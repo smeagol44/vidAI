@@ -1,5 +1,33 @@
 # Project status — 2026-10-20
 
+## Featured founder acquisition pipeline — v0.30.0
+
+- Added an **opt-in, read-only** survey for all nine curated starting
+  genotypes in a naturally initialized 400-nutrient world. It measures
+  separate steps of real food acquisition: retinal intersection with
+  an edible category, genetically filtered visible RGB, proximity of
+  food circles to the actual mouth segment, physical oral contact,
+  genuinely transferred nutrient/prey energy and reserve change.
+  It also records actual net displacement and egg affordability.
+- Herbivores cannot count carnivorous prey/carrion as edible; carnivores
+  cannot count green nutrients as edible. The diagnostic exposes
+  physically intersected but spectrally invisible objects separately.
+  Prey/egg sight and actual bites are included in carnivore signals;
+  mouth-to-*free-food* surface gaps intentionally exclude moving prey.
+- The observer is never called by the normal game loop. It only reads
+  snapshots following ordinary native physics; its data never reaches
+  brains, genetics, collision checks, reproduction, saved state,
+  world energy, environment placement or PRNG.
+- A bounded 2-second seed-17 free-roaming regression and opt-in
+  `npm run benchmark:ecology` report distinguish **seen but not reached**
+  from **reached but not eaten**; no survival or natural selection claim.
+  Negative outcomes remain visible. Further ecology work must use
+  these real measurements rather than scripted behavior or endless
+  founder calibration.
+- **Physics/render separation remains deferred milestone P**, after
+  ecological acquisition and naturally funded eggs/hatching. No 3D edits.
+
+
 ## Physical predator feeding: enclosed-mouth contact — v0.29.0
 
 - **Corrected a physically possible contact miss.** The old predator
