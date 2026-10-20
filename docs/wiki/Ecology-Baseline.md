@@ -77,6 +77,31 @@ selection and ongoing nutrient accessibility still need separate evidence.
 The `EcologyIntakeObserver` also exposes read-only per-organism intake,
 subject to the existing eight-receipt-per-organism density limit.
 
+## Featured founder natural-acquisition survey
+
+The opt-in ecological benchmark also provides a **read-only**, nine-genotype
+survey using normal 400-nutrient water and native physics. For each founder,
+it counts (per physics tick) physically edible objects intersecting an
+eye ray, the subset actually detected after inherited RGB sensitivity,
+free edible food within 24px of the real mouth aperture, overlapping food,
+production-kernel physical oral contact, and positive assimilated joules.
+It reports starting/ending mouth-to-free-food gap, true net body
+displacement, reserve changes, and the unfunded joules still needed to
+afford one egg. Predator sightings include real prey and eggs; their
+free-food proximity metric only applies to carrion, not moving prey.
+
+These are **diagnostic categories**, not creature inputs or rewards.
+Physical ray hits can be invisible if genetic sensitivity suppresses all
+light channels. Contact may occur at a full energy reserve without
+absorption. An eye sighting alone is never counted as feeding.
+No food is placed near any creature during a trial, and no organism
+is given steering, maturity, reserve or reproduction bonuses.
+
+This helps distinguish founders that **never see suitable food** from
+ones that **see but cannot reach it** or **make contact without obtaining
+energy**. The short survey cannot by itself demonstrate long-term
+foraging, successful predation, paid hatching or selection.
+
 ## Repeatable bounded protocol
 
 Run `npm run benchmark:ecology` to print the fixed-seed report. Short fast
