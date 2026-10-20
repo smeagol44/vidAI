@@ -41,6 +41,15 @@
   profile of the first implementation showed little net gain and prompted removing
   redundant clears on aligned records. Do not promise browser multipliers or treat
   short server timings as stable speed guarantees.
+- The first CI profile also preserves all hashes: throughput ratios
+  0.82x / 1.06x / 1.08x / 1.11x. Its first small-world sample was slower.
+  A bounded follow-up on that exact 15-founder/200-food/180-remain fixture,
+  with 360 ticks and four alternating-order rounds in one process, gave
+  baseline 952/910/863/815 ms versus candidate 885/730/764/684 ms, with
+  identical full states in every round. This supports a net gain once warm,
+  while retaining the cold/sampled timing limitation. CI components agree:
+  median clipping 65.14→26.11 ms, learning 273.10→89.08 ms and unchanged
+  history 193.37→1.43 ms for the same bounded call counts above.
 - Verification: 215/215 fast tests, TypeScript/Vite build and actual production
   Worker thread check. New regression coverage compares 4,000 seeded rectangle
   contacts and boundary cases to a frozen v0.32 oracle; checks returned-value
