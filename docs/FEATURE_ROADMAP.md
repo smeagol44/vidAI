@@ -8,7 +8,10 @@ distinguished below from gaps in existing systems.
 ## Immediate ecological work following v0.27
 
 Optional **abiotic nutrient blooms** now provide geographically clustered
-and dispersed food while retaining caps and energy conservation. Legacy
+and dispersed food while retaining caps and energy conservation. Uniform
+remains the default: one unassisted 2-second seed-17 trial of all nine
+featured founders with 400 nutrients absorbed 2,592 J under Uniform,
+versus 864 J under Blooms (three feeding founders vs one). Legacy
 snapshots still use precisely uniform food placement. The reproducible
 nine-featured-founder native-kernel comparison measures individual real
 mouth-intake joules and reserve outcomes at the normal 400-food baseline,
