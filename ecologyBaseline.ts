@@ -3,6 +3,7 @@ import {createFounderGenome} from './founders';
 import {createInitialWorld, addExternalOrganism} from './world';
 import {DEFAULT_SETTINGS, createSnapshot, restoreSnapshot, clearFreeNutrients} from './persistence';
 import {EcologyIntakeObserver, readEcologyState, type EcologyStateReport, type IntakeLedger} from './ecologyAudit';
+import {FoodAcquisitionObserver} from './foodAcquisitionAudit';
 
 export const ECOLOGY_DT = 1 / 60;
 export const ECOLOGY_SEEDS = [17, 29, 41] as const;
@@ -167,11 +168,37 @@ export function runFeaturedFoodDistributionPair(seed = 17, seconds = 3) {
   return {seed, seconds, uniform: create('uniform'), blooms: create('blooms')};
 }
 
+/**
+ * Ordinary 400-food, nine-genotype showcase: all animals start juveniles,
+ * freely swimming with identical kernel, inherited minds and funded reserves.
+ * This counts sight -> food-surface approach -> physical oral contact ->
+ * actual absorption, keeping natural reproductive affordability visible.
+ *
+ * No repositioned food, forced prey contact, maturity jump, artificial energy,
+ * input rewiring, fixed steering or altered population clock.
+ */
+export function runFeaturedAcquisitionSurvey(seed = 17, seconds = 2) {
+  const settings = {...DEFAULT_SETTINGS, targetNutrients: 400, inflowRate: 15,
+    nutrientPattern: 'uniform' as const};
+  const state = createInitialWorld(settings, seed, 'balanced', 'showcase');
+  const observer = new FoodAcquisitionObserver(state);
+  const initial = readEcologyState(state);
+  for (let i = 0; i < Math.floor(seconds / ECOLOGY_DT); i++) {
+    sim.stepSimulation(state, settings, ECOLOGY_DT);
+    observer.sample(state);
+  }
+  return {
+    seed, seconds, initial, final: readEcologyState(state),
+    founders: observer.results(state),
+  };
+}
+
 export function collectEcologyBaseline() {
   return {
     protocol: 'VIDA-BD-short-fixed-seed-v1',
     physics: 'production-kernel / 1/60 s, no scripted feeding or steering',
     scope: 'bounded experiments; not ecological viability or evolutionary selection',
+    featuredAcquisition: runFeaturedAcquisitionSurvey(),
     featuredFoodDistribution: runFeaturedFoodDistributionPair(),
     unassistedPairs: ECOLOGY_SEEDS.map(runUnassistedEcologyPair),
     controlledGrazing: ECOLOGY_SEEDS.slice(0, 2).flatMap(seed => [-1, 1].flatMap(side =>
