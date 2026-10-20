@@ -108,7 +108,7 @@ import {
   createArchetypeGenome,
   stepSimulation
 } from './simulation';
-import {FOUNDER_BLUEPRINTS, FOUNDER_FAMILIES, createFounderBankItems, type FounderMode} from './founders';
+import {FOUNDER_BLUEPRINTS, FEATURED_BLUEPRINTS, FOUNDER_FAMILIES, createFounderBankItems, type FounderMode} from './founders';
 import {BUILD_VERSION, CREDITS, createSnapshot, restoreSnapshot, validateGenome,
   clearFreeNutrients, resizeWorld, diagnosticReport} from './persistence';
 export * from './simulation';
@@ -293,6 +293,7 @@ export default function App() {
   const [bankFamily, setBankFamily] = useState('All');
   const [bankDiet, setBankDiet] = useState('All');
   const [bankSearch, setBankSearch] = useState('');
+  const [bankSection, setBankSection] = useState<'featured' | 'legacy' | 'saved' | 'all'>('featured');
   const [reportText, setReportText] = useState('');
   const founderBankItems = useMemo(() => createFounderBankItems(founderMode), [founderMode]);
   const [synapsePruningThreshold, setSynapsePruningThreshold] = useState<number>(0.02);
@@ -341,10 +342,12 @@ export default function App() {
   // Specimen Bank & Comparison Arena State
   const [specimenBank, setSpecimenBank] = useState<SpecimenBankItem[]>([]);
   const displayedSpecimenBank = useMemo(() => [...founderBankItems, ...specimenBank].filter(item =>
-    (bankFamily === 'All' || item.genome.archetype === bankFamily)
+    (bankSection === 'all' || (bankSection === 'saved' ? !item.id.startsWith('FOUNDER-')
+      : item.tags.includes(bankSection === 'featured' ? 'Featured' : 'Legacy')))
+    && (bankFamily === 'All' || item.genome.archetype === bankFamily)
     && (bankDiet === 'All' || getDietClassification(item.genome.mouths).category.toLowerCase() === bankDiet)
     && item.name.toLowerCase().includes(bankSearch.toLowerCase())),
-    [founderBankItems, specimenBank, bankFamily, bankDiet, bankSearch]);
+    [founderBankItems, specimenBank, bankSection, bankFamily, bankDiet, bankSearch]);
   const [saveNotification, setSaveNotification] = useState<string | null>(null);
   const [arenaCompetitorA, setArenaCompetitorA] = useState<Genome | null>(null);
   const [arenaCompetitorB, setArenaCompetitorB] = useState<Genome | null>(null);
@@ -2039,7 +2042,14 @@ export default function App() {
             </div>
 
             <div className="space-y-2 mb-2 text-[10px] shrink-0">
-              <div className="text-purple-300">{FOUNDER_BLUEPRINTS.length} built-in founders · {specimenBank.length} saved specimens</div>
+              <div className="text-purple-300">{FEATURED_BLUEPRINTS.length} featured · {FOUNDER_BLUEPRINTS.length} legacy · {specimenBank.length} saved</div>
+              <select aria-label="Bank collection" value={bankSection} onChange={e => setBankSection(e.target.value as typeof bankSection)}
+                className="w-full bg-slate-950 border border-purple-900 rounded px-2 py-1 text-purple-200">
+                <option value="featured">Featured starters ({FEATURED_BLUEPRINTS.length})</option>
+                <option value="legacy">Legacy designs ({FOUNDER_BLUEPRINTS.length})</option>
+                <option value="saved">My saved specimens ({specimenBank.length})</option>
+                <option value="all">All specimens</option>
+              </select>
               <input aria-label="Search specimens" placeholder="Search creatures…" value={bankSearch} onChange={e => setBankSearch(e.target.value)} className="w-full bg-slate-950 border border-purple-900 rounded px-2 py-1" />
               <div className="flex gap-2">
                 <select aria-label="Body family" value={bankFamily} onChange={e => setBankFamily(e.target.value)} className="min-w-0 flex-1 bg-slate-950 border border-purple-900 rounded px-1 py-1">
@@ -2049,7 +2059,7 @@ export default function App() {
                   <option value="All">All diets</option>{['herbivore', 'omnivore', 'carnivore'].map(d => <option key={d}>{d}</option>)}
                 </select>
               </div>
-              <button onClick={() => {initGame('showcase'); setIsSpecimenBankOpen(false);}} className="w-full py-1 border border-purple-500/40 rounded text-purple-300">Reset with Catalogue Showcase (up to {FOUNDER_BLUEPRINTS.length})</button>
+              <button onClick={() => {initGame('showcase'); setIsSpecimenBankOpen(false);}} className="w-full py-1 border border-purple-500/40 rounded text-purple-300">Reset with Featured Showcase ({FEATURED_BLUEPRINTS.length})</button>
             </div>
             <div className="flex-1 min-h-0 overflow-y-auto space-y-2 pr-1">
               {displayedSpecimenBank.length === 0 ? (
