@@ -240,8 +240,8 @@
   when deriving CUR-001. Do not equate bounded swimming and mouth tests
   with sustainable ecological fitness. Use
   `tests/featured-starters.test.ts` in the fast gate.
-- v0.27 ecological environment: fresh 2D UI worlds offer the Blooms
-  nutrient distribution (65% clustered across twelve seed-stable abiotic
+- v0.27 ecological environment: new 2D UI worlds default to Uniform,
+  with an optional Blooms distribution (65% clustered across twelve seed-stable abiotic
   sites, 35% dispersed). Uniform/absent nutrientPattern MUST retain
   exactly the old position and PRNG stream; old imported saves default to
   uniform. Feed/Feed All manual patch placement takes precedence and
