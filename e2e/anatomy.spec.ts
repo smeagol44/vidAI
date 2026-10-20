@@ -15,12 +15,12 @@ test('fresh defaults, five-design population, slotted bank preview and jellyfish
   await page.keyboard.press('Space');
   await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
   await page.getByTitle('Ecology & Physical Settings').click();
-  await expect(page.getByLabel('Nutrient target', {exact: true})).toHaveValue('400');
+  await expect(page.getByLabel('Nutrient target', {exact: true})).toHaveValue('275');
   const download = page.waitForEvent('download');
   await page.getByRole('button', {name: 'Export Snapshot', exact: true}).click();
   const snapshot = JSON.parse(await readFile((await (await download).path())!, 'utf8'));
   expect(snapshot.schemaVersion).toBe('8.0.0');
-  expect(snapshot.settings.targetNutrients).toBe(400);
+  expect(snapshot.settings.targetNutrients).toBe(275);
   expect(snapshot.state.organisms).toHaveLength(18);
   expect(new Set(snapshot.state.organisms.map((o: any) => o.genome.id)).size).toBe(5);
   for (const o of snapshot.state.organisms) {

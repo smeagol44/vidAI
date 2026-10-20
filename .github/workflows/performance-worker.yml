@@ -3,6 +3,11 @@ on:
   pull_request:
     paths:
       - 'simulation.worker.ts'
+      - 'App.tsx'
+      - 'BrainGraph.tsx'
+      - 'persistence.ts'
+      - 'constants.ts'
+      - 'playground_config.json'
       - 'workerPacing.ts'
       - 'playwright.worker-firefox.config.ts'
       - 'tests/worker-pacing.test.ts'

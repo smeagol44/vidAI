@@ -3,6 +3,7 @@ import type {Genome, Organism} from './simulation';
 type Edge = {edge: string; slot: number};
 export interface CompiledBrain {
   ih: Uint8Array; hh: Uint8Array; ho: Uint8Array;
+  enabledIH: Array<number[] | undefined>; enabledHH: Array<number[] | undefined>; enabledHO: Array<number[] | undefined>;
   sensory: Array<Edge & {input: number; hidden: number}>;
   motor: Array<Edge & {output: number; hidden: number}>;
   sensorySlots: Map<string, number>; motorSlots: Map<string, number>;
@@ -11,6 +12,23 @@ type Entry = {inputs: Genome['inputKeys']; outputs: Genome['outputKeys']; hidden
   disabled: Genome['disabledConnections']; disabledCount: number; scope: Genome['plasticMotorScope'];
   motorEnabled: boolean; sensoryEnabled: boolean; compiled: CompiledBrain};
 const brains = new WeakMap<Genome, Entry>();
+
+/** Dense rows use a straight loop; only rows containing disabled edges need
+ * an ordered indirection list. Compile identities/masks, never weight values. */
+function enabledRows(mask: Uint8Array, targets: number, sources: number): Array<number[] | undefined> {
+  const rows = new Array<number[] | undefined>(targets);
+  for (let target = 0; target < targets; target++) {
+    const offset = target * sources;
+    let masked = false;
+    for (let source = 0; source < sources; source++) if (mask[offset + source]) {masked = true; break;}
+    if (masked) {
+      const enabled: number[] = [];
+      for (let source = 0; source < sources; source++) if (!mask[offset + source]) enabled.push(source);
+      rows[target] = enabled;
+    }
+  }
+  return rows;
+}
 
 /** Transient topology only. Weights are always read from the actual genome.
  * Identity/length changes invalidate the plan; topology editors also explicitly
@@ -63,6 +81,9 @@ export function compiledBrain(g: Genome): CompiledBrain {
     }
   }
   const compiled = {ih, hh, ho, motor, sensory,
+    enabledIH: enabledRows(ih, hidden.length, inputs.length),
+    enabledHH: enabledRows(hh, hidden.length, hidden.length),
+    enabledHO: enabledRows(ho, outputs.length, hidden.length),
     motorSlots: new Map(motor.map(e => [e.edge, e.slot])),
     sensorySlots: new Map(sensory.map(e => [e.edge, e.slot]))};
   brains.set(g, {inputs, outputs, hidden, disabled: g.disabledConnections,

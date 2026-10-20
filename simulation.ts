@@ -2860,23 +2860,32 @@ export function hslToRgb(h: number, s: number, l: number): [number, number, numb
 }
 
 /** Repair contact-induced hinge error without adding velocity or motor energy. */
+const scratchProjection = Array.from({length: MAX_PARTS - 1}, () => ({
+  aim: 0, bim: 0, aii: 0, bii: 0, paX: 0, paY: 0, pbX: 0, pbY: 0,
+}));
 function projectBodyJoints(org: Organism, iterations: number): void {
   const parts = org.genome.parts;
+  // Local geometry/masses stay constant while projection changes poses.
+  for (let index = 1; index < parts.length; index++) {
+    const def = parts[index], pd = parts[def.parentIndex], entry = scratchProjection[index - 1];
+    const am = Math.max(.35, pd.dimN * pd.dimM * BASE_PART_DENSITY);
+    const bm = Math.max(.35, def.dimN * def.dimM * BASE_PART_DENSITY);
+    entry.aim = 1 / am; entry.bim = 1 / bm;
+    entry.aii = 12 / (am * (pd.width ** 2 + pd.height ** 2));
+    entry.bii = 12 / (bm * (def.width ** 2 + def.height ** 2));
+    const pa = getCardinalAnchor(def.attachmentPoint, pd.width, pd.height);
+    const pb = getChildAnchorForParentDir(def.attachmentPoint, def.width, def.height);
+    entry.paX = pa.x; entry.paY = pa.y; entry.pbX = pb.x; entry.pbY = pb.y;
+  }
   for (let iteration = 0; iteration < iterations; iteration++) {
     for (let index = 1; index < parts.length; index++) {
       const def = parts[index], pd = parts[def.parentIndex];
       const a = org.segments[def.parentIndex], b = org.segments[index];
-      const am = Math.max(.35, pd.dimN * pd.dimM * BASE_PART_DENSITY);
-      const bm = Math.max(.35, def.dimN * def.dimM * BASE_PART_DENSITY);
-      const aim = 1 / am, bim = 1 / bm;
-      const aii = 12 / (am * (pd.width ** 2 + pd.height ** 2));
-      const bii = 12 / (bm * (def.width ** 2 + def.height ** 2));
-      const pa = getCardinalAnchor(def.attachmentPoint, pd.width, pd.height);
-      const pb = getChildAnchorForParentDir(def.attachmentPoint, def.width, def.height);
-      const ax = Math.cos(a.angle) * pa.x - Math.sin(a.angle) * pa.y;
-      const ay = Math.sin(a.angle) * pa.x + Math.cos(a.angle) * pa.y;
-      const bx = Math.cos(b.angle) * pb.x - Math.sin(b.angle) * pb.y;
-      const by = Math.sin(b.angle) * pb.x + Math.cos(b.angle) * pb.y;
+      const {aim, bim, aii, bii, paX, paY, pbX, pbY} = scratchProjection[index - 1];
+      const ax = Math.cos(a.angle) * paX - Math.sin(a.angle) * paY;
+      const ay = Math.sin(a.angle) * paX + Math.cos(a.angle) * paY;
+      const bx = Math.cos(b.angle) * pbX - Math.sin(b.angle) * pbY;
+      const by = Math.sin(b.angle) * pbX + Math.cos(b.angle) * pbY;
       const ex = b.x + bx - a.x - ax, ey = b.y + by - a.y - ay;
       const k11 = aim + bim + ay * ay * aii + by * by * bii;
       const k22 = aim + bim + ax * ax * aii + bx * bx * bii;
@@ -3221,6 +3230,82 @@ export function evaluateEggHatchStatus(egg: Egg, settings: SimulationSettings, o
 // ============================================================================
 // 3. AUTHORITATIVE MODULAR SIMULATION KERNEL (`stepSimulation`)
 // ============================================================================
+/** Evaluate the same ordered sums using dense or compiled enabled-row loops.
+ * Learned offsets remain separate additions; current genome weights are read
+ * on every tick. No lower precision, reassociation or sensing-rate changes. */
+function evaluateOrganismBrain(org: Organism, dt: number): void {
+  const g = org.genome;
+  const hiddenCount = g.hiddenIds!.length;
+  const plan = compiledBrain(g);
+  const learnedMotor = org.learnedMotorWeights?.length ? compiledDeltas(org, plan) : null;
+  const learnedRetina = org.learnedSensoryWeights?.length
+    ? (learnedMotor ?? compiledDeltas(org, plan)) : null;
+  const inputCount = org.neuralInputs.length;
+  for (let h = 0; h < hiddenCount; h++) scratchPrevHidden[h] = org.neuralHidden[h] || 0;
+  
+  for (let h = 0; h < hiddenCount; h++) {
+    let sum = g.biasesH[h] || 0;
+    const ihRow = g.weightsIH[h], hhRow = g.weightsHH[h];
+    const ihOffset = h * inputCount;
+    const enabledInputs = plan.enabledIH[h];
+    if (enabledInputs) {
+      for (let k = 0; k < enabledInputs.length; k++) {
+        const inp = enabledInputs[k];
+        sum += (org.neuralInputs[inp] || 0) * (ihRow?.[inp] || 0);
+        if (learnedRetina) {
+          const delta = learnedRetina.sensory[ihOffset + inp];
+          if (delta !== 0) sum += (org.neuralInputs[inp] || 0) * delta;
+        }
+      }
+    } else {
+      for (let inp = 0; inp < org.neuralInputs.length; inp++) {
+        sum += (org.neuralInputs[inp] || 0) * (ihRow?.[inp] || 0);
+        if (learnedRetina) {
+          const delta = learnedRetina.sensory[ihOffset + inp];
+          if (delta !== 0) sum += (org.neuralInputs[inp] || 0) * delta;
+        }
+      }
+    }
+    const enabledRecurrent = plan.enabledHH[h];
+    if (enabledRecurrent) {
+      for (let k = 0; k < enabledRecurrent.length; k++) {
+        const rh = enabledRecurrent[k];
+        sum += scratchPrevHidden[rh] * (hhRow?.[rh] || 0);
+      }
+    } else for (let rh = 0; rh < hiddenCount; rh++) sum += scratchPrevHidden[rh] * (hhRow?.[rh] || 0);
+    const next = isNaN(sum) ? 0 : Math.tanh(sum);
+    org.neuralHidden[h] = integrateNeuronMemory(scratchPrevHidden[h], next, g.hiddenTimeConstants![h], dt);
+  }
+  
+  const numJoints = org.segments.length - 1;
+  for (let o = 0; o < numJoints * OUTPUTS_PER_JOINT; o++) {
+    let sum = g.biasesO[o] || 0;
+    const hoRow = g.weightsHO[o];
+    const enabledOutputs = plan.enabledHO[o];
+    if (enabledOutputs) {
+      for (let k = 0; k < enabledOutputs.length; k++) {
+        const h = enabledOutputs[k];
+        sum += org.neuralHidden[h] * (hoRow?.[h] || 0);
+      }
+    } else for (let h = 0; h < hiddenCount; h++) sum += org.neuralHidden[h] * (hoRow?.[h] || 0);
+    // Acquired synapse offsets alter the neural motor command, not genome
+    // weights, and cannot activate a disabled connection.
+    if (learnedMotor && (g.plasticMotorScope === 'all' || g.outputKeys![o].endsWith(':Angle'))) {
+      if (enabledOutputs) {
+        for (let k = 0; k < enabledOutputs.length; k++) {
+          const h = enabledOutputs[k], slot = o * hiddenCount + h;
+          sum += org.neuralHidden[h] * learnedMotor.motor[slot];
+        }
+      } else for (let h = 0; h < hiddenCount; h++) {
+        const slot = o * hiddenCount + h;
+        sum += org.neuralHidden[h] * learnedMotor.motor[slot];
+      }
+    }
+    org.neuralOutputs[o] = isNaN(sum) ? 0 : Math.tanh(sum);
+  }
+  
+}
+
 export function stepSimulation(
   state: SimulationState,
   settings: SimulationSettings,
@@ -3617,55 +3702,7 @@ export function stepSimulation(
 
     // B. RECURRENT NEURAL EVALUATION. The original dense 24-node loop retains its
     // arithmetic order; explicit disabled keys opt individual edges out.
-    const hiddenCount = g.hiddenIds!.length;
-    const plan = compiledBrain(g);
-    const learnedMotor = org.learnedMotorWeights?.length ? compiledDeltas(org, plan) : null;
-    const learnedRetina = org.learnedSensoryWeights?.length
-      ? (learnedMotor ?? compiledDeltas(org, plan)) : null;
-    const inputCount = org.neuralInputs.length;
-    for (let h = 0; h < hiddenCount; h++) scratchPrevHidden[h] = org.neuralHidden[h] || 0;
-
-    for (let h = 0; h < hiddenCount; h++) {
-      let sum = g.biasesH[h] || 0;
-      const ihRow = g.weightsIH[h], hhRow = g.weightsHH[h];
-      const ihOffset = h * inputCount, hhOffset = h * hiddenCount;
-      for (let inp = 0; inp < org.neuralInputs.length; inp++) {
-        if (!plan.ih[ihOffset + inp]) {
-          sum += (org.neuralInputs[inp] || 0) * (ihRow?.[inp] || 0);
-          if (learnedRetina) {
-            const delta = learnedRetina.sensory[ihOffset + inp];
-            if (delta !== 0) sum += (org.neuralInputs[inp] || 0) * delta;
-          }
-        }
-      }
-      for (let rh = 0; rh < hiddenCount; rh++) {
-        if (!plan.hh[hhOffset + rh]) {
-          sum += scratchPrevHidden[rh] * (hhRow?.[rh] || 0);
-        }
-      }
-      const next = isNaN(sum) ? 0 : Math.tanh(sum);
-      org.neuralHidden[h] = integrateNeuronMemory(scratchPrevHidden[h], next, g.hiddenTimeConstants![h], dt);
-    }
-
-    const numJoints = org.segments.length - 1;
-    for (let o = 0; o < numJoints * OUTPUTS_PER_JOINT; o++) {
-      let sum = g.biasesO[o] || 0;
-      const hoRow = g.weightsHO[o], hoOffset = o * hiddenCount;
-      for (let h = 0; h < hiddenCount; h++) {
-        if (!plan.ho[hoOffset + h]) {
-          sum += org.neuralHidden[h] * (hoRow?.[h] || 0);
-        }
-      }
-      // Acquired synapse offsets alter the neural motor command, not genome
-      // weights, and cannot activate a disabled connection.
-      if (learnedMotor && (g.plasticMotorScope === 'all' || g.outputKeys![o].endsWith(':Angle'))) {
-        for (let h = 0; h < hiddenCount; h++) {
-          const slot = o * hiddenCount + h;
-          if (!plan.ho[slot]) sum += org.neuralHidden[h] * learnedMotor.motor[slot];
-        }
-      }
-      org.neuralOutputs[o] = isNaN(sum) ? 0 : Math.tanh(sum);
-    }
+    evaluateOrganismBrain(org, dt);
     // Reward is from legitimate physical contact on the PREVIOUS tick.
     // Mutations in a living animal's learned offsets change subsequent
     // motor commands only, with their own debited metabolic cost.

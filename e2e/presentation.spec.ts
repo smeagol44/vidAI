@@ -186,6 +186,8 @@ test('white eggs render white and actual feeding animates the mouth', async ({pa
   const rect = (await canvas.boundingBox())!;
   await expect.poll(() => canvas.evaluate(node => (node as HTMLCanvasElement).width)).toBe(Math.round(rect.width * 2));
   await page.mouse.click(rect.x + rect.width / 2, rect.y + rect.height / 2);
+  await expect(page.getByTestId('badge-window')).toBeVisible();
+  await page.getByTestId('badge-window').getByRole('button', {name: 'Inspect', exact: true}).click();
   await expect(page.getByTestId('creature-inspector')).toBeVisible();
   await expect.poll(() => page.evaluate(() => new Set((window as any).mouthOpenings.map((a: number[]) => a[1].toFixed(3))).size)).toBeGreaterThan(5);
   await expect.poll(() => page.evaluate(() => Math.max(...(window as any).mouthOpenings.map((a: number[]) => a[1])))).toBeGreaterThan(1.3);

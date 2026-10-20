@@ -84,6 +84,7 @@ test('real learned experience is compared against its own erased-experience phys
 });
 
 test('a populated tank can step 100 learning-capable articulated animals without unbounded synapse state',()=>{
+ const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, maxOrganisms: 100};
  const world=createInitialWorld(settings,861,'unbiased','standard',0);
  const g=createFounderGenome('FND-001','balanced');
  g.plasticityRate=.6;

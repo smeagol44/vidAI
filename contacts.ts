@@ -4,6 +4,7 @@ interface Body {
   org: Organism; index: number; p: PartPhys; def: PartDef;
   im: number; ii: number; c: number; s: number;
   left: number; right: number; top: number; bottom: number;
+  cellLeft: number; cellRight: number; cellTop: number; cellBottom: number;
 }
 export interface RectangleContact {nx: number; ny: number; depth: number; x: number; y: number}
 
@@ -71,14 +72,17 @@ function bodies(organisms: Organism[], density: number): Body[] {
     const ry = (Math.abs(s) * def.width + Math.abs(c) * def.height) / 2;
     const im = 1 / mass, ii = 12 / (mass * (def.width ** 2 + def.height ** 2));
     const left = p.x - rx, right = p.x + rx, top = p.y - ry, bottom = p.y + ry;
+    const cellLeft = Math.floor(left / 128), cellRight = Math.floor(right / 128);
+    const cellTop = Math.floor(top / 128), cellBottom = Math.floor(bottom / 128);
     let body = bodyPool[list.length];
     if (!body) {
-      body = {org, index, p, def, im, ii, c, s, left, right, top, bottom};
+      body = {org, index, p, def, im, ii, c, s, left, right, top, bottom, cellLeft, cellRight, cellTop, cellBottom};
       bodyPool.push(body);
     } else {
       body.org = org; body.index = index; body.p = p; body.def = def;
       body.im = im; body.ii = ii; body.c = c; body.s = s;
       body.left = left; body.right = right; body.top = top; body.bottom = bottom;
+      body.cellLeft = cellLeft; body.cellRight = cellRight; body.cellTop = cellTop; body.cellBottom = cellBottom;
     }
     list.push(body);
   }
@@ -86,25 +90,36 @@ function bodies(organisms: Organism[], density: number): Body[] {
   return list;
 }
 
-/** Deterministic spatial broad phase; directly hinged neighbors may overlap while bending. */
+type ContactCell = {stamp: number; indices: number[]};
+const contactColumns = new Map<number, Map<number, ContactCell>>();
+let contactStamp = 0, contactCells = 0;
+
+/** Stable first-common-cell ownership removes the per-pass pair Set without
+ * changing pair order. Buckets reuse storage; every body bound is still rebuilt.
+ * Bound retained cell storage across world changes and very long runs. */
 function pairs(list: Body[]): [Body, Body][] {
-  const grid = new Map<number, Map<number, number[]>>(), seen = new Set<number>(), result: [Body, Body][] = [];
+  contactStamp = (contactStamp + 1) >>> 0;
+  if (!contactStamp || contactCells > 4096) {
+    contactColumns.clear(); contactCells = 0; contactStamp = 1;
+  }
+  const result: [Body, Body][] = [];
   for (let i = 0; i < list.length; i++) {
     const a = list[i];
-    for (let x = Math.floor(a.left / 128); x <= Math.floor(a.right / 128); x++) {
-      let column = grid.get(x);
-      if (!column) {column = new Map(); grid.set(x, column);}
-      for (let y = Math.floor(a.top / 128); y <= Math.floor(a.bottom / 128); y++) {
+    for (let x = a.cellLeft; x <= a.cellRight; x++) {
+      let column = contactColumns.get(x);
+      if (!column) {column = new Map(); contactColumns.set(x, column);}
+      for (let y = a.cellTop; y <= a.cellBottom; y++) {
         let cell = column.get(y);
-        if (!cell) {cell = []; column.set(y, cell);}
-        for (const j of cell) {
-          const id = j * list.length + i; if (seen.has(id)) continue; seen.add(id);
+        if (!cell) {cell = {stamp: contactStamp, indices: []}; column.set(y, cell); contactCells++;}
+        if (cell.stamp !== contactStamp) {cell.stamp = contactStamp; cell.indices.length = 0;}
+        for (const j of cell.indices) {
           const b = list[j];
+          if (x !== Math.max(a.cellLeft, b.cellLeft) || y !== Math.max(a.cellTop, b.cellTop)) continue;
           if (a.org === b.org && (a.def.parentIndex === b.index || b.def.parentIndex === a.index)) continue;
           if (a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom) continue;
           result.push([b, a]);
         }
-        cell.push(i);
+        cell.indices.push(i);
       }
     }
   }

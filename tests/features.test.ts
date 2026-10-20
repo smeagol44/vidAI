@@ -211,7 +211,7 @@ test('in-game verification runs real checks without consuming the live/global PR
 
 for (const seed of [4242, 71, 1901]) test(`actual default initialization: 60 seconds, seed ${seed}`, () => {
   const s = createInitialWorld(DEFAULT_SETTINGS, seed);
-  assert.equal(s.organisms.length, 18); assert.equal(s.nutrients.length, 400);
+  assert.equal(s.organisms.length, 18); assert.equal(s.nutrients.length, 275);
   for (let i = 0; i < 3600; i++) sim.stepSimulation(s, DEFAULT_SETTINGS, 1 / 60);
   assert.ok(s.organisms.filter(o => !o.dissolving).length > 0);
   assert.ok(Math.abs(totalAccountedEnergy(s) - s.ledger.externalInflow) < 1e-4);

@@ -2292,6 +2292,7 @@ export default function App() {
                 <div className="flex justify-between items-center px-1 text-[10px] text-slate-400">
                   <span>Pruning Threshold: <strong className="text-cyan-400">{synapsePruningThreshold.toFixed(2)}</strong></span>
                   <input
+                    aria-label="Pruning threshold"
                     type="range"
                     min="0"
                     max="0.8"
