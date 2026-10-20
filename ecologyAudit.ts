@@ -75,6 +75,7 @@ export function readEcologyState(state: SimulationState): EcologyStateReport {
  * this observer as a comprehensive high-density ecosystem ledger. */
 export class EcologyIntakeObserver {
   private observed = new WeakMap<FeedingEvent, number>();
+  private byOrganism = new Map<string, IntakeLedger>();
   private lastTime = -Infinity;
   readonly absorbedJ: IntakeLedger = emptyIntake();
 
@@ -87,10 +88,20 @@ export class EcologyIntakeObserver {
       const previous = this.observed.get(receipt) ?? 0;
       const delta = receipt.energyTransferred - previous;
       if (!Number.isFinite(delta) || delta < -1e-8) throw new Error('Invalid feeding receipt');
-      if (delta > 0) this.absorbedJ[receipt.foodCategory] += delta;
+      if (delta > 0) {
+        this.absorbedJ[receipt.foodCategory] += delta;
+        let own = this.byOrganism.get(org.id);
+        if (!own) {own = emptyIntake(); this.byOrganism.set(org.id, own);}
+        own[receipt.foodCategory] += delta;
+      }
       this.observed.set(receipt, receipt.energyTransferred);
     }
   }
 
   totals(): IntakeLedger { return {...this.absorbedJ}; }
+
+  /** Per-individual, read-only energy absorbed from actual mouth receipts. */
+  perOrganismTotals(): Record<string, IntakeLedger> {
+    return Object.fromEntries([...this.byOrganism].map(([id, tally]) => [id, {...tally}]));
+  }
 }
