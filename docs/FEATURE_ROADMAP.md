@@ -1,9 +1,25 @@
-# VIDA: remaining features — 2026-10-20 / v0.26.0
+# VIDA: remaining features — 2026-10-20 / v0.27.0
 
 This is a focused review of the current 2D source, not an implementation promise.
 Small changes fit the existing systems. Big changes affect simulation architecture,
 biology or behavior and need their own focused updates. Optional extensions are
 distinguished below from gaps in existing systems.
+
+## Immediate ecological work following v0.27
+
+Optional **abiotic nutrient blooms** now provide geographically clustered
+and dispersed food while retaining caps and energy conservation. Legacy
+snapshots still use precisely uniform food placement. The reproducible
+nine-featured-founder native-kernel comparison measures individual real
+mouth-intake joules and reserve outcomes at the normal 400-food baseline,
+with no post-seeding assistance. **It does not prove ecological benefit.**
+
+Next: inspect this short comparison for whether particular body plans
+encounter and ingest natural food. Fix a reproducible physical/perceptual
+bottleneck in a separate bounded change, then measure affordable eggs
+and natural hatching over multiple generations. Only afterward compare
+selection, predator-prey fitness and potential learned improvement. Avoid
+adding behavioral scripts or retuning every starter to pass tests.
 
 ## Small
 
