@@ -4,6 +4,7 @@ import * as sim from '../simulation';
 import {createInitialWorld} from '../world';
 import {createSnapshot, restoreSnapshot, DEFAULT_SETTINGS, totalAccountedEnergy} from '../persistence';
 import {EcologyIntakeObserver, readEcologyState} from '../ecologyAudit';
+import {runFeaturedFoodDistributionPair} from '../ecologyBaseline';
 
 const settings = {...DEFAULT_SETTINGS, worldWidth: 2400, worldHeight: 1500,
   targetNutrients: 400, inflowRate: 0, mutationSeverity: 0};
@@ -87,4 +88,30 @@ test('short naturally moving featured cohorts run in both food modes with real r
       intakeJ: observer.totals(), finalReservesJ: readEcologyState(state).resources.livingReservesJ,
       eggsLaid: readEcologyState(state).population.eggLayings}));
   }
+});
+
+test('all nine featured founders get one bounded unassisted 400-food ecological comparison', () => {
+  const compared = runFeaturedFoodDistributionPair(17, 2);
+  const uniform = compared.uniform, blooms = compared.blooms;
+  assert.equal(uniform.outcomes.length, 9);
+  assert.equal(blooms.outcomes.length, 9);
+  assert.deepEqual(blooms.founderStart, uniform.founderStart,
+    'all founder genomes/positions must match before food is distributed');
+  assert.equal(uniform.initialFoodJ, blooms.initialFoodJ);
+  for (const condition of [uniform, blooms]) {
+    close(condition.final.energy.discrepancyJ, 0);
+    assert.equal(condition.final.population.seededOrHatchedBirths, 9);
+    for (const founder of condition.outcomes) {
+      assert.ok(Number.isFinite(founder.absorbedNutrientJ) && founder.absorbedNutrientJ >= 0);
+      assert.ok(Number.isFinite(founder.reserveDeltaJ));
+      assert.ok(Number.isInteger(founder.eggsLaid) && founder.eggsLaid >= 0);
+    }
+  }
+  console.log('VIDA_FEATURED_400 ' + JSON.stringify({
+    seed: compared.seed, seconds: compared.seconds,
+    uniform: {total: uniform.totalIntakeJ,
+      byFounder: uniform.outcomes.map(f => [f.founderId, Math.round(f.absorbedNutrientJ), Math.round(f.reserveDeltaJ)])},
+    blooms: {total: blooms.totalIntakeJ,
+      byFounder: blooms.outcomes.map(f => [f.founderId, Math.round(f.absorbedNutrientJ), Math.round(f.reserveDeltaJ)])},
+  }));
 });
