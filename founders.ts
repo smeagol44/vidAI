@@ -22,10 +22,51 @@ interface FounderBlueprint {
 export const FOUNDER_BLUEPRINTS = rawFounders as FounderBlueprint[];
 export const FOUNDER_FAMILIES = [...new Set(FOUNDER_BLUEPRINTS.map(f => f.family))];
 
+/**
+ * Nine curated, separately identified starters derived from nine distinct,
+ * already physical-swimming legacy families. The original FND genomes remain
+ * available unchanged. Each starter retains its donor's tested articulation,
+ * physical mouth anchor, seed and energy economics. Only inherited receptors
+ * and optional genetic learning capacity are specialized.
+ *
+ * These are starting genotypes, not scripted ecological roles or proven
+ * self-sustaining species. Children can mutate every inherited trait.
+ */
+export const FEATURED_STARTER_SPECS = [
+  {id: 'CUR-001', source: 'FND-001', name: 'Darter Scout', sensitivity: [0.5, 1, 0.6], learning: 0.016},
+  {id: 'CUR-002', source: 'FND-006', name: 'Twin Oar Grazer', sensitivity: [0.25, 1, 0.5], learning: 0},
+  {id: 'CUR-003', source: 'FND-021', name: 'Tidewheel Browser', sensitivity: [0.6, 1, 0.8], learning: 0},
+  {id: 'CUR-004', source: 'FND-052', name: 'Lantern Filterer', sensitivity: [0.15, 1, 0.35], learning: 0.008},
+  {id: 'CUR-005', source: 'FND-019', name: 'Forktail Opportunist', sensitivity: [0.9, 1, 0.7], learning: 0.012},
+  {id: 'CUR-006', source: 'FND-034', name: 'Broadwake Forager', sensitivity: [1, 0.8, 0.8], learning: 0.018},
+  {id: 'CUR-007', source: 'FND-039', name: 'Hooktail Scavenger', sensitivity: [1, 0.75, 1], learning: 0.012},
+  {id: 'CUR-008', source: 'FND-030', name: 'Hammerhead Pursuer', sensitivity: [1, 0.1, 0.9], learning: 0.018},
+  {id: 'CUR-009', source: 'FND-050', name: 'Branchstalker', sensitivity: [1, 0, 1], learning: 0.012},
+] as const;
+
+export const FEATURED_BLUEPRINTS: FounderBlueprint[] = FEATURED_STARTER_SPECS.map(spec => {
+  const donor = FOUNDER_BLUEPRINTS.find(f => f.id === spec.source);
+  if (!donor) throw new Error(`Missing curated founder source: ${spec.source}`);
+  const variant = structuredClone(donor);
+  variant.id = spec.id;
+  variant.name = spec.name;
+  // Stable, new organ/segment identities, with no changes to geometry, slots,
+  // motor phases or mouth placement.
+  variant.morphology.parts.forEach(p => {p.id = p.id.replace(donor.id, spec.id);});
+  variant.morphology.eyes.forEach(e => {e.id = e.id.replace(donor.id, spec.id);});
+  variant.morphology.mouths.forEach(m => {m.id = m.id.replace(donor.id, spec.id);});
+  return variant;
+});
+
+export const isFeaturedFounderId = (id: string): boolean =>
+  FEATURED_STARTER_SPECS.some(spec => spec.id === id);
+
 export function createFounderGenome(id: string, mode: FounderMode = 'balanced'): Genome {
-  const blueprint = FOUNDER_BLUEPRINTS.find(f => f.id === id);
+  const blueprint = FEATURED_BLUEPRINTS.find(f => f.id === id) ?? FOUNDER_BLUEPRINTS.find(f => f.id === id);
   if (!blueprint) throw new Error(`Unknown founder ${id}`);
   const d = structuredClone(blueprint);
+  const featured = FEATURED_STARTER_SPECS.find(spec => spec.id === id);
+  const sourceId = featured?.source ?? id;
   const {parts, eyes, mouths, hue, saturation, lightness} = d.morphology;
   // Physically verified head-first gait calibration (Phase 5): this axial
   // swimmer's original tail wave carried its mouth/eyes *backwards* relative
@@ -33,7 +74,7 @@ export function createFounderGenome(id: string, mode: FounderMode = 'balanced'):
   // thrust force or steering override, restores forward food access.
   // Do not apply to other founders (e.g. bell swimmers already move forward).
   // Older saved genotypes keep their exact original joint phases.
-  if (d.id === 'FND-001') {
+  if (sourceId === 'FND-001') {
     for (const part of parts.slice(1)) part.cpgPhaseOffset = -part.cpgPhaseOffset;
   }
   const layout = getBrainLayout({parts, eyes, mouths});
@@ -76,7 +117,19 @@ export function createFounderGenome(id: string, mode: FounderMode = 'balanced'):
     g.weightsHO = g.weightsHO.map(row => row.map(w => w * .1));
     g.biasesO = g.biasesO.map(b => b * .1);
   }
-  if (mode === 'balanced') addRetinalSteeringPrior(g, d.diet, d.id === 'FND-001');
+  if (mode === 'balanced') addRetinalSteeringPrior(g, d.diet, sourceId === 'FND-001');
+  if (featured) {
+    // RGB receptor gains and learning rates are ordinary mutable alleles.
+    // They affect real retinal rays and paid synaptic changes, never add an
+    // identity label, food-seeking script or extra locomotion force.
+    const spectralSensitivity = [...featured.sensitivity] as [number, number, number];
+    for (const eye of g.eyes) eye.spectralSensitivity = [...spectralSensitivity];
+    if (featured.learning > 0) {
+      g.plasticityRate = featured.learning;
+      g.sensoryPlasticityRate = featured.learning;
+      g.forgettingRate = 0.1;
+    }
+  }
   return g;
 }
 
@@ -109,15 +162,21 @@ function addRetinalSteeringPrior(g: Genome, diet: MouthType, calibratedDarter = 
 }
 
 export function createFounderBankItems(mode: FounderMode = 'balanced'): SpecimenBankItem[] {
-  return FOUNDER_BLUEPRINTS.map(d => ({id: `FOUNDER-${d.id}`, name: d.name,
-    savedAt: 'Built-in', genome: createFounderGenome(d.id, mode), tags: [d.family, d.diet]}));
+  return [
+    ...FEATURED_BLUEPRINTS.map(d => ({id: `FOUNDER-${d.id}`, name: d.name,
+      savedAt: 'Featured starter', genome: createFounderGenome(d.id, mode),
+      tags: ['Featured', `${d.family} design`, d.diet]})),
+    ...FOUNDER_BLUEPRINTS.map(d => ({id: `FOUNDER-${d.id}`, name: d.name,
+      savedAt: 'Legacy catalogue', genome: createFounderGenome(d.id, mode),
+      tags: ['Legacy', d.family, d.diet]})),
+  ];
 }
 
 /** Up to five distinct designs, sampled without replacement; clones get independent brains.
  */
 export function sampleFounderGenomes(prng: XoshiroPRNG, count = 18, mode: FounderMode = 'balanced'): Genome[] {
   if (count <= 0) return [];
-  const available = [...FOUNDER_BLUEPRINTS];
+  const available = [...FEATURED_BLUEPRINTS];
   const designs: FounderBlueprint[] = [];
   const number = Math.min(5, count, available.length);
   for (let i = 0; i < number; i++) {
