@@ -68,7 +68,7 @@ test('20 articulated creatures with 200 nutrients and 180 carrion simulate off-c
     const x = s.prng.range(40, settings.worldWidth - 40);
     const y = s.prng.range(40, settings.worldHeight - 40);
     s.nutrients.push({...nutrient(`carrion-${i}`, x, y, sim.getNutrientRadius(3000)),
-      kind: 'carrion', decayTimeRemaining: 500});
+      kind: 'carrion', decayTimeRemaining: sim.CARRION_DECAY_SECONDS});
     s.ledger.externalInflow += 3000;
   }
   assert.equal(s.nutrients.length, 380);
