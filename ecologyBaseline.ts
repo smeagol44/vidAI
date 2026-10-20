@@ -123,11 +123,56 @@ export function runStarvationCohort(seed: number) {
   return result;
 }
 
+/**
+ * First ecosystem-scale comparison with all nine curated founders, 400
+ * naturally seeded nutrients, ordinary intake and native metabolism.
+ * The initial animals/positions are identical across conditions: only the
+ * abiotic food distribution differs. No food is placed at a mouth, no
+ * scripted steering, no pre-funded adults and no post-start interventions.
+ * Optional benchmark only; not part of fast tests or a fitness guarantee.
+ */
+export function runFeaturedFoodDistributionPair(seed = 17, seconds = 3) {
+  const settings = {...DEFAULT_SETTINGS, inflowRate: 15, targetNutrients: 400,
+    nutrientPattern: 'uniform' as const};
+  const create = (pattern: 'uniform' | 'blooms') => {
+    const config = {...settings, nutrientPattern: pattern};
+    const state = createInitialWorld(config, seed, 'balanced', 'showcase');
+    const founders = state.organisms.map(o => ({
+      orgId: o.id, founderId: o.genome.id, initialEnergyJ: o.energy,
+      position: sim.calculateOrganismCOM(o),
+    }));
+    const observer = new EcologyIntakeObserver();
+    const initialFoodJ = readEcologyState(state).resources.freeFoodJ;
+    for (let i = 0; i < Math.floor(seconds / ECOLOGY_DT); i++) {
+      sim.stepSimulation(state, config, ECOLOGY_DT);
+      observer.sample(state);
+    }
+    const intake = observer.perOrganismTotals();
+    const outcomes = founders.map(f => {
+      const final = state.organisms.find(o => o.id === f.orgId);
+      return {
+        founderId: f.founderId,
+        absorbedNutrientJ: intake[f.orgId]?.Nutrient ?? 0,
+        absorbedPreyJ: intake[f.orgId]?.Prey ?? 0,
+        endReserveJ: final?.energy ?? 0,
+        reserveDeltaJ: (final?.energy ?? 0) - f.initialEnergyJ,
+        living: !!final && !final.dissolving,
+        eggsLaid: state.lineage.get(f.orgId)?.offspringCount ?? 0,
+      };
+    });
+    return {pattern, initialFoodJ, founderStart: founders.map(f =>
+      ({id: f.founderId, x: f.position.x, y: f.position.y})),
+      final: readEcologyState(state), totalIntakeJ: observer.totals(), outcomes};
+  };
+  return {seed, seconds, uniform: create('uniform'), blooms: create('blooms')};
+}
+
 export function collectEcologyBaseline() {
   return {
     protocol: 'VIDA-BD-short-fixed-seed-v1',
     physics: 'production-kernel / 1/60 s, no scripted feeding or steering',
     scope: 'bounded experiments; not ecological viability or evolutionary selection',
+    featuredFoodDistribution: runFeaturedFoodDistributionPair(),
     unassistedPairs: ECOLOGY_SEEDS.map(runUnassistedEcologyPair),
     controlledGrazing: ECOLOGY_SEEDS.slice(0, 2).flatMap(seed => [-1, 1].flatMap(side =>
       [135, 160].flatMap(distance => [true, false].map(vision =>
