@@ -1,5 +1,36 @@
 # Project status — 2026-10-20
 
+## Abiotic nutrient blooms and ecological founder comparison — v0.27.0
+
+- **Ecological change:** fresh 2D worlds start with an optional, displayed
+  **Blooms** distribution. Sixty-five percent of abiotic nutrient spawns
+  cluster around twelve reproducible sites, and the remaining 35 percent
+  stay uniformly dispersed. Sites are determined only by world seed and
+  tank size; they never track organisms or respond to mouths/health/diet.
+  Spawns use the existing 400-nutrient default target, 15-per-second inflow,
+  cap, per-particle joules and fully accounted external energy.
+  The **Uniform** option reproduces the previous random stream; importing
+  snapshots without this setting defaults to Uniform. The active selection
+  is saved and precisely restored in the existing schema v11.
+- **Observation:** `EcologyIntakeObserver.perOrganismTotals` can now attribute
+  genuine incrementally absorbed joules to each animal without modifying
+  the simulation. An optional `npm run benchmark:ecology` report compares
+  **all nine CUR founders** in seeded 400-food uniform and bloom worlds,
+  recording per-founder intake, final energy, egg laying, survival and
+  whole-world conservation. The two conditions start with the same
+  featured genotypes and creature positions, before food is distributed.
+- Focused fast checks cover clustered versus uniform food placement,
+  stable bloom-center seed derivation, exact save continuation,
+  old uniform snapshots, manual Feed patch precedence, strict import
+  validation, short native-physics founder cohorts and conservation.
+- **Not established:** blooms have NOT been shown to improve natural
+  multigeneration survival, hunter success, or ecosystem sustainability.
+  A short pair is a descriptive observation, not optimized founder tuning.
+  Further experiments should use the measured outcomes to distinguish
+  nutrient accessibility from poor movement/sensing/reproduction. Phase 6
+  remains optional/unimplemented; 3D is untouched.
+
+
 ## Curated starting bank — v0.26.0
 
 - Added **nine featured inherited genotypes** (CUR-001–CUR-009), selected
