@@ -1,4 +1,4 @@
-# VIDA: remaining features — 2026-10-20 / v0.25.0
+# VIDA: remaining features — 2026-10-20 / v0.26.0
 
 This is a focused review of the current 2D source, not an implementation promise.
 Small changes fit the existing systems. Big changes affect simulation architecture,
@@ -134,9 +134,23 @@ outcomes rather than silently being marked solved.
   energetically accountable, and compare against equal-compute waking learning.
   World-model dreaming is a later optional idea, not an existing feature.
 
-Do not prune the 55 founders now. Once lifetime learning and longer ecological
-fitness comparisons are evaluated, curate approximately eight differentiated
-**featured** starters while keeping archived Bank designs and old saves usable.
+The **v0.26 featured founder bank is implemented**: nine separately identified
+curated genotypes drawn from nine distinct source families (four herbivores,
+three omnivores and two carnivores). All 55 originals remain accessible in
+the Legacy Bank collection, alongside Saved specimens. Ordinary new worlds
+choose up to five of the nine featured genotypes, while the full featured
+showcase is explicit. Their inherited eye spectra and some learning rates
+are mutable; known legacy swimming gaits, physical feeding and metabolism
+remain in place. Short focused checks do **not** establish natural food
+acquisition or population fitness.
+
+**Next: ecological viability based on those nine starters**, in bounded
+increments. First measure real unassisted mouth absorption, replenishment
+and egg completion without subsidies; then measure predator/prey interactions
+and only fix concrete learning/locomotion limitations revealed by the data.
+Evaluate evolving generations only after reproduction works naturally.
+Do not run prolonged genotype tuning, guarantee survival, or start optional
+Phase 6 sleep/replay yet.
 
 Monitor performance only if measured bottlenecks arise.
 
