@@ -228,6 +228,18 @@
 - Controlled `tests/behavior-baseline.test.ts` trials compare vision on/off,
   ray detections, motor responses, physical travel, feeding and energy in
   short seeded scenarios; they are not ecological fitness evidence.
+- Curated starter Bank (v0.26.0): `FEATURED_STARTER_SPECS` in
+  `founders.ts` contains nine new, separately identified CUR-001–009
+  variants from nine distinct FND donor families (4 herbivores, 3
+  omnivores, 2 carnivores). Keep all 55 `FOUNDER_BLUEPRINTS` intact and
+  accessible in the Bank Legacy section. Default starting worlds still
+  distribute 18 animals over at most five random *featured* genotypes;
+  showcase spawns all nine only by explicit user choice. The new inherited
+  RGB sensitivities/learning alleles are mutable, metabolic, and never
+  scripted targeting. Preserve FND-001's calibrated phase/retinal prior
+  when deriving CUR-001. Do not equate bounded swimming and mouth tests
+  with sustainable ecological fitness. Use
+  `tests/featured-starters.test.ts` in the fast gate.
 - `data/founders.json` contains 55 distinct blueprints (50 revised originals and
   five jellyfish designs). Preserve their actual anatomy and measured gaits; never
   replace entries with renamed duplicates. Selective symmetry is not a mutation rule.
