@@ -1,5 +1,33 @@
 # Project status — 2026-10-20
 
+## Curated starting bank — v0.26.0
+
+- Added **nine featured inherited genotypes** (CUR-001–CUR-009), selected
+  from nine distinct, already swimming legacy anatomy families: four
+  herbivores, three omnivores and two carnivores.
+- Their nine *source* FND blueprints stay unchanged, as do all 55 legacy
+  genomes and old world snapshots. CUR variants have new stable part/eye/
+  mouth identities, ordinary inherited RGB receptor gains (including
+  suppressed or zero green sensitivity in the two predators), and optional
+  small inherited waking-learning rates. They keep the source's actual
+  mouth position, muscle geometry, oscillation/phase, neural steering prior,
+  finite metabolism and reproduction funding. No behavior scripts, oracle
+  signals, locomotion bonuses or free food were introduced.
+- Bank collections now distinguish **Featured / Legacy / Saved / All**,
+  sharing existing search, family/diet filters, previews and spawn controls.
+  Fresh default worlds still seed 18 organisms from at most five randomly
+  selected **featured** designs; the nine-design showcase remains opt-in.
+- Added fast checks for curated anatomy, brain/save validation, diet
+  permissions at real mouth contacts, finite active swimming and energy
+  conservation. These are short mechanical validation checks **only**.
+- **Unproven:** successful unassisted foraging for every starter, real
+  moving-prey catches for the predators, funded multigenerational breeding,
+  population sustainability, and whether these new sensory/learning
+  alleles confer measurable fitness advantage. Those are the next
+  ecological milestones. Existing founders were not empirically tuned
+  to guarantee success.
+
+
 ## Original Phase 5 — bounded waking-learning implementation complete (v0.25.0)
 
 - The production 2D neural kernel now supports genetically evolvable
