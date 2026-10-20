@@ -1,6 +1,6 @@
 {
   "name": "vidai",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "private": true,
   "type": "module",
   "description": "VIDA: a 2D aquatic artificial life and evolution simulator",
@@ -17,7 +17,7 @@
     "benchmark": "node --import tsx scripts/benchmark.ts",
     "benchmark:behavior": "node --import tsx scripts/behavior-benchmark.ts",
     "benchmark:ecology": "node --import tsx scripts/ecology-baseline.ts",
-    "test:fast": "node --import tsx --test tests/feeding.test.ts tests/motor-control.test.ts tests/senses-contact.test.ts tests/hatching-senses.test.ts tests/jellyfish-variants.test.ts tests/brain-architecture.test.ts tests/brain-topology.test.ts tests/reproduction-economy.test.ts tests/brain-memory.test.ts tests/behavior-baseline.test.ts tests/evolvable-actuation.test.ts tests/visual-steering-survey.test.ts tests/injury-sense.test.ts tests/bite-escape-survey.test.ts tests/moving-hunter.test.ts tests/spectral-vision.test.ts tests/moving-visual-hunter.test.ts tests/ecology-baseline.test.ts tests/waking-plasticity.test.ts tests/sensory-association.test.ts tests/selective-memory.test.ts tests/learned-physical-outcome.test.ts tests/featured-starters.test.ts"
+    "test:fast": "node --import tsx --test tests/feeding.test.ts tests/motor-control.test.ts tests/senses-contact.test.ts tests/hatching-senses.test.ts tests/jellyfish-variants.test.ts tests/brain-architecture.test.ts tests/brain-topology.test.ts tests/reproduction-economy.test.ts tests/brain-memory.test.ts tests/behavior-baseline.test.ts tests/evolvable-actuation.test.ts tests/visual-steering-survey.test.ts tests/injury-sense.test.ts tests/bite-escape-survey.test.ts tests/moving-hunter.test.ts tests/spectral-vision.test.ts tests/moving-visual-hunter.test.ts tests/ecology-baseline.test.ts tests/waking-plasticity.test.ts tests/sensory-association.test.ts tests/selective-memory.test.ts tests/learned-physical-outcome.test.ts tests/featured-starters.test.ts tests/abiotic-blooms.test.ts"
   },
   "dependencies": {
     "lucide-react": "1.59.0",
