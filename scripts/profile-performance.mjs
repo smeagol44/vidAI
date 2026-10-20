@@ -1,0 +1,70 @@
+import {Session} from 'node:inspector/promises';
+import {createHash} from 'node:crypto';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+
+const root = resolve(process.argv[2] ?? '.');
+const sim = await import(pathToFileURL(resolve(root, 'simulation.ts')).href);
+const {createInitialWorld, addExternalOrganism} = await import(pathToFileURL(resolve(root, 'world.ts')).href);
+const {DEFAULT_SETTINGS, createSnapshot} = await import(pathToFileURL(resolve(root, 'persistence.ts')).href);
+const settings = {...DEFAULT_SETTINGS, targetNutrients: 200, inflowRate: 0, maxOrganisms: 100};
+for (const scenario of ['founders-15', 'generation-2-30', 'blocked-eggs']) {
+  const state = createInitialWorld(settings, 711, 'balanced', 'standard', scenario === 'founders-15' ? 15 : 0);
+  if (scenario !== 'founders-15') {
+    const donors = createInitialWorld(settings, 711, 'balanced', 'standard', 30).organisms;
+    donors.forEach((donor, i) => {
+      let genome = donor.genome;
+      for (let generation = 0; generation < 2; generation++) genome = sim.mutateGenome(genome, .25, state.prng);
+      addExternalOrganism(state, genome, settings, 150 + i % 6 * 380, 150 + Math.floor(i / 6) * 260, 0);
+    });
+  }
+  state.simTime = 100;
+  for (const org of state.organisms) {org.age = org.genome.maturityAge + 1; org.lastReproductionTime = 100;}
+  if (scenario === 'blocked-eggs') for (let i = 0; i < 75; i++) {
+    const org = state.organisms[i % state.organisms.length], g = structuredClone(org.genome);
+    state.eggs.push({id: 'profile-egg-' + i, clutchId: 'profile', parentOrgId: org.id,
+      x: org.segments[0].x, y: org.segments[0].y, vx: 0, vy: 0, genome: g,
+      fundedStructural: g.bodyCost, fundedReserve: 10000, incubationProgress: 1,
+      totalIncubationTime: 10, pulseTimer: 0, colorHue: g.hue, readyToHatch: true, hatchHeading: 0});
+    state.ledger.externalInflow += g.bodyCost + 10000;
+  }
+  for (let i = 0; i < 180; i++) {
+    state.nutrients.push({id: 'profile-remains-' + i, kind: 'carrion',
+      x: state.prng.range(40, 2360), y: state.prng.range(40, 1460), vx: 0, vy: 0,
+      energyValue: 3000, radius: 18, decayTimeRemaining: 60, bottomTimer: 0, pulseTimer: 0});
+    state.ledger.externalInflow += 3000;
+  }
+  const session = new Session(); session.connect();
+  await session.post('Profiler.enable');
+  await session.post('Profiler.setSamplingInterval', {interval: 500});
+  for (let i = 0; i < 20; i++) sim.stepSimulation(state, settings, 1 / 60);
+  await session.post('Profiler.start');
+  const start = performance.now();
+  for (let i = 0; i < 120; i++) sim.stepSimulation(state, settings, 1 / 60);
+  const milliseconds = performance.now() - start;
+  const {profile} = await session.post('Profiler.stop'); session.disconnect();
+  const nodes = new Map(profile.nodes.map(n => [n.id, n])), parents = new Map();
+  for (const n of profile.nodes) for (const child of n.children ?? []) parents.set(child, n.id);
+  const totals = {}, self = {};
+  for (const id of profile.samples ?? []) {
+    const node = nodes.get(id), name = node?.callFrame.functionName || '(anonymous)';
+    self[name] = (self[name] ?? 0) + 1;
+    let current = id, category = 'other';
+    while (current !== undefined) {
+      const fn = nodes.get(current)?.callFrame.functionName;
+      if (fn === 'resolveBodyContacts') {category = 'contacts'; break;}
+      if (fn === 'advanceOrganismPhysics') {category = 'joint-and-drag-physics'; break;}
+      if (fn === 'hatchPlacement') {category = 'hatch-clearance'; break;}
+      if (fn === 'mutateGenome') {category = 'mutation'; break;}
+      if (fn === 'stepSimulation') category = 'vision-brain-feeding-and-other-kernel';
+      current = parents.get(current);
+    }
+    totals[category] = (totals[category] ?? 0) + 1;
+  }
+  const samples = profile.samples?.length || 1;
+  const percentages = Object.fromEntries(Object.entries(totals).map(([name, n]) => [name, Math.round(1000 * n / samples) / 10]));
+  console.log(JSON.stringify({root, scenario, milliseconds: Math.round(milliseconds),
+    stepsPerSecond: Math.round(120000 / milliseconds), creatures: state.organisms.length, eggs: state.eggs.length,
+    stateHash: createHash('sha256').update(JSON.stringify(createSnapshot(state, settings).state)).digest('hex'),
+    samplePercent: percentages, topSelf: Object.entries(self).sort((a,b) => b[1]-a[1]).slice(0,12)}));
+}

@@ -1,0 +1,34 @@
+name: Simulation throughput diagnosis
+on:
+  pull_request:
+    paths:
+      - 'scripts/profile-performance.mjs'
+      - 'simulation.ts'
+      - 'contacts.ts'
+      - 'simulation.worker.ts'
+      - 'workerPacing.ts'
+      - '.github/workflows/performance-profile.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  profile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - uses: actions/checkout@v4
+        with:
+          ref: efca47d6fafa21d8d79fd539831e1eb16df0b1ed
+          path: performance-baseline
+      - name: Profile v0.31 baseline
+        run: node --import tsx scripts/profile-performance.mjs performance-baseline
+      - name: Profile candidate
+        run: node --import tsx scripts/profile-performance.mjs .
+      - name: Verify exact kernel continuation against v0.31
+        run: npm run benchmark:performance -- --baseline performance-baseline
