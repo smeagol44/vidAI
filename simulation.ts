@@ -2808,6 +2808,33 @@ export function getPartCornerVertices(phys: PartPhys, def: PartDef): Array<{x: n
   ];
 }
 
+/**
+ * Physical mouth aperture versus a prey body rectangle. Boundary edges alone
+ * are insufficient when the entire mouth aperture is *inside* prey tissue:
+ * no edge is crossed and the aperture may be farther than mouthRadius from
+ * every edge. A buried mouth is genuine physical overlap, not an oracle bite.
+ * The containment check uses the prey's actual rotated rectangle.
+ */
+export function mouthApertureContactsPart(
+  cx: number, cy: number,
+  x1: number, y1: number, x2: number, y2: number,
+  mouthRadius: number, part: PartPhys, def: PartDef,
+): boolean {
+  const dx = cx - part.x, dy = cy - part.y;
+  const cos = Math.cos(part.angle), sin = Math.sin(part.angle);
+  const localX = cos * dx + sin * dy;
+  const localY = -sin * dx + cos * dy;
+  if (Math.abs(localX) <= def.width * .5 && Math.abs(localY) <= def.height * .5) return true;
+
+  const corners = getPartCornerVertices(part, def);
+  for (let edge = 0; edge < 4; edge++) {
+    const a = corners[edge], b = corners[(edge + 1) % 4];
+    if (lineIntersection(x1, y1, x2, y2, a.x, a.y, b.x, b.y).hit ||
+        distPointToSegment(cx, cy, a.x, a.y, b.x, b.y) <= mouthRadius) return true;
+  }
+  return false;
+}
+
 export function distPointToSegment(px: number, py: number, x1: number, y1: number, x2: number, y2: number): number {
   const dx = x2 - x1;
   const dy = y2 - y1;
@@ -3795,14 +3822,12 @@ export function stepSimulation(
           if (prey.id === org.id || prey.dissolving || (isKinshipProtected && areSiblings(org, prey))) continue;
           let contact = false;
           for (let part = 0; part < prey.segments.length && !contact; part++) {
-            const pos = prey.segments[part];
-            if (Math.abs(pos.x - cx) > 70 || Math.abs(pos.y - cy) > 70) continue;
-            const corners = getPartCornerVertices(pos, prey.genome.parts[part]);
-            for (let edge = 0; edge < 4; edge++) {
-              const a = corners[edge], b = corners[(edge + 1) % 4];
-              if (lineIntersection(x1, y1, x2, y2, a.x, a.y, b.x, b.y).hit ||
-                  distPointToSegment(cx, cy, a.x, a.y, b.x, b.y) <= mouthRadius) { contact = true; break; }
-            }
+            const pos = prey.segments[part], def = prey.genome.parts[part];
+            // Conservative rectangle half-diagonal + mouth aperture bounds;
+            // unlike a fixed 70px cutoff, this also handles large mutated parts.
+            const reach = Math.hypot(def.width, def.height) * .5 + halfAperture + mouthRadius;
+            if (Math.abs(pos.x - cx) > reach || Math.abs(pos.y - cy) > reach) continue;
+            contact = mouthApertureContactsPart(cx, cy, x1, y1, x2, y2, mouthRadius, pos, def);
           }
           if (!contact) continue;
           feedback.contact = 1;
