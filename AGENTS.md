@@ -286,6 +286,18 @@
   step replacement state before its matching pause/settings render.
 - New imports must be validated before replacing the active world. Current
   snapshots must continue exactly, including PRNG, activations, counters and IDs.
+- v0.28 2D performance broadphase: `sightBroadphase.ts` conservatively
+  indexes food centers in 128px cells, expands each sight-ray AABB by
+  the largest physical food radius, and preserves old array-index
+  ordering for strict closest-hit ties. Per-step scratch only:
+  rebuild whenever dissolution adds remains, never persist/cache
+  across world replacements, never change ray RGB, nutrition, neural
+  weights or PRNG. The renderer skips off-viewport food, eggs and
+  caustics without stopping off-camera simulation. Preserve old
+  exact-save continuation and use bounded
+  `tests/sight-broadphase.test.ts`, including the 20-creature /
+  200-nutrient / 180-carrion configuration. FPS speedups are NOT
+  claimed until measured in the user's browser; no native port yet.
 - Default verification is `npm run test:fast` and `npm run build`. Prefer pure
   geometry/state assertions and a few kernel ticks. Full `npm test`, browser tests,
   ecosystem/behavior benchmarks and manual browser checks are opt-in for a concrete
