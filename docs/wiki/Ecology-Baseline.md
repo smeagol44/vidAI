@@ -34,6 +34,41 @@ receipts, unusually dense situations creating more than eight separate
 events within one tick can undercount; this is **not** a complete
 high-density historical feeding ledger.
 
+## Abiotic food distribution in new worlds
+
+The **Abiotic nutrient distribution** control lets new worlds choose:
+
+- **Blooms** (fresh-game default): 65% of new environmental nutrients
+  appear near twelve sites derived from the world seed and tank dimensions;
+  35% remain dispersed. These sites stay fixed until changing tank size
+  or seed, and do not sense or follow creatures.
+- **Uniform**: historical random placement with no seeded hotspots.
+  Imported older snapshots without the setting use Uniform, preserving
+  historical randomness and exact continuation.
+
+Neither setting changes the food cap (400 by default), energy per nutrient,
+inflow rate, physical mouth contact, prey appetite, or egg cost.
+The environment charges every added nutrient to the external-inflow
+ledger. Manually placed Feed bursts retain their explicit positions in
+either mode; changing modes alone does not add food or move existing
+particles. World reset repopulates from the selected distribution.
+
+### Nine-founder ecological observation
+
+The optional `npm run benchmark:ecology` now includes a normal
+**400-food, nine-featured-founder, three-second comparison** under
+Uniform and Blooms (seed 17). All nine organisms start with the same
+identities and positions before nutrient generation. It reports
+real orally absorbed nutrient/prey joules, reserve change, survival,
+funded eggs and conservation for each founder. Absorbed joules come from
+incremental physical mouth receipts, not what an eye sees.
+
+A three-second comparison cannot establish ecological sustainability,
+even if some starters acquire food; adult maturation, multi-generational
+selection and ongoing nutrient accessibility still need separate evidence.
+The `EcologyIntakeObserver` also exposes read-only per-organism intake,
+subject to the existing eight-receipt-per-organism density limit.
+
 ## Repeatable bounded protocol
 
 Run `npm run benchmark:ecology` to print the fixed-seed report. Short fast
@@ -76,9 +111,7 @@ or post-start survival aid occurs.
 but does **not** establish self-sustaining ecosystems, cross-generation
 selection, reliable hunter pursuit, or long-term population fitness.
 Those remain biological results to improve and test, not implied outcomes
-of implementing sensors and reproduction. The 55 founders and all prior
-save states are untouched. Original Phase 5 lifetime synaptic learning and
-original Phase 6 optional sleep/replay are distinct, still unimplemented.
+of implementing sensors and reproduction. All 55 legacy founders and historical saved genotypes remain accessible. Original Phase 5 waking synaptic learning is implemented as a bounded feature but has no proven general ecological benefit. Original Phase 6 optional sleep/replay remains unimplemented.
 
 ## Where to inspect next
 
@@ -87,7 +120,7 @@ original Phase 6 optional sleep/replay are distinct, still unimplemented.
 - `ecologyBaseline.ts`: identical seeded paired worlds, controlled grazing,
   warm-start egg allocation and explicit starvation stress
 - `scripts/ecology-baseline.ts`: JSON report, with negative results included
-- `tests/ecology-baseline.test.ts`: compact deterministic conservation,
+- `tests/abiotic-blooms.test.ts`: focused bloom/uniform physical ecology, saves and accounting\n- `tests/ecology-baseline.test.ts`: compact deterministic conservation,
   snapshot, intake, survival, reproduction and mortality regressions
 - [Sensory Behavior](Sensory-Behavior): inherited retinal/motor pathways,
   measured feeding and the limits of predator pursuit
