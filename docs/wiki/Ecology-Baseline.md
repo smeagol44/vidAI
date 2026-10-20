@@ -38,11 +38,11 @@ high-density historical feeding ledger.
 
 The **Abiotic nutrient distribution** control lets new worlds choose:
 
-- **Blooms** (fresh-game default): 65% of new environmental nutrients
+- **Blooms** (optional): 65% of new environmental nutrients
   appear near twelve sites derived from the world seed and tank dimensions;
   35% remain dispersed. These sites stay fixed until changing tank size
   or seed, and do not sense or follow creatures.
-- **Uniform**: historical random placement with no seeded hotspots.
+- **Uniform** (default): historical random placement with no seeded hotspots.
   Imported older snapshots without the setting use Uniform, preserving
   historical randomness and exact continuation.
 
@@ -62,6 +62,14 @@ identities and positions before nutrient generation. It reports
 real orally absorbed nutrient/prey joules, reserve change, survival,
 funded eggs and conservation for each founder. Absorbed joules come from
 incremental physical mouth receipts, not what an eye sees.
+
+In a **bounded two-second seed-17 trial**, Uniform yielded **2,592 J**
+of genuine nutrient absorption (CUR-001, CUR-002 and CUR-006 fed).
+Blooms yielded **864 J** (CUR-005 fed). Both used nine distinct CUR
+genotypes, 400 nutrient particles, real locomotion and energy
+conservation. This single result favored Uniform, which therefore
+remains the fresh-world default. Resource patches are an
+**experimental option**, not a proven survival improvement.
 
 A three-second comparison cannot establish ecological sustainability,
 even if some starters acquire food; adult maturation, multi-generational
