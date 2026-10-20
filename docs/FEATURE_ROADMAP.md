@@ -1,4 +1,4 @@
-# VIDA: remaining features — 2026-10-20 / v0.28.0
+# VIDA: remaining features — 2026-10-20 / v0.29.0
 
 This is a focused review of the current 2D source, not an implementation promise.
 Small changes fit the existing systems. Big changes affect simulation architecture,
@@ -17,12 +17,17 @@ nine-featured-founder native-kernel comparison measures individual real
 mouth-intake joules and reserve outcomes at the normal 400-food baseline,
 with no post-seeding assistance. **It does not prove ecological benefit.**
 
-Next: inspect this short comparison for whether particular body plans
-encounter and ingest natural food. Fix a reproducible physical/perceptual
-bottleneck in a separate bounded change, then measure affordable eggs
-and natural hatching over multiple generations. Only afterward compare
-selection, predator-prey fitness and potential learned improvement. Avoid
-adding behavioral scripts or retuning every starter to pass tests.
+The current bounded correction fixes prey-body overlaps that could
+leave a physically enclosed carnivore mouth unable to bite because no prey
+**edge** crossed the aperture. This does not change learned steering or
+guarantee natural prey capture.
+
+Next ecological increments: measure actual sightings, swimming displacement,
+mouth contact, oral absorption and reserve balance for the featured starters.
+Then fix specific failed acquisition paths and observe funded eggs/hatches
+without forced survival. Only afterward compare multigeneration selection,
+predator/prey fitness and learned improvements. Do not prescribe navigation
+or retune all starters to a test outcome.
 
 ## Small
 
@@ -42,7 +47,7 @@ adding behavioral scripts or retuning every starter to pass tests.
 | Evolvable neural structure | Phases 1–2 support inherited hidden sizes (1–96), neuron identity, connection masks and bounded upkeep. Phase 4 adds inherited activation memory time constants (0–4 s). Phase 5 now permits bounded personal changes in existing retinal and motor synapses, with energy-paid consolidation and forgetting, but **not** within-life neuron/topology growth. One controlled later feeding arrangement improved by 180 J; another worsened by 420 J. General ecological fitness remains unproven. |
 | Growth, injury and gradual aging | Juvenile/adult/aging labels exist, but real body growth, local tissue injury/repair and gradual senescence are absent. These require consistent mass, geometry, energy and controller updates. |
 | Environment and communication (optional) | Currents and resource patches could create niches. Chemical or acoustic organs would add new physical signals and sensory channels. Current sound effects are presentation, not creature communication. Implement these as separate systems, not one large update. |
-| Performance at larger populations | **v0.28** indexes food for each retinal ray and avoids drawing off-camera nutrients/eggs/caustics; body contacts already have a spatial index. Creature/egg retinal geometry still uses direct scans, visible glows are uncached and physics/render still share the main thread. Next: measure performance at ~20 creatures + 200 food + 180 carrion, then profile whether spatial sight, sprite/gradient caching or worker-thread separation deserves the next bounded increment. A Tauri/Electron wrapper alone would not speed up the unchanged JS kernel. |
+| Performance at larger populations | **v0.28** added nutrient sight indexing and off-camera paint culling. Physics/render still share the main thread. **DEFERRED separate workstream:** after ecological food acquisition and funded natural reproduction, move the authoritative simulation kernel into a Web Worker and paint on the main thread. Preserve exact deterministic stepping, snapshot/PRNG continuation, 100+ off-camera organisms and conserved energy; profile 20 creatures + 200 nutrients + 180 carrion before and after. A native wrapper alone would not solve the bottleneck. |
 | Experiment archives and comparison | Current branching replaces the active world with a cloned snapshot; it does not retain multiple named worlds for switching/comparison. Add an archive, event history and repeatable cross-seed comparisons. Deterministic snapshot continuation already exists; playback/rewind does not. |
 
 ## Milestones, without overlapping phase numbers
@@ -170,6 +175,14 @@ and only fix concrete learning/locomotion limitations revealed by the data.
 Evaluate evolving generations only after reproduction works naturally.
 Do not run prolonged genotype tuning, guarantee survival, or start optional
 Phase 6 sleep/replay yet.
+
+**Deferred post-ecology milestone P — physics/render separation:**
+migrate native `stepSimulation` updates into a Web Worker, send bounded
+state snapshots/diffs for rendering, retain exact save compatibility,
+off-camera simulation and energy conservation. Benchmark the user-reported
+20-creature/380-food workload. Do not begin this milestone before finishing
+the current ecological acquisition and natural reproduction work; do not
+introduce a second behavioral engine or start native desktop packaging.
 
 Monitor performance only if measured bottlenecks arise.
 
