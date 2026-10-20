@@ -298,6 +298,18 @@
   `tests/sight-broadphase.test.ts`, including the 20-creature /
   200-nutrient / 180-carrion configuration. FPS speedups are NOT
   claimed until measured in the user's browser; no native port yet.
+- v0.29 natural-predation contact correction: carnivore and omnivore
+  prey mouths must recognize both real aperture-edge contact and a
+  mouth center completely enclosed by a prey's *rotated* rectangular
+  segment. `mouthApertureContactsPart` is physical geometry only,
+  not target-seeking; budget and prey energy transfer remain conserved.
+  Keep the near-candidate cutoff proportional to the part dimensions
+  and oral aperture, never fixed to a magic broadphase distance.
+  Bounded test is `tests/prey-mouth-overlap.test.ts`; existing
+  feeding and conservation tests must remain green. Natural hunting
+  fitness remains unknown. User explicitly deferred physics/render
+  separation to a new milestone P AFTER ecological acquisition
+  and funded reproduction; no Worker or native work now.
 - Default verification is `npm run test:fast` and `npm run build`. Prefer pure
   geometry/state assertions and a few kernel ticks. Full `npm test`, browser tests,
   ecosystem/behavior benchmarks and manual browser checks are opt-in for a concrete
