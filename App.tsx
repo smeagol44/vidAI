@@ -970,6 +970,12 @@ export default function App() {
     ctx.translate(canvasWidth / 2, canvasHeight / 2);
     ctx.scale(zoom, zoom);
     ctx.translate(-cam.x, -cam.y);
+    // Visible-world bounds for presentation ONLY. Simulation, feeding,
+    // perception and all off-camera organisms continue at full fidelity.
+    const viewHalfWidth = canvasWidth / (2 * zoom);
+    const viewHalfHeight = canvasHeight / (2 * zoom);
+    const viewLeft = cam.x - viewHalfWidth, viewRight = cam.x + viewHalfWidth;
+    const viewTop = cam.y - viewHalfHeight, viewBottom = cam.y + viewHalfHeight;
 
     // Tank Boundaries & Grid
     ctx.strokeStyle = 'rgba(6, 182, 212, 0.25)';
@@ -993,6 +999,9 @@ export default function App() {
 
     // Caustics
     for (const c of s.caustics) {
+      const blurMargin = Math.max(0, c.radius) + 48 / zoom;
+      if (c.x + blurMargin < viewLeft || c.x - blurMargin > viewRight
+        || c.y + blurMargin < viewTop || c.y - blurMargin > viewBottom) continue;
       ctx.save();
       ctx.beginPath();
       ctx.arc(c.x, c.y, Math.max(0, c.radius), 0, Math.PI * 2);
@@ -1027,6 +1036,9 @@ export default function App() {
       const isSuper = nut.isSuper || nut.energyValue > NUTRIENT_ENERGY_VALUE * 1.25;
       const baseRadius = Math.max(6.0, nut.radius);
       const pulse = 1.0 + Math.sin(nut.pulseTimer || 0) * 0.12;
+      const visualRadius = Math.max(14, baseRadius * 2.6) * pulse;
+      if (nut.x + visualRadius < viewLeft || nut.x - visualRadius > viewRight
+        || nut.y + visualRadius < viewTop || nut.y - visualRadius > viewBottom) continue;
 
       ctx.save();
       ctx.translate(nut.x, nut.y);
@@ -1071,6 +1083,8 @@ export default function App() {
     const eggImg = assets['organismEgg'];
     const eggAspect = (getConfig('assetOrganismEggAspectRatio') as number) || 0.785;
     for (const egg of s.eggs) {
+      if (egg.x + 30 < viewLeft || egg.x - 30 > viewRight
+        || egg.y + 30 < viewTop || egg.y - 30 > viewBottom) continue;
       const eggHeight = 32;
       const eggWidth = eggHeight * eggAspect;
       const pulse = 1 + Math.sin(egg.pulseTimer) * 0.08;
