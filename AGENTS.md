@@ -1,4 +1,4 @@
-# Current performance architecture (v0.31)
+# Current performance architecture (v0.31.1)
 
 - The user explicitly brought performance work forward. `simulation.worker.ts`
   owns live state and fixed 1/60-second ticks; `App.tsx` paints a read-only replica.
@@ -14,6 +14,12 @@
   reserve and biomass energy. Old saved fragments remain valid and unmerged.
   This requested physical food-geometry/PRNG change is intentional. Never create
   one circle per 3000 J again. Food glow sprites are presentation-only caches.
+- Backlogged Worker batches queue through MessageChannel; idle/light worlds use
+  a paced timer. Preserve all fixed ticks, command yields and bounded render traffic.
+- Share hatch-obstacle bounds only within one egg pass; append each newborn
+  immediately. Cache velocity-solver geometry only within one substep, and vision
+  corners only before movement. Contact wrappers may be reused but their AABBs
+  must be rebuilt after projection. Preserve original candidate/impulse order.
 - Routine checks: fast tests + build + `npm run test:worker`. The last command
   executes the built Worker on a real thread. The dedicated browser smoke checks
   actual UI/Worker integration in CI. `benchmark:performance` accepts a local
@@ -342,7 +348,7 @@
   prey ray hits, mouth-contact ticks and bite receipts still count.
   Use `tests/featured-acquisition.test.ts` and conservation/unchanged
   snapshot checks. Do not interpret 2 juvenile seconds as viable ecology.
-  Original Phase 6 remains deferred; Worker milestone P is now implemented on the performance branch.
+  Original Phase 6 remains deferred; Worker milestone P is implemented in production.
 - Default verification is `npm run test:fast` and `npm run build`. Prefer pure
   geometry/state assertions and a few kernel ticks. Full `npm test`, browser tests,
   ecosystem/behavior benchmarks and manual browser checks are opt-in for a concrete

@@ -380,7 +380,7 @@ run with **extended_validation** enabled; they no longer run on every release.
 
 ## Performance architecture
 
-The v0.31 performance branch moves authoritative fixed-step simulation into a
+VIDA runs authoritative fixed-step simulation in a
 Web Worker, with bounded render frames on the UI thread. Neural connection masks
 and plastic indices are cached, acquired synapse records are reused, and food
 and carrion glow sprites are cached. Each new corpse produces one larger edible
@@ -392,3 +392,12 @@ check. `npm run benchmark:performance` measures the 15-creature / 78-food /
 an identical-state comparison against a previous local checkout with dependencies.
 Browser FPS remains hardware dependent. `?mainthread` selects the diagnostic
 fallback; every organism is still simulated off-camera in either mode.
+
+The Worker queues overdue work without adding timer sleeps. Ready eggs share
+per-tick clearance bounds, newborns update those bounds immediately, and joint
+geometry is reused only during unchanged velocity iterations. Vision corners
+and collision wrappers avoid repeated allocation while all physical substeps,
+sensing and deterministic arithmetic remain intact. The focused Worker smoke
+runs in both Chromium and Firefox. See the current
+[Simulation Performance Wiki](https://github.com/smeagol44/vidAI/wiki/Simulation-Performance)
+for diagnostics and limits.

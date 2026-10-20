@@ -1,5 +1,45 @@
 # Project status — 2026-10-20
 
+## Simulation throughput correction — v0.31.1
+
+- Follow-up to smooth 60 FPS rendering but inadequate simulation speed. The
+  Worker now queues overdue batches through MessageChannel instead of adding
+  timer idle time. Light worlds sleep until a tick is due; paused worlds use
+  an idle timer. The fixed 1/60-second clock, 8 ms batch yield and bounded
+  render updates remain intact.
+- CPU sampling reproduced a concrete slowdown with 30 mutated generation-2
+  animals, 200 nutrients, 180 remains and 75 ready-but-blocked eggs. Rebuilding
+  every living-body bound separately for each egg consumed 55–59% of tick time.
+  The egg pass now shares those bounds and immediately appends each newborn.
+  Clearance is still checked every tick in all eight original orientations.
+- Reuse velocity-constraint geometry only within its unchanged ten-iteration
+  solve; cache exact vision corners only before movement; use numeric spatial
+  grid coordinates and reusable contact wrappers with fresh AABBs each pass.
+  No reduced physics substeps, sensing frequency, neural capacity or behavior.
+- One same-run CI CPU profile measured these 120-tick kernels after 20 warm-up
+  ticks (milliseconds, including profiler overhead):
+
+  | Workload (200 nutrients, 180 remains) | v0.31 | v0.31.1 |
+  | --- | ---: | ---: |
+  | 15 founders | 847 | 620 |
+  | 30 second-generation animals | 1148 | 994 |
+  | Same 30 with 75 blocked eggs | 2678 | 988 |
+
+  The egg-heavy sample rose from about 45 to 121 ticks/s. All three complete
+  snapshot hashes exactly match v0.31, including PRNG and learning. These are
+  synthetic server kernels, not measurements of the user's unavailable tank
+  export, and not a promise of 2x/5x speed on every computer.
+- Separate masked-brain 15-creature/78-nutrient/221-remains differential:
+  baseline 710/495 ms vs candidate 623/408 ms in reversed-order rounds;
+  complete state matches. Vision/neural work and contacts remain significant.
+- Verification on the code commit: 208/208 fast tests, TypeScript/Vite build,
+  actual production Worker thread check, Chromium UI/Worker smoke and the same
+  smoke in Firefox all pass. Existing sibling-hatch, funding, save, learning,
+  sensory and contact regressions remain green. No 3D changes.
+- An opt-in CPU profiling script and workflow retain three complete-state
+  references. Routine verification remains fast tests/build/Worker check;
+  avoid turning every future feature into a benchmark campaign.
+
 
 ## Performance branch — v0.31.0
 
@@ -24,8 +64,8 @@
   optimized 971 and 1459 ms. Final states match. These are noisy server
   kernel timings (roughly 3–5x improvement), NOT user-browser FPS claims.
 - Local browser installation returned a truncated archive, so direct local
-  browser validation is unavailable. A dedicated CI browser smoke covers
-  the UI/Worker integration. Keep the change on its branch pending checks.
+  browser validation was unavailable. The dedicated CI browser smoke passed;
+  PR #34 merged and Pages/Wiki publishing succeeded.
 
 
 ## Featured founder acquisition pipeline — v0.30.0
