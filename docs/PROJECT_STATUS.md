@@ -18,12 +18,28 @@
   snapshots following ordinary native physics; its data never reaches
   brains, genetics, collision checks, reproduction, saved state,
   world energy, environment placement or PRNG.
-- A bounded 2-second seed-17 free-roaming regression and opt-in
+- **Measured seed 17, 400 natural nutrients, 2 seconds, nine CUR animals:**
+  all nine registered spectrally visible edible-eye hits at least once.
+  CUR-001 physically absorbed **96 J**, CUR-002 **1,488 J**, CUR-006
+  **1,008 J**. The other six absorbed zero. CUR-003, CUR-005 and CUR-007
+  had **no free edible food within 24px of their mouths** during the
+  trial, despite their eye detections. CUR-004 registered nearby food
+  throughout, but **never contacted or absorbed any**. CUR-008 and
+  CUR-009 were able to see potential animal prey in some ticks but
+  never made bite contact. Net COM travel ranged roughly **2–18px**.
+  This isolates where acquisition breaks down without pretending that
+  all founders have a demonstrated foraging skill.
+- None of the nine laid eggs in the two juvenile seconds. All were
+  **3,055–21,588 J below** the threshold for one egg, including the
+  parental safety reserve (these are observed initial-state deficits,
+  not suggestions to hand out energy). Long-term affordable
+  reproduction and predator pursuit remain unproven.
+- A bounded free-roaming regression and optional
   `npm run benchmark:ecology` report distinguish **seen but not reached**
   from **reached but not eaten**; no survival or natural selection claim.
-  Negative outcomes remain visible. Further ecology work must use
-  these real measurements rather than scripted behavior or endless
-  founder calibration.
+  The next bounded correction should target physically demonstrated
+  ineffective locomotion/orientation or oral approach; do not add scripted
+  food targeting or endlessly retune the whole founder bank.
 - **Physics/render separation remains deferred milestone P**, after
   ecological acquisition and naturally funded eggs/hatching. No 3D edits.
 
