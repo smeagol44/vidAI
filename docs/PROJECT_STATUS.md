@@ -1,5 +1,45 @@
 # Project status — 2026-10-20
 
+## First browser-performance pass — v0.28.0
+
+- User-reported slowdown: approximately **20 live creatures, 200 green nutrients
+  and 180 carrion/remains**, even though this is a modest population.
+  Existing kernel previously scanned *every* nutrient for *every* visual
+  ray. With roughly two to four eyes and five rays per eye, this creates
+  many redundant checks at each of 60 native physics ticks per second.
+- **Implemented:** ephemeral per-step 128px spatial food broadphase.
+  Ray segments select only candidate nutrient cells expanded by
+  the largest actual nutrient radius, then process candidates in the
+  original array-index order. This preserves closest-hit strict tie
+  behavior, RGB attenuation, occlusion, predator perception of carrion,
+  and all sensory/neural inputs. Index is discarded after stepping;
+  it does not enter the genome, PRNG, snapshot or energy ledger.
+  Dissolving bodies may create carrion during the organism pass, so
+  any change in food-array length forces the eye index to rebuild.
+- **Presentation-only:** nutrients, eggs, and caustic effects outside the
+  camera's world-space viewport are not drawn. They still exist,
+  are seen by nearby off-camera creatures, collide/feed, age and
+  participate in energy accounting normally.
+- **Validation:** a deterministic 380-food candidate-versus-exhaustive
+  raycast comparison, boundary/oversized circle cases and a short
+  20-creature + 200 nutrient + 180 carrion native-physics scenario,
+  with exact save/load continuation and conserved joules. The usual
+  fast suite and TypeScript production build remain the merge gate.
+- **Limit:** this is a bounded CPU/render optimization, not yet
+  a measured browser FPS improvement. Physics still executes on
+  the main thread, joint solving remains iterative, and visible
+  nutrient glow gradients are still drawn on each frame.
+  Next only if observed slowdown remains: browser profiling,
+  sprite-cache/renderer batching, indexed creature sight and
+  Worker or native/WASM simulation-kernel isolation.
+- **Native desktop assessment:** wrapping the unchanged site in
+  Electron/Tauri would still use a web view and largely the same
+  JavaScript computation. A genuine compiled native/WASM kernel or
+  threaded Worker approach may help CPU-bound simulations, but
+  should follow profiling to avoid a high-risk rewrite. No desktop
+  packaging or VIDA 3D changes in this increment.
+
+
 ## Abiotic nutrient blooms and ecological founder comparison — v0.27.0
 
 - **Ecological change:** 2D worlds retain **Uniform** as the default,
