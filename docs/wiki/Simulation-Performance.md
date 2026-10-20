@@ -17,7 +17,9 @@ Topology changes invalidate the cache; changing
 weights never leaves cached weight values behind.
 
 Individual acquired synapse records and temporary numeric buffers are
-reused. Genetic and somatic memory remain separate, energy-paid and
+reused. Aligned acquired records overwrite their compiled eligible slots directly;
+imported or edited lists clear only eligible slots before rebuilding deltas.
+Removed records and topology changes cannot retain stale offsets. Genetic and somatic memory remain separate, energy-paid and
 bounded. Saved edge identities, PRNG, learning arithmetic and existing
 brain structure are preserved. Caches are never saved.
 
@@ -52,6 +54,10 @@ Contacts reuse bounded cell buckets and use first-shared-cell ownership
 to remove duplicate pairs in the original order. All moving bounds are
 recomputed every pass. Hinge projection reuses only unchanged masses and
 local anchors; moving angles and impulses are recomputed each iteration.
+Rectangle narrowphase reuses the current pass's rotations and two fixed clipping
+buffers. Positional contact corrections still read current centers; hinge
+projection refreshes rotations and bounds before the next pass. SAT axes,
+clipping order, centroids and impulses retain their original arithmetic.
 
 ## Rendering and remains
 
@@ -75,6 +81,12 @@ spawn, clear-food and resize requests execute between complete ticks.
 Exports, forks and diagnostic reports request exact authoritative state,
 including PRNG and all acquired memories; render frames are never used
 as saves.
+
+Lineage transport sends the complete history once after reset/import, then only
+records marked by actual spawning, hatching, egg laying or death. Repeated edits
+coalesce until the next frame; unchanged ancestors are not scanned. Subscriptions
+are transient and detached on world reset, with no journal in headless worlds or
+save files. Future lineage edits must mark the corresponding record.
 
 Render updates are bounded to 30 per second, with **one frame in flight**.
 Genomes transfer once, lineage sends changed records, and heavy neural
@@ -121,6 +133,10 @@ Render FPS alone does not measure simulation throughput.
   `node scripts/compare-performance.mjs before.json after.json`.
   Original hashes and cross-checkout comparisons require exact continuation.
   The throughput diagnosis workflow is opt-in outside its development branch.
+- `node --import tsx scripts/benchmark-runtime-components.mjs <baseline-checkout>`
+  compares bounded collision clipping, 96-hidden-neuron learning-buffer preparation
+  and unchanged 10,000-record lineage frames, with alternating implementation order.
+  These isolate overhead and do not predict total simulation speed.
 
 Joint constraints, remaining ray geometry and large evolved neural layouts
 can still dominate CPU time. Profile actual evolved worlds before the

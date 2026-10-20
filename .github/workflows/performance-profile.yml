@@ -5,6 +5,11 @@ on:
       - 'scripts/profile-performance.mjs'
       - 'simulation.ts'
       - 'contacts.ts'
+      - 'neuralRuntime.ts'
+      - 'simulationHost.ts'
+      - 'lineageChanges.ts'
+      - 'world.ts'
+      - 'scripts/benchmark-runtime-components.mjs'
       - 'simulation.worker.ts'
       - 'workerPacing.ts'
       - '.github/workflows/performance-profile.yml'
@@ -13,7 +18,7 @@ permissions:
   contents: read
 jobs:
   profile:
-    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'perf/spatial-kernel-ui'
+    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'perf/contact-learning-lineage'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -25,13 +30,15 @@ jobs:
       - run: npm ci
       - uses: actions/checkout@v4
         with:
-          ref: be6e6252d3e2a9f37c25440d946bb0d8e6bf4ce5
+          ref: 03a48027b822a552a32306af90a113fa4c4ff3e8
           path: performance-baseline
-      - name: Profile v0.31.1 baseline
+      - name: Profile v0.32.0 baseline
         run: node --import tsx scripts/profile-performance.mjs performance-baseline baseline-profile.json
       - name: Profile candidate
         run: node --import tsx scripts/profile-performance.mjs . candidate-profile.json
       - name: Compare complete workload states and timings
         run: node scripts/compare-performance.mjs baseline-profile.json candidate-profile.json
-      - name: Verify exact kernel continuation against v0.31.1
+      - name: Verify exact kernel continuation against v0.32.0
         run: npm run benchmark:performance -- --baseline performance-baseline
+      - name: Compare collision, learning and long-history transport components
+        run: node --import tsx scripts/benchmark-runtime-components.mjs performance-baseline

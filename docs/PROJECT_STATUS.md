@@ -1,5 +1,53 @@
 # Project status — 2026-10-20
 
+## Contact, learning-buffer and lineage overhead — v0.32.1
+
+- User approved all three remaining bounded optimizations. Rectangle SAT uses
+  pass-current cached rotations and two numeric clipping buffers; current centers,
+  original SAT/clip/vertex ordering, centroid sums, all eight contact passes and
+  hinge projections are retained. Returned contact records do not alias scratch.
+- Compiled learning buffers skip clearing when verified aligned records overwrite
+  every eligible slot directly. Imported/reordered/shrunk lists clear only eligible
+  slots and use ID lookup; changing topology creates fresh zeroed buffers. Genome
+  weights, learned-record identities and neural arithmetic remain authoritative.
+- Render hosts subscribe to lineage edits, seed existing IDs once on reset/import,
+  then coalesce changes from all four production mutation sites: external spawn,
+  hatch, egg laying and completed death. No per-frame historical scan or saved
+  journal; headless worlds retain no journal. Future lineage edits must mark IDs.
+- Local same-process component comparison, three alternating-order rounds against
+  main 03a4802 (v0.32.0), medians:
+
+  | Component | Baseline ms | Candidate ms | Work |
+  | --- | ---: | ---: | --- |
+  | Overlapping rotated rectangle clipping | 62.36 | 18.04 | 100,000 calls |
+  | 96-hidden-neuron acquired-delta preparation | 245.01 | 82.65 | 100,000 calls |
+  | Unchanged 10,000-record lineage | 162.99 | 0.94 | 300 empty-world frames |
+
+  These isolate overhead, with exact contact/delta agreement. The lineage fixture
+  shares one genome and excludes initial transfer, rendering and living entities;
+  it demonstrates avoiding historical scans, not whole-tank performance.
+- Final sequential CPU-sampled kernel comparison, 20 warm-up + 120 measured ticks:
+
+  | Synthetic workload | Baseline ms | Candidate ms | Throughput ratio |
+  | --- | ---: | ---: | ---: |
+  | 15 founders, 200 food, 180 remains | 402 | 394 | 1.02x |
+  | 30 generation-2 animals, same food/remains | 709 | 546 | 1.30x |
+  | Same 30 with 75 blocked eggs | 797 | 651 | 1.22x |
+  | 34 Gen-6 animals, 272 food, 27 eggs, 3 remains | 672 | 599 | 1.12x |
+
+  All four pre-existing complete-state hashes match exactly, including learning
+  and PRNG. The separate 15/78/221 reversed-order differential also matches exact
+  states, with noisy timings (342/295 ms baseline, 366/285 ms candidate). An earlier
+  profile of the first implementation showed little net gain and prompted removing
+  redundant clears on aligned records. Do not promise browser multipliers or treat
+  short server timings as stable speed guarantees.
+- Verification: 215/215 fast tests, TypeScript/Vite build and actual production
+  Worker thread check. New regression coverage compares 4,000 seeded rectangle
+  contacts and boundary cases to a frozen v0.32 oracle; checks returned-value
+  ownership, edited/removed learning records, topology invalidation, real lineage
+  spawning/laying/hatching/death, complete cold reset and no unchanged-history scan.
+  The PR runs the bounded comparison and focused Chromium/Firefox Worker checks.
+
 ## Spatial/neural execution and lightweight inspection — v0.32.0
 
 - User requested further optimization and quieter creature selection. One

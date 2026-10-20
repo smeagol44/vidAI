@@ -1,3 +1,4 @@
+import {watchLineage} from './lineageChanges';
 import {stepSimulation, addNutrients, nutrientSpawnSlots, createArchetypeGenome,
   clampVal, type Genome, type SimulationState, type SimulationSettings,
   type Organism, type Egg, type LineageRecord, type ArchetypeId} from './simulation';
@@ -28,15 +29,17 @@ export class SimulationHost {
   epoch = 0; running = false; speed = 1; selected: string | null = null;
   private genomeIds = new WeakMap<Genome, string>();
   private nextGenome = 0;
-  private sentLineage = new Map<string, string>();
+  private lineageChanges?: ReturnType<typeof watchLineage>;
   private steps = 0;
   private events = new Set<string>();
 
   reset(snapshot: WorldSnapshot, epoch: number): void {
     const restored = restoreSnapshot(snapshot);
+    this.lineageChanges?.dispose();
     this.state = restored.state; this.settings = restored.settings; this.epoch = epoch;
     this.running = false; this.steps = 0; this.events.clear();
-    this.genomeIds = new WeakMap(); this.nextGenome = 0; this.sentLineage.clear();
+    this.genomeIds = new WeakMap(); this.nextGenome = 0;
+    this.lineageChanges = watchLineage(this.state.lineage);
   }
   tick(): void {
     stepSimulation(this.state, this.settings, 1 / 60, event => this.events.add(event));
@@ -96,13 +99,12 @@ export class SimulationHost {
     });
     const liveEggs = eggs.map(({genome, ...egg}) => ({...egg, genomeKey: key(genome)}));
     const lineage: RenderFrame['lineage'] = [];
-    for (const [id, record] of sourceLineage) {
-      const stamp = `${record.offspringCount}:${record.deathTime ?? ''}`;
-      if (this.sentLineage.get(id) === stamp) continue;
+    for (const id of this.lineageChanges!.pending) {
+      const record = sourceLineage.get(id)!;
       const {genome, ...entry} = record;
       lineage.push([id, {...entry, genomeKey: key(genome)}]);
-      this.sentLineage.set(id, stamp);
     }
+    this.lineageChanges!.pending.clear();
     const result = {epoch: this.epoch, steps: this.steps, events: [...this.events], genomes, lineage,
       state: {...rest, organisms: live, eggs: liveEggs}};
     this.steps = 0; this.events.clear();

@@ -1,3 +1,4 @@
+import {markLineageChanged} from './lineageChanges';
 import {
   XoshiroPRNG, spawnOrganism, createArchetypeGenome, getDietClassification,
   addNutrients, type ArchetypeId, type Genome,
@@ -14,6 +15,7 @@ export function addExternalOrganism(s: SimulationState, g: Genome, settings: Sim
   s.lineage.set(org.id, {id: org.id, name: genome.name, parentIds: [], generation: genome.generation,
     birthTime: s.simTime, offspringCount: 0, archetype: genome.archetype ?? 'Custom',
     hue: genome.hue, diet: getDietClassification(genome.mouths).label, genome});
+  markLineageChanged(s.lineage, org.id);
   return org;
 }
 

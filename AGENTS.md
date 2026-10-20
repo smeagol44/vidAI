@@ -1,4 +1,4 @@
-# Current performance architecture (v0.32.0)
+# Current performance architecture (v0.32.1)
 
 - The user explicitly brought performance work forward. `simulation.worker.ts`
   owns live state and fixed 1/60-second ticks; `App.tsx` paints a read-only replica.
@@ -10,6 +10,18 @@
 - `neuralRuntime.ts` caches topology/masks and ordered enabled-row lists, not weights. Invalidate on topology
   edits; reuse learned records while preserving old arithmetic and ID-keyed saves.
   Existing complete-state hashes from main d3d7465 are regression references.
+- Contact clipping uses two fixed numeric scratch polygons. Rotation reuse is
+  valid only within a contact pass: corrections change centers, while hinge
+  projection changes angles and requires fresh rotations/bounds next pass.
+  Preserve SAT/plane/vertex arithmetic and order. Returned contacts own their data.
+- Aligned plastic records overwrite eligible compiled slots directly; unaligned
+  records clear eligible slots only. Validate identities/length before this fast
+  path; removed records must leave no stale deltas. Caches remain unsaved.
+- `lineageChanges.ts` subscribes only live render hosts. EVERY authoritative
+  lineage insertion or record edit must call `markLineageChanged`; current sites
+  are external spawn, hatch, egg-laying offspring count and completed death.
+  Reset/import seeds all IDs once and detaches the previous subscription. Never
+  scan growing unchanged history every frame or persist change journals.
 - Each newly dissolved organism leaves ONE carrion circle with all remaining
   reserve and biomass energy. Old saved fragments remain valid and unmerged.
   This requested physical food-geometry/PRNG change is intentional. Never create

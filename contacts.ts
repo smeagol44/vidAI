@@ -8,12 +8,21 @@ interface Body {
 }
 export interface RectangleContact {nx: number; ny: number; depth: number; x: number; y: number}
 
+// Two fixed scratch polygons: clipping a quadrilateral by four planes has at
+// most eight vertices. Calls are synchronous; returned contacts own their data.
+const polygonA = new Float64Array(16), polygonB = new Float64Array(16);
+
 /** SAT on both rectangles' face normals. The overlap centroid supplies a contact point. */
 export function rectangleContact(a: PartPhys, ad: PartDef, b: PartPhys, bd: PartDef): RectangleContact | null {
-  const ac = Math.cos(a.angle), as = Math.sin(a.angle), bc = Math.cos(b.angle), bs = Math.sin(b.angle);
-  const axes = [[ac, as], [-as, ac], [bc, bs], [-bs, bc]];
+  return rotatedContact(a, ad, b, bd, Math.cos(a.angle), Math.sin(a.angle), Math.cos(b.angle), Math.sin(b.angle));
+}
+
+function rotatedContact(a: PartPhys, ad: PartDef, b: PartPhys, bd: PartDef,
+  ac: number, as: number, bc: number, bs: number): RectangleContact | null {
   let depth = Infinity, nx = 0, ny = 0;
-  for (const [x, y] of axes) {
+  for (let axis = 0; axis < 4; axis++) {
+    const x = axis === 0 ? ac : axis === 1 ? -as : axis === 2 ? bc : -bs;
+    const y = axis === 0 ? as : axis === 1 ? ac : axis === 2 ? bs : bc;
     const ra = Math.abs(x * ac + y * as) * ad.width / 2 + Math.abs(-x * as + y * ac) * ad.height / 2;
     const rb = Math.abs(x * bc + y * bs) * bd.width / 2 + Math.abs(-x * bs + y * bc) * bd.height / 2;
     const offset = (b.x - a.x) * x + (b.y - a.y) * y;
@@ -21,28 +30,37 @@ export function rectangleContact(a: PartPhys, ad: PartDef, b: PartPhys, bd: Part
     if (overlap <= 0) return null;
     if (overlap < depth) { depth = overlap; nx = offset < 0 ? -x : x; ny = offset < 0 ? -y : y; }
   }
-  let polygon = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([x, y]) => ({
-    x: a.x + ac * x * ad.width / 2 - as * y * ad.height / 2,
-    y: a.y + as * x * ad.width / 2 + ac * y * ad.height / 2}));
-  // Clip A's polygon against B's four half-planes.
-  for (const [x, y, limit] of [[bc, bs, bd.width / 2], [-bc, -bs, bd.width / 2],
-    [-bs, bc, bd.height / 2], [bs, -bc, bd.height / 2]]) {
-    const clipped: typeof polygon = [];
-    for (let i = 0; i < polygon.length; i++) {
-      const p = polygon[i], q = polygon[(i + 1) % polygon.length];
-      const dp = (p.x - b.x) * x + (p.y - b.y) * y - limit;
-      const dq = (q.x - b.x) * x + (q.y - b.y) * y - limit;
-      if (dp <= 0) clipped.push(p);
+  let polygon = polygonA, clipped = polygonB, count = 4;
+  for (let i = 0; i < 4; i++) {
+    const x = i === 0 || i === 3 ? -1 : 1, y = i < 2 ? -1 : 1;
+    polygon[i * 2] = a.x + ac * x * ad.width / 2 - as * y * ad.height / 2;
+    polygon[i * 2 + 1] = a.y + as * x * ad.width / 2 + ac * y * ad.height / 2;
+  }
+  // Same half-plane and edge order as the allocating implementation.
+  for (let plane = 0; plane < 4; plane++) {
+    const x = plane === 0 ? bc : plane === 1 ? -bc : plane === 2 ? -bs : bs;
+    const y = plane === 0 ? bs : plane === 1 ? -bs : plane === 2 ? bc : -bc;
+    const limit = plane < 2 ? bd.width / 2 : bd.height / 2;
+    let nextCount = 0;
+    for (let i = 0; i < count; i++) {
+      const j = (i + 1) % count;
+      const px = polygon[i * 2], py = polygon[i * 2 + 1], qx = polygon[j * 2], qy = polygon[j * 2 + 1];
+      const dp = (px - b.x) * x + (py - b.y) * y - limit;
+      const dq = (qx - b.x) * x + (qy - b.y) * y - limit;
+      if (dp <= 0) {clipped[nextCount * 2] = px; clipped[nextCount * 2 + 1] = py; nextCount++;}
       if ((dp < 0 && dq > 0) || (dp > 0 && dq < 0)) {
-        const t = dp / (dp - dq); clipped.push({x: p.x + (q.x - p.x) * t, y: p.y + (q.y - p.y) * t});
+        const t = dp / (dp - dq);
+        clipped[nextCount * 2] = px + (qx - px) * t;
+        clipped[nextCount * 2 + 1] = py + (qy - py) * t;
+        nextCount++;
       }
     }
-    polygon = clipped;
+    const swap = polygon; polygon = clipped; clipped = swap; count = nextCount;
   }
-  const count = polygon.length;
-  return {nx, ny, depth,
-    x: count ? polygon.reduce((sum, p) => sum + p.x, 0) / count : (a.x + b.x) / 2,
-    y: count ? polygon.reduce((sum, p) => sum + p.y, 0) / count : (a.y + b.y) / 2};
+  let sumX = 0, sumY = 0;
+  for (let i = 0; i < count; i++) {sumX += polygon[i * 2]; sumY += polygon[i * 2 + 1];}
+  return {nx, ny, depth, x: count ? sumX / count : (a.x + b.x) / 2,
+    y: count ? sumY / count : (a.y + b.y) / 2};
 }
 
 /** Inelastic, frictionless impulse. Equal/opposite linear and angular impulses; no motor work. */
@@ -133,7 +151,8 @@ export function resolveBodyContacts(organisms: Organism[], density: number,
   for (let iteration = 0; iteration < 8; iteration++) {
     let contactCount = 0;
     for (const [a, b] of pairs(bodies(organisms, density))) {
-      const contact = rectangleContact(a.p, a.def, b.p, b.def); if (!contact) continue;
+      // Position repair changes centers, not angles; projections refresh rotations next pass.
+      const contact = rotatedContact(a.p, a.def, b.p, b.def, a.c, a.s, b.c, b.s); if (!contact) continue;
       contactCount++; touched.add(a.org); touched.add(b.org);
       contactImpulse(a.p, a.im, a.ii, b.p, b.im, b.ii, contact);
       // Split positional correction prevents overlap recovery from acting as propulsion.

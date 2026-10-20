@@ -5,7 +5,10 @@ import * as sim from '../simulation';
 import {createFounderGenome} from '../founders';
 import {createInitialWorld, addExternalOrganism} from '../world';
 import {DEFAULT_SETTINGS, createSnapshot, restoreSnapshot, totalAccountedEnergy} from '../persistence';
-import {compiledBrain} from '../neuralRuntime';
+import {compiledBrain, compiledDeltas, invalidateCompiledBrain, alignPlasticRecords} from '../neuralRuntime';
+import {rectangleContact} from '../contacts';
+import {referenceContact} from './support/reference-contact';
+import {watchLineage, markLineageChanged} from '../lineageChanges';
 import {SimulationHost, RenderReplica} from '../simulationHost';
 
 const config = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
@@ -120,4 +123,84 @@ test('worker commands honor nutrient caps, accounting, resize and exact authorit
   assert.ok(Math.abs(totalAccountedEnergy(host.state) - host.state.ledger.externalInflow) < 1e-5);
   const snapshot = host.snapshot({test: true});
   assert.deepEqual(createSnapshot(restoreSnapshot(snapshot).state, host.settings, {test: true}), snapshot);
+});
+
+test('pooled collision clipping exactly matches v0.32 geometry across rotations and boundaries', () => {
+  const random = new sim.XoshiroPRNG(917), org = fixture('plain').organisms[0];
+  for (let i = 0; i < 4000; i++) {
+    const a = {...org.segments[0], x: random.range(-100, 100), y: random.range(-100, 100), angle: random.range(-Math.PI, Math.PI)};
+    const b = {...a, x: a.x + random.range(-90, 90), y: a.y + random.range(-90, 90), angle: random.range(-Math.PI, Math.PI)};
+    const ad = {...org.genome.parts[0], width: random.range(.01, 160), height: random.range(.01, 160)};
+    const bd = {...ad, width: random.range(.01, 160), height: random.range(.01, 160)};
+    assert.deepEqual(rectangleContact(a, ad, b, bd), referenceContact(a, ad, b, bd));
+  }
+  const a = {...org.segments[0], x: 0, y: 0, angle: 0}, def = {...org.genome.parts[0], width: 20, height: 20};
+  for (const x of [0, 20, 20 - 1e-12, 20 + 1e-12])
+    assert.deepEqual(rectangleContact(a, def, {...a, x}, def), referenceContact(a, def, {...a, x}, def));
+  const retained = rectangleContact(a, def, a, def), copy = structuredClone(retained);
+  rectangleContact({...a, angle: .7}, def, a, def);
+  assert.deepEqual(retained, copy, 'returned contact must not alias reusable scratch');
+});
+
+test('sparse learning clears removed records and invalidates all old slots after topology edits', () => {
+  const org = fixture().organisms[0];
+  let plan = compiledBrain(org.genome);
+  const check = () => {
+    const actual = compiledDeltas(org, plan), motor = new Float64Array(plan.ho.length), sensory = new Float64Array(plan.ih.length);
+    for (const r of org.learnedMotorWeights ?? []) {const slot = plan.motorSlots.get(r.edge); if (slot !== undefined) motor[slot] = r.delta;}
+    for (const r of org.learnedSensoryWeights ?? []) {const slot = plan.sensorySlots.get(r.edge); if (slot !== undefined) sensory[slot] = r.delta;}
+    assert.deepEqual(actual.motor, motor); assert.deepEqual(actual.sensory, sensory);
+    return actual;
+  };
+  org.learnedMotorWeights = plan.motor.map(({edge}, i) => ({edge, delta: i % 2 ? -.3 : .2, eligibility: 0}));
+  org.learnedSensoryWeights = plan.sensory.map(({edge}) => ({edge, delta: .1, eligibility: 0}));
+  const first = check();
+  org.learnedMotorWeights = alignPlasticRecords(org.learnedMotorWeights, plan.motor);
+  org.learnedSensoryWeights = alignPlasticRecords(org.learnedSensoryWeights, plan.sensory);
+  check();
+  org.learnedMotorWeights.reverse(); check();
+  org.learnedMotorWeights.length = 1;
+  delete org.learnedSensoryWeights; assert.equal(check(), first);
+  org.genome.disabledConnections!.push(plan.motor[0].edge);
+  invalidateCompiledBrain(org.genome); plan = compiledBrain(org.genome);
+  assert.notEqual(check(), first);
+  org.genome.plasticityRate = 0; plan = compiledBrain(org.genome); check();
+});
+
+test('lineage transport tracks real spawning, laying, hatching, death and epoch reset', () => {
+  const state = fixture('plain'); state.nutrients = [];
+  const parent = state.organisms[0]; parent.age = 40; state.simTime = 50;
+  parent.genome.targetClutchSize = 1; parent.genome.motorForce = 0;
+  parent.energy = sim.evaluateReproductionAffordability(parent, state.simTime, 1, 0).requiredForOneEgg + 100;
+  const host = new SimulationHost(); host.reset(createSnapshot(state, config), 1);
+  const replica = new RenderReplica(); let view = replica.apply(structuredClone(host.frame()), state);
+  const apply = () => {const frame = structuredClone(host.frame()); view = replica.apply(frame, view);
+    assert.deepEqual([...view.lineage], [...host.state.lineage]); return frame;};
+  assert.equal(apply().lineage.length, 0);
+  host.tick(); assert.equal(host.state.eggs.length, 1);
+  assert.equal(apply().lineage.length, 1);
+  const egg = host.state.eggs[0]; egg.x = 400; egg.y = 400; egg.incubationProgress = 1; egg.readyToHatch = true;
+  host.tick(); assert.equal(host.state.eggs.length, 0);
+  assert.equal(apply().lineage.length, 1);
+  const doomed = host.state.organisms[0]; doomed.dissolving = true; doomed.dissolveAlpha = .001;
+  host.tick(); const death = apply(); assert.equal(death.lineage.length, 1);
+  assert.equal(view.lineage.get(doomed.id)!.deathTime, host.state.simTime);
+  host.action({kind: 'spawn', archetype: 'eel', x: 1800, y: 1000});
+  assert.equal(apply().lineage.length, 1); assert.equal(apply().lineage.length, 0);
+  const saved = host.snapshot(); host.reset(saved, 2);
+  assert.equal(apply().lineage.length, saved.state.lineage.length);
+  assert.deepEqual(host.snapshot(), saved);
+});
+
+test('lineage subscriptions coalesce changes, detach and avoid scanning unchanged history', () => {
+  const state = fixture('plain'), id = state.organisms[0].id;
+  const a = watchLineage(state.lineage), b = watchLineage(state.lineage);
+  a.pending.clear(); b.pending.clear();
+  markLineageChanged(state.lineage, id); markLineageChanged(state.lineage, id);
+  assert.deepEqual([...a.pending], [id]); assert.deepEqual([...b.pending], [id]);
+  a.pending.clear(); a.dispose(); markLineageChanged(state.lineage, id);
+  assert.equal(a.pending.size, 0); b.dispose();
+  const host = new SimulationHost(); host.reset(createSnapshot(state, config), 1); host.frame();
+  host.state.lineage[Symbol.iterator] = () => {throw new Error('unchanged lineage was scanned');};
+  assert.equal(host.frame().lineage.length, 0);
 });

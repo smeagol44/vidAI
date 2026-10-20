@@ -103,6 +103,25 @@ export function alignPlasticRecords(records: Somatic | undefined, edges: readonl
   return result;
 }
 
+/** Aligned live records overwrite every eligible slot, so clearing is redundant.
+ * Cold/imported or edited lists clear only eligible slots before ID lookup. */
+function writeDeltas(buffer: Float64Array, edges: readonly Edge[], slots: Map<string, number>, records: Somatic | undefined): void {
+  if (records && aligned.get(records) === edges && records.length === edges.length) {
+    let complete = true;
+    for (let i = 0; i < edges.length; i++) {
+      if (records[i].edge !== edges[i].edge) {complete = false; break;}
+      buffer[edges[i].slot] = records[i].delta;
+    }
+    if (complete) return;
+  }
+  // Removed/reordered records must never leave a previous tick's delta behind.
+  for (const {slot} of edges) buffer[slot] = 0;
+  for (const record of records ?? []) {
+    const slot = slots.get(record.edge);
+    if (slot !== undefined) buffer[slot] = record.delta;
+  }
+}
+
 const deltas = new WeakMap<Organism, {plan: CompiledBrain; motor: Float64Array; sensory: Float64Array}>();
 export function compiledDeltas(org: Organism, plan: CompiledBrain) {
   let result = deltas.get(org);
@@ -110,14 +129,7 @@ export function compiledDeltas(org: Organism, plan: CompiledBrain) {
     result = {plan, motor: new Float64Array(plan.ho.length), sensory: new Float64Array(plan.ih.length)};
     deltas.set(org, result);
   }
-  result.motor.fill(0); result.sensory.fill(0);
-  for (const record of org.learnedMotorWeights ?? []) {
-    const slot = plan.motorSlots.get(record.edge);
-    if (slot !== undefined) result.motor[slot] = record.delta;
-  }
-  for (const record of org.learnedSensoryWeights ?? []) {
-    const slot = plan.sensorySlots.get(record.edge);
-    if (slot !== undefined) result.sensory[slot] = record.delta;
-  }
+  writeDeltas(result.motor, plan.motor, plan.motorSlots, org.learnedMotorWeights);
+  writeDeltas(result.sensory, plan.sensory, plan.sensorySlots, org.learnedSensoryWeights);
   return result;
 }

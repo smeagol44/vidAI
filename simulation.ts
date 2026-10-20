@@ -1,3 +1,4 @@
+import {markLineageChanged} from './lineageChanges';
 import {compiledBrain, compiledDeltas, alignPlasticRecords, invalidateCompiledBrain} from './neuralRuntime';
 import {resolveBodyContacts} from './contacts';
 import {NutrientSightGrid} from './sightBroadphase';
@@ -3463,6 +3464,7 @@ export function stepSimulation(
           genome: baby.genome,
         });
 
+        markLineageChanged(state.lineage, baby.id);
         eggs.splice(i, 1);
         if (onEvent) onEvent('birth');
       }
@@ -3515,6 +3517,7 @@ export function stepSimulation(
           rec.deathCause = cause;
           rec.deathAge = org.age;
           rec.deathEnergy = Math.max(0, org.energy);
+          markLineageChanged(state.lineage, org.id);
         }
 
         if (!state.recentDeaths) state.recentDeaths = [];
@@ -3942,7 +3945,10 @@ export function stepSimulation(
             laidAny = true;
 
             const rec = state.lineage.get(org.id);
-            if (rec) rec.offspringCount += 1;
+            if (rec) {
+              rec.offspringCount += 1;
+              markLineageChanged(state.lineage, org.id);
+            }
 
             const angleSpread = (k - (clutchCount - 1) / 2) * 0.35;
             const layAngle = rearSeg.angle + Math.PI + angleSpread;
