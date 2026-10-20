@@ -13,7 +13,7 @@ import type {Nutrient} from './simulation';
 export class NutrientSightGrid {
   static readonly CELL_SIZE = 128;
   readonly nutrientCount: number;
-  private readonly cells = new Map<string, number[]>();
+  private readonly rows = new Map<number, Map<number, number[]>>();
   private readonly maxRadius: number;
 
   constructor(nutrients: readonly Nutrient[]) {
@@ -23,12 +23,11 @@ export class NutrientSightGrid {
     for (let i = 0; i < nutrients.length; i++) {
       const food = nutrients[i];
       maxRadius = Math.max(maxRadius, food.radius);
-      const key = `${Math.floor(food.x / scale)},${Math.floor(food.y / scale)}`;
-      let bucket = this.cells.get(key);
-      if (!bucket) {
-        bucket = [];
-        this.cells.set(key, bucket);
-      }
+      const x = Math.floor(food.x / scale), y = Math.floor(food.y / scale);
+      let row = this.rows.get(y);
+      if (!row) {row = new Map(); this.rows.set(y, row);}
+      let bucket = row.get(x);
+      if (!bucket) {bucket = []; row.set(x, bucket);}
       bucket.push(i);
     }
     this.maxRadius = maxRadius;
@@ -44,9 +43,13 @@ export class NutrientSightGrid {
     const top = Math.floor((Math.min(originY, endY) - radius) / scale);
     const bottom = Math.floor((Math.max(originY, endY) + radius) / scale);
     const candidates: number[] = [];
-    for (let y = top; y <= bottom; y++) for (let x = left; x <= right; x++) {
-      const bucket = this.cells.get(`${x},${y}`);
-      if (bucket) candidates.push(...bucket);
+    for (let y = top; y <= bottom; y++) {
+      const row = this.rows.get(y);
+      if (!row) continue;
+      for (let x = left; x <= right; x++) {
+        const bucket = row.get(x);
+        if (bucket) candidates.push(...bucket);
+      }
     }
     candidates.sort((a, b) => a - b);
     return candidates;

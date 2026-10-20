@@ -13,6 +13,7 @@ permissions:
   contents: read
 jobs:
   profile:
+    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'perf/simulation-throughput'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:

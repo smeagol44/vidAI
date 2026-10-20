@@ -1,5 +1,6 @@
 import {SimulationHost, type WorldSnapshot, type WorldAction} from './simulationHost';
 import type {SimulationSettings} from './simulation';
+import {workerWakeDelay} from './workerPacing';
 
 const host = new SimulationHost();
 const port = self as unknown as {postMessage(message: unknown): void;
@@ -39,6 +40,10 @@ port.onmessage = ({data}: MessageEvent) => {
       message: error instanceof Error ? error.message : String(error)});
   }
 };
+// A queued message yields to commands without the minimum delay imposed on
+// nested timers. Only one wakeup is scheduled; idle worlds still use a timer.
+const wake = new MessageChannel();
+wake.port1.onmessage = () => pump();
 function pump() {
   const now = performance.now();
   if (initialized && host.running) {
@@ -55,6 +60,9 @@ function pump() {
   }
   previous = now;
   if (initialized && dirty && now - lastFrame >= 1000 / 30) sendFrame();
-  setTimeout(pump, initialized && host.running ? 2 : 16);
+  const delay = workerWakeDelay(accumulator, host.speed, performance.now() - previous,
+    initialized && host.running);
+  if (delay === 0) wake.port2.postMessage(null);
+  else setTimeout(pump, delay);
 }
 pump();

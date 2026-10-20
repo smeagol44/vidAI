@@ -476,6 +476,14 @@ const scratchInvMasses = new Float64Array(16);
 const scratchInertias = new Float64Array(16);
 const scratchInvInertias = new Float64Array(16);
 const scratchPrevHidden = new Float64Array(MAX_HIDDEN);
+// A velocity solve changes velocities only. Its geometry, effective masses,
+// positional bias and angle-limit error stay fixed through all ten iterations.
+// Recompute once per substep; never cache across moving poses or world swaps.
+const scratchConstraints = Array.from({length: MAX_PARTS - 1}, () => ({
+  parentIdx: 0, childIdx: 0, rPx: 0, rPy: 0, rCx: 0, rCy: 0,
+  biasX: 0, biasY: 0, wP: 0, wC: 0, iP: 0, iC: 0,
+  k11: 0, k22: 0, k12: 0, det: 0, limited: false, angularBias: 0,
+}));
 
 export const clampVal = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
 export const hsl = (h: number, s: number, l: number, a = 1) =>
@@ -3070,87 +3078,66 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     seg.angVel = clampVal(seg.angVel, -20.0, 20.0);
   }
 
-  // Joint Constraint Solver (Iterative impulse resolution with exact momentum conservation)
+  // Prepare geometry once; positions/angles do not change during the velocity solve.
+  for (let j = 0; j < numJoints; j++) {
+    const childIdx = j + 1, childDef = g.parts[childIdx];
+    const parentIdx = Math.max(0, Math.min(childIdx - 1, childDef.parentIndex));
+    const parentPhys = org.segments[parentIdx], childPhys = org.segments[childIdx];
+    const parentDef = g.parts[parentIdx], c = scratchConstraints[j];
+    c.parentIdx = parentIdx; c.childIdx = childIdx;
+    const parentAnchorLocal = getCardinalAnchor(childDef.attachmentPoint, parentDef.width, parentDef.height);
+    const childAnchorLocal = getChildAnchorForParentDir(childDef.attachmentPoint, childDef.width, childDef.height);
+    const cosP = Math.cos(parentPhys.angle), sinP = Math.sin(parentPhys.angle);
+    const cosC = Math.cos(childPhys.angle), sinC = Math.sin(childPhys.angle);
+    const rPx = c.rPx = cosP * parentAnchorLocal.x - sinP * parentAnchorLocal.y;
+    const rPy = c.rPy = sinP * parentAnchorLocal.x + cosP * parentAnchorLocal.y;
+    const rCx = c.rCx = cosC * childAnchorLocal.x - sinC * childAnchorLocal.y;
+    const rCy = c.rCy = sinC * childAnchorLocal.x + cosC * childAnchorLocal.y;
+    const anchorPx = parentPhys.x + rPx, anchorPy = parentPhys.y + rPy;
+    const anchorCx = childPhys.x + rCx, anchorCy = childPhys.y + rCy;
+    const posErrX = anchorCx - anchorPx, posErrY = anchorCy - anchorPy;
+    const beta = 0.35;
+    c.biasX = (beta / dt_sub) * posErrX; c.biasY = (beta / dt_sub) * posErrY;
+    const wP = c.wP = scratchInvMasses[parentIdx], wC = c.wC = scratchInvMasses[childIdx];
+    const iP = c.iP = scratchInvInertias[parentIdx], iC = c.iC = scratchInvInertias[childIdx];
+    const k11 = c.k11 = wP + wC + rPy * rPy * iP + rCy * rCy * iC;
+    const k22 = c.k22 = wP + wC + rPx * rPx * iP + rCx * rCx * iC;
+    const k12 = c.k12 = -rPx * rPy * iP - rCx * rCy * iC;
+    c.det = k11 * k22 - k12 * k12;
+    let relAngle = childPhys.angle - parentPhys.angle - (childDef.baseAngleOffset || 0);
+    while (relAngle > Math.PI) relAngle -= Math.PI * 2;
+    while (relAngle < -Math.PI) relAngle += Math.PI * 2;
+    c.limited = Math.abs(relAngle) > childDef.maxAngle;
+    if (c.limited) {
+      const limitErr = Math.sign(relAngle) * (Math.abs(relAngle) - childDef.maxAngle);
+      c.angularBias = (0.2 / dt_sub) * limitErr;
+    }
+  }
+
+  // Keep every original impulse, iteration and arithmetic order.
   for (let iter = 0; iter < 10; iter++) {
     for (let j = 0; j < numJoints; j++) {
-      const childIdx = j + 1;
-      const childDef = g.parts[childIdx];
-      const parentIdx = Math.max(0, Math.min(childIdx - 1, childDef.parentIndex));
-
-      const parentPhys = org.segments[parentIdx];
-      const childPhys = org.segments[childIdx];
-      const parentDef = g.parts[parentIdx];
-
-      const parentAnchorLocal = getCardinalAnchor(childDef.attachmentPoint, parentDef.width, parentDef.height);
-      const childAnchorLocal = getChildAnchorForParentDir(childDef.attachmentPoint, childDef.width, childDef.height);
-
-      const cosP = Math.cos(parentPhys.angle);
-      const sinP = Math.sin(parentPhys.angle);
-      const rPx = cosP * parentAnchorLocal.x - sinP * parentAnchorLocal.y;
-      const rPy = sinP * parentAnchorLocal.x + cosP * parentAnchorLocal.y;
-
-      const cosC = Math.cos(childPhys.angle);
-      const sinC = Math.sin(childPhys.angle);
-      const rCx = cosC * childAnchorLocal.x - sinC * childAnchorLocal.y;
-      const rCy = sinC * childAnchorLocal.x + cosC * childAnchorLocal.y;
-
-      const anchorPx = parentPhys.x + rPx;
-      const anchorPy = parentPhys.y + rPy;
-      const anchorCx = childPhys.x + rCx;
-      const anchorCy = childPhys.y + rCy;
-
+      const {parentIdx, childIdx, rPx, rPy, rCx, rCy, biasX, biasY,
+        wP, wC, iP, iC, k11, k22, k12, det, limited, angularBias} = scratchConstraints[j];
+      const parentPhys = org.segments[parentIdx], childPhys = org.segments[childIdx];
       const vAnchorPx = parentPhys.vx - parentPhys.angVel * rPy;
       const vAnchorPy = parentPhys.vy + parentPhys.angVel * rPx;
       const vAnchorCx = childPhys.vx - childPhys.angVel * rCy;
       const vAnchorCy = childPhys.vy + childPhys.angVel * rCx;
-
-      const vRelX = vAnchorCx - vAnchorPx;
-      const vRelY = vAnchorCy - vAnchorPy;
-
-      const posErrX = anchorCx - anchorPx;
-      const posErrY = anchorCy - anchorPy;
-      const beta = 0.35;
-      const biasX = (beta / dt_sub) * posErrX;
-      const biasY = (beta / dt_sub) * posErrY;
-
-      const wP = scratchInvMasses[parentIdx];
-      const wC = scratchInvMasses[childIdx];
-      const iP = scratchInvInertias[parentIdx];
-      const iC = scratchInvInertias[childIdx];
-
-      const k11 = wP + wC + rPy * rPy * iP + rCy * rCy * iC;
-      const k22 = wP + wC + rPx * rPx * iP + rCx * rCx * iC;
-      const k12 = -rPx * rPy * iP - rCx * rCy * iC;
-
-      const det = k11 * k22 - k12 * k12;
+      const vRelX = vAnchorCx - vAnchorPx, vRelY = vAnchorCy - vAnchorPy;
       if (det > 1e-7) {
-        const rhsX = -(vRelX + biasX);
-        const rhsY = -(vRelY + biasY);
-
+        const rhsX = -(vRelX + biasX), rhsY = -(vRelY + biasY);
         const impulseX = (k22 * rhsX - k12 * rhsY) / det;
         const impulseY = (-k12 * rhsX + k11 * rhsY) / det;
-
-        childPhys.vx += impulseX * wC;
-        childPhys.vy += impulseY * wC;
+        childPhys.vx += impulseX * wC; childPhys.vy += impulseY * wC;
         childPhys.angVel += (rCx * impulseY - rCy * impulseX) * iC;
-
-        parentPhys.vx -= impulseX * wP;
-        parentPhys.vy -= impulseY * wP;
+        parentPhys.vx -= impulseX * wP; parentPhys.vy -= impulseY * wP;
         parentPhys.angVel -= (rPx * impulseY - rPy * impulseX) * iP;
       }
-
-      // Enforce physical joint-angle limits
-      let relAngle = childPhys.angle - parentPhys.angle - (childDef.baseAngleOffset || 0);
-      while (relAngle > Math.PI) relAngle -= Math.PI * 2;
-      while (relAngle < -Math.PI) relAngle += Math.PI * 2;
-
-      if (Math.abs(relAngle) > childDef.maxAngle) {
-        const limitErr = Math.sign(relAngle) * (Math.abs(relAngle) - childDef.maxAngle);
+      if (limited) {
         const relAngVel = childPhys.angVel - parentPhys.angVel;
-        const angularBias = (0.2 / dt_sub) * limitErr;
         const angImpulse = -(relAngVel + angularBias) / (iP + iC);
-        childPhys.angVel += angImpulse * iC;
-        parentPhys.angVel -= angImpulse * iP;
+        childPhys.angVel += angImpulse * iC; parentPhys.angVel -= angImpulse * iP;
       }
     }
   }
@@ -3166,18 +3153,28 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
 
 interface HatchBounds {left: number; right: number; top: number; bottom: number}
 function bodyBounds(parts: PartDef[], segments: PartPhys[]): HatchBounds {
-  const corners = parts.flatMap((p, i) => getPartCornerVertices(segments[i], p));
-  return {left: Math.min(...corners.map(p => p.x)), right: Math.max(...corners.map(p => p.x)),
-    top: Math.min(...corners.map(p => p.y)), bottom: Math.max(...corners.map(p => p.y))};
+  let left = Infinity, right = -Infinity, top = Infinity, bottom = -Infinity;
+  for (let i = 0; i < parts.length; i++) for (const p of getPartCornerVertices(segments[i], parts[i])) {
+    left = Math.min(left, p.x); right = Math.max(right, p.x);
+    top = Math.min(top, p.y); bottom = Math.max(bottom, p.y);
+  }
+  return {left, right, top, bottom};
+}
+
+/** Bodies remain fixed during the egg pass. Share these exact bounds until a
+ * successful hatch appends its new body's bounds; rebuild on every kernel tick. */
+function hatchObstacles(organisms: Organism[]): HatchBounds[] {
+  return organisms.filter(o => !o.dissolving).flatMap(o =>
+    o.segments.map((p, i) => bodyBounds([o.genome.parts[i]], [p])));
 }
 
 /** Conservative empty envelope also prevents spawning arms around an existing body. */
 /** Authoritative dry-run of the same eight-orientation clearance test used for hatching.
  * Does not consume PRNG or move the egg or adults.
  */
-function hatchPlacement(egg: Egg, settings: SimulationSettings, organisms: Organism[]) {
+function hatchPlacement(egg: Egg, settings: SimulationSettings, organisms: Organism[], sharedObstacles?: HatchBounds[]) {
   const pose = restSegments(egg.genome.parts);
-  const obstacles = organisms.filter(o => !o.dissolving).flatMap(o => o.segments.map((p, i) => bodyBounds([o.genome.parts[i]], [p])));
+  const obstacles = sharedObstacles ?? hatchObstacles(organisms);
   let containedOrientation = false;
   for (let attempt = 0; attempt < 8; attempt++) {
     const heading = (egg.hatchHeading ?? 0) + attempt * Math.PI / 4, c = Math.cos(heading), s = Math.sin(heading);
@@ -3298,6 +3295,7 @@ export function stepSimulation(
     if (c.y > worldHeight) c.y = 0;
   }
 
+  let sharedHatchObstacles: HatchBounds[] | undefined;
   // 4. Incubating Multi-Egg Clutches (Full energy accounting: non-viable damaged eggs decompose without duplicate hatching)
   for (let i = eggs.length - 1; i >= 0; i--) {
     const egg = eggs[i];
@@ -3348,7 +3346,8 @@ export function stepSimulation(
       egg.readyToHatch = true;
       if (organisms.filter(o => !o.dissolving).length < (settings.maxOrganisms ?? 50)) {
         egg.hatchHeading ??= prng.range(0, Math.PI * 2);
-        const heading = findClearHatchHeading(egg, settings, organisms);
+        sharedHatchObstacles ??= hatchObstacles(organisms);
+        const heading = hatchPlacement(egg, settings, organisms, sharedHatchObstacles).heading;
         if (heading === null) continue; // Remain funded, edible and ready until a full body fits.
         const startingUsableReserve = remainingEggEnergy - requiredBodyCost;
         const baby = spawnOrganism(
@@ -3362,6 +3361,8 @@ export function stepSimulation(
         );
         baby.structuralBiomass = requiredBodyCost;
         organisms.push(baby);
+        for (let p = 0; p < baby.segments.length; p++)
+          sharedHatchObstacles.push(bodyBounds([baby.genome.parts[p]], [baby.segments[p]]));
         state.totalBirths += 1;
 
         state.lineage.set(baby.id, {
@@ -3386,6 +3387,9 @@ export function stepSimulation(
   // Corpse dissolution can append carrion while iterating living organisms,
   // so rebuild on any length change before their next eye cast.
   let sightGrid: NutrientSightGrid | undefined;
+  // All vision precedes movement. Reuse exact corners across rays/eyes, retaining
+  // the original organism/segment/edge order and dynamic pigment evaluation.
+  const sightCorners = new Map<PartPhys, ReturnType<typeof getPartCornerVertices>>();
   // 5. Organisms Simulation
   for (let orgIdx = organisms.length - 1; orgIdx >= 0; orgIdx--) {
     const org = organisms[orgIdx];
@@ -3525,7 +3529,8 @@ export function stepSimulation(
             const otherDef = other.genome.parts[s];
             if (Math.abs(otherSeg.x - eyeWorldX) > closestDist + 50 || Math.abs(otherSeg.y - eyeWorldY) > closestDist + 50) continue;
 
-            const corners = getPartCornerVertices(otherSeg, otherDef);
+            let corners = sightCorners.get(otherSeg);
+            if (!corners) {corners = getPartCornerVertices(otherSeg, otherDef); sightCorners.set(otherSeg, corners);}
             for (let c = 0; c < 4; c++) {
               const c1 = corners[c];
               const c2 = corners[(c + 1) % 4];
@@ -3619,18 +3624,20 @@ export function stepSimulation(
 
     for (let h = 0; h < hiddenCount; h++) {
       let sum = g.biasesH[h] || 0;
+      const ihRow = g.weightsIH[h], hhRow = g.weightsHH[h];
+      const ihOffset = h * inputCount, hhOffset = h * hiddenCount;
       for (let inp = 0; inp < org.neuralInputs.length; inp++) {
-        if (!plan.ih[h * inputCount + inp]) {
-          sum += (org.neuralInputs[inp] || 0) * (g.weightsIH[h]?.[inp] || 0);
+        if (!plan.ih[ihOffset + inp]) {
+          sum += (org.neuralInputs[inp] || 0) * (ihRow?.[inp] || 0);
           if (learnedRetina) {
-            const delta = learnedRetina.sensory[h * inputCount + inp];
+            const delta = learnedRetina.sensory[ihOffset + inp];
             if (delta !== 0) sum += (org.neuralInputs[inp] || 0) * delta;
           }
         }
       }
       for (let rh = 0; rh < hiddenCount; rh++) {
-        if (!plan.hh[h * hiddenCount + rh]) {
-          sum += scratchPrevHidden[rh] * (g.weightsHH[h]?.[rh] || 0);
+        if (!plan.hh[hhOffset + rh]) {
+          sum += scratchPrevHidden[rh] * (hhRow?.[rh] || 0);
         }
       }
       const next = isNaN(sum) ? 0 : Math.tanh(sum);
@@ -3640,9 +3647,10 @@ export function stepSimulation(
     const numJoints = org.segments.length - 1;
     for (let o = 0; o < numJoints * OUTPUTS_PER_JOINT; o++) {
       let sum = g.biasesO[o] || 0;
+      const hoRow = g.weightsHO[o], hoOffset = o * hiddenCount;
       for (let h = 0; h < hiddenCount; h++) {
-        if (!plan.ho[o * hiddenCount + h]) {
-          sum += org.neuralHidden[h] * (g.weightsHO[o]?.[h] || 0);
+        if (!plan.ho[hoOffset + h]) {
+          sum += org.neuralHidden[h] * (hoRow?.[h] || 0);
         }
       }
       // Acquired synapse offsets alter the neural motor command, not genome

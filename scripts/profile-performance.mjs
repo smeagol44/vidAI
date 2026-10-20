@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import {Session} from 'node:inspector/promises';
 import {createHash} from 'node:crypto';
 import {resolve} from 'node:path';
@@ -7,6 +8,11 @@ const root = resolve(process.argv[2] ?? '.');
 const sim = await import(pathToFileURL(resolve(root, 'simulation.ts')).href);
 const {createInitialWorld, addExternalOrganism} = await import(pathToFileURL(resolve(root, 'world.ts')).href);
 const {DEFAULT_SETTINGS, createSnapshot} = await import(pathToFileURL(resolve(root, 'persistence.ts')).href);
+const golden = {
+  'founders-15': 'de3c9130159af23590db2b385c2d11c338f2882f5e64f0eb4c756db4fa71b672',
+  'generation-2-30': 'd83bcecee1ce65b208cb901724071a9754f96ea65a3d33fcc1614dae43441cb0',
+  'blocked-eggs': '895f4cc9937245e25344b2a2eb33cc92754b7d895e36b2bd388f81b3f1d4a28d',
+};
 const settings = {...DEFAULT_SETTINGS, targetNutrients: 200, inflowRate: 0, maxOrganisms: 100};
 for (const scenario of ['founders-15', 'generation-2-30', 'blocked-eggs']) {
   const state = createInitialWorld(settings, 711, 'balanced', 'standard', scenario === 'founders-15' ? 15 : 0);
@@ -63,8 +69,13 @@ for (const scenario of ['founders-15', 'generation-2-30', 'blocked-eggs']) {
   }
   const samples = profile.samples?.length || 1;
   const percentages = Object.fromEntries(Object.entries(totals).map(([name, n]) => [name, Math.round(1000 * n / samples) / 10]));
+  const stateHash = createHash('sha256').update(JSON.stringify(createSnapshot(state, settings).state)).digest('hex');
+  assert.equal(stateHash, golden[scenario], 'Complete v0.31 state continuation must remain exact');
   console.log(JSON.stringify({root, scenario, milliseconds: Math.round(milliseconds),
     stepsPerSecond: Math.round(120000 / milliseconds), creatures: state.organisms.length, eggs: state.eggs.length,
-    stateHash: createHash('sha256').update(JSON.stringify(createSnapshot(state, settings).state)).digest('hex'),
-    samplePercent: percentages, topSelf: Object.entries(self).sort((a,b) => b[1]-a[1]).slice(0,12)}));
+    stateHash, exactStateMatch: true,
+    samplePercent: percentages,
+    kernelLines: profile.nodes.filter(n => n.callFrame.functionName === 'stepSimulation')
+      .flatMap(n => n.positionTicks ?? []).sort((a,b) => b.ticks-a.ticks).slice(0,10),
+    topSelf: Object.entries(self).sort((a,b) => b[1]-a[1]).slice(0,12)}));
 }
