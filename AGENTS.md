@@ -240,6 +240,20 @@
   when deriving CUR-001. Do not equate bounded swimming and mouth tests
   with sustainable ecological fitness. Use
   `tests/featured-starters.test.ts` in the fast gate.
+- v0.27 ecological environment: fresh 2D UI worlds offer the Blooms
+  nutrient distribution (65% clustered across twelve seed-stable abiotic
+  sites, 35% dispersed). Uniform/absent nutrientPattern MUST retain
+  exactly the old position and PRNG stream; old imported saves default to
+  uniform. Feed/Feed All manual patch placement takes precedence and
+  retains its old semantics. `nutrientBloomCenters` may not consume the
+  world's PRNG, track creatures or inject energy; all food creation
+  still uses `addNutrients`, external input ledger, inflow/target cap.
+  New pattern is validated/persisted in schema v11, with no 3D changes.
+  `ecologyBaseline.ts` has an optional nine-founder 400-food
+  uniform-vs-bloom unassisted comparison; intake receipts can be broken
+  down by organism, but do NOT claim bloom viability without evidence.
+  Fast bound: `tests/abiotic-blooms.test.ts`. Future work should
+  address concrete natural intake/egg failures, not optimize a survey.
 - `data/founders.json` contains 55 distinct blueprints (50 revised originals and
   five jellyfish designs). Preserve their actual anatomy and measured gaits; never
   replace entries with renamed duplicates. Selective symmetry is not a mutation rule.
