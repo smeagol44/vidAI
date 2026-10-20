@@ -284,6 +284,8 @@ export default function App() {
   const [waterViscosity, setWaterViscosity] = useState<number>((getConfig('waterViscosity') as number) ?? 0.22);
   const [targetNutrientAbundance, setTargetNutrientAbundance] = useState<number>(clampVal(getConfig('targetNutrientCount') ?? 400, 0, 800));
   const [nutrientInflowRate, setNutrientInflowRate] = useState<number>((getConfig('nutrientInflowRate') as number) ?? 15);
+  // Fresh worlds offer abiotic food hotspots; old imported saves keep uniform.
+  const [nutrientPattern, setNutrientPattern] = useState<'uniform' | 'blooms'>('blooms');
   const [kinshipProtectionEnabled, setKinshipProtectionEnabled] = useState<boolean>(true);
   const [gravity, setGravity] = useState(0);
   const [mutationSeverity, setMutationSeverity] = useState(getConfig('mutationRate'));
@@ -516,9 +518,10 @@ export default function App() {
   }, [selectedSpecimen, specimenBank]);
 
   const currentSettings = useCallback((): SimulationSettings => ({worldWidth, worldHeight, waterViscosity,
-    targetNutrients: targetNutrientAbundance, inflowRate: nutrientInflowRate, kinshipProtection: kinshipProtectionEnabled,
+    targetNutrients: targetNutrientAbundance, inflowRate: nutrientInflowRate,
+    nutrientPattern, kinshipProtection: kinshipProtectionEnabled,
     mutationSeverity, gravity, maxOrganisms}),
-    [worldWidth, worldHeight, waterViscosity, targetNutrientAbundance, nutrientInflowRate, kinshipProtectionEnabled, gravity, maxOrganisms, mutationSeverity]);
+    [worldWidth, worldHeight, waterViscosity, targetNutrientAbundance, nutrientInflowRate, nutrientPattern, kinshipProtectionEnabled, gravity, maxOrganisms, mutationSeverity]);
 
   const changeTankSize = (width: number, height: number) => {
     resizeWorld(simStateRef.current, currentSettings(), width, height);
@@ -569,6 +572,7 @@ export default function App() {
       setEcoStats(prev => ({...prev, ...collectWorldStats(restored.state, v.targetNutrients)}));
       setWorldWidth(v.worldWidth); setWorldHeight(v.worldHeight); setGravity(v.gravity ?? 0);
       setWaterViscosity(v.waterViscosity); setTargetNutrientAbundance(v.targetNutrients); setNutrientInflowRate(v.inflowRate);
+      setNutrientPattern(v.nutrientPattern ?? 'uniform');
       setKinshipProtectionEnabled(v.kinshipProtection); setMaxOrganisms(v.maxOrganisms ?? 100); setMutationSeverity(v.mutationSeverity);
       if (Number.isInteger(restored.metadata.seed)) setSimulationSeed(Number(restored.metadata.seed));
       if (restored.metadata.founderMode === 'balanced' || restored.metadata.founderMode === 'unbiased') setFounderMode(restored.metadata.founderMode);
@@ -810,6 +814,7 @@ export default function App() {
       waterViscosity,
       targetNutrients: targetNutrientAbundance,
       inflowRate: nutrientInflowRate,
+      nutrientPattern,
       kinshipProtection: kinshipProtectionEnabled,
       mutationSeverity,
       maxOrganisms,
@@ -1888,6 +1893,16 @@ export default function App() {
               </div>
 
               <p className="text-[10px] text-slate-400">Limit applies to inflow, Feed and Feed All. Existing food remains until eaten or cleared; remains keep their stored energy.</p>
+              <div className="space-y-1">
+                <label htmlFor="nutrient-pattern" className="text-[11px] text-slate-300">Abiotic nutrient distribution</label>
+                <select id="nutrient-pattern" value={nutrientPattern}
+                  onChange={e => setNutrientPattern(e.target.value as 'uniform' | 'blooms')}
+                  className="w-full bg-slate-950 border border-emerald-500/40 rounded px-2 py-1 text-[11px]">
+                  <option value="blooms">Blooms — clustered hotspots + dispersed food</option>
+                  <option value="uniform">Uniform — classic random distribution</option>
+                </select>
+                <p className="text-[10px] text-slate-400">Changes only future abiotic spawns; a reset distributes the initial food. Blooms never follow creatures. Switching modes adds no free energy.</p>
+              </div>
               <button className="w-full py-1.5 bg-slate-800 border border-emerald-500/40 rounded-xl text-emerald-300 text-[11px]"
                 onClick={() => {
                   clearFreeNutrients(simStateRef.current);
