@@ -1,13 +1,13 @@
-# Current performance architecture (v0.31.1)
+# Current performance architecture (v0.32.0)
 
 - The user explicitly brought performance work forward. `simulation.worker.ts`
   owns live state and fixed 1/60-second ticks; `App.tsx` paints a read-only replica.
   Route every world mutation through Worker commands and obtain exact exports,
   forks and diagnostics from the Worker, never from a render frame. Epochs reject
   stale-world traffic; one frame in flight bounds messaging. Genomes travel once,
-  inspector memory only for the selected animal. Unsupported Workers retain the
+  inspector memory only for the selected animal while diagnostics are open. Unsupported Workers retain the
   main-thread path; `?mainthread` is available for diagnosis.
-- `neuralRuntime.ts` caches topology/masks, not weights. Invalidate on topology
+- `neuralRuntime.ts` caches topology/masks and ordered enabled-row lists, not weights. Invalidate on topology
   edits; reuse learned records while preserving old arithmetic and ID-keyed saves.
   Existing complete-state hashes from main d3d7465 are regression references.
 - Each newly dissolved organism leaves ONE carrion circle with all remaining
@@ -20,6 +20,17 @@
   immediately. Cache velocity-solver geometry only within one substep, and vision
   corners only before movement. Contact wrappers may be reused but their AABBs
   must be rebuilt after projection. Preserve original candidate/impulse order.
+- `spatialIndex.ts` indexes full physical AABBs and returns unique source-ordered
+  ray-corridor/aperture candidates. Vision priority is food, eggs, body parts.
+  Feeding rebuilds from post-physics positions and keeps descending order;
+  food removal rebuilds before the next mouth, egg removal invalidates immediately.
+  Never persist spatial scratch or reuse sight bounds after movement.
+- Clicking a creature opens general status only. Each explicit diagnostics
+  opening resets graph pruning to 0.5 before rendering; graph pruning never
+  changes neural state. New worlds cap living population at 30, target 275
+  nutrients and choose an initial random UI seed. Explicit seeds remain
+  reproducible; imports retain stored settings and historical omitted-field
+  defaults (100 creatures/400 nutrients).
 - Routine checks: fast tests + build + `npm run test:worker`. The last command
   executes the built Worker on a real thread. The dedicated browser smoke checks
   actual UI/Worker integration in CI. `benchmark:performance` accepts a local
@@ -290,7 +301,8 @@
   markers, previews and debug ray origins. Legacy saved positions stay centered
   unless their explicit slots say otherwise; do not rewrite living legacy anatomy.
 - Default seeding distributes 18 organisms across up to five uniformly sampled
-  distinct designs, with independent genomes. Default nutrients are 400.
+  distinct designs, with independent genomes. New-world defaults are a 30-creature
+  cap and 275 nutrients.
   Specialist mouths transfer 3600 J/s and omnivores 1800 J/s gross
   before 80% assimilation. Egg reserve funding uses the parent's inherited
   eggReserveFraction × 10,000 J; retain at least 12% of storage capacity
@@ -313,10 +325,10 @@
   step replacement state before its matching pause/settings render.
 - New imports must be validated before replacing the active world. Current
   snapshots must continue exactly, including PRNG, activations, counters and IDs.
-- v0.28 2D performance broadphase: `sightBroadphase.ts` conservatively
-  indexes food centers in 128px cells, expands each sight-ray AABB by
-  the largest physical food radius, and preserves old array-index
-  ordering for strict closest-hit ties. Per-step scratch only:
+- 2D performance broadphase: `spatialIndex.ts` conservatively indexes full
+  physical bounds in 128px cells and visits only ray-intersected cell slabs.
+  `sightBroadphase.ts` retains the food wrapper. Preserve original group and
+  array ordering for strict closest-hit ties. Per-step scratch only:
   rebuild whenever dissolution adds remains, never persist/cache
   across world replacements, never change ray RGB, nutrition, neural
   weights or PRNG. The renderer skips off-viewport food, eggs and

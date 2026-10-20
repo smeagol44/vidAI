@@ -46,10 +46,23 @@ the new alleles when loaded.
 ## Starting a world
 
 A normal new world still creates the configured founder population (18 by
-default) from **at most five randomly selected featured designs**. It
+default) from **at most five randomly selected featured designs**. The default
+living-population cap is **30**, and the plant-food target is **275**. It
 does not seed every one of the nine. The Bank's optional **Featured
 Showcase** resets the world with one of each nine. Older saved worlds
 keep their actual stored genomes instead of being converted to CUR IDs.
+
+The initial seed is randomly chosen when the app opens. The settings field
+shows that seed and remains editable; resets reuse the displayed seed for
+reproducibility. Imported worlds retain their stored settings and random state.
+
+## Selecting a creature
+
+Clicking a creature opens its general-status window. Use **Inspect** there
+(or the explicit toolbar/keyboard inspector control) to open **Recurrent
+Brain & Diagnostics**. Each opening starts the display-only pruning threshold
+at **0.5**; the slider can reveal weaker connections when needed. Pruning
+changes only what the graph draws, never the organism's neural connections.
 
 ## Evidence and limitations
 

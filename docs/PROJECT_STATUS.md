@@ -1,5 +1,55 @@
 # Project status — 2026-10-20
 
+## Spatial/neural execution and lightweight inspection — v0.32.0
+
+- User requested further optimization and quieter creature selection. One
+  physical-bounds index now supplies ray-corridor candidates for food, eggs
+  and body parts, deduplicated in legacy group/array order. Separate
+  post-physics indexes serve mouth apertures; descending prey/egg/food
+  competition is unchanged. Food deletions trigger rebuilding before the
+  next mouth, egg predation invalidates immediately, and new eggs are seen
+  by later mouths. All physical substeps, sensing/feeding rates, geometry,
+  energy accounting, neural sum order and PRNG are retained.
+- Dense neural rows avoid per-edge mask checks; masked rows iterate compiled
+  enabled source lists in original order. Weights are always current genome
+  values, somatic deltas are still separate additions and caches are unsaved.
+  Contacts reuse bounded generation-stamped cell buckets and deduplicate by
+  first common cell in the original pair order. Hinge projection precomputes
+  unchanged masses/local anchors but recalculates moving pose every iteration.
+- Clicking a creature opens only general status. Explicit Inspect, toolbar
+  or keyboard opening sets display pruning to 0.5 before graph rendering.
+  Weak graph edges are filtered before constructing string IDs/SVG nodes.
+  Heavy selected neural transport is requested only with diagnostics open.
+  Display pruning never changes actual genetic or acquired connections.
+- New-world cap 30; plant target 275; initial UI seed comes from the browser's
+  random source and remains editable/reusable on reset. Initial population
+  stays 18. Imports keep explicit settings; absent historical cap/target
+  retain 100/400 so old continuations are not silently changed.
+- Same-run CPU sampling, 120 measured ticks after 20 warm-up ticks; comparing
+  main be6e625/v0.31.1 to the implementation commit:
+
+  | Synthetic workload | Baseline ms | Candidate ms | Throughput ratio |
+  | --- | ---: | ---: | ---: |
+  | 15 founders, 200 food, 180 remains | 600 | 413 | 1.45x |
+  | 30 generation-2 animals, same food/remains | 959 | 608 | 1.58x |
+  | Same 30 with 75 blocked eggs | 1047 | 708 | 1.48x |
+  | 34 Gen-6 animals, 272 food, 27 eggs, 3 remains | 1105 | 697 | 1.59x |
+
+  All four complete-state hashes match exactly, including learning and PRNG.
+  The fourth matches the user's reported counts, not their actual exported
+  tank. These are profiled server kernels, not a browser speed promise.
+  Reversed-order masked-brain 15/78/221 differential also matches exactly:
+  baseline 548/394 ms vs candidate 399/366 ms; short timings remain noisy.
+- Verification on implementation 82d7c75: 211/211 fast tests and TypeScript/
+  Vite build pass. Actual production Worker thread transport passes; both
+  Chromium and Firefox pass the original Worker smoke and new UI regression
+  for defaults, random-source seed initialization, status-only selection
+  and pruning reset. The intentional 100-animal stress test now explicitly
+  selects cap 100 instead of inheriting a changed new-world default.
+- Ray geometry, neural evaluation and body contacts remain CPU work. Native
+  packaging, WASM, reduced sensor/physics fidelity and more simulation Workers
+  were not needed for this bounded change. VIDA 3D is untouched.
+
 ## Simulation throughput correction — v0.31.1
 
 - Follow-up to smooth 60 FPS rendering but inadequate simulation speed. The

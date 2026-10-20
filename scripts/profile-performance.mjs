@@ -10,6 +10,7 @@ const sim = await import(pathToFileURL(resolve(root, 'simulation.ts')).href);
 const {createInitialWorld, addExternalOrganism} = await import(pathToFileURL(resolve(root, 'world.ts')).href);
 const {DEFAULT_SETTINGS, createSnapshot} = await import(pathToFileURL(resolve(root, 'persistence.ts')).href);
 const golden = {
+  'generation-6-34': '88884af87b30310bd79543fa2209012b0b4da03335cef9e7750c9232e08530ab',
   'founders-15': 'de3c9130159af23590db2b385c2d11c338f2882f5e64f0eb4c756db4fa71b672',
   'generation-2-30': 'd83bcecee1ce65b208cb901724071a9754f96ea65a3d33fcc1614dae43441cb0',
   'blocked-eggs': '895f4cc9937245e25344b2a2eb33cc92754b7d895e36b2bd388f81b3f1d4a28d',
@@ -62,6 +63,7 @@ for (const scenario of ['founders-15', 'generation-2-30', 'blocked-eggs', 'gener
     let current = id, category = 'other';
     while (current !== undefined) {
       const fn = nodes.get(current)?.callFrame.functionName;
+      if (fn === 'evaluateOrganismBrain') {category = 'neural-evaluation'; break;}
       if (fn === 'resolveBodyContacts') {category = 'contacts'; break;}
       if (fn === 'advanceOrganismPhysics') {category = 'joint-and-drag-physics'; break;}
       if (fn === 'hatchPlacement') {category = 'hatch-clearance'; break;}
@@ -74,10 +76,13 @@ for (const scenario of ['founders-15', 'generation-2-30', 'blocked-eggs', 'gener
   const samples = profile.samples?.length || 1;
   const percentages = Object.fromEntries(Object.entries(totals).map(([name, n]) => [name, Math.round(1000 * n / samples) / 10]));
   const stateHash = createHash('sha256').update(JSON.stringify(createSnapshot(state, settings).state)).digest('hex');
-  if (golden[scenario]) assert.equal(stateHash, golden[scenario], 'Complete v0.31 state continuation must remain exact');
+  assert.equal(stateHash, golden[scenario], 'Complete v0.31 state continuation must remain exact');
   const report = {root, scenario, milliseconds: Math.round(milliseconds),
     stepsPerSecond: Math.round(120000 / milliseconds), creatures: state.organisms.length, eggs: state.eggs.length,
     stateHash, exactStateMatch: true,
+    parts: state.organisms.reduce((n,o)=>n+o.segments.length,0),
+    eyes: state.organisms.reduce((n,o)=>n+o.genome.eyes.length,0),
+    hiddenNeurons: state.organisms.reduce((n,o)=>n+o.genome.hiddenIds.length,0),
     samplePercent: percentages,
     kernelLines: profile.nodes.filter(n => n.callFrame.functionName === 'stepSimulation')
       .flatMap(n => n.positionTicks ?? []).sort((a,b) => b.ticks-a.ticks).slice(0,10),

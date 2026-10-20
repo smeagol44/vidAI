@@ -10,7 +10,10 @@ off-camera; rendering never decides which organisms are simulated.
 Neural topology is compiled into transient numeric masks and plastic-edge
 indices. The inner neural loops read actual genome weights in their
 original order, without serializing a JSON edge identifier for each
-synapse on every tick. Topology changes invalidate the cache; changing
+synapse on every tick. Dense rows use direct loops; masked rows use sorted
+enabled-source lists, avoiding a mask lookup for every multiplication.
+Learned deltas remain separate additions in their original order.
+Topology changes invalidate the cache; changing
 weights never leaves cached weight values behind.
 
 Individual acquired synapse records and temporary numeric buffers are
@@ -32,10 +35,23 @@ constant through its ten velocity iterations; all ten impulses and all
 four physical substeps are retained. Body-contact wrappers are reused,
 but moving bounds are recomputed on every contact pass in original order.
 
-Vision reuses exact rectangle corners during the pre-movement sensing
-pass. Surface pigment still reads the current reserves at each hit.
-Food and contact grids use numeric cell coordinates; candidate ordering,
-occlusion, neural sums, learning and randomness retain their prior math.
+Vision builds one physical-bounds index for food, eggs and living body
+parts before movement. Ray queries follow only the cells crossed by the
+ray through each horizontal slab, including boundaries and oversized objects.
+Candidates are deduplicated and sorted into the original food/egg/body
+and array order. Exact intersection geometry, closest-hit ties, occlusion
+and live reserve-dependent pigment remain authoritative.
+
+Feeding builds separate indexes from post-physics positions. Mouths query
+their aperture bounds, retaining original descending prey/egg/food order.
+Food removals rebuild the next mouth's index; egg predation invalidates
+its index, and newly laid eggs remain visible to later mouths in that tick.
+No sensing or feeding frequency is reduced.
+
+Contacts reuse bounded cell buckets and use first-shared-cell ownership
+to remove duplicate pairs in the original order. All moving bounds are
+recomputed every pass. Hinge projection reuses only unchanged masses and
+local anchors; moving angles and impulses are recomputed each iteration.
 
 ## Rendering and remains
 
@@ -62,7 +78,7 @@ as saves.
 
 Render updates are bounded to 30 per second, with **one frame in flight**.
 Genomes transfer once, lineage sends changed records, and heavy neural
-inspector state is sent only for the selected animal. Paused worlds do
+inspector state is sent only for the selected animal while diagnostics are open. Paused worlds do
 not stream unchanged frames. World epochs discard stale messages after
 reset/import. Worker errors pause the simulation visibly.
 
@@ -85,24 +101,28 @@ Render FPS alone does not measure simulation throughput.
 
 - `npm run test:fast` includes complete-state hashes captured before the
   neural optimization, cold-cache saves, Worker-host command accounting
-  one-circle corpse conservation and Worker pacing boundaries.
+  and one-circle corpse conservation, Worker pacing and conservative spatial queries.
 - `npm run build` then `npm run test:worker` execute the actual production
   Worker bundle on a separate thread, checking independent progress,
   paused exact exports, commands and stale-world rejection.
 - Dedicated Chromium and Firefox smoke checks cover the UI's real Worker,
-  import/export, pause, Feed and Add Life in GitHub Actions.
+  import/export, pause, Feed, Add Life and selection/defaults in GitHub Actions.
 - `npm run benchmark:performance` measures 15 creatures, 78 nutrients
   and 221 remains with evolved connection masks. An optional local
   `--baseline` checkout compares timings and requires identical final
   states. This is a kernel benchmark, not a browser FPS promise.
 
 - `node --import tsx scripts/profile-performance.mjs [checkout]` samples
-  three bounded kernels: 15 founders, 30 second-generation animals, and
-  the same 30 with 75 blocked eggs (each has 200 nutrients/180 remains).
-  Fixed complete-state hashes require exact v0.31 continuation.
+  four bounded kernels: 15 founders, 30 second-generation animals, the
+  same 30 with 75 blocked eggs (each with 200 nutrients/180 remains), and
+  34 generation-six creatures with 272 nutrients, 27 eggs and 3 remains.
+  The last is synthetic and matches reported counts, not a user's exact save.
+  Reports can be written to a second path argument and compared with
+  `node scripts/compare-performance.mjs before.json after.json`.
+  Original hashes and cross-checkout comparisons require exact continuation.
   The throughput diagnosis workflow is opt-in outside its development branch.
 
-Joint constraints, body/egg vision scans and large evolved neural layouts
+Joint constraints, remaining ray geometry and large evolved neural layouts
 can still dominate CPU time. Profile actual evolved worlds before the
 next optimization. Native desktop packaging alone does not remove those
 costs; compiled/WASM kernels remain a separate future option.

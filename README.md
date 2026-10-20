@@ -214,7 +214,7 @@ saved-specimen slots. Standard seeding uses 18 organisms drawn evenly from up to
 designs, without replacement at design selection. The same seed reproduces the
 same selection; each organism owns an independent genome and brain state. There
 is no forced diet quota; some random communities will fare better than others.
-The default plant-food target is 400;
+The default plant-food target is 275;
 **Reset with Catalogue Showcase** starts a new world with up to 55 designs, subject
 to the current living-population cap. The old six archetype shortcuts have been removed; use the Bank or Add Life.
 
@@ -260,7 +260,7 @@ summary for its memory/metabolic breakdown. This is **not** online learning,
 synaptic plasticity or sleep/dreaming.
 
 Settings include nutrients (0–800), tank width/height, gravity, population cap
-(1–150), viscosity, inflow, seed and founder brain mode. Resizing translates whole
+(1–150, default 30), viscosity, inflow, seed and founder brain mode. Resizing translates whole
 articulated bodies. Lowering the cap does not kill existing creatures. A zero food
 target stops automatic and manual nutrient creation. Existing particles are retained.
 **Clear Free Nutrients** removes plant food and records its energy in the ledger.
@@ -351,7 +351,9 @@ resolve correctly below the repository subpath.
 ## Controls
 
 Choose **Seed Simulation** to start. Drag the tank to pan and scroll to zoom.
-Click a creature to inspect it. Space pauses/resumes; the on-screen buttons
+Click a creature for general status; its **Inspect** button opens diagnostics
+with a display-only pruning threshold of 0.5. The initial seed is random and
+can be edited in settings; resetting reuses that displayed seed. Space pauses/resumes; the on-screen buttons
 provide settings, simulation speed, specimen tools, ecosystem export/import,
 and diagnostics. The help panel lists the other shortcuts.
 
@@ -401,3 +403,10 @@ sensing and deterministic arithmetic remain intact. The focused Worker smoke
 runs in both Chromium and Firefox. See the current
 [Simulation Performance Wiki](https://github.com/smeagol44/vidAI/wiki/Simulation-Performance)
 for diagnostics and limits.
+
+Physical vision and feeding use ordered, conservative spatial queries. Neural
+execution uses dense or enabled-row loops while retaining original numerical
+sum order. Contacts reuse cell storage and invariant hinge-projection work.
+See `scripts/profile-performance.mjs` for bounded CPU profiles and complete-state
+comparison, including a synthetic generation-six population. These improvements
+retain the physical substeps, sensor rates, biology and saved continuation.
