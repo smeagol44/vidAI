@@ -1,5 +1,30 @@
 # Project status — 2026-10-20
 
+## Physical predator feeding: enclosed-mouth contact — v0.29.0
+
+- **Corrected a physically possible contact miss.** The old predator
+  mouth-vs-prey rectangle test only checked aperture-edge intersections or
+  small mouth-to-edge distances. A fully enclosed mouth could therefore
+  be deep inside prey tissue without counting a bite. The contact test
+  now also recognizes the mouth center inside the real rotated rectangle.
+  The cheap broadphase uses actual prey half-diagonal and aperture extent
+  rather than a fixed 70px assumption.
+- This changes no sensor values, motor scripts, learned synapses, age,
+  prey diet permissions, per-mouth transfer limits, reserve costs,
+  predator targeting or reproductive thresholds. Actual prey reserve/
+  tissue still funds every bite, with assimilation losses sent to heat.
+- Compact tests check deep overlap for rotated prey, false positives
+  outside the surface, ordinary crossing/near-edge contact and real
+  paid bites with conserved total world energy.
+- **What remains unproven:** natural catches of independently moving
+  prey, ordinary food acquisition by all nine starters, affordable
+  hatching and self-sustaining generations. This is a physical-contact
+  bug fix, **not** a hunter-performance guarantee.
+- **Scope control:** the planned physics/render separation is added as
+  *deferred milestone P* after current ecological acquisition/reproduction
+  work. No Worker port, native packaging or VIDA 3D edits.
+
+
 ## First browser-performance pass — v0.28.0
 
 - User-reported slowdown: approximately **20 live creatures, 200 green nutrients
