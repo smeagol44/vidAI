@@ -1,6 +1,8 @@
 **VIDA — Current Reference**
 
 - [[Home]]
+- **Specimen Bank**
+  - [[Featured Starters and Legacy Designs|Featured-Starters]]
 - **Simulation systems**
   - [[Movement and Motor Control|Motor-Control]]
   - [[Senses and Visually Guided Behavior|Sensory-Behavior]]
