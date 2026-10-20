@@ -377,3 +377,18 @@ conservative and can delay hatching near densely packed bodies.
 Routine GitHub validation runs fast automated tests and the production build.
 Full simulations and browser checks remain available through a manual workflow
 run with **extended_validation** enabled; they no longer run on every release.
+
+## Performance architecture
+
+The v0.31 performance branch moves authoritative fixed-step simulation into a
+Web Worker, with bounded render frames on the UI thread. Neural connection masks
+and plastic indices are cached, acquired synapse records are reused, and food
+and carrion glow sprites are cached. Each new corpse produces one larger edible
+circle containing all its remaining energy. Existing saved fragments still load.
+
+Run `npm run build && npm run test:worker` for the production Worker transport
+check. `npm run benchmark:performance` measures the 15-creature / 78-food /
+221-remains masked-brain workload. Add `-- --baseline /path/to/checkout` for
+an identical-state comparison against a previous local checkout with dependencies.
+Browser FPS remains hardware dependent. `?mainthread` selects the diagnostic
+fallback; every organism is still simulated off-camera in either mode.

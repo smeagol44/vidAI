@@ -1,3 +1,24 @@
+# Current performance architecture (v0.31)
+
+- The user explicitly brought performance work forward. `simulation.worker.ts`
+  owns live state and fixed 1/60-second ticks; `App.tsx` paints a read-only replica.
+  Route every world mutation through Worker commands and obtain exact exports,
+  forks and diagnostics from the Worker, never from a render frame. Epochs reject
+  stale-world traffic; one frame in flight bounds messaging. Genomes travel once,
+  inspector memory only for the selected animal. Unsupported Workers retain the
+  main-thread path; `?mainthread` is available for diagnosis.
+- `neuralRuntime.ts` caches topology/masks, not weights. Invalidate on topology
+  edits; reuse learned records while preserving old arithmetic and ID-keyed saves.
+  Existing complete-state hashes from main d3d7465 are regression references.
+- Each newly dissolved organism leaves ONE carrion circle with all remaining
+  reserve and biomass energy. Old saved fragments remain valid and unmerged.
+  This requested physical food-geometry/PRNG change is intentional. Never create
+  one circle per 3000 J again. Food glow sprites are presentation-only caches.
+- Routine checks: fast tests + build + `npm run test:worker`. The last command
+  executes the built Worker on a real thread. The dedicated browser smoke checks
+  actual UI/Worker integration in CI. `benchmark:performance` accepts a local
+  `--baseline` checkout and compares identical state, without promising browser FPS.
+
 # Working on VIDA
 
 - This is the 2D simulation. Keep the current visual style, movable windows,
@@ -309,7 +330,8 @@
   feeding and conservation tests must remain green. Natural hunting
   fitness remains unknown. User explicitly deferred physics/render
   separation to a new milestone P AFTER ecological acquisition
-  and funded reproduction; no Worker or native work now.
+  and funded reproduction was the prior plan; the explicit user request
+  for performance work now supersedes that deferral. No native port is planned.
 - v0.30 ecology diagnostic: `foodAcquisitionAudit.ts` and the
   `runFeaturedAcquisitionSurvey` opt-in path read the real nine CUR founders'
   edible retina intersections, spectrally visible stimuli, true free-food
@@ -320,7 +342,7 @@
   prey ray hits, mouth-contact ticks and bite receipts still count.
   Use `tests/featured-acquisition.test.ts` and conservation/unchanged
   snapshot checks. Do not interpret 2 juvenile seconds as viable ecology.
-  Original Phase 6 and Worker separation milestone P are both deferred.
+  Original Phase 6 remains deferred; Worker milestone P is now implemented on the performance branch.
 - Default verification is `npm run test:fast` and `npm run build`. Prefer pure
   geometry/state assertions and a few kernel ticks. Full `npm test`, browser tests,
   ecosystem/behavior benchmarks and manual browser checks are opt-in for a concrete

@@ -43,6 +43,9 @@ import {
 import {getConfig} from './constants';
 import BackgroundMusic from './utils/BackgroundMusic';
 import BrainGraph from './BrainGraph';
+import {drawFoodGlow} from './foodGlow';
+import {SimulationClient} from './simulationClient';
+import type {WorldAction} from './simulationHost';
 import {runProductionChecks} from './diagnostics';
 import CreaturePreview from './CreaturePreview';
 import {createInitialWorld, addExternalOrganism, collectWorldStats} from './world';
@@ -215,6 +218,9 @@ function AudioControls({sfxVolume, musicVolume, sfxMuted, musicMuted,
 
 export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const workerClientRef = useRef<SimulationClient | null>(null);
+  const workerSettingsRef = useRef<SimulationSettings | null>(null);
+  const workerStepsRef = useRef(0);
   const viewportRef = useRef<HTMLDivElement>(null);
   const [{width: canvasWidth, height: canvasHeight}, setViewportSize] = useState({width: 1280, height: 720});
   useEffect(() => {
@@ -393,13 +399,17 @@ export default function App() {
 
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
   const [selectedEggId, setSelectedEggId] = useState<string | null>(null);
+  const workerSelectionRef = useRef(selectedOrgId);
+  workerSelectionRef.current = selectedOrgId;
+  const workerPausedRef = useRef(true);
+  workerPausedRef.current = gameState.status !== 'PLAYING' || isGameMenuOpen;
   const [selectedSpecimen, setSelectedSpecimen] = useState<Organism | null>(null);
   const [isAutoTracking, setIsAutoTracking] = useState(false);
 
   // History for telemetry graph
   const popHistoryRef = useRef<number[]>([]);
 
-  // AUTHORITATIVE SIMULATION STATE IN REF
+  // Render replica when the Worker is active; authoritative state only in fallback mode.
   const simStateRef = useRef<SimulationState>({
     simTime: 0,
     organisms: [],
@@ -452,9 +462,13 @@ export default function App() {
   // A replacement world must never be stepped by a render holding its old settings.
   const [worldEpoch, setWorldEpoch] = useState(0);
   const worldEpochRef = useRef(0);
-  const replaceWorld = useCallback((state: SimulationState) => {
+  const replaceWorld = useCallback((state: SimulationState, settings?: SimulationSettings) => {
     worldEpochRef.current++;
     simStateRef.current = state;
+    workerStepsRef.current = 0;
+    const config = settings ?? workerSettingsRef.current;
+    if (workerClientRef.current && config)
+      workerClientRef.current.reset(createSnapshot(state, config), worldEpochRef.current);
     setWorldEpoch(worldEpochRef.current);
   }, []);
 
@@ -523,18 +537,27 @@ export default function App() {
     mutationSeverity, gravity, maxOrganisms}),
     [worldWidth, worldHeight, waterViscosity, targetNutrientAbundance, nutrientInflowRate, nutrientPattern, kinshipProtectionEnabled, gravity, maxOrganisms, mutationSeverity]);
 
+  workerSettingsRef.current = currentSettings();
+  const workerAction = (action: WorldAction) => workerClientRef.current!.action(action)
+    .catch(error => {setSaveNotification(String(error)); return undefined;});
+  const authoritativeSnapshot = async (metadata: Record<string, unknown> = {}) =>
+    workerClientRef.current ? workerClientRef.current.snapshot(metadata)
+      : createSnapshot(simStateRef.current, currentSettings(), metadata);
+
   const changeTankSize = (width: number, height: number) => {
+    if (workerClientRef.current) void workerAction({kind: 'resize', width, height});
     resizeWorld(simStateRef.current, currentSettings(), width, height);
     const dx = (width - worldWidth) / 2, dy = (height - worldHeight) / 2;
     const cam = cameraRef.current;
     cam.x = clampVal(cam.x + dx, 0, width); cam.targetX = clampVal(cam.targetX + dx, 0, width);
     cam.y = clampVal(cam.y + dy, 0, height); cam.targetY = clampVal(cam.targetY + dy, 0, height);
     setWorldWidth(width); setWorldHeight(height);
-    replaceWorld(simStateRef.current);
+    if (!workerClientRef.current) replaceWorld(simStateRef.current);
   };
 
   const copyDiagnosticReport = async () => {
-    const report = JSON.stringify(diagnosticReport(simStateRef.current, currentSettings(), selectedOrgId,
+    const exact = restoreSnapshot(await authoritativeSnapshot());
+    const report = JSON.stringify(diagnosticReport(exact.state, exact.settings, selectedOrgId,
       {seed: simStateRef.current.initialSeed ?? simulationSeed, founderMode}), null, 2);
     setReportText(report);
     try { await navigator.clipboard.writeText(report); setSaveNotification('Diagnostic report copied.'); }
@@ -543,17 +566,18 @@ export default function App() {
   };
 
   // Fork a complete, independent state without changing simulation randomness.
-  const branchEcosystem = useCallback(() => {
-    replaceWorld(restoreSnapshot(createSnapshot(simStateRef.current, currentSettings())).state);
+  const branchEcosystem = useCallback(async () => {
+    const exact = restoreSnapshot(await authoritativeSnapshot());
+    replaceWorld(exact.state, exact.settings);
     setSelectedOrgId(null); setSelectedSpecimen(null); setSelectedEggId(null); setIsAutoTracking(false);
     setSaveNotification(`Branched ecosystem: ${customBranchName}`);
     setTimeout(() => setSaveNotification(null), 2500);
     gameAudio.playLevelUpStinger();
   }, [customBranchName, currentSettings, replaceWorld]);
 
-  const exportEcosystemJSON = useCallback(() => {
+  const exportEcosystemJSON = useCallback(async () => {
     const s = simStateRef.current;
-    const payload = createSnapshot(s, currentSettings(), {seed: s.initialSeed ?? simulationSeed, founderMode, branch: customBranchName,
+    const payload = await authoritativeSnapshot({seed: s.initialSeed ?? simulationSeed, founderMode, branch: customBranchName,
       populationHistory: popHistoryRef.current});
     const url = URL.createObjectURL(new Blob([JSON.stringify(payload)], {type: 'application/json'}));
     const a = document.createElement('a'); a.href = url;
@@ -568,7 +592,7 @@ export default function App() {
     void file.text().then(text => {
       const restored = restoreSnapshot(text);
       const v = restored.settings;
-      replaceWorld(restored.state);
+      replaceWorld(restored.state, v);
       setEcoStats(prev => ({...prev, ...collectWorldStats(restored.state, v.targetNutrients)}));
       setWorldWidth(v.worldWidth); setWorldHeight(v.worldHeight); setGravity(v.gravity ?? 0);
       setWaterViscosity(v.waterViscosity); setTargetNutrientAbundance(v.targetNutrients); setNutrientInflowRate(v.inflowRate);
@@ -627,6 +651,17 @@ export default function App() {
 
   // Manual Add Life
   const addPrimordialSpecimen = useCallback((archetype: ArchetypeId = 'random', customGenome?: Genome) => {
+    if (workerClientRef.current) {
+      const cam = cameraRef.current;
+      void workerAction({kind: 'spawn', x: cam.x, y: cam.y, archetype, genome: customGenome}).then(id => {
+        if (typeof id !== 'string') {if (id === null) setSaveNotification('Population cap reached.'); return;}
+        setSelectedOrgId(id); setSelectedEggId(null);
+        setSelectedSpecimen(simStateRef.current.organisms.find(o => o.id === id) ?? null);
+        gameAudio.playPowerupChime();
+        setGameState(previous => previous.status === 'GAME_OVER' ? {...previous, status: 'PLAYING'} : previous);
+      });
+      return;
+    }
     const s = simStateRef.current;
     if (s.organisms.filter(o => !o.dissolving).length >= maxOrganisms) { setSaveNotification('Population cap reached.'); return; }
     const cam = cameraRef.current;
@@ -663,6 +698,11 @@ export default function App() {
   // Spawn manual nutrient burst
   const spawnNutrientBurst = useCallback(
     (worldX?: number, worldY?: number, count = 15) => {
+      if (workerClientRef.current) {
+        void workerAction({kind: 'feed', x: worldX ?? cameraRef.current.x,
+          y: worldY ?? cameraRef.current.y, count}).then(added => {if (added) gameAudio.playPotionGulp();});
+        return;
+      }
       const s = simStateRef.current;
       if (nutrientSpawnSlots(s, currentSettings()) === 0) return;
       const cx = worldX ?? cameraRef.current.x, cy = worldY ?? cameraRef.current.y;
@@ -672,6 +712,10 @@ export default function App() {
 
   // Feed All adds capped plant food near living creatures, not directly to reserves.
   const feedAllOrganisms = useCallback(() => {
+    if (workerClientRef.current) {
+      void workerAction({kind: 'feed-all'}).then(added => {if (added) gameAudio.playPotionGulp();});
+      return;
+    }
     const s = simStateRef.current, living = s.organisms.filter(o => !o.dissolving);
     if (!living.length) { spawnNutrientBurst(worldWidth / 2, worldHeight / 2, 35); return; }
     let added = 0;
@@ -823,9 +867,11 @@ export default function App() {
 
     // Computation budget cap (16ms per frame to prevent freezing)
     const frameStartTime = performance.now();
-    let stepsRun = 0;
+    let stepsRun = workerStepsRef.current;
+    workerStepsRef.current = 0;
+    if (workerClientRef.current) realTimeTrackerRef.current.physicsStepsThisSec += stepsRun;
 
-    for (let step = 0; step < multiplier; step++) {
+    for (let step = 0; !workerClientRef.current && step < multiplier; step++) {
       stepSimulation(s, settings, fixedDt, (evt) => {
         if (evt === 'clash') gameAudio.playSwordClash();
         else if (evt === 'eat') gameAudio.playCoinPickup();
@@ -1043,25 +1089,7 @@ export default function App() {
       ctx.save();
       ctx.translate(nut.x, nut.y);
       const auraRad = Math.max(14, baseRadius * 2.6) * pulse;
-      const auraGrad = ctx.createRadialGradient(0, 0, baseRadius * 0.3, 0, 0, auraRad);
-      if (carrion) {
-        auraGrad.addColorStop(0, 'rgba(240, 120, 106, .75)');
-        auraGrad.addColorStop(.45, 'rgba(190, 75, 60, .35)');
-        auraGrad.addColorStop(1, 'rgba(190, 75, 60, 0)');
-      } else if (isSuper) {
-        auraGrad.addColorStop(0, 'rgba(52, 211, 153, 0.9)');
-        auraGrad.addColorStop(0.4, 'rgba(6, 182, 212, 0.5)');
-        auraGrad.addColorStop(1, 'rgba(6, 182, 212, 0)');
-      } else {
-        auraGrad.addColorStop(0, 'rgba(34, 224, 120, 0.75)');
-        auraGrad.addColorStop(0.45, 'rgba(16, 185, 129, 0.35)');
-        auraGrad.addColorStop(1, 'rgba(5, 150, 105, 0)');
-      }
-      ctx.fillStyle = auraGrad;
-      ctx.beginPath();
-      ctx.arc(0, 0, auraRad, 0, Math.PI * 2);
-      ctx.fill();
-
+      drawFoodGlow(ctx, auraRad, carrion ? 'carrion' : isSuper ? 'super' : 'nutrient');
       ctx.beginPath();
       ctx.arc(0, 0, baseRadius, 0, Math.PI * 2);
       const rgb = getFoodRGB(nut).map(c => Math.round(c * 255));
@@ -1351,6 +1379,39 @@ export default function App() {
 
     ctx.restore();
   };
+
+  useEffect(() => {
+    if (typeof Worker === 'undefined' || new URLSearchParams(location.search).has('mainthread')) return;
+    let client: SimulationClient;
+    try { client = new SimulationClient(() => simStateRef.current, (state, frame) => {
+      simStateRef.current = state;
+      workerStepsRef.current += frame.steps;
+      if (workerPausedRef.current) {
+        setEcoStats(previous => ({...previous, ...collectWorldStats(state, workerSettingsRef.current!.targetNutrients)}));
+        setSelectedSpecimen(state.organisms.find(o => o.id === workerSelectionRef.current) ?? null);
+      }
+      for (const event of frame.events) {
+        if (event === 'clash') gameAudio.playSwordClash();
+        else if (event === 'eat') gameAudio.playCoinPickup();
+        else if (event === 'birth') gameAudio.playPowerupChime();
+      }
+    }, message => {
+      setGameState(previous => ({...previous, status: 'PAUSED'}));
+      setSaveNotification(`Simulation paused: ${message}`);
+    }); } catch {
+      setSaveNotification('Worker unavailable; running simulation on the main thread.');
+      return;
+    }
+    workerClientRef.current = client;
+    client.reset(createSnapshot(simStateRef.current, workerSettingsRef.current!), worldEpochRef.current);
+    return () => {client.dispose(); workerClientRef.current = null;};
+  }, []);
+
+  useEffect(() => {
+    workerClientRef.current?.control(currentSettings(),
+      worldEpoch === worldEpochRef.current && gameState.status === 'PLAYING' && !isGameMenuOpen,
+      timeMultiplier, selectedOrgId);
+  }, [currentSettings, gameState.status, isGameMenuOpen, timeMultiplier, selectedOrgId, worldEpoch]);
 
   const updateRef = useRef(update);
   const drawRef = useRef(draw);
@@ -1862,7 +1923,7 @@ export default function App() {
                     className="flex-1 bg-slate-950 border border-purple-500/40 rounded px-2 py-1 text-[11px] text-white"
                   />
                   <button
-                    onClick={branchEcosystem}
+                    onClick={() => {void branchEcosystem().catch(error => setSaveNotification(String(error)));}}
                     className="px-2.5 py-1 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded text-[11px]">
                     Fork
                   </button>
@@ -1919,7 +1980,8 @@ export default function App() {
               </div>
               <button className="w-full py-1.5 bg-slate-800 border border-emerald-500/40 rounded-xl text-emerald-300 text-[11px]"
                 onClick={() => {
-                  clearFreeNutrients(simStateRef.current);
+                  if (workerClientRef.current) void workerAction({kind: 'clear-food'});
+                  else clearFreeNutrients(simStateRef.current);
                   setSaveNotification('Free nutrients cleared; removed energy recorded.');
                   setTimeout(() => setSaveNotification(null), 2500);
                 }}>Clear Free Nutrients</button>
@@ -2017,13 +2079,13 @@ export default function App() {
                 </button>
               </div>
 
-              <button onClick={copyDiagnosticReport} className="w-full py-1.5 bg-slate-800 text-cyan-300 border border-cyan-500/40 rounded-xl font-bold text-[11px]">Copy Diagnostic Report</button>
+              <button onClick={() => {void copyDiagnosticReport().catch(error => setSaveNotification(String(error)));}} className="w-full py-1.5 bg-slate-800 text-cyan-300 border border-cyan-500/40 rounded-xl font-bold text-[11px]">Copy Diagnostic Report</button>
               {reportText && <textarea aria-label="Diagnostic report" readOnly value={reportText} onFocus={e => e.currentTarget.select()}
                 className="w-full h-24 bg-slate-950 border border-cyan-900 rounded p-2 text-[10px] text-slate-300" />}
               {/* Persistence: Export & Import JSON */}
               <div className="pt-2 border-t border-slate-800 flex gap-2">
                 <button
-                  onClick={exportEcosystemJSON}
+                  onClick={() => {void exportEcosystemJSON().catch(error => setSaveNotification(String(error)));}}
                   className="flex-1 py-1.5 bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 rounded-xl font-bold flex items-center justify-center gap-1 text-[11px]">
                   <Download size={13} />
                   Export Snapshot

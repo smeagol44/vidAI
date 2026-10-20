@@ -1,4 +1,4 @@
-# VIDA: remaining features — 2026-10-20 / v0.30.0
+# VIDA: remaining features — 2026-10-20 / v0.31.0
 
 This is a focused review of the current 2D source, not an implementation promise.
 Small changes fit the existing systems. Big changes affect simulation architecture,
@@ -34,8 +34,9 @@ edible stimuli that are seen but not reached (movement/orientation)
 versus mouths that touch food but do not assimilate. Then observe
 naturally earned egg funding, laying and hatching before declaring
 multigeneration success. No prescribed behavioral scripts or prolonged
-starter tuning. Physics/render Worker separation is still deferred
-milestone P after ecological progress.
+starter tuning. The user brought performance milestone P forward;
+Worker separation and the neural/glow optimizations are now implemented on
+the performance branch, pending its integration review.
 
 ## Small
 
@@ -55,7 +56,7 @@ milestone P after ecological progress.
 | Evolvable neural structure | Phases 1–2 support inherited hidden sizes (1–96), neuron identity, connection masks and bounded upkeep. Phase 4 adds inherited activation memory time constants (0–4 s). Phase 5 now permits bounded personal changes in existing retinal and motor synapses, with energy-paid consolidation and forgetting, but **not** within-life neuron/topology growth. One controlled later feeding arrangement improved by 180 J; another worsened by 420 J. General ecological fitness remains unproven. |
 | Growth, injury and gradual aging | Juvenile/adult/aging labels exist, but real body growth, local tissue injury/repair and gradual senescence are absent. These require consistent mass, geometry, energy and controller updates. |
 | Environment and communication (optional) | Currents and resource patches could create niches. Chemical or acoustic organs would add new physical signals and sensory channels. Current sound effects are presentation, not creature communication. Implement these as separate systems, not one large update. |
-| Performance at larger populations | **v0.28** added nutrient sight indexing and off-camera paint culling. Physics/render still share the main thread. **DEFERRED separate workstream:** after ecological food acquisition and funded natural reproduction, move the authoritative simulation kernel into a Web Worker and paint on the main thread. Preserve exact deterministic stepping, snapshot/PRNG continuation, 100+ off-camera organisms and conserved energy; profile 20 creatures + 200 nutrients + 180 carrion before and after. A native wrapper alone would not solve the bottleneck. |
+| Performance at larger populations | v0.31 caches neural masks/plastic indices, reuses learned records and glow sprites, emits one carrion circle per corpse, and runs authoritative fixed-step simulation in a Web Worker. Main-thread painting consumes bounded render frames. Measure actual evolved-world FPS/Steps/s and remaining vision/contact costs; exact saves and off-camera life remain required. |
 | Experiment archives and comparison | Current branching replaces the active world with a cloned snapshot; it does not retain multiple named worlds for switching/comparison. Add an archive, event history and repeatable cross-seed comparisons. Deterministic snapshot continuation already exists; playback/rewind does not. |
 
 ## Milestones, without overlapping phase numbers
@@ -184,15 +185,12 @@ Evaluate evolving generations only after reproduction works naturally.
 Do not run prolonged genotype tuning, guarantee survival, or start optional
 Phase 6 sleep/replay yet.
 
-**Deferred post-ecology milestone P — physics/render separation:**
-migrate native `stepSimulation` updates into a Web Worker, send bounded
-state snapshots/diffs for rendering, retain exact save compatibility,
-off-camera simulation and energy conservation. Benchmark the user-reported
-20-creature/380-food workload. Do not begin this milestone before finishing
-the current ecological acquisition and natural reproduction work; do not
-introduce a second behavioral engine or start native desktop packaging.
-
-Monitor performance only if measured bottlenecks arise.
+**Performance milestone P — implemented on the performance branch:**
+The authoritative fixed-step kernel runs in a Web Worker. Cached numeric
+neural topology removes per-synapse JSON work; learned memory and glow
+assets are reused. New corpses become one conserved-energy carrion circle.
+Pending release review and actual evolved-world browser measurements;
+compiled native packaging and optional Phase 6 remain out of scope.
 
 ## Limits that remain corrections rather than new features
 

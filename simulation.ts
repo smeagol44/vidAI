@@ -1,3 +1,4 @@
+import {compiledBrain, compiledDeltas, alignPlasticRecords, invalidateCompiledBrain} from './neuralRuntime';
 import {resolveBodyContacts} from './contacts';
 import {NutrientSightGrid} from './sightBroadphase';
 // ============================================================================
@@ -1201,28 +1202,7 @@ export function memoryUpkeep(g: Pick<Genome, 'hiddenTimeConstants'>): number {
  * ceiling and the disabled-connection mask are identical for either scope.
  */
 export function plasticMotorEdges(g: Genome): Array<{edge: string; output: number; hidden: number}> {
-  if (!(g.plasticityRate && g.plasticityRate > 0)) return [];
-  const disabled = new Set(g.disabledConnections ?? []);
-  const result: Array<{edge: string; output: number; hidden: number}> = [];
-  if (g.plasticMotorScope === 'all') {
-    for (let h = 0; h < g.hiddenIds!.length; h++) {
-      for (let o = 0; o < g.outputKeys!.length; o++) {
-        const edge = brainEdgeKey('ho', g.outputKeys![o], g.hiddenIds![h]);
-        if (!disabled.has(edge)) result.push({edge, output: o, hidden: h});
-        if (result.length >= MAX_PLASTIC_MOTOR_SYNAPSES) return result;
-      }
-    }
-  } else {
-    for (let o = 0; o < g.outputKeys!.length; o++) {
-      if (!g.outputKeys![o].endsWith(':Angle')) continue;
-      for (let h = 0; h < g.hiddenIds!.length; h++) {
-        const edge = brainEdgeKey('ho', g.outputKeys![o], g.hiddenIds![h]);
-        if (!disabled.has(edge)) result.push({edge, output: o, hidden: h});
-        if (result.length >= MAX_PLASTIC_MOTOR_SYNAPSES) return result;
-      }
-    }
-  }
-  return result;
+  return compiledBrain(g).motor;
 }
 
 /** A heritable capability to associate physical optical RGB channels with
@@ -1233,19 +1213,7 @@ export function plasticMotorEdges(g: Genome): Array<{edge: string; output: numbe
  * dormant genetic connections remain dormant.
  */
 export function plasticSensoryEdges(g: Genome): Array<{edge: string; input: number; hidden: number}> {
-  if (!(g.sensoryPlasticityRate && g.sensoryPlasticityRate > 0)) return [];
-  const disabled = new Set(g.disabledConnections ?? []);
-  const retinalInputs = g.inputKeys!.flatMap((key, index) =>
-    key.startsWith('eye:') && /:(red|green|blue)$/.test(key) ? [index] : []);
-  const result: Array<{edge: string; input: number; hidden: number}> = [];
-  for (let h = 0; h < g.hiddenIds!.length; h++) {
-    for (const input of retinalInputs) {
-      const edge = brainEdgeKey('ih', g.hiddenIds![h], g.inputKeys![input]);
-      if (!disabled.has(edge)) result.push({edge, input, hidden: h});
-      if (result.length >= MAX_PLASTIC_SENSORY_SYNAPSES) return result;
-    }
-  }
-  return result;
+  return compiledBrain(g).sensory;
 }
 
 /** Optional consolidation of compatible, already learned experiences.
@@ -1256,22 +1224,30 @@ export function plasticSensoryEdges(g: Genome): Array<{edge: string; input: numb
  * loses consolidation slowly. The rate is heritable; the strength isn't.
  * Return undefined for old organisms to preserve v0.23 save/step semantics.
  */
+const retentionScratch: {forget: number; consolidation?: number} = {forget: 1};
+const plasticTargets = new Float64Array(96);
+const plasticEligibility = new Float64Array(96);
+const plasticConsolidation = new Float64Array(96);
+
 function nextRetention(
   g: Genome, old: {delta: number; consolidation?: number} | undefined,
   teaching: number, dt: number,
 ): {forget: number; consolidation?: number} {
   const baseline = g.forgettingRate ?? .1;
   const rate = g.memoryConsolidationRate ?? 0;
-  if (rate <= 0) return {forget: Math.exp(-baseline * dt)};
+  if (rate <= 0) {
+    retentionScratch.forget = Math.exp(-baseline * dt);
+    retentionScratch.consolidation = undefined;
+    return retentionScratch;
+  }
   const strength = old?.consolidation ?? 0;
   const consistent = old && old.delta * teaching > 0;
   const contradictory = old && old.delta * teaching < 0;
   const gain = consistent ? rate * Math.min(1, Math.abs(teaching)) * (1 - strength) * dt : 0;
   const decay = strength * rate * (contradictory ? .5 : .008) * dt;
-  return {
-    forget: Math.exp(-baseline * (1 - .95 * strength) * dt),
-    consolidation: clampVal(strength + gain - decay, 0, 1),
-  };
+  retentionScratch.forget = Math.exp(-baseline * (1 - .95 * strength) * dt);
+  retentionScratch.consolidation = clampVal(strength + gain - decay, 0, 1);
+  return retentionScratch;
 }
 
 /** Learned retinal associations use precisely the same somatic energy
@@ -1288,42 +1264,44 @@ export function applySensoryAssociations(
   if (!(g.sensoryPlasticityRate && g.sensoryPlasticityRate > 0) || dt <= 0 || org.dissolving) return 0;
   const edges = plasticSensoryEdges(g);
   if (!edges.length) return 0;
-  const previous = new Map((org.learnedSensoryWeights ?? []).map(s => [s.edge, s]));
+  const records = org.learnedSensoryWeights = alignPlasticRecords(org.learnedSensoryWeights, edges);
   const alpha = -Math.expm1(-dt / PLASTIC_ELIGIBILITY_SECONDS);
-  const reward = clampVal(Math.max(0, ...g.mouths.map(m => org.mouthFeedback?.[m.id]?.intake ?? 0)), 0, 1);
+  let reward = 0;
+  for (const mouth of g.mouths) reward = Math.max(reward, org.mouthFeedback?.[mouth.id]?.intake ?? 0);
+  reward = clampVal(reward, 0, 1);
   const injuryIndex = g.inputKeys!.indexOf('body:injury');
   const injury = injuryIndex >= 0 ? clampVal(org.neuralInputs[injuryIndex] ?? 0, 0, 1) : 0;
   const valence = g.sensoryPlasticityRate * reward - (g.injuryAversionRate ?? 0) * injury;
-  const next = edges.map(({edge, input, hidden}) => {
-    const old = previous.get(edge);
+  let stable = 0, change = 0;
+  for (let i = 0; i < edges.length; i++) {
+    const {input, hidden} = edges[i], old = records[i];
     const pre = clampVal(org.neuralInputs[input] ?? 0, 0, 1);
-    const eligibility = clampVal((old?.eligibility ?? 0) * (1 - alpha)
+    const eligibility = clampVal(old.eligibility * (1 - alpha)
       + alpha * pre * org.neuralHidden[hidden], -1, 1);
-    const delta = old?.delta ?? 0;
     const teaching = valence * eligibility;
     const retention = nextRetention(g, old, teaching, dt);
-    const target = clampVal(delta * retention.forget + teaching * dt,
+    const target = clampVal(old.delta * retention.forget + teaching * dt,
       -MAX_LEARNED_MOTOR_DELTA, MAX_LEARNED_MOTOR_DELTA);
-    return {edge, delta, eligibility, target, consolidation:retention.consolidation,
-      oldConsolidation:old?.consolidation ?? 0};
-  });
-  const stableUpkeep = next.reduce((sum, e) => sum + (e.consolidation ?? 0), 0)
-    * CONSOLIDATED_MEMORY_UPKEEP_J_PER_SECOND * dt;
-  const upkeep = Math.min(org.energy,
-    edges.length * PLASTIC_UPKEEP_J_PER_EDGE_SECOND * dt + stableUpkeep);
-  const wanted = next.reduce((sum, e) => sum + Math.abs(e.target - e.delta), 0) * PLASTIC_REWRITE_J_PER_WEIGHT;
+    plasticTargets[i] = target; plasticEligibility[i] = eligibility;
+    plasticConsolidation[i] = retention.consolidation ?? 0;
+    stable += plasticConsolidation[i]; change += Math.abs(target - old.delta);
+  }
+  const stableUpkeep = stable * CONSOLIDATED_MEMORY_UPKEEP_J_PER_SECOND * dt;
+  const upkeep = Math.min(org.energy, edges.length * PLASTIC_UPKEEP_J_PER_EDGE_SECOND * dt + stableUpkeep);
+  const wanted = change * PLASTIC_REWRITE_J_PER_WEIGHT;
   const paid = Math.min(wanted, Math.max(0, org.energy - upkeep));
   const scale = wanted > 0 ? paid / wanted : 1;
   const cost = upkeep + paid;
   org.energy -= cost;
   ledger.metabolicDissipation += cost;
-  org.learnedSensoryWeights = next.map(e => ({
-    edge: e.edge, delta: e.delta + (e.target - e.delta) * scale, eligibility: e.eligibility,
-    ...(e.consolidation === undefined ? {} : {
-      consolidation: e.oldConsolidation + (e.consolidation - e.oldConsolidation)
-        * (e.consolidation > e.oldConsolidation ? scale : 1),
-    }),
-  }));
+  for (let i = 0; i < records.length; i++) {
+    const record = records[i], oldConsolidation = record.consolidation ?? 0;
+    record.delta += (plasticTargets[i] - record.delta) * scale;
+    record.eligibility = plasticEligibility[i];
+    if ((g.memoryConsolidationRate ?? 0) > 0) record.consolidation = oldConsolidation
+      + (plasticConsolidation[i] - oldConsolidation) * (plasticConsolidation[i] > oldConsolidation ? scale : 1);
+    else delete record.consolidation;
+  }
   return cost;
 }
 
@@ -1343,47 +1321,45 @@ export function applyWakingPlasticity(
   if (!(g.plasticityRate && g.plasticityRate > 0) || dt <= 0 || org.dissolving) return 0;
   const edges = plasticMotorEdges(g);
   if (edges.length === 0) return 0;
-  const old = new Map((org.learnedMotorWeights ?? []).map(s => [s.edge, s]));
+  const records = org.learnedMotorWeights = alignPlasticRecords(org.learnedMotorWeights, edges);
   const factor = -Math.expm1(-dt / PLASTIC_ELIGIBILITY_SECONDS);
-  // Each mouth reports absorbed energy / intake budget from the last tick.
-  // Do not use untrusted UI feeding counters or diagnostic objectType.
-  const reward = clampVal(Math.max(0, ...g.mouths.map(m => org.mouthFeedback?.[m.id]?.intake ?? 0)), 0, 1);
+  let reward = 0;
+  for (const mouth of g.mouths) reward = Math.max(reward, org.mouthFeedback?.[mouth.id]?.intake ?? 0);
+  reward = clampVal(reward, 0, 1);
   const injuryIndex = g.inputKeys!.indexOf('body:injury');
-  // The injury input was generated by actual physical reserve/tissue removal
-  // earlier in this very neural tick. Zero aversion preserves v0.21 math.
   const injury = injuryIndex >= 0 ? clampVal(org.neuralInputs[injuryIndex] ?? 0, 0, 1) : 0;
   const valence = g.plasticityRate! * reward - (g.injuryAversionRate ?? 0) * injury;
-  const next = edges.map(({edge, output, hidden}) => {
-    const previous = old.get(edge);
-    const eligibility = clampVal((previous?.eligibility ?? 0) * (1 - factor)
+  let stable = 0, requestedChange = 0;
+  for (let i = 0; i < edges.length; i++) {
+    const {output, hidden} = edges[i], previous = records[i];
+    const eligibility = clampVal(previous.eligibility * (1 - factor)
       + factor * org.neuralHidden[hidden] * org.neuralOutputs[output], -1, 1);
-    const delta = previous?.delta ?? 0;
     const teaching = valence * eligibility;
     const retention = nextRetention(g, previous, teaching, dt);
-    const requested = clampVal(delta * retention.forget + teaching * dt,
+    const requested = clampVal(previous.delta * retention.forget + teaching * dt,
       -MAX_LEARNED_MOTOR_DELTA, MAX_LEARNED_MOTOR_DELTA);
-    return {edge, delta, requested, eligibility,
-      consolidation:retention.consolidation, oldConsolidation:previous?.consolidation ?? 0};
-  });
+    plasticTargets[i] = requested; plasticEligibility[i] = eligibility;
+    plasticConsolidation[i] = retention.consolidation ?? 0;
+    stable += plasticConsolidation[i]; requestedChange += Math.abs(requested - previous.delta);
+  }
   const upkeep = PLASTIC_UPKEEP_J_PER_EDGE_SECOND * edges.length * dt
-    + next.reduce((sum,e)=>sum+(e.consolidation ?? 0),0)
-      * CONSOLIDATED_MEMORY_UPKEEP_J_PER_SECOND * dt;
+    + stable * CONSOLIDATED_MEMORY_UPKEEP_J_PER_SECOND * dt;
   const upkeepPaid = Math.min(org.energy, upkeep);
   const availableForUpdates = Math.max(0, org.energy - upkeepPaid);
-  const requestedChange = next.reduce((sum, s) => sum + Math.abs(s.requested - s.delta), 0);
   const changePrice = requestedChange * PLASTIC_REWRITE_J_PER_WEIGHT;
   const scale = changePrice > 0 ? Math.min(1, availableForUpdates / changePrice) : 1;
   const rewritePaid = changePrice * scale;
   const total = upkeepPaid + rewritePaid;
   org.energy -= total;
   ledger.metabolicDissipation += total;
-  org.learnedMotorWeights = next.map(s => ({edge:s.edge,
-    delta: s.delta + (s.requested - s.delta) * scale, eligibility:s.eligibility,
-    ...(s.consolidation === undefined ? {} : {
-      consolidation: s.oldConsolidation + (s.consolidation - s.oldConsolidation)
-        * (s.consolidation > s.oldConsolidation ? scale : 1),
-    }),
-  }));
+  for (let i = 0; i < records.length; i++) {
+    const record = records[i], oldConsolidation = record.consolidation ?? 0;
+    record.delta += (plasticTargets[i] - record.delta) * scale;
+    record.eligibility = plasticEligibility[i];
+    if ((g.memoryConsolidationRate ?? 0) > 0) record.consolidation = oldConsolidation
+      + (plasticConsolidation[i] - oldConsolidation) * (plasticConsolidation[i] > oldConsolidation ? scale : 1);
+    else delete record.consolidation;
+  }
   return total;
 }
 
@@ -1404,6 +1380,7 @@ function checkBrainBudget(g: Genome): void {
 
 /** Preserve connections and hidden biases by stable identity, not shifting matrix indices. */
 export function remapBrain(g: Genome, previous: Genome = g): void {
+  invalidateCompiledBrain(g);
   const layout = getBrainLayout(g);
   const oldInputs = previous.inputKeys ?? legacyInputKeys(previous);
   const oldOutputs = previous.outputKeys ?? legacyOutputKeys(previous);
@@ -2063,6 +2040,7 @@ function findBrainEdge(g: Genome, key: string): BrainEdgeLocation | null {
  */
 export function mutateBrainTopology(g: Genome, operation: BrainTopologyOperation, customPrng: XoshiroPRNG = rng): boolean {
   ensureBrainLayout(g);
+  invalidateCompiledBrain(g);
   const count = g.hiddenIds!.length, inputs = g.inputKeys!.length, outputs = g.outputKeys!.length;
   const disabled = new Set(g.disabledConnections!);
   if (operation === 'add-neuron') {
@@ -3418,44 +3396,16 @@ export function stepSimulation(
       if (org.dissolveAlpha <= 0) {
         const deadPos = org.segments[0];
         const totalRemainingEnergy = Math.max(0, org.structuralBiomass) + Math.max(0, org.energy);
-        const fullNutrientCount = Math.floor(totalRemainingEnergy / NUTRIENT_ENERGY_VALUE);
-        const remainderFraction = totalRemainingEnergy - fullNutrientCount * NUTRIENT_ENERGY_VALUE;
-        let returnedEnergy = 0;
-
-        for (let d = 0; d < fullNutrientCount; d++) {
-          if (nutrients.length >= 2200) break;
-          const angle = (d / Math.max(1, fullNutrientCount)) * Math.PI * 2;
+        if (totalRemainingEnergy > 0 && nutrients.length < 2200) {
           nutrients.push({
             id: `REM-${prng.nextUint32().toString(36)}`,
             kind: 'carrion', decayTimeRemaining: CARRION_DECAY_SECONDS,
-            x: clampVal(deadPos.x + Math.cos(angle) * 16, 40, worldWidth - 40),
-            y: clampVal(deadPos.y + Math.sin(angle) * 16, 40, worldHeight - 40),
-            vx: 0,
-            vy: 0,
-            energyValue: NUTRIENT_ENERGY_VALUE,
-            radius: getNutrientRadius(NUTRIENT_ENERGY_VALUE),
-            bottomTimer: 0,
-            pulseTimer: prng.range(0, Math.PI * 2),
+            x: clampVal(deadPos.x, 40, worldWidth - 40),
+            y: clampVal(deadPos.y, 40, worldHeight - 40), vx: 0, vy: 0,
+            energyValue: totalRemainingEnergy, radius: getNutrientRadius(totalRemainingEnergy),
+            bottomTimer: 0, pulseTimer: prng.range(0, Math.PI * 2),
           });
-          returnedEnergy += NUTRIENT_ENERGY_VALUE;
-        }
-
-        if (remainderFraction > 5.0 && nutrients.length < 2200) {
-          nutrients.push({
-            id: `REM-${prng.nextUint32().toString(36)}`,
-            kind: 'carrion', decayTimeRemaining: CARRION_DECAY_SECONDS,
-            x: deadPos.x,
-            y: deadPos.y,
-            vx: 0,
-            vy: 0,
-            energyValue: remainderFraction,
-            radius: getNutrientRadius(remainderFraction),
-            bottomTimer: 0,
-            pulseTimer: prng.range(0, Math.PI * 2),
-          });
-          returnedEnergy += remainderFraction;
-        }
-        ledger.recordedLosses += totalRemainingEnergy - returnedEnergy;
+        } else ledger.recordedLosses += totalRemainingEnergy;
 
         const cause: DeathCause = org.deathCause || (org.age >= org.maxLifespan ? 'Old Age' : org.energy <= 0 ? 'Starvation' : 'Predation');
         const rec = state.lineage.get(org.id);
@@ -3660,28 +3610,26 @@ export function stepSimulation(
     // B. RECURRENT NEURAL EVALUATION. The original dense 24-node loop retains its
     // arithmetic order; explicit disabled keys opt individual edges out.
     const hiddenCount = g.hiddenIds!.length;
-    const disabled = g.disabledConnections?.length ? new Set(g.disabledConnections) : null;
-    const learnedMotor = org.learnedMotorWeights?.length
-      ? new Map(org.learnedMotorWeights.map(s => [s.edge, s.delta]))
-      : null;
+    const plan = compiledBrain(g);
+    const learnedMotor = org.learnedMotorWeights?.length ? compiledDeltas(org, plan) : null;
     const learnedRetina = org.learnedSensoryWeights?.length
-      ? new Map(org.learnedSensoryWeights.map(s => [s.edge, s.delta]))
-      : null;
+      ? (learnedMotor ?? compiledDeltas(org, plan)) : null;
+    const inputCount = org.neuralInputs.length;
     for (let h = 0; h < hiddenCount; h++) scratchPrevHidden[h] = org.neuralHidden[h] || 0;
 
     for (let h = 0; h < hiddenCount; h++) {
       let sum = g.biasesH[h] || 0;
       for (let inp = 0; inp < org.neuralInputs.length; inp++) {
-        if (!disabled || !disabled.has(brainEdgeKey('ih', g.hiddenIds![h], g.inputKeys![inp]))) {
+        if (!plan.ih[h * inputCount + inp]) {
           sum += (org.neuralInputs[inp] || 0) * (g.weightsIH[h]?.[inp] || 0);
           if (learnedRetina) {
-            const delta = learnedRetina.get(brainEdgeKey('ih', g.hiddenIds![h], g.inputKeys![inp])) ?? 0;
+            const delta = learnedRetina.sensory[h * inputCount + inp];
             if (delta !== 0) sum += (org.neuralInputs[inp] || 0) * delta;
           }
         }
       }
       for (let rh = 0; rh < hiddenCount; rh++) {
-        if (!disabled || !disabled.has(brainEdgeKey('hh', g.hiddenIds![h], g.hiddenIds![rh]))) {
+        if (!plan.hh[h * hiddenCount + rh]) {
           sum += scratchPrevHidden[rh] * (g.weightsHH[h]?.[rh] || 0);
         }
       }
@@ -3693,7 +3641,7 @@ export function stepSimulation(
     for (let o = 0; o < numJoints * OUTPUTS_PER_JOINT; o++) {
       let sum = g.biasesO[o] || 0;
       for (let h = 0; h < hiddenCount; h++) {
-        if (!disabled || !disabled.has(brainEdgeKey('ho', g.outputKeys![o], g.hiddenIds![h]))) {
+        if (!plan.ho[o * hiddenCount + h]) {
           sum += org.neuralHidden[h] * (g.weightsHO[o]?.[h] || 0);
         }
       }
@@ -3701,8 +3649,8 @@ export function stepSimulation(
       // weights, and cannot activate a disabled connection.
       if (learnedMotor && (g.plasticMotorScope === 'all' || g.outputKeys![o].endsWith(':Angle'))) {
         for (let h = 0; h < hiddenCount; h++) {
-          const edge = brainEdgeKey('ho', g.outputKeys![o], g.hiddenIds![h]);
-          if (!disabled?.has(edge)) sum += org.neuralHidden[h] * (learnedMotor.get(edge) ?? 0);
+          const slot = o * hiddenCount + h;
+          if (!plan.ho[slot]) sum += org.neuralHidden[h] * learnedMotor.motor[slot];
         }
       }
       org.neuralOutputs[o] = isNaN(sum) ? 0 : Math.tanh(sum);

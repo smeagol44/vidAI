@@ -1,5 +1,33 @@
 # Project status — 2026-10-20
 
+
+## Performance branch — v0.31.0
+
+- User-authorized performance work now takes priority over the former
+  deferred Worker milestone. Branch starts from main d3d7465/v0.30.0;
+  all newer ecology/contact fixes are retained. No 3D files are involved.
+- Cached numeric neural masks/plastic indices and in-place acquired records
+  eliminate inner-loop JSON edge creation and repeated learning allocations.
+  Four 120-tick complete-state hashes match the unoptimized v0.30 kernel
+  exactly (plain, masked, learning and masked+learning).
+- Presentation uses three cached food/carrion glow images. New corpses
+  produce one circle carrying all remaining energy; old saved fragments
+  remain valid. This explicit corpse change alters future geometry/PRNG
+  at death, while keeping chemical accounting intact.
+- Authoritative simulation runs on a Worker. Commands own all world edits;
+  exports/forks/diagnostics use exact Worker snapshots. Render replication
+  sends genomes once, changed lineage and selected inspector state, with
+  30Hz maximum and one message in flight. Pause/reset epochs and command
+  order are covered by bounded host and real-thread production checks.
+- Local masked/learning 15-creature/78-food/221-remains comparison,
+  120 measured ticks after warm-up: baseline 4992 and 4207 ms,
+  optimized 971 and 1459 ms. Final states match. These are noisy server
+  kernel timings (roughly 3–5x improvement), NOT user-browser FPS claims.
+- Local browser installation returned a truncated archive, so direct local
+  browser validation is unavailable. A dedicated CI browser smoke covers
+  the UI/Worker integration. Keep the change on its branch pending checks.
+
+
 ## Featured founder acquisition pipeline — v0.30.0
 
 - Added an **opt-in, read-only** survey for all nine curated starting

@@ -1,77 +1,77 @@
 # Simulation Performance
 
-VIDA 2D is a native-physics, browser-rendered artificial-life simulator.
-Every organism is simulated, even when off-camera. Physics, neural
-evaluation, vision, metabolism and mouth contact run each simulation tick;
-Canvas rendering is a separate presentation step.
+VIDA 2D runs the authoritative 1/60-second simulation in a Web Worker.
+Canvas painting, camera controls and the interface remain on the main
+thread. All creatures continue sensing, moving, eating and evolving
+off-camera; rendering never decides which organisms are simulated.
 
-## Current optimizations
+## Neural and learning execution
 
-- **Food vision:** Retinal rays use a transient 128px spatial grid of
-  all nutrients, including carrion. The ray's bounding rectangle is
-  enlarged by the largest actual nutrient radius before selecting
-  candidates. Those candidates are visited in the exact previous
-  food-array order, preserving strict nearest-hit ties. Physical
-  RGB, occlusion and distance calculations are unchanged.
-- **Dissolution:** A dissolving creature can append carrion during
-  the current organism pass. The grid rebuilds when the array's
-  length changes, so later eyes do not miss newly formed remains.
-- **Off-screen rendering:** Camera bounds exclude nutrients, eggs
-  and caustic glows that do not overlap the visible world-space
-  viewport. This only skips paint calls, not simulation.
-- **Body contacts:** Already use a spatial broadphase. Brain
-  structure, physical joint constraints, water drag, conserved
-  energy, saved worlds and gene mutations are unchanged.
+Neural topology is compiled into transient numeric masks and plastic-edge
+indices. The inner neural loops read actual genome weights in their
+original order, without serializing a JSON edge identifier for each
+synapse on every tick. Topology changes invalidate the cache; changing
+weights never leaves cached weight values behind.
 
-Spatial acceleration is per-step scratch state; it is never added
-to the saved snapshot or used as a new neural input.
+Individual acquired synapse records and temporary numeric buffers are
+reused. Genetic and somatic memory remain separate, energy-paid and
+bounded. Saved edge identities, PRNG, learning arithmetic and existing
+brain structure are preserved. Caches are never saved.
 
-## What remains expensive
+## Rendering and remains
 
-- Joint solving integrates **four physical substeps per 1/60s tick**,
-  including multiple constraint iterations.
-- Creature and egg vision still perform direct geometry scans.
-- Each *visible* nutrient still draws gradient/glow effects.
-- Rendering and the physics kernel run on the same browser
-  main thread, so heavy simulations can lower both FPS and
-  actual physics steps per second.
+- Three reusable glow images cover ordinary nutrients, larger nutrients
+  and carrion. Each visible particle scales the appropriate image rather
+  than constructing its own radial gradient every frame.
+- Food, eggs and caustics outside the viewport skip paint calls.
+- Every newly dissolved organism leaves **one larger edible carrion
+  circle** holding its remaining reserve plus tissue energy. Its radius
+  follows the existing energy-to-radius rule and shrinks during feeding.
+  This replaces the former collection of 3000-J fragments. Full-buffer
+  losses remain recorded in the energy ledger.
+- Old saved fragments remain intact when imported. The new corpse layout
+  intentionally changes future food geometry and random draws at death;
+  importing a save never deletes or silently merges its existing remains.
 
-The HUD shows **FPS** and **Steps/s**. At 1x target speed, 60
-physics steps/s corresponds to real-time 60Hz simulation.
-An elevated render FPS cannot compensate for physics
-falling below 60 steps/s; and low FPS with normal steps/s
-usually means paint or main-thread scheduling is expensive.
+## Worker state and controls
 
-## Representative load and validation
+The Worker is the sole owner of living state and randomness. Feed, Feed All,
+spawn, clear-food and resize requests execute between complete ticks.
+Exports, forks and diagnostic reports request exact authoritative state,
+including PRNG and all acquired memories; render frames are never used
+as saves.
 
-The regression suite includes **20 articulated organisms,
-200 plant nutrients and 180 carrion objects**, with physical
-neural updates, exact snapshot continuation and energy
-conservation. Separately, seeded ray fixtures prove the index
-does not skip a valid intersecting nutrient or rearrange
-nearest-hit tie order. These validate function, **not a
-specific speedup on your GPU/CPU or browser**.
+Render updates are bounded to 30 per second, with **one frame in flight**.
+Genomes transfer once, lineage sends changed records, and heavy neural
+inspector state is sent only for the selected animal. Paused worlds do
+not stream unchanged frames. World epochs discard stale messages after
+reset/import. Worker errors pause the simulation visibly.
 
-The separate physics/render thread is a **deferred milestone P**
-to begin after the present ecological acquisition and natural
-reproduction work. At that stage, use FPS, Steps/s and the real
-20-creature/380-food workload to profile main-thread CPU load,
-then move the authoritative physics into a Web Worker without
-changing ecological behavior, saves or energy conservation.
-Do not silently stop off-camera life or reduce neural fidelity.
+Unsupported Workers retain the main-thread execution path. The diagnostic
+URL option `?mainthread` explicitly selects it. A CPU-bound Worker can
+still fall short of the requested simulation speed; separation protects
+UI responsiveness without inventing extra simulated time.
 
-## Would native desktop help?
+## Measurements and checks
 
-**Electron** packages Chromium, and **Tauri** embeds an OS web view.
-Both can distribute a desktop application, but running the
-same TypeScript kernel and Canvas rendering is unlikely to
-dramatically increase raw simulation speed. A future
-**Web Worker** can separate physics from painting in the web
-version; a separately optimized **WebAssembly or compiled
-native** simulation kernel can offer additional options,
-but requires a carefully validated port of physics, neural
-state, determinism and energy bookkeeping. Native packaging
-alone is not an optimization.
+The HUD distinguishes **FPS** from **Steps/s**. At 1x, 60 physical ticks
+per real second is real-time simulation; at 5x the target is 300.
+Render FPS alone does not measure simulation throughput.
 
-This page describes current performance architecture,
-rather than tracking historical benchmark results.
+- `npm run test:fast` includes complete-state hashes captured before the
+  neural optimization, cold-cache saves, Worker-host command accounting
+  and one-circle corpse conservation.
+- `npm run build` then `npm run test:worker` execute the actual production
+  Worker bundle on a separate thread, checking independent progress,
+  paused exact exports, commands and stale-world rejection.
+- A dedicated browser smoke checks the UI's real Worker, import/export,
+  pause, Feed and Add Life in GitHub Actions.
+- `npm run benchmark:performance` measures 15 creatures, 78 nutrients
+  and 221 remains with evolved connection masks. An optional local
+  `--baseline` checkout compares timings and requires identical final
+  states. This is a kernel benchmark, not a browser FPS promise.
+
+Joint constraints, body/egg vision scans and large evolved neural layouts
+can still dominate CPU time. Profile actual evolved worlds before the
+next optimization. Native desktop packaging alone does not remove those
+costs; compiled/WASM kernels remain a separate future option.
