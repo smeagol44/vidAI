@@ -284,8 +284,8 @@ export default function App() {
   const [waterViscosity, setWaterViscosity] = useState<number>((getConfig('waterViscosity') as number) ?? 0.22);
   const [targetNutrientAbundance, setTargetNutrientAbundance] = useState<number>(clampVal(getConfig('targetNutrientCount') ?? 400, 0, 800));
   const [nutrientInflowRate, setNutrientInflowRate] = useState<number>((getConfig('nutrientInflowRate') as number) ?? 15);
-  // Fresh worlds offer abiotic food hotspots; old imported saves keep uniform.
-  const [nutrientPattern, setNutrientPattern] = useState<'uniform' | 'blooms'>('blooms');
+  // Default uniform until repeated natural-feeding evidence favors hotspots.
+  const [nutrientPattern, setNutrientPattern] = useState<'uniform' | 'blooms'>('uniform');
   const [kinshipProtectionEnabled, setKinshipProtectionEnabled] = useState<boolean>(true);
   const [gravity, setGravity] = useState(0);
   const [mutationSeverity, setMutationSeverity] = useState(getConfig('mutationRate'));
@@ -1898,8 +1898,8 @@ export default function App() {
                 <select id="nutrient-pattern" value={nutrientPattern}
                   onChange={e => setNutrientPattern(e.target.value as 'uniform' | 'blooms')}
                   className="w-full bg-slate-950 border border-emerald-500/40 rounded px-2 py-1 text-[11px]">
-                  <option value="blooms">Blooms — clustered hotspots + dispersed food</option>
                   <option value="uniform">Uniform — classic random distribution</option>
+                  <option value="blooms">Blooms — clustered hotspots + dispersed food</option>
                 </select>
                 <p className="text-[10px] text-slate-400">Changes only future abiotic spawns; a reset distributes the initial food. Blooms never follow creatures. Switching modes adds no free energy.</p>
               </div>
