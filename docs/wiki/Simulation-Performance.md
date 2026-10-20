@@ -52,12 +52,13 @@ does not skip a valid intersecting nutrient or rearrange
 nearest-hit tie order. These validate function, **not a
 specific speedup on your GPU/CPU or browser**.
 
-If this configuration is still slow, the next optimization
-should be guided by FPS versus Steps/s and browser CPU
-profiling: likely sprite/glow caching or moving the kernel
-to a Worker before considering a major physics engine port.
-Do not compensate by disabling off-camera life or reducing
-neural fidelity silently.
+The separate physics/render thread is a **deferred milestone P**
+to begin after the present ecological acquisition and natural
+reproduction work. At that stage, use FPS, Steps/s and the real
+20-creature/380-food workload to profile main-thread CPU load,
+then move the authoritative physics into a Web Worker without
+changing ecological behavior, saves or energy conservation.
+Do not silently stop off-camera life or reduce neural fidelity.
 
 ## Would native desktop help?
 
