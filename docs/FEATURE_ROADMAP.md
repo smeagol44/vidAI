@@ -1,4 +1,4 @@
-# VIDA: remaining features — 2026-10-20 / v0.29.0
+# VIDA: remaining features — 2026-10-20 / v0.30.0
 
 This is a focused review of the current 2D source, not an implementation promise.
 Small changes fit the existing systems. Big changes affect simulation architecture,
@@ -22,12 +22,20 @@ leave a physically enclosed carnivore mouth unable to bite because no prey
 **edge** crossed the aperture. This does not change learned steering or
 guarantee natural prey capture.
 
-Next ecological increments: measure actual sightings, swimming displacement,
-mouth contact, oral absorption and reserve balance for the featured starters.
-Then fix specific failed acquisition paths and observe funded eggs/hatches
-without forced survival. Only afterward compare multigeneration selection,
-predator/prey fitness and learned improvements. Do not prescribe navigation
-or retune all starters to a test outcome.
+**Now available:** the read-only featured-founder acquisition census
+measures edible-eye-ray intersection, spectrally visible food, true
+mouth-to-food gaps, actual oral contacts and absorbed joules, together
+with displacement, reserve change and first-egg shortfall. It uses
+nine independently free-swimming organisms and an ordinary 400-food
+seeded world. No staged feeding or artificial maturity.
+
+Next: use its real breakdown to correct specific failure paths, especially
+edible stimuli that are seen but not reached (movement/orientation)
+versus mouths that touch food but do not assimilate. Then observe
+naturally earned egg funding, laying and hatching before declaring
+multigeneration success. No prescribed behavioral scripts or prolonged
+starter tuning. Physics/render Worker separation is still deferred
+milestone P after ecological progress.
 
 ## Small
 
