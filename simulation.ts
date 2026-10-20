@@ -1,4 +1,5 @@
 import {resolveBodyContacts} from './contacts';
+import {NutrientSightGrid} from './sightBroadphase';
 // ============================================================================
 // 1. DETERMINISTIC PRNG (xoshiro128++)
 // ============================================================================
@@ -3376,6 +3377,10 @@ export function stepSimulation(
     }
   }
 
+  // Nutrient vision broadphase is per-step scratch, never part of snapshots.
+  // Corpse dissolution can append carrion while iterating living organisms,
+  // so rebuild on any length change before their next eye cast.
+  let sightGrid: NutrientSightGrid | undefined;
   // 5. Organisms Simulation
   for (let orgIdx = organisms.length - 1; orgIdx >= 0; orgIdx--) {
     const org = organisms[orgIdx];
@@ -3468,6 +3473,9 @@ export function stepSimulation(
     }
 
     // A. MULTI-EYE OPTICAL RGB RAYCAST WITH WATER ATTENUATION
+    if (!sightGrid || sightGrid.nutrientCount !== nutrients.length) {
+      sightGrid = new NutrientSightGrid(nutrients);
+    }
     org.rayHits = [];
     org.neuralInputs.fill(0);
     let rayInputIdx = 0;
@@ -3507,7 +3515,9 @@ export function stepSimulation(
 
         // Walls, grid, bubbles, rays, glows and other display effects are invisible.
         // 2. Nutrients
-        for (let n = 0; n < nutrients.length; n++) {
+        const possibleFood = sightGrid.query(eyeWorldX, eyeWorldY,
+          eyeWorldX + rayDirX * maxRange, eyeWorldY + rayDirY * maxRange);
+        for (const n of possibleFood) {
           const nut = nutrients[n];
           if (Math.abs(nut.x - eyeWorldX) > closestDist + nut.radius || Math.abs(nut.y - eyeWorldY) > closestDist + nut.radius) continue;
           const res = rayCircleIntersection(eyeWorldX, eyeWorldY, rayDirX, rayDirY, closestDist, nut.x, nut.y, nut.radius);
