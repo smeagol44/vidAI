@@ -4,11 +4,11 @@ import {
   getBrainLayout, getDietClassification, brainEdgeKey, CARRION_DECAY_SECONDS, MAX_OUTPUTS, MAX_SURFACE_ORGANS, MAX_NEURAL_INPUTS, MAX_HIDDEN, MAX_ENABLED_BRAIN_EDGES, MAX_BRAIN_MEMORY_SECONDS, MAX_PLASTIC_MOTOR_SYNAPSES, MAX_PLASTIC_SENSORY_SYNAPSES, MAX_LEARNED_MOTOR_DELTA, plasticMotorEdges, plasticSensoryEdges, surfacePlacementProblems, morphologyProblems, type Genome, type SimulationSettings, type SimulationState, type Organism,
 } from './simulation';
 
-export const BUILD_VERSION = '0.31.1';
+export const BUILD_VERSION = '0.32.0';
 export const DEFAULT_SETTINGS: SimulationSettings = {
   worldWidth: 2400, worldHeight: 1500, waterViscosity: .18,
-  targetNutrients: 400, inflowRate: 15, nutrientPattern: 'uniform', kinshipProtection: true,
-  mutationSeverity: .25, gravity: 0, maxOrganisms: 100,
+  targetNutrients: 275, inflowRate: 15, nutrientPattern: 'uniform', kinshipProtection: true,
+  mutationSeverity: .25, gravity: 0, maxOrganisms: 30,
 };
 export const CREDITS = 'By Hernán Garro & Federico Regueira';
 
@@ -197,7 +197,9 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   const data = legacy ? raw : raw.state;
   assert(data && typeof data === 'object', 'state');
   finiteTree(data);
-  const settings: SimulationSettings = {...DEFAULT_SETTINGS, ...raw.settings};
+  // Historical omitted fields retain their original values; new-world defaults
+  // must not silently change old snapshot ecology.
+  const settings: SimulationSettings = {...DEFAULT_SETTINGS, targetNutrients: 400, maxOrganisms: 100, ...raw.settings};
   for (const [key, min, max] of [['worldWidth', 800, 4800], ['worldHeight', 600, 3000], ['waterViscosity', 0, .8],
     ['targetNutrients', 0, 800], ['inflowRate', 0, 150], ['gravity', -200, 200], ['maxOrganisms', 1, 150], ['mutationSeverity', 0, 1]] as const) {
     assert(typeof settings[key] === 'number' && Number.isFinite(settings[key]) && settings[key]! >= min && settings[key]! <= max, `setting ${key}`);

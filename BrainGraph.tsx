@@ -1,4 +1,5 @@
 import React from 'react';
+import {compiledBrain} from './neuralRuntime';
 import {brainEdgeKey, getBrainLayout, OUTPUT_LABELS, OUTPUTS_PER_JOINT, type Organism} from './simulation';
 
 export default function BrainGraph({organism: org, threshold}: {organism: Organism; threshold: number}) {
@@ -8,14 +9,14 @@ export default function BrainGraph({organism: org, threshold}: {organism: Organi
   const x = [105, 250, 400];
   const positions = (n: number) => Array.from({length: n}, (_, i) => 12 + i * (height - 24) / Math.max(1, n - 1));
   const inputs = positions(org.neuralInputs.length), hidden = positions(hiddenIds.length), outputs = positions(layout.outputs.length);
-  const disabled = new Set(g.disabledConnections ?? []);
-  const learned = new Map((org.learnedMotorWeights ?? []).map(e => [e.edge, e.delta]));
-  const learnedRetina = new Map((org.learnedSensoryWeights ?? []).map(e => [e.edge, e.delta]));
+  const plan = compiledBrain(g);
+  const learned = new Map((org.learnedMotorWeights ?? []).map(e => [plan.motorSlots.get(e.edge), e.delta]));
+  const learnedRetina = new Map((org.learnedSensoryWeights ?? []).map(e => [plan.sensorySlots.get(e.edge), e.delta]));
   const acquiredCount = [...learned.values()].filter(value => Math.abs(value) > 1e-8).length;
   const acquiredRetina = [...learnedRetina.values()].filter(value => Math.abs(value) > 1e-8).length;
   const links: React.ReactNode[] = [];
   const link = (key: string, edge: string, fromX: number, fromY: number, toX: number, toY: number, weight: number, activation: number, recurrent = false) => {
-    if (disabled.has(edge) || Math.abs(weight) <= threshold) return;
+    if (Math.abs(weight) <= threshold) return;
     const color = weight > 0 ? '6,182,212' : '244,63,94';
     const opacity = Math.min(recurrent ? .35 : .85, .08 + Math.abs(weight * activation) * .7);
     links.push(<path key={edge} data-synapse={edge} d={recurrent
@@ -27,21 +28,28 @@ export default function BrainGraph({organism: org, threshold}: {organism: Organi
   };
   for (let h = 0; h < hiddenIds.length; h++) {
     for (let i = 0; i < inputs.length; i++) {
+      const slot = h * layout.inputs.length + i;
+      if (plan.ih[slot]) continue;
+      const gene = g.weightsIH[h]?.[i] ?? 0, acquired = learnedRetina.get(slot) ?? 0;
+      if (Math.abs(gene + acquired) <= threshold) continue;
       const edge = brainEdgeKey('ih', hiddenIds[h], layout.inputs[i]);
-      const gene = g.weightsIH[h]?.[i] ?? 0, acquired = learnedRetina.get(edge) ?? 0;
       const description = `${layout.labels[i]} → ${hiddenIds[h]}`
         + (acquired ? ` (inherited ${gene.toFixed(4)}, retinal memory Δ${acquired.toFixed(4)})` : '');
       link(description, edge, x[0], inputs[i], x[1], hidden[h], gene + acquired, org.neuralInputs[i] ?? 0);
     }
     for (let prev = 0; prev < hiddenIds.length; prev++) {
+      if (plan.hh[h * hiddenIds.length + prev] || Math.abs(g.weightsHH[h]?.[prev] ?? 0) <= threshold) continue;
       const edge = brainEdgeKey('hh', hiddenIds[h], hiddenIds[prev]);
       link(`${hiddenIds[prev]} → ${hiddenIds[h]}`, edge, x[1], hidden[prev], x[1], hidden[h], g.weightsHH[h]?.[prev] ?? 0, org.neuralHidden[prev] ?? 0, true);
     }
   }
   for (let o = 0; o < outputs.length; o++) for (let h = 0; h < hiddenIds.length; h++) {
-    const edge = brainEdgeKey('ho', layout.outputs[o], hiddenIds[h]);
-    const somaticOffset = learned.get(edge) ?? 0;
+    const slot = o * hiddenIds.length + h;
+    if (plan.ho[slot]) continue;
+    const somaticOffset = learned.get(slot) ?? 0;
     const inheritedWeight = g.weightsHO[o]?.[h] ?? 0;
+    if (Math.abs(inheritedWeight + somaticOffset) <= threshold) continue;
+    const edge = brainEdgeKey('ho', layout.outputs[o], hiddenIds[h]);
     const label = `${hiddenIds[h]} → ${layout.outputs[o]}`
       + (somaticOffset !== 0 ? ` (inherited ${inheritedWeight.toFixed(4)}, acquired Δ${somaticOffset.toFixed(4)})` : '');
     link(label, edge, x[1], hidden[h], x[2], outputs[o], inheritedWeight + somaticOffset, org.neuralHidden[h] ?? 0);

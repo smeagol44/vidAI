@@ -288,15 +288,15 @@ export default function App() {
 
   // Settings & Configuration Sliders
   const [waterViscosity, setWaterViscosity] = useState<number>((getConfig('waterViscosity') as number) ?? 0.22);
-  const [targetNutrientAbundance, setTargetNutrientAbundance] = useState<number>(clampVal(getConfig('targetNutrientCount') ?? 400, 0, 800));
+  const [targetNutrientAbundance, setTargetNutrientAbundance] = useState<number>(clampVal(getConfig('targetNutrientCount') ?? 275, 0, 800));
   const [nutrientInflowRate, setNutrientInflowRate] = useState<number>((getConfig('nutrientInflowRate') as number) ?? 15);
   // Default uniform until repeated natural-feeding evidence favors hotspots.
   const [nutrientPattern, setNutrientPattern] = useState<'uniform' | 'blooms'>('uniform');
   const [kinshipProtectionEnabled, setKinshipProtectionEnabled] = useState<boolean>(true);
   const [gravity, setGravity] = useState(0);
   const [mutationSeverity, setMutationSeverity] = useState(getConfig('mutationRate'));
-  const [maxOrganisms, setMaxOrganisms] = useState(100);
-  const [simulationSeed, setSimulationSeed] = useState(4242);
+  const [maxOrganisms, setMaxOrganisms] = useState(30);
+  const [simulationSeed, setSimulationSeed] = useState(() => crypto.getRandomValues(new Uint32Array(1))[0]);
   const [founderMode, setFounderMode] = useState<FounderMode>('balanced');
   const [bankFamily, setBankFamily] = useState('All');
   const [bankDiet, setBankDiet] = useState('All');
@@ -304,7 +304,7 @@ export default function App() {
   const [bankSection, setBankSection] = useState<'featured' | 'legacy' | 'saved' | 'all'>('featured');
   const [reportText, setReportText] = useState('');
   const founderBankItems = useMemo(() => createFounderBankItems(founderMode), [founderMode]);
-  const [synapsePruningThreshold, setSynapsePruningThreshold] = useState<number>(0.02);
+  const [synapsePruningThreshold, setSynapsePruningThreshold] = useState<number>(0.5);
   const [customBranchName, setCustomBranchName] = useState<string>('Parallel Ocean');
 
   // Draggable Modals
@@ -788,7 +788,7 @@ export default function App() {
         setTimeMultiplier(20);
         gameAudio.playHoverMicroTone();
       } else if (e.key.toLowerCase() === 'b') {
-        setIsBrainInspectorOpen((prev) => !prev);
+        setSynapsePruningThreshold(0.5); setIsBrainInspectorOpen((prev) => !prev);
       } else if (e.key.toLowerCase() === 'g') {
         setIsEcosystemGraphOpen((prev) => !prev);
       } else if (e.key.toLowerCase() === 't') {
@@ -987,7 +987,7 @@ export default function App() {
     }
     const clicked = simStateRef.current.organisms.find(org => org.segments.some(seg => Math.hypot(seg.x - x, seg.y - y) < 45 / cam.zoom));
     setSelectedEggId(null); setSelectedOrgId(clicked?.id ?? null); setSelectedSpecimen(clicked ?? null);
-    setIsBrainInspectorOpen(!!clicked); setIsAutoTracking(!!clicked);
+    setIsBrainInspectorOpen(false); setIsAutoTracking(!!clicked);
     if (clicked) gameAudio.playConfirmSelect();
   };
 
@@ -1410,8 +1410,8 @@ export default function App() {
   useEffect(() => {
     workerClientRef.current?.control(currentSettings(),
       worldEpoch === worldEpochRef.current && gameState.status === 'PLAYING' && !isGameMenuOpen,
-      timeMultiplier, selectedOrgId);
-  }, [currentSettings, gameState.status, isGameMenuOpen, timeMultiplier, selectedOrgId, worldEpoch]);
+      timeMultiplier, isBrainInspectorOpen ? selectedOrgId : null);
+  }, [currentSettings, gameState.status, isGameMenuOpen, timeMultiplier, selectedOrgId, isBrainInspectorOpen, worldEpoch]);
 
   const updateRef = useRef(update);
   const drawRef = useRef(draw);
@@ -1563,7 +1563,7 @@ export default function App() {
                   setSelectedOrgId(first.id);
                   setSelectedSpecimen(first);
                 }
-                setIsBrainInspectorOpen(true);
+                setSynapsePruningThreshold(0.5); setIsBrainInspectorOpen(true);
                 gameAudio.playCrispClick();
               }
             }}
@@ -1727,7 +1727,7 @@ export default function App() {
                   className="flex items-center gap-1.5 font-bold text-cyan-300 hover:underline"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setIsBrainInspectorOpen(true);
+                    setSynapsePruningThreshold(0.5); setIsBrainInspectorOpen(true);
                     gameAudio.playCrispClick();
                   }}>
                   <GripHorizontal size={14} className="text-slate-500" />
@@ -1755,7 +1755,7 @@ export default function App() {
                     onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();
-                      setIsBrainInspectorOpen((prev) => !prev);
+                      setSynapsePruningThreshold(0.5); setIsBrainInspectorOpen((prev) => !prev);
                       gameAudio.playCrispClick();
                     }}
                     className="text-[10px] px-1.5 py-0.5 rounded border bg-cyan-950/60 border-cyan-500/40 text-cyan-300 hover:bg-cyan-900/50">

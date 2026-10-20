@@ -137,13 +137,13 @@ export const CONFIG = {
     group: 'Rules',
   },
   maxOrganisms: {
-    value: 50,
+    value: 30,
     type: 'number',
     label: 'Max Population',
     group: 'Rules',
   },
   targetNutrientCount: {
-    value: 400,
+    value: 275,
     type: 'number',
     label: 'Nutrient Abundance Target',
     group: 'Rules',
