@@ -58,25 +58,45 @@ export function contactImpulse(a: PartPhys, aim: number, aii: number,
   b.vx += nx * impulse * bim; b.vy += ny * impulse * bim; b.angVel += cb * impulse * bii;
 }
 
+// The resolver consumes each pass before rebuilding the next one. Reuse
+// wrappers while recalculating every moved pose/bound; never retain stale AABBs.
+const bodyPool: Body[] = [];
 function bodies(organisms: Organism[], density: number): Body[] {
-  return organisms.flatMap(org => org.segments.map((p, index) => {
+  const list: Body[] = [];
+  for (const org of organisms) for (let index = 0; index < org.segments.length; index++) {
+    const p = org.segments[index];
     const def = org.genome.parts[index], mass = Math.max(.35, def.dimN * def.dimM * density);
     const c = Math.cos(p.angle), s = Math.sin(p.angle);
     const rx = (Math.abs(c) * def.width + Math.abs(s) * def.height) / 2;
     const ry = (Math.abs(s) * def.width + Math.abs(c) * def.height) / 2;
-    return {org, index, p, def, im: 1 / mass, ii: 12 / (mass * (def.width ** 2 + def.height ** 2)), c, s,
-      left: p.x - rx, right: p.x + rx, top: p.y - ry, bottom: p.y + ry};
-  }));
+    const im = 1 / mass, ii = 12 / (mass * (def.width ** 2 + def.height ** 2));
+    const left = p.x - rx, right = p.x + rx, top = p.y - ry, bottom = p.y + ry;
+    let body = bodyPool[list.length];
+    if (!body) {
+      body = {org, index, p, def, im, ii, c, s, left, right, top, bottom};
+      bodyPool.push(body);
+    } else {
+      body.org = org; body.index = index; body.p = p; body.def = def;
+      body.im = im; body.ii = ii; body.c = c; body.s = s;
+      body.left = left; body.right = right; body.top = top; body.bottom = bottom;
+    }
+    list.push(body);
+  }
+  bodyPool.length = list.length;
+  return list;
 }
 
 /** Deterministic spatial broad phase; directly hinged neighbors may overlap while bending. */
 function pairs(list: Body[]): [Body, Body][] {
-  const grid = new Map<string, number[]>(), seen = new Set<number>(), result: [Body, Body][] = [];
+  const grid = new Map<number, Map<number, number[]>>(), seen = new Set<number>(), result: [Body, Body][] = [];
   for (let i = 0; i < list.length; i++) {
     const a = list[i];
     for (let x = Math.floor(a.left / 128); x <= Math.floor(a.right / 128); x++) {
+      let column = grid.get(x);
+      if (!column) {column = new Map(); grid.set(x, column);}
       for (let y = Math.floor(a.top / 128); y <= Math.floor(a.bottom / 128); y++) {
-        const key = `${x},${y}`, cell = grid.get(key) ?? [];
+        let cell = column.get(y);
+        if (!cell) {cell = []; column.set(y, cell);}
         for (const j of cell) {
           const id = j * list.length + i; if (seen.has(id)) continue; seen.add(id);
           const b = list[j];
@@ -84,7 +104,7 @@ function pairs(list: Body[]): [Body, Body][] {
           if (a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom) continue;
           result.push([b, a]);
         }
-        cell.push(i); grid.set(key, cell);
+        cell.push(i);
       }
     }
   }
