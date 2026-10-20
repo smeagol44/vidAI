@@ -2,6 +2,23 @@
 
 VIDA organisms sense their environment through real organ geometry and a recurrent, inheritable neural controller. **Seeing an object is not the same as recognizing or reaching it.** Actual locomotion, contact and energy intake depend on the creature's articulated body and physical simulation.
 
+## Physically overlapping prey and oral contact
+
+Carnivore and omnivore mouths transfer energy only through their real,
+oriented aperture when it contacts a prey's body. The contact geometry
+checks an aperture crossing an actual rectangular body edge, proximity
+to that edge, **or a mouth entirely buried inside the prey's rotated
+body rectangle**. The enclosed case matters because an edge-only
+test can miss deep physical overlap. Bounding checks respect each
+body part's size rather than assuming a fixed distance.
+
+A bite consumes the prey's existing reserve/tissue at the mouth's
+finite intake rate and pays assimilation losses to metabolic heat.
+It gives no target location, scripted pursuit, energy bonus or
+diet exception. Whether a founder can *reach* and catch moving
+prey without assistance is still unproven.
+
+
 ## Sensory pathways
 
 ```mermaid
