@@ -2,8 +2,8 @@
 
 ## Abiotic nutrient blooms and ecological founder comparison — v0.27.0
 
-- **Ecological change:** fresh 2D worlds start with an optional, displayed
-  **Blooms** distribution. Sixty-five percent of abiotic nutrient spawns
+- **Ecological change:** 2D worlds retain **Uniform** as the default,
+  with an optional, displayed **Blooms** distribution. Sixty-five percent of abiotic nutrient spawns
   cluster around twelve reproducible sites, and the remaining 35 percent
   stay uniformly dispersed. Sites are determined only by world seed and
   tank size; they never track organisms or respond to mouths/health/diet.
@@ -23,6 +23,15 @@
   stable bloom-center seed derivation, exact save continuation,
   old uniform snapshots, manual Feed patch precedence, strict import
   validation, short native-physics founder cohorts and conservation.
+- **Measured short unassisted comparison (seed 17, 2 seconds):** all nine CUR
+  starters with normal 400-food densities physically absorbed **2,592 J**
+  under Uniform (three feeding founders: CUR-001 96 J, CUR-002 1,488 J,
+  CUR-006 1,008 J); Blooms yielded **864 J** total (CUR-005 only).
+  Thus *this* trial favored Uniform, and selecting Blooms as the new
+  default would have been unsupported. Uniform remains the default.
+  A separate 4-founder/70-food two-second control had **zero** intake
+  in both configurations. All experiments kept reserves and heat
+  conserved and did not manually reposition food near mouths.
 - **Not established:** blooms have NOT been shown to improve natural
   multigeneration survival, hunter success, or ecosystem sustainability.
   A short pair is a descriptive observation, not optimized founder tuning.
