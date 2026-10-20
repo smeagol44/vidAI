@@ -1,4 +1,4 @@
-# VIDA: remaining features — 2026-10-20 / v0.27.0
+# VIDA: remaining features — 2026-10-20 / v0.28.0
 
 This is a focused review of the current 2D source, not an implementation promise.
 Small changes fit the existing systems. Big changes affect simulation architecture,
@@ -42,7 +42,7 @@ adding behavioral scripts or retuning every starter to pass tests.
 | Evolvable neural structure | Phases 1–2 support inherited hidden sizes (1–96), neuron identity, connection masks and bounded upkeep. Phase 4 adds inherited activation memory time constants (0–4 s). Phase 5 now permits bounded personal changes in existing retinal and motor synapses, with energy-paid consolidation and forgetting, but **not** within-life neuron/topology growth. One controlled later feeding arrangement improved by 180 J; another worsened by 420 J. General ecological fitness remains unproven. |
 | Growth, injury and gradual aging | Juvenile/adult/aging labels exist, but real body growth, local tissue injury/repair and gradual senescence are absent. These require consistent mass, geometry, energy and controller updates. |
 | Environment and communication (optional) | Currents and resource patches could create niches. Chemical or acoustic organs would add new physical signals and sensory channels. Current sound effects are presentation, not creature communication. Implement these as separate systems, not one large update. |
-| Performance at larger populations | Body contacts have spatial indexing; sight still scans objects. Index perception and move the simulation to a Worker while preserving deterministic stepping and UI responsiveness. |
+| Performance at larger populations | **v0.28** indexes food for each retinal ray and avoids drawing off-camera nutrients/eggs/caustics; body contacts already have a spatial index. Creature/egg retinal geometry still uses direct scans, visible glows are uncached and physics/render still share the main thread. Next: measure performance at ~20 creatures + 200 food + 180 carrion, then profile whether spatial sight, sprite/gradient caching or worker-thread separation deserves the next bounded increment. A Tauri/Electron wrapper alone would not speed up the unchanged JS kernel. |
 | Experiment archives and comparison | Current branching replaces the active world with a cloned snapshot; it does not retain multiple named worlds for switching/comparison. Add an archive, event history and repeatable cross-seed comparisons. Deterministic snapshot continuation already exists; playback/rewind does not. |
 
 ## Milestones, without overlapping phase numbers
