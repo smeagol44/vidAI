@@ -438,6 +438,8 @@ export interface SimulationSettings {
   waterViscosity: number;
   targetNutrients: number;
   inflowRate: number;
+  /** Absent/undefined retains exact historical uniform nutrient placement. */
+  nutrientPattern?: 'uniform' | 'blooms';
   kinshipProtection: boolean;
   mutationSeverity: number;
   gravity?: number;
@@ -782,6 +784,25 @@ export function getNutrientRadius(energy: number): number {
   return Math.max(8.0, BASE_NUTRIENT_RADIUS * Math.max(0.4, scale));
 }
 
+/**
+ * Repeatable abiotic bloom sites in the tank, with no organism influence.
+ * Center jitter uses an independent seed stream, so observing the sites or
+ * loading a save never advances the world's PRNG. The same seed and tank
+ * dimensions reproduce the same fixed sites after exact-state continuation.
+ */
+export function nutrientBloomCenters(state: Pick<SimulationState, 'initialSeed'>,
+  settings: Pick<SimulationSettings, 'worldWidth' | 'worldHeight'>): {x: number; y: number}[] {
+  const local = new XoshiroPRNG(((state.initialSeed ?? 0) ^ 0x6d2b79f5) >>> 0);
+  const centers: {x: number; y: number}[] = [];
+  for (let row = 0; row < 3; row++) for (let col = 0; col < 4; col++) {
+    centers.push({
+      x: (col + .5 + local.range(-.16, .16)) * settings.worldWidth / 4,
+      y: (row + .5 + local.range(-.16, .16)) * settings.worldHeight / 3,
+    });
+  }
+  return centers;
+}
+
 /** Shared by initialization, environmental inflow, Feed and Feed All. */
 export function nutrientSpawnSlots(state: SimulationState, settings: SimulationSettings): number {
   const plants = state.nutrients.filter(n => n.kind !== 'carrion').length;
@@ -792,10 +813,21 @@ export function addNutrients(state: SimulationState, settings: SimulationSetting
   patch?: {x: number; y: number; spread: number}): number {
   const count = Math.min(Math.max(0, Math.floor(requested)), nutrientSpawnSlots(state, settings));
   const prng = state.prng;
+  // In bloom mode, 65% of abiotic input is clustered around twelve stable
+  // sites, while 35% remains dispersed. No sources track organism locations,
+  // energy, diets, deaths or reproductive needs. The manual Feed patch
+  // argument always takes precedence. Uniform/old saves take the original
+  // PRNG path byte-for-byte.
+  const bloomCenters = !patch && settings.nutrientPattern === 'blooms'
+    ? nutrientBloomCenters(state, settings) : undefined;
+  const spread = Math.max(40, Math.min(170, Math.min(settings.worldWidth, settings.worldHeight) * .12));
   for (let i = 0; i < count; i++) {
+    const bloom = bloomCenters && prng.nextFloat() < .65
+      ? bloomCenters[prng.rangeInt(0, bloomCenters.length - 1)] : undefined;
+    const center = patch ?? (bloom && {x: bloom.x, y: bloom.y, spread});
     state.nutrients.push({id: `NUT-${prng.nextUint32().toString(36)}`,
-      x: patch ? clampVal(patch.x + prng.range(-patch.spread, patch.spread), 40, settings.worldWidth - 40) : prng.range(40, settings.worldWidth - 40),
-      y: patch ? clampVal(patch.y + prng.range(-patch.spread, patch.spread), 40, settings.worldHeight - 40) : prng.range(40, settings.worldHeight - 40),
+      x: center ? clampVal(center.x + prng.range(-center.spread, center.spread), 40, settings.worldWidth - 40) : prng.range(40, settings.worldWidth - 40),
+      y: center ? clampVal(center.y + prng.range(-center.spread, center.spread), 40, settings.worldHeight - 40) : prng.range(40, settings.worldHeight - 40),
       vx: 0, vy: 0, energyValue: NUTRIENT_ENERGY_VALUE, radius: getNutrientRadius(NUTRIENT_ENERGY_VALUE),
       bottomTimer: 0, pulseTimer: prng.range(0, Math.PI * 2)});
     state.ledger.externalInflow += NUTRIENT_ENERGY_VALUE;
