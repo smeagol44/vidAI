@@ -310,6 +310,17 @@
   fitness remains unknown. User explicitly deferred physics/render
   separation to a new milestone P AFTER ecological acquisition
   and funded reproduction; no Worker or native work now.
+- v0.30 ecology diagnostic: `foodAcquisitionAudit.ts` and the
+  `runFeaturedAcquisitionSurvey` opt-in path read the real nine CUR founders'
+  edible retina intersections, spectrally visible stimuli, true free-food
+  mouth gap, active contact, absorbed joules, movement and egg funding.
+  The observer MUST remain outside `stepSimulation` and the UI runtime;
+  never add oracle distance, forced steering, rewards or hidden food.
+  Carnivore free-food gap intentionally ignores living prey; real
+  prey ray hits, mouth-contact ticks and bite receipts still count.
+  Use `tests/featured-acquisition.test.ts` and conservation/unchanged
+  snapshot checks. Do not interpret 2 juvenile seconds as viable ecology.
+  Original Phase 6 and Worker separation milestone P are both deferred.
 - Default verification is `npm run test:fast` and `npm run build`. Prefer pure
   geometry/state assertions and a few kernel ticks. Full `npm test`, browser tests,
   ecosystem/behavior benchmarks and manual browser checks are opt-in for a concrete
