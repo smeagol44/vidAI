@@ -1,3 +1,4 @@
+import {applyStarterLocomotion} from './starterLocomotion';
 import rawFounders from './data/founders.json' with {type: 'json'};
 import {
   XoshiroPRNG, createXavierRecurrentNetwork, calculateBodyCost,
@@ -26,8 +27,9 @@ export const FOUNDER_FAMILIES = [...new Set(FOUNDER_BLUEPRINTS.map(f => f.family
  * Nine curated, separately identified starters derived from nine distinct,
  * already physical-swimming legacy families. The original FND genomes remain
  * available unchanged. Each starter retains its donor's tested articulation,
- * physical mouth anchor, seed and energy economics. Only inherited receptors
- * and optional genetic learning capacity are specialized.
+ * physical mouth anchor, seed and energy economics. Inherited receptors and
+ * optional genetic learning capacity are specialized. Selected featured motor
+ * alleles are additionally calibrated by the bounded offline swim search.
  *
  * These are starting genotypes, not scripted ecological roles or proven
  * self-sustaining species. Children can mutate every inherited trait.
@@ -61,7 +63,8 @@ export const FEATURED_BLUEPRINTS: FounderBlueprint[] = FEATURED_STARTER_SPECS.ma
 export const isFeaturedFounderId = (id: string): boolean =>
   FEATURED_STARTER_SPECS.some(spec => spec.id === id);
 
-export function createFounderGenome(id: string, mode: FounderMode = 'balanced'): Genome {
+export function createFounderGenome(id: string, mode: FounderMode = 'balanced',
+  options: {locomotion?: 'current' | 'catalogue'} = {}): Genome {
   const blueprint = FEATURED_BLUEPRINTS.find(f => f.id === id) ?? FOUNDER_BLUEPRINTS.find(f => f.id === id);
   if (!blueprint) throw new Error(`Unknown founder ${id}`);
   const d = structuredClone(blueprint);
@@ -130,6 +133,7 @@ export function createFounderGenome(id: string, mode: FounderMode = 'balanced'):
       g.forgettingRate = 0.1;
     }
   }
+  if (options.locomotion !== 'catalogue') applyStarterLocomotion(g);
   return g;
 }
 

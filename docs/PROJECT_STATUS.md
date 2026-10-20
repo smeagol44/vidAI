@@ -1,5 +1,73 @@
 # Project status — 2026-10-20
 
+## Sims-inspired bounded swimming development — v0.33.0
+
+- User approved auditing drag/muscle scaling and a small offline search using
+  existing motor genes. No live physics algorithm, coefficient, solver iteration,
+  initial reserve, neural weight, anatomy, mouth or lifecycle gene is changed.
+  Only new CUR-003/008/009 constructors apply selected mutable motor alleles.
+  All other six CUR and all 55 FND remain unchanged. Old saves retain exact genes.
+- Actual-kernel audit: rotated translational decay matches the analytic local-
+  axis Euler substeps, passive spin dissipates without translation, and zero
+  viscosity preserves free momentum. Current axial drag is 1/40 of the uniform
+  four-face normal-drag reference; rotation uses full-face damping. Uniformly
+  doubling 2D dimensions yields 16× actual muscle torque (inertia-based gains),
+  rather than attachment-area/lever-arm scaling. These are calibrated modeling
+  departures, not newly corrected coefficients. Work is sampled using pre-update
+  joint speed and capped at 40 J per complete tick; its old substep comment is
+  corrected. Chemical ledger conservation is not full mechanical conservation.
+- Offline (1+8) asexual search for three generations: 25 training evaluations
+  per each of nine separate families (225 total), fixed anatomy and intact brain,
+  sensing, learning and life-history genes. Eligible parameters are existing
+  frequency, muscle force, joint phase, amplitude and smooth harmonics. No fitness
+  code is imported by the live engine or UI. Trials use normal funded founder
+  reserves and no food or reproductive subsidies.
+- Six-second training excludes the first second from displacement/path metrics,
+  rewards COM progress/straightness/final-third progress with a bounded total-
+  chemical-energy penalty, and requires ongoing late motor expenditure. Four
+  held-out screens: three 9-second swims at viscosities 0.15/0.18/0.22 and rotated
+  headings, plus a 15-second swim at 0.18/heading 0.37. Screens require >5% progress
+  and >2% progress/J improvement, preserved original travel direction, nonlower
+  late speed, ≤5% extra total reserve expense, no sampled speed/work cap, drift,
+  non-finite pose, exhausted reserve or accounting error. A new seed alone is not
+  an independent environment here: the empty-water controller is deterministic.
+- Selected candidates passed every screen. Fifteen-second results, measuring
+  net COM progress after one second of settling; costs include the whole trial:
+
+  | New starter | Original progress px | Selected progress px | Progress ratio | Total reserve J, original → selected |
+  | --- | ---: | ---: | ---: | ---: |
+  | CUR-003 Tidewheel Browser | 114.40 | 224.65 | 1.96× | 455.80 → 459.70 |
+  | CUR-008 Hammerhead Pursuer | 263.91 | 398.36 | 1.51× | 482.58 → 483.92 |
+  | CUR-009 Branchstalker | 80.28 | 152.36 | 1.90× | 458.82 → 460.59 |
+
+  All three have higher late speed and progress per total reserve joule, zero
+  sampled caps, <0.12px final-tick hinge drift and <1e-5 J chemical discrepancy.
+  Motor heat itself increases; efficiency claims use total chemical expenditure,
+  not reduced motor work. Screens preserve prior route direction, not mouth-
+  first travel. No improved food capture, live hunting, learning or ecological
+  sustainability has been established. Substep spikes/all numerical exploits
+  are not excluded by final-tick guards; future physical model work is separate.
+- Six candidates were withheld. Darter's short training gain did not retain
+  late speed/longer progress. Twin Oar and Hooktail changed route too much.
+  Forktail/Broadwake failed held-out conditions. Lantern's original training
+  trial hit a solver/work cap, preventing a clean baseline comparison. Do not
+  retune or weaken screens until every starter can be declared a winner.
+- Full reproducible settings, original genome hashes, every baseline/candidate,
+  selected alleles and audit findings are in
+  `docs/experiments/locomotion-search-v1.json`. `search:locomotion -- --check`
+  reproduces and checks the constructor output for selected and unchanged designs.
+- Verification: nine new bounded tests cover physics audit, fitness pitfalls,
+  deterministic search budgets, genotype isolation, screening, longer native
+  movement, unchanged founders and the pre-calibration CUR-003 cold-save hash.
+  Four historical kernel-profile state hashes remain exact by pinning original
+  founder genes/phases in the profile fixture. All 224 fast tests, the TypeScript/
+  Vite build and real production Worker-thread check pass locally; the default
+  `--check` reproduces all nine constructor outputs. CI repeats the bounded search.
+- Next movement work, if pursued: explicitly version/evaluate literal face-drag
+  and geometric muscle limits, improve mechanical-work accounting, then test
+  mouth access and sensory-guided intake for these gaits. Modular controllers
+  and body/control co-duplication remain future architecture, not this release.
+
 ## Contact, learning-buffer and lineage overhead — v0.32.1
 
 - User approved all three remaining bounded optimizations. Rectangle SAT uses

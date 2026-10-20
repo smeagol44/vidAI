@@ -23,8 +23,9 @@ chosen collection. All original FND genomes remain usable.
 The nine come from **nine different original anatomical families**, not nine
 recolored versions of one swimmer. Each new CUR identity has its own part and
 organ IDs, while preserving the donor's valid structural connections,
-physical mouth position, locomotor phases, motor force, storage and egg
-economics. Mutations can still change anatomy, organs, synapses, receptors
+physical mouth position, storage and egg economics. Three featured designs
+add selected motor alleles from the bounded swimming search; the remaining six
+retain their original motor genes. Mutations can still change anatomy, organs, synapses, receptors
 and inherited biological traits.
 
 ## What changes genetically?
@@ -42,6 +43,22 @@ These are the existing energy-paid waking-learning mechanisms, not
 preprogrammed foraging or learned survival. A creature can evolve away from
 these starting values. The original legacy blueprints do **not** acquire
 the new alleles when loaded.
+
+## Swimming calibration
+
+New Tidewheel Browser (CUR-003), Hammerhead Pursuer (CUR-008) and Branchstalker
+(CUR-009) genomes receive selected frequency/amplitude/phase alleles. Their
+anatomy, neural matrices, receptor and learning genes, starting reserve and
+lifecycle economics are preserved. All selected alleles remain mutable through
+normal offspring mutation. Saved animals and stored genomes are never rewritten.
+
+The offline search retains each anatomical family separately and screens
+sustained COM progress and progress per reserve joule across longer swims,
+headings and viscosities. It rejects caps, drift, exhausted reserves and
+regressions in late motion or original direction. Six featured designs were
+left unchanged because their candidate did not pass every screen. This measures
+swimming, not successful hunting, mouth-first travel or sustainable ecology.
+See [Movement and Motor Control](Motor-Control) for the current protocol.
 
 ## Starting a world
 

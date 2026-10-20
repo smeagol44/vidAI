@@ -48,6 +48,37 @@
   actual UI/Worker integration in CI. `benchmark:performance` accepts a local
   `--baseline` checkout and compares identical state, without promising browser FPS.
 
+# Bounded locomotion development (v0.33.0)
+
+- User explicitly approved verifying the drag/muscle foundation and a small
+  offline evolutionary search. This authorizes the bounded search, not an
+  unbounded founder/brain tuning campaign or a silent new physics model.
+- `locomotionPhysicsAudit.ts` measures the existing calibrated dissipative drag
+  and inertia-based muscle scaling against actual kernel motion. Current axial
+  drag is 1/40 of a uniform four-normal-face reference; 2× body dimensions give
+  16× torque. Motor work is sampled pre-update and capped at 40 J per COMPLETE
+  tick. Chemical closure is not proof of mechanical-energy correctness.
+- `locomotionSearch.ts` and its audit are OFFLINE ONLY; never import them into
+  live simulation/UI. Fixed 1/60 ticks, normal initial reserves and real physical
+  motion. No target coordinates, search scores or subsidies reach brains. Fixed
+  anatomy and intact neural/biological genes preserve all nine starter families.
+- Default search: 3 generations × 8 offspring + baseline per family, 6-second
+  training, then three 9-second and one 15-second held-out conditions. Reject
+  invalid/capped/drifting/depleted trials; screen progress, late speed, total
+  reserve efficiency, expenditure and original-direction preservation. Do not
+  weaken screens to promote faster-looking candidates. This is not food fitness.
+- `data/starter-locomotion.json` selects existing motor alleles for newly created
+  CUR-003/008/009 only; other six CUR and 55 FND remain unchanged. The constructor
+  option `{locomotion: 'catalogue'}` provides the original pre-calibration genes
+  for diagnostics. Imports never call the calibrator. Existing saved genes keep
+  exact continuation; cold CUR-003 v0.32.1 hash is a regression reference.
+- Performance profiles pin original catalogue genes and initial joint phases
+  to retain their old full-state hashes while newly seeded worlds use current
+  starters. Preserve this historical fixture instead of rewriting goldens.
+- Run `npm run audit:locomotion`, and `npm run search:locomotion -- --check` for
+  this feature. CI reproduces the bounded selection; results are recorded in
+  `docs/experiments/locomotion-search-v1.json`. No manual browser campaign.
+
 # Working on VIDA
 
 - This is the 2D simulation. Keep the current visual style, movable windows,

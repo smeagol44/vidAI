@@ -8,7 +8,19 @@ import {pathToFileURL} from 'node:url';
 const root = resolve(process.argv[2] ?? '.');
 const sim = await import(pathToFileURL(resolve(root, 'simulation.ts')).href);
 const {createInitialWorld, addExternalOrganism} = await import(pathToFileURL(resolve(root, 'world.ts')).href);
+const {createFounderGenome} = await import(pathToFileURL(resolve(root, 'founders.ts')).href);
 const {DEFAULT_SETTINGS, createSnapshot} = await import(pathToFileURL(resolve(root, 'persistence.ts')).href);
+// Pin historical founder alleles so new starter calibrations do not silently
+// replace the worlds used to assert exact saved-kernel continuation.
+function catalogueWorld(settings, count) {
+  const state = createInitialWorld(settings, 711, 'balanced', 'standard', count);
+  for (const org of state.organisms) {
+    org.genome = createFounderGenome(org.genome.id, 'balanced', {locomotion: 'catalogue'});
+    org.joints.forEach((joint, i) => {joint.phase = org.genome.parts[i + 1].cpgPhaseOffset || 0;});
+    state.lineage.get(org.id).genome = org.genome;
+  }
+  return state;
+}
 const golden = {
   'generation-6-34': '88884af87b30310bd79543fa2209012b0b4da03335cef9e7750c9232e08530ab',
   'founders-15': 'de3c9130159af23590db2b385c2d11c338f2882f5e64f0eb4c756db4fa71b672',
@@ -20,9 +32,9 @@ for (const scenario of ['founders-15', 'generation-2-30', 'blocked-eggs', 'gener
   const generationSix = scenario === 'generation-6-34';
   const settings = {...DEFAULT_SETTINGS, targetNutrients: generationSix ? 272 : 200,
     inflowRate: 0, maxOrganisms: 100};
-  const state = createInitialWorld(settings, 711, 'balanced', 'standard', scenario === 'founders-15' ? 15 : 0);
+  const state = catalogueWorld(settings, scenario === 'founders-15' ? 15 : 0);
   if (scenario !== 'founders-15') {
-    const donors = createInitialWorld(settings, 711, 'balanced', 'standard', generationSix ? 34 : 30).organisms;
+    const donors = catalogueWorld(settings, generationSix ? 34 : 30).organisms;
     donors.forEach((donor, i) => {
       let genome = donor.genome;
       for (let generation = 0; generation < (generationSix ? 5 : 2); generation++) genome = sim.mutateGenome(genome, .25, state.prng);

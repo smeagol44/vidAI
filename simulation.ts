@@ -106,7 +106,7 @@ export const PLASTIC_ELIGIBILITY_SECONDS = 0.6;
 export const PLASTIC_UPKEEP_J_PER_EDGE_SECOND = 0.002;
 export const PLASTIC_REWRITE_J_PER_WEIGHT = 0.4;
 export const CONSOLIDATED_MEMORY_UPKEEP_J_PER_SECOND = 0.004; // Extra J/s at 100% retained per eligible synapse.
-export const MAX_FRAME_MOTOR_WORK = 40.0; // Max motor dissipation per sub-step clamp to prevent solver spikes
+export const MAX_FRAME_MOTOR_WORK = 40.0; // Legacy motor-heat cap per complete tick, not per substep
 export const LONGITUDINAL_DRAG = 0.05; // Calibrated nonzero resistance along each segment.
 export const MOTOR_RESPONSE_SECONDS = 0.12;
 

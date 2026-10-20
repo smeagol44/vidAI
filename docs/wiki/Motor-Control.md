@@ -59,7 +59,75 @@ For old organisms and unchanged founder genotypes, both new joint fields are abs
 
 A joint with `oscillatorMix = 0` can use the full range of its direct **Angle** neural command while active. A joint may also set **Amp** to zero and use direct posture, without turning off its muscle. Without a brain command, a direct-only joint does not move on its own.
 
-World snapshots use the existing version-10 schema. New fields are optional, strictly validated on import and round-trip exactly; saved older genomes are never rewritten to acquire new motor alleles.
+World snapshots use the existing version-11 schema. New fields are optional, strictly validated on import and round-trip exactly; saved older genomes are never rewritten to acquire new motor alleles.
+
+## Drag and muscle scaling
+
+The current water model uses body-local translation with these coefficients:
+
+```text
+Fx_local = -0.05 × viscosity × height × local_vx
+Fy_local = -2.0  × viscosity × width  × local_vy
+torque_drag = -viscosity × angular_velocity × (width³ + height³) / 6
+```
+
+These terms dissipate passive motion. They are a calibrated anisotropic model,
+not a literal application of the same normal-drag coefficient to all four
+rectangle faces: lengthwise resistance is 1/40 of that four-face reference.
+Rotation retains the full-face damping coefficient. No fluid flow, wakes or
+shielding between adjacent body surfaces is simulated.
+
+Muscle gains and torque limits scale with average joint-part rotational inertia.
+Uniformly doubling both bodies' dimensions yields 16× torque in the 2D model.
+This differs from muscle limits based on attachment area and lever arm. The
+existing drag and muscle rules remain in force for both new and imported worlds.
+Changing these rules requires a separately evaluated, save-compatible physics
+revision; the offline calibration does not introduce alternate live physics.
+
+`npm run audit:locomotion` checks actual passive motion against analytical
+substep decay at several orientations, passive spin, free momentum without
+viscosity, and actual muscle size scaling. It confirms those bounded properties,
+not complete articulated mechanical-energy conservation. Motor cost currently
+uses pre-update relative angular speed and a legacy 40-J **per complete tick**
+cap. The chemical ledger can close even when that cost estimate is imperfect.
+
+## Offline swimming development
+
+`npm run search:locomotion -- --output report.json` runs a bounded asexual
+search using the production kernel: nine separate anatomical families, three
+generations of eight offspring each, with the parent retained (25 training
+trials per family). Only existing motor frequency, force, joint phase, amplitude
+and smooth waveform genes are eligible. Bodies, mouths, eyes, neural weights,
+learning traits, initial reserve and lifecycle genes are preserved.
+
+Six-second food-free training measures COM progress after one second of settling,
+straightness, progress during the final third and chemical energy spent.
+An idle swimmer or startup-only push cannot score. The search never supplies
+coordinates, fitness rewards or thrust to a brain, and is not part of live
+selection or lifetime learning.
+
+Candidates are screened on three nine-second swims with different headings and
+viscosities (0.15, 0.18, 0.22), plus a 15-second swim. Promotion requires at least
+5% more progress and 2% more progress per total reserve joule in **every** screen,
+no lower late speed, no more than 5% extra reserve expenditure, and preservation
+of the original travel direction. Sampled speed/work caps, hinge drift,
+non-finite poses, depleted reserves or ledger errors reject a result. Final-tick
+observations cannot exclude every substep spike or numerical exploit.
+
+Selected genes in `data/starter-locomotion.json` apply only when constructing
+new featured genotypes. CUR-003, CUR-008 and CUR-009 use the selected alleles;
+the other six featured and all 55 legacy founders retain their prior genes.
+Existing saved genomes keep their actual genes and exact continuation. The
+search's `--check` option reproduces the default selection and verifies the
+committed constructor output. `--id CUR-003` limits it to one family;
+`--seed`, `--generations` (1–8) and `--offspring` (1–16) allow bounded experiments.
+
+This adapts the COM/late-motion evaluation idea from Karl Sims,
+*Evolving Virtual Creatures* (SIGGRAPH 1994, §§3.3, 4, 5.1). Efficiency weighting
+and promotion guards are VIDA-specific. The measured result is stronger empty-
+water locomotion. Direction preservation does not guarantee mouth-first travel,
+food capture, prey pursuit or sustainable reproduction. Detailed historical
+measurements live in `docs/PROJECT_STATUS.md`, outside this current reference.
 
 ## Boundaries and current limitations
 

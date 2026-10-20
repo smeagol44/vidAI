@@ -1,0 +1,38 @@
+name: Bounded locomotion calibration
+on:
+  pull_request:
+    paths:
+      - 'founders.ts'
+      - 'simulation.ts'
+      - 'contacts.ts'
+      - 'neuralRuntime.ts'
+      - 'persistence.ts'
+      - 'starterLocomotion.ts'
+      - 'data/starter-locomotion.json'
+      - 'locomotionSearch.ts'
+      - 'locomotionPhysicsAudit.ts'
+      - 'scripts/search-locomotion.ts'
+      - 'scripts/audit-locomotion.ts'
+      - 'tests/locomotion-search.test.ts'
+      - '.github/workflows/locomotion.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  calibration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run audit:locomotion
+      - name: Reproduce bounded search and verify every selected or unchanged starter
+        run: npm run search:locomotion -- --check --output locomotion-report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: locomotion-search
+          path: locomotion-report.json
