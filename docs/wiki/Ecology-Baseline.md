@@ -120,7 +120,8 @@ of implementing sensors and reproduction. All 55 legacy founders and historical 
 - `ecologyBaseline.ts`: identical seeded paired worlds, controlled grazing,
   warm-start egg allocation and explicit starvation stress
 - `scripts/ecology-baseline.ts`: JSON report, with negative results included
-- `tests/abiotic-blooms.test.ts`: focused bloom/uniform physical ecology, saves and accounting\n- `tests/ecology-baseline.test.ts`: compact deterministic conservation,
+- `tests/abiotic-blooms.test.ts`: focused bloom/uniform physical ecology, saves and accounting
+- `tests/ecology-baseline.test.ts`: compact deterministic conservation,
   snapshot, intake, survival, reproduction and mortality regressions
 - [Sensory Behavior](Sensory-Behavior): inherited retinal/motor pathways,
   measured feeding and the limits of predator pursuit
