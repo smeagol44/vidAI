@@ -4,6 +4,7 @@ Documentation for the **current 2D VIDA simulation**. Each page describes what t
 
 ## Simulation systems
 
+- [Simulation Performance](https://github.com/smeagol44/vidAI/wiki/Simulation-Performance) — food-ray broadphase, rendering optimizations, remaining bottlenecks and desktop considerations.
 - [Featured Starters and Specimen Bank](https://github.com/smeagol44/vidAI/wiki/Featured-Starters) — nine featured, mutable genotypes; 55 accessible legacy designs; selection and ecological limits.
 - [Movement and Motor Control](https://github.com/smeagol44/vidAI/wiki/Motor-Control) — optional oscillators, direct joint positioning, inherited motor parameters, physical work and limits.
 - [Senses and Visually Guided Behavior](https://github.com/smeagol44/vidAI/wiki/Sensory-Behavior) — true retinal rays, inherited neural steering, measured food approach and unresolved threat recognition.
