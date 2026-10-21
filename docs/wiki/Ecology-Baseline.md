@@ -28,7 +28,8 @@ This is an ecological stock ledger, not proof of solver mechanical conservation.
 - Debt repayment requires a return flow. Plant nutrients do not decay; an
   extinct world containing only nutrients can remain in debt indefinitely.
   Clear Free Nutrients returns their energy to the reserve, or the player can
-  raise the budget. Automatic nutrient decay is not implemented.
+  raise the budget. Persistent debt after extinction is accepted; no abiotic
+  nutrient decay is planned. Manual life still requires available reserve.
 - Carrion decays into the reserve regardless of the nutrient cap; funded food
   conversion then uses that reserve. Extinct worlds keep recycling until paused.
 - The computational food limit is 2,200 particles. At that limit, remains merge
@@ -75,6 +76,11 @@ Mouth permissions apply per mouth, including on creatures with different
 specialist mouths. Feeding requires physical contact; no steering or survival
 bonus is supplied. Pigment is independent of diet. Kin protection can restrict
 living-relative/related-egg feeding; carrion carries no kin protection.
+
+Mouth size and hit-area review remains pending: displayed markers, inherited
+aperture span, rotated prey and endpoint contact, and collision obstruction must
+be evaluated together. Current mouth reach, transfer rates and diet permissions
+remain unchanged.
 
 ## Chemical energy transfers
 

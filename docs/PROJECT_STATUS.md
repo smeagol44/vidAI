@@ -1,5 +1,36 @@
 # Project status — 2026-10-21
 
+## Transient UI corrections and kinetic audit — v0.35.1
+
+- Centralized notification expiry at 2500 ms wall time. Every caller now expires,
+  repeated identical text restarts the timer, replacements cancel old timers and
+  unmount cleans up. Paused worlds use the same wall clock. Hinge canvas markers
+  are removed; physical joints, Worker payload and constraint work remain.
+- Optional offline kinetic observer attributes force/motor integration, guards,
+  anchor constraints, angular limits, contact impulses and pose projection without
+  changing equations, order, genes or persisted state. Exact observed/unobserved
+  continuation is checked across all three physics and both ecology regimes.
+- `docs/experiments/mechanical-audit-v1.json` records five isolated 0.1-second
+  controls and nine five-second frozen swims. One-pixel unpowered anchor error
+  produces 0.00148176 J gross kinetic addition, almost all later removed. The
+  isolated limit control also injects energy. These are real velocity-bias
+  defects, not proof of a net ecological subsidy. Inelastic single-part contact
+  removes its initial 0.000105 J. Projection changes pose with zero immediate
+  kinetic change; it may influence subsequent bias/forces. Stage reconciliation
+  error is below 2.5e-14 J across this audit.
+- Frozen swim distances remain the v0.34.1 recovery values (Darter 190.4994 px
+  in five seconds); Lantern/Forktail/Broadwake retain 352/116/1106 guard events.
+  No movement, drag/muscle, diet, mouth reach, brain or starter changes are made.
+  Solver correction, speed-clamp dependence and coherent drag/muscles remain open.
+- Mouth sizes/hit areas are now an explicit next correction: visible span,
+  inherited aperture, rotated/end contact and body obstruction need joint review.
+  No brain or diet tuning accompanies that review.
+- User accepts persistent nutrient debt after extinction; no abiotic decay is
+  needed. Manual additions still require funds. Previous limitation measurements
+  remain below as historical evidence, not a pending feature request.
+- Local fast checks: 268 tests passed; production build and real Worker operation
+  passed. Focused Chromium/Firefox notification lifecycle checks run in PR CI.
+
 ## Closed ecological energy and finite eggs — v0.35.0
 
 - New application worlds have a finite pool initialized from actual seeded

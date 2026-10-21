@@ -4,6 +4,9 @@ Rectangular body parts connect through physical hinges at their attachment
 faces. Joint torques and water resistance produce motion; neural outputs do
 not directly set world-space position or grant forward thrust.
 
+Hinge markers are hidden in the display. The joints still constrain and actuate
+body parts in the Worker; hiding their dots saves drawing, not physics work.
+
 ## Controller
 
 Each joint has six neural outputs:
@@ -131,7 +134,12 @@ The paper does not establish VIDA's coefficients or validate that normalization.
 The discrete solver uses velocity bias, position projection, limits and contact
 impulses, which can alter mechanical energy. Paid actuator work and chemical
 closure do not prove full solver-wide conservation or exclude every exploit.
-The normal-drag/geometric-muscle replacement is unresolved foundation work.
+An opt-in offline kinetic observer separates force/motor integration, speed
+clamps, anchor impulses, angular limits, contact impulses and pose projection.
+Unpowered anchor and angular-limit error controls demonstrate velocity-bias
+energy injection. Bounded inelastic contact dissipates energy; projection changes
+pose without an immediate kinetic change, which does not exclude later effects.
+The solver correction and normal-drag/geometric-muscle replacement remain open.
 
 A two-sided frozen-genome regression gate compares all nine featured designs
 against their pre-change movement and total energy expenditure. It catches
@@ -179,7 +187,8 @@ rewrite those inherited genes. Equivalent corrected-world benefits are unproven.
 ## Developer entry points
 
 - `npm run audit:foraging`: Twin Oar finite-food controls and three short scattered-food pairs.
-- `npm run audit:foundation`: bounded frozen-genome comparison of both regimes.
+- `npm run audit:foundation`: bounded frozen-genome comparison of all three physics regimes.
+- `npm run audit:mechanics`: stage-resolved kinetic audit with passive controls and nine frozen swimmers.
 - `npm run audit:locomotion`: historical legacy passive drag/spin and scaling checks.
 - `npm run search:locomotion -- --check`: reproduce the committed default selection.
 - `--id CUR-003`, `--seed`, `--generations` (1–8), `--offspring` (1–16) and `--output report.json`: bounded search options; `--check` requires the default budget/seed.

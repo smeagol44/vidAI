@@ -1,0 +1,596 @@
+{
+  "protocol": "solver-stage-kinetic-audit-v1",
+  "seed": 711,
+  "controls": [
+    {
+      "name": "aligned-rest",
+      "seconds": 0.1,
+      "initialKineticJ": 0,
+      "finalKineticJ": 0,
+      "recordedDeltaJ": 0,
+      "reconciliationErrorJ": 0,
+      "positiveMotorWorkJ": 0,
+      "negativeMotorWorkJ": 0,
+      "motorChemicalCostJ": 0,
+      "numericalGuardEvents": 0,
+      "displacementPx": 0,
+      "primaryReserveSpentJ": 1.913333333333867,
+      "chemicalLedgerErrorJ": 0,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "speed-guards": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 240,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "name": "one-pixel-anchor-error-at-rest",
+      "seconds": 0.1,
+      "initialKineticJ": 0,
+      "finalKineticJ": 3.671066688528914e-12,
+      "recordedDeltaJ": 3.6710666885287075e-12,
+      "reconciliationErrorJ": 2.0679515313825692e-25,
+      "positiveMotorWorkJ": 0,
+      "negativeMotorWorkJ": 0,
+      "motorChemicalCostJ": 0,
+      "numericalGuardEvents": 0,
+      "displacementPx": 4.547473508864641e-13,
+      "primaryReserveSpentJ": 1.913333333333867,
+      "chemicalLedgerErrorJ": 0,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "speed-guards": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 240,
+          "addedJ": 0.0014817600000000004,
+          "removedJ": 0.0014817599963289337,
+          "netJ": 3.6710666885287075e-12
+        }
+      }
+    },
+    {
+      "name": "angular-limit-error-at-rest",
+      "seconds": 0.1,
+      "initialKineticJ": 0,
+      "finalKineticJ": 1.2836122901913535e-7,
+      "recordedDeltaJ": 1.2836122902006725e-7,
+      "reconciliationErrorJ": -9.318950606573406e-19,
+      "positiveMotorWorkJ": 0,
+      "negativeMotorWorkJ": 0,
+      "motorChemicalCostJ": 0,
+      "numericalGuardEvents": 0,
+      "displacementPx": 2.2737367544323206e-13,
+      "primaryReserveSpentJ": 1.913333333333867,
+      "chemicalLedgerErrorJ": 0,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "speed-guards": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 240,
+          "addedJ": 5.363099471926672e-7,
+          "removedJ": 0.0013521878470564904,
+          "netJ": -0.0013516515371092977
+        },
+        "angular-limit": {
+          "samples": 240,
+          "addedJ": 0.0054064359570626976,
+          "removedJ": 0.004054656058724379,
+          "netJ": 0.0013517798983383178
+        }
+      }
+    },
+    {
+      "name": "inelastic-single-part-contact",
+      "seconds": 0.1,
+      "initialKineticJ": 0.00010499999999999999,
+      "finalKineticJ": 0,
+      "recordedDeltaJ": -0.00010499999999999999,
+      "reconciliationErrorJ": 0,
+      "positiveMotorWorkJ": 0,
+      "negativeMotorWorkJ": 0,
+      "motorChemicalCostJ": 0,
+      "numericalGuardEvents": 0,
+      "displacementPx": 0.2400000000000091,
+      "primaryReserveSpentJ": 1.5800000000053842,
+      "chemicalLedgerErrorJ": -1.0913936421275139e-11,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "speed-guards": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "contact-impulse": {
+          "samples": 192,
+          "addedJ": 0,
+          "removedJ": 0.00010499999999999999,
+          "netJ": -0.00010499999999999999
+        },
+        "position-projection": {
+          "samples": 432,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "name": "overlapping-articulated-bodies-at-rest",
+      "seconds": 0.1,
+      "initialKineticJ": 0,
+      "finalKineticJ": 7.317187264417735e-28,
+      "recordedDeltaJ": 7.317187264417723e-28,
+      "reconciliationErrorJ": 1.1658803223182478e-42,
+      "positiveMotorWorkJ": 0,
+      "negativeMotorWorkJ": 0,
+      "motorChemicalCostJ": 0,
+      "numericalGuardEvents": 0,
+      "displacementPx": 9.365995340220914,
+      "primaryReserveSpentJ": 1.913333333333867,
+      "chemicalLedgerErrorJ": 0,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 96,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "speed-guards": {
+          "samples": 96,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 480,
+          "addedJ": 3.300946847843897e-27,
+          "removedJ": 1.2262344315456723e-27,
+          "netJ": 2.0747124162982234e-27
+        },
+        "contact-impulse": {
+          "samples": 386,
+          "addedJ": 0,
+          "removedJ": 1.342993689856451e-27,
+          "netJ": -1.342993689856451e-27
+        },
+        "position-projection": {
+          "samples": 432,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    }
+  ],
+  "starters": [
+    {
+      "name": "CUR-001",
+      "seconds": 5,
+      "initialKineticJ": 0,
+      "finalKineticJ": 0.005148193835487687,
+      "recordedDeltaJ": 0.005148193835487633,
+      "reconciliationErrorJ": 5.4643789493269423e-17,
+      "positiveMotorWorkJ": 0.5004177707271794,
+      "negativeMotorWorkJ": 0.27186787691889075,
+      "motorChemicalCostJ": 2.0016710829087176,
+      "numericalGuardEvents": 0,
+      "displacementPx": 190.4994092650809,
+      "primaryReserveSpentJ": 131.04583774935054,
+      "chemicalLedgerErrorJ": 2.2737367544323206e-10,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 3600,
+          "addedJ": 0.3347882724373197,
+          "removedJ": 0.29543320885722585,
+          "netJ": 0.03935506358009328
+        },
+        "speed-guards": {
+          "samples": 3600,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 24000,
+          "addedJ": 0.0005515308608143655,
+          "removedJ": 0.03475840060541991,
+          "netJ": -0.03420686974460565
+        }
+      }
+    },
+    {
+      "name": "CUR-002",
+      "seconds": 5,
+      "initialKineticJ": 0,
+      "finalKineticJ": 0.006413547379773697,
+      "recordedDeltaJ": 0.0064135473797737735,
+      "reconciliationErrorJ": -7.632783294297951e-17,
+      "positiveMotorWorkJ": 0.3430396742833105,
+      "negativeMotorWorkJ": 0.22557738129149438,
+      "motorChemicalCostJ": 1.372158697133242,
+      "numericalGuardEvents": 0,
+      "displacementPx": 39.04960172765563,
+      "primaryReserveSpentJ": 135.34090869694592,
+      "chemicalLedgerErrorJ": 1.8735590856522322e-10,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 0.254137141236966,
+          "removedJ": 0.21342165390437953,
+          "netJ": 0.04071548733258633
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 36000,
+          "addedJ": 0.0002126598760691234,
+          "removedJ": 0.034514599828881706,
+          "netJ": -0.034301939952812555
+        }
+      }
+    },
+    {
+      "name": "CUR-003",
+      "seconds": 5,
+      "initialKineticJ": 0,
+      "finalKineticJ": 0.020167123238903593,
+      "recordedDeltaJ": 0.020167123238899354,
+      "reconciliationErrorJ": 4.2396641752873165e-15,
+      "positiveMotorWorkJ": 2.7783978520263286,
+      "negativeMotorWorkJ": 1.5444706010144686,
+      "motorChemicalCostJ": 11.113591408105314,
+      "numericalGuardEvents": 0,
+      "displacementPx": 40.96657961070125,
+      "primaryReserveSpentJ": 160.40525807453014,
+      "chemicalLedgerErrorJ": 2.419255906715989e-10,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 2.483249906356807,
+          "removedJ": 1.7723263540721708,
+          "netJ": 0.7109235522846266
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 48000,
+          "addedJ": 0.007584434651198147,
+          "removedJ": 0.6983408636969234,
+          "netJ": -0.6907564290457272
+        }
+      }
+    },
+    {
+      "name": "CUR-004",
+      "seconds": 5,
+      "initialKineticJ": 0,
+      "finalKineticJ": 0.003793611044205824,
+      "recordedDeltaJ": 0.0037936110442065574,
+      "reconciliationErrorJ": -7.333543494691952e-16,
+      "positiveMotorWorkJ": 0.9017600099444867,
+      "negativeMotorWorkJ": 0.20746599991507045,
+      "motorChemicalCostJ": 3.6070400397779467,
+      "numericalGuardEvents": 352,
+      "displacementPx": 44.781469500070486,
+      "primaryReserveSpentJ": 106.08954003944928,
+      "chemicalLedgerErrorJ": 3.292370820418e-10,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 0.655139073282032,
+          "removedJ": 0.13036528754433646,
+          "netJ": 0.5247737857376958
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0.11881353863903914,
+          "netJ": -0.11881353863903914
+        },
+        "anchor-constraint": {
+          "samples": 48000,
+          "addedJ": 0.0012964181980436537,
+          "removedJ": 0.28146694306361963,
+          "netJ": -0.2801705248655768
+        },
+        "contact-impulse": {
+          "samples": 3951,
+          "addedJ": 0,
+          "removedJ": 0.055520389103416314,
+          "netJ": -0.055520389103416314
+        },
+        "position-projection": {
+          "samples": 2268,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "angular-limit": {
+          "samples": 4050,
+          "addedJ": 0.000029697311349538904,
+          "removedJ": 0.06650541939680658,
+          "netJ": -0.06647572208545702
+        }
+      }
+    },
+    {
+      "name": "CUR-005",
+      "seconds": 5,
+      "initialKineticJ": 0,
+      "finalKineticJ": 0.014184727309721826,
+      "recordedDeltaJ": 0.014184727309722867,
+      "reconciliationErrorJ": -1.0408340855860843e-15,
+      "positiveMotorWorkJ": 4.776920396873054,
+      "negativeMotorWorkJ": 1.3801387826347153,
+      "motorChemicalCostJ": 19.107681587492216,
+      "numericalGuardEvents": 116,
+      "displacementPx": 81.09567467543901,
+      "primaryReserveSpentJ": 196.56934825387907,
+      "chemicalLedgerErrorJ": 2.801243681460619e-10,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 4.540141270184306,
+          "removedJ": 1.558663568319115,
+          "netJ": 2.9814777018651704
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0.0881062714114354,
+          "netJ": -0.0881062714114354
+        },
+        "anchor-constraint": {
+          "samples": 60000,
+          "addedJ": 0.012470390899789177,
+          "removedJ": 2.2696358911324523,
+          "netJ": -2.257165500232654
+        },
+        "angular-limit": {
+          "samples": 9460,
+          "addedJ": 0.000036951671395793256,
+          "removedJ": 0.6220581545827537,
+          "netJ": -0.6220212029113581
+        }
+      }
+    },
+    {
+      "name": "CUR-006",
+      "seconds": 5,
+      "initialKineticJ": 0,
+      "finalKineticJ": 0.03902563785597225,
+      "recordedDeltaJ": 0.03902563785594812,
+      "reconciliationErrorJ": 2.413347299778934e-14,
+      "positiveMotorWorkJ": 5.662011620285583,
+      "negativeMotorWorkJ": 1.1402807486465443,
+      "motorChemicalCostJ": 22.64804648114233,
+      "numericalGuardEvents": 1106,
+      "displacementPx": 20.711421809546138,
+      "primaryReserveSpentJ": 225.23471314743801,
+      "chemicalLedgerErrorJ": 3.710738383233547e-10,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 8400,
+          "addedJ": 5.24821564263114,
+          "removedJ": 1.1373896343020677,
+          "netJ": 4.11082600832906
+        },
+        "speed-guards": {
+          "samples": 8400,
+          "addedJ": 0,
+          "removedJ": 2.484836695266852,
+          "netJ": -2.484836695266852
+        },
+        "anchor-constraint": {
+          "samples": 72000,
+          "addedJ": 0.0031621549787317635,
+          "removedJ": 1.2854021702785927,
+          "netJ": -1.2822400152998656
+        },
+        "contact-impulse": {
+          "samples": 4389,
+          "addedJ": 0,
+          "removedJ": 0.1641856231400361,
+          "netJ": -0.1641856231400361
+        },
+        "position-projection": {
+          "samples": 4792,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "angular-limit": {
+          "samples": 7880,
+          "addedJ": 4.672851419565763e-8,
+          "removedJ": 0.1405380834948726,
+          "netJ": -0.14053803676635843
+        }
+      }
+    },
+    {
+      "name": "CUR-007",
+      "seconds": 5,
+      "initialKineticJ": 0,
+      "finalKineticJ": 0.02047392040770551,
+      "recordedDeltaJ": 0.020473920407704613,
+      "reconciliationErrorJ": 8.98586760555986e-16,
+      "positiveMotorWorkJ": 1.4434851303567533,
+      "negativeMotorWorkJ": 0.7576337256241819,
+      "motorChemicalCostJ": 5.773940521427013,
+      "numericalGuardEvents": 0,
+      "displacementPx": 29.49322828280543,
+      "primaryReserveSpentJ": 169.50123218756926,
+      "chemicalLedgerErrorJ": 5.238689482212067e-10,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 1.0589992550433591,
+          "removedJ": 0.6082110699247436,
+          "netJ": 0.4507881851186153
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 60000,
+          "addedJ": 0.002215534693716543,
+          "removedJ": 0.3536762936315788,
+          "netJ": -0.351460758937863
+        },
+        "contact-impulse": {
+          "samples": 881,
+          "addedJ": 2.168404344971009e-19,
+          "removedJ": 0.07885350577304769,
+          "netJ": -0.07885350577304769
+        },
+        "position-projection": {
+          "samples": 992,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "name": "CUR-008",
+      "seconds": 5,
+      "initialKineticJ": 0,
+      "finalKineticJ": 0.005584507245039866,
+      "recordedDeltaJ": 0.005584507245038672,
+      "reconciliationErrorJ": 1.1934897514720433e-15,
+      "positiveMotorWorkJ": 1.2134437193657004,
+      "negativeMotorWorkJ": 0.6199783242610947,
+      "motorChemicalCostJ": 4.853774877462802,
+      "numericalGuardEvents": 0,
+      "displacementPx": 88.99453540708751,
+      "primaryReserveSpentJ": 163.91960821036446,
+      "chemicalLedgerErrorJ": 4.2928149923682213e-10,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 0.8908710325079393,
+          "removedJ": 0.4750862536902706,
+          "netJ": 0.4157847788176686
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 60000,
+          "addedJ": 0.0017846634195579723,
+          "removedJ": 0.22417688381308934,
+          "netJ": -0.22239222039353182
+        },
+        "contact-impulse": {
+          "samples": 4681,
+          "addedJ": 0,
+          "removedJ": 0.18780805117909813,
+          "netJ": -0.18780805117909813
+        },
+        "position-projection": {
+          "samples": 2864,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "name": "CUR-009",
+      "seconds": 5,
+      "initialKineticJ": 0,
+      "finalKineticJ": 0.016003834091264123,
+      "recordedDeltaJ": 0.01600383409126635,
+      "reconciliationErrorJ": -2.2273849431542203e-15,
+      "positiveMotorWorkJ": 1.6566459518688175,
+      "negativeMotorWorkJ": 1.2614101714980976,
+      "motorChemicalCostJ": 6.62658380747527,
+      "numericalGuardEvents": 0,
+      "displacementPx": 64.69857340259024,
+      "primaryReserveSpentJ": 157.11908380719797,
+      "chemicalLedgerErrorJ": 2.7830537874251604e-10,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 1.0570728386196682,
+          "removedJ": 0.8165672711925679,
+          "netJ": 0.24050556742709833
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 36000,
+          "addedJ": 0.007109903461541664,
+          "removedJ": 0.23161163679737415,
+          "netJ": -0.22450173333583198
+        }
+      }
+    }
+  ],
+  "notes": [
+    "Observation only: all forces, iteration order, physics regimes, genes and saved state are unchanged.",
+    "Stage changes measure translational plus rotational kinetic energy in joules; forces-and-motors combines motor, fluid, gravity and wall forces.",
+    "Gross added/removed values include exchanges during iterative solving; use net values for total reconciliation.",
+    "Position projection changes pose without immediate kinetic change; later bias/force changes can still inject energy.",
+    "No spring potential or fluid energy is modeled here. This is a kinetic audit, not a proof of total mechanical conservation.",
+    "Frozen starter swims use five seconds, heading .37, viscosity .18, no food or gene tuning. No ecological fitness claim."
+  ]
+}

@@ -1,3 +1,4 @@
+import {partKineticEnergy, organismKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
 import type {Organism, PartDef, PartPhys} from './simulation';
 
 interface Body {
@@ -146,23 +147,31 @@ function pairs(list: Body[]): [Body, Body][] {
 
 /** Contacts alternate with hinge projection; position repair never creates separation velocity. */
 export function resolveBodyContacts(organisms: Organism[], density: number,
-  projectJoints: (org: Organism, iterations: number) => void): Set<Organism> {
+  projectJoints: (org: Organism, iterations: number) => void, observe?: MechanicalObserver): Set<Organism> {
   const touched = new Set<Organism>();
+  const project = (org: Organism, iterations: number) => {
+    const before = observe ? organismKineticEnergy(org, density) : 0;
+    projectJoints(org, iterations);
+    if (observe) observe('position-projection', before, organismKineticEnergy(org, density));
+  };
   for (let iteration = 0; iteration < 8; iteration++) {
     let contactCount = 0;
     for (const [a, b] of pairs(bodies(organisms, density))) {
       // Position repair changes centers, not angles; projections refresh rotations next pass.
       const contact = rotatedContact(a.p, a.def, b.p, b.def, a.c, a.s, b.c, b.s); if (!contact) continue;
       contactCount++; touched.add(a.org); touched.add(b.org);
+      const beforeImpulse = observe ? partKineticEnergy(a.p, a.def, density) + partKineticEnergy(b.p, b.def, density) : 0;
       contactImpulse(a.p, a.im, a.ii, b.p, b.im, b.ii, contact);
+      if (observe) observe('contact-impulse', beforeImpulse,
+        partKineticEnergy(a.p, a.def, density) + partKineticEnergy(b.p, b.def, density));
       // Split positional correction prevents overlap recovery from acting as propulsion.
       const correction = Math.min(3, Math.max(0, contact.depth - .02) * .6) / (a.im + b.im);
       a.p.x -= contact.nx * correction * a.im; a.p.y -= contact.ny * correction * a.im;
       b.p.x += contact.nx * correction * b.im; b.p.y += contact.ny * correction * b.im;
     }
     if (!contactCount) break;
-    for (const org of touched) projectJoints(org, 4);
+    for (const org of touched) project(org, 4);
   }
-  for (const org of touched) projectJoints(org, 12);
+  for (const org of touched) project(org, 12);
   return touched;
 }

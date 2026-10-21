@@ -1,3 +1,25 @@
+# UI corrections and mechanical observation (v0.35.1)
+
+- All transient messages use `useNotification`: one 2500-ms wall-clock lifetime,
+  cleanup on replacement/unmount, and a fresh lifetime for identical text. Never
+  add per-caller timeout clears that can dismiss a newer message. Keep pointer
+  events disabled on the status banner, including while simulation is paused.
+- Hinge dots are not rendered. Physical joints and their Worker/state data remain
+  essential; do not remove them or claim reduced solver cost from hidden dots.
+- `stepSimulation` accepts an optional mechanical observer for offline stage
+  attribution. Production hosts do not enable it. It reads kinetic energy only,
+  never changes equations, state, PRNG, controls or save schemas. Audit modules
+  remain outside the runtime graph; `mechanicalObservation.ts` is a small helper.
+- `audit:mechanics` isolates unpowered anchor/limit bias injection, passive contact
+  and all nine frozen swimmers. Gross iteration gains/losses are not independent
+  net energy sources; pose projection can affect later forces despite zero
+  immediate kinetic change. Solver correction remains open; retain all regimes.
+- User accepts indebted extinct worlds without abiotic nutrient decay. No decay
+  work is needed. Adding a creature still needs funded reserve.
+- Mouth size and hit detection are explicitly pending together: visible markers,
+  inherited aperture, endpoint/rotated contact and collision obstruction. Keep
+  this ahead of ecological/brain tuning; do not silently change old save feeding.
+
 # Closed ecological economy and eggs (v0.35.0)
 
 - New application worlds explicitly use `ecologyRegime: closed-v1`; omitted
@@ -30,7 +52,7 @@
 - Plant nutrients do not decay. An extinct nutrient-only world can retain debt
   indefinitely; do not promise automatic debt recovery. Clearing food returns
   energy to reserve, or a manual budget increase can clear debt. Abiotic decay
-  is a separate design choice, not an authorized silent correction.
+  is not planned; the user accepts this extinct-world outcome.
 - `tests/closed-energy.test.ts`, production Worker checks and focused CI browser
   controls protect the new mode and legacy import. Frozen starter/body/brain/diet
   settings and all physics equations remain unchanged. Longer ecology and

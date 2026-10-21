@@ -54,11 +54,27 @@ Still open: longer multi-generation ecological validation; whether the initial
 10% incubation reserve topup and three-incubation lifespan give useful selection;
 recycling/uptake allocation alternatives; measured increases to population/egg/
 particle/save capacity. Retain the visible computational safeguards for now.
-Plant nutrients currently do not decay, so debt can stall after extinction when
-only nutrients retain energy. Clearing food or raising the budget resolves it;
-automatic abiotic decay would be a separate design decision, not an implied rule.
+Plant nutrients do not decay. The user accepts debt remaining after extinction;
+this is not a blocker and no abiotic decay is planned. Manual creature addition
+still requires available reserve; clearing nutrients or raising the budget can
+fund repopulation.
 Ledger closure does not establish useful ecology or solve mechanical-energy
 errors. No starter/body/brain/diet retuning or 3D/sleep work accompanies this change.
+
+## Next bounded corrections
+
+- The stage-resolved kinetic audit is implemented (`npm run audit:mechanics`).
+  It exposes anchor velocity-bias and angular-limit energy injection in unpowered
+  isolated controls. Contact impulses dissipate in the bounded collision case;
+  pose projection has no immediate kinetic change, but can affect later bias.
+  The solver correction itself remains open. Preserve saved regimes and compare
+  all nine frozen swimmers before proposing any replacement for production.
+- Review mouth size and physical hit area together: inherited intake span,
+  visible marker, rotated prey contact, aperture endpoints and body-collision
+  obstruction. Treat contact correctness separately from brain or diet-rate
+  tuning. This is an explicit user priority, not permission for hidden reach.
+- Notification expiry is centralized and hinge dots are removed. Physical joints
+  remain necessary; marker removal reduces canvas work, not Worker joint work.
 
 ## Next ecological goal
 

@@ -105,3 +105,11 @@ closed worlds), adjustable to 150. The separate 75-egg computational limit is
 retained. Food conversion stops at 2,200 particles and banks remaining energy;
 one extra carrion slot plus carrion aggregation preserves remains at capacity.
 Unlimited ecological nutrients does not remove these computational safeguards.
+
+## Transient interface messages
+
+Notifications expire after 2.5 seconds of wall time, including while paused.
+Replacing a message or repeating the same message restarts its lifetime; an old
+message cannot dismiss its replacement. Noninteractive banners do not capture
+pointer input. Hinge dots are hidden; physical joints and their Worker data remain.
+This removes drawing commands, with no measured FPS or solver-speed claim.

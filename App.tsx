@@ -51,6 +51,7 @@ import {SimulationClient} from './simulationClient';
 import type {WorldAction} from './simulationHost';
 import {runProductionChecks} from './diagnostics';
 import CreaturePreview from './CreaturePreview';
+import {useNotification} from './utils/useNotification';
 import {createInitialWorld, addExternalOrganism, collectWorldStats} from './world';
 import {
   createFixedStepper,
@@ -107,7 +108,6 @@ import {
   getNutrientRadius,
   getCardinalAnchor,
   getOrganAnchor,
-  getChildAnchorForParentDir,
   getCardinalOutwardNormal,
   calculateTotalBodyArea,
   formatJoules,
@@ -363,7 +363,7 @@ export default function App() {
     && (bankDiet === 'All' || getDietClassification(item.genome.mouths).category.toLowerCase() === bankDiet)
     && item.name.toLowerCase().includes(bankSearch.toLowerCase())),
     [founderBankItems, specimenBank, bankSection, bankFamily, bankDiet, bankSearch]);
-  const [saveNotification, setSaveNotification] = useState<string | null>(null);
+  const [saveNotification, setSaveNotification] = useNotification();
   const [arenaCompetitorA, setArenaCompetitorA] = useState<Genome | null>(null);
   const [arenaCompetitorB, setArenaCompetitorB] = useState<Genome | null>(null);
   const [arenaState, setArenaState] = useState<{
@@ -540,7 +540,6 @@ export default function App() {
       // ignore
     }
     setSaveNotification(`Saved "${item.name}" to Specimen Bank!`);
-    setTimeout(() => setSaveNotification(null), 2500);
     gameAudio.playPowerupChime();
   }, [selectedSpecimen, specimenBank]);
 
@@ -609,7 +608,6 @@ export default function App() {
     setReportText(report);
     try { await navigator.clipboard.writeText(report); setSaveNotification('Diagnostic report copied.'); }
     catch { setSaveNotification('Select and copy the diagnostic report below.'); }
-    setTimeout(() => setSaveNotification(null), 2500);
   };
 
   // Fork a complete, independent state without changing simulation randomness.
@@ -618,7 +616,6 @@ export default function App() {
     replaceWorld(exact.state, exact.settings);
     setSelectedOrgId(null); setSelectedSpecimen(null); setSelectedEggId(null); setIsAutoTracking(false);
     setSaveNotification(`Branched ecosystem: ${customBranchName}`);
-    setTimeout(() => setSaveNotification(null), 2500);
     gameAudio.playLevelUpStinger();
   }, [customBranchName, currentSettings, replaceWorld]);
 
@@ -655,7 +652,6 @@ export default function App() {
       cameraRef.current.y = cameraRef.current.targetY = v.worldHeight / 2;
       setGameState(prev => ({...prev, status: 'PAUSED'}));
       setSaveNotification('Snapshot restored. Resume when ready.');
-      setTimeout(() => setSaveNotification(current => current === 'Snapshot restored. Resume when ready.' ? null : current), 2500);
       gameAudio.playLevelUpStinger();
     }).catch(error => setSaveNotification(error instanceof Error ? error.message : 'Invalid snapshot.'));
   }, [replaceWorld]);
@@ -1292,18 +1288,6 @@ export default function App() {
           ctx.stroke();
         }
 
-        // Joint Node
-        if (sIdx > 0) {
-          const childAnchor = getChildAnchorForParentDir(pDef.attachmentPoint, w, h);
-          ctx.beginPath();
-          ctx.arc(childAnchor.x, childAnchor.y, 3.5, 0, Math.PI * 2);
-          ctx.fillStyle = '#ffffff';
-          ctx.strokeStyle = '#06b6d4';
-          ctx.lineWidth = 1.5;
-          ctx.fill();
-          ctx.stroke();
-        }
-
         // Sensory Eyes
         const partEyes = g.eyes.filter((e) => e.partIndex === sIdx);
         for (const eye of partEyes) {
@@ -1926,7 +1910,7 @@ export default function App() {
 
         {/* TOAST NOTIFICATION BADGE */}
         {saveNotification && (
-          <div className="pointer-events-none absolute top-14 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-900/90 to-emerald-900/90 border border-emerald-400 backdrop-blur-md rounded-2xl px-4 py-2 flex items-center gap-2 z-50 font-mono text-xs font-bold text-emerald-300 shadow-2xl animate-bounce">
+          <div role="status" aria-live="polite" data-testid="notification" className="pointer-events-none absolute top-14 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-900/90 to-emerald-900/90 border border-emerald-400 backdrop-blur-md rounded-2xl px-4 py-2 flex items-center gap-2 z-50 font-mono text-xs font-bold text-emerald-300 shadow-2xl animate-bounce">
             <CheckCircle2 size={16} className="text-emerald-400" />
             <span>{saveNotification}</span>
           </div>
@@ -2075,7 +2059,6 @@ export default function App() {
                   if (workerClientRef.current) void workerAction({kind: 'clear-food'});
                   else clearFreeNutrients(simStateRef.current);
                   setSaveNotification(energyPool ? 'Free nutrients returned to the world reserve.' : 'Free nutrients cleared; removed energy recorded.');
-                  setTimeout(() => setSaveNotification(null), 2500);
                 }}>Clear Free Nutrients</button>
               <div>
                 <label className="flex justify-between text-[11px] text-slate-300">Tank Width <strong>{worldWidth} px</strong></label>
