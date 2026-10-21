@@ -2900,9 +2900,14 @@ export default function App() {
             </div>
 
             <div className="space-y-1.5 text-[10px] text-slate-300">
-              {energyPool && <p className="text-cyan-200">Returns below are cumulative diagnostics, already recycled into the reserve. They are not additional energy stores.</p>}
+              {energyPool && <>
+                <div>World budget: <strong>{formatJoules(energyPool.budget)}</strong></div>
+                <div>Signed world reserve: <strong>{formatJoules(energyPool.reserve)}</strong></div>
+                <div>Live accounted total: <strong>{formatJoules(embodiedEnergy(simStateRef.current) + energyPool.reserve)}</strong></div>
+                <p className="text-cyan-200">Counters below are cumulative diagnostics. Returns are already recycled into the reserve, not additional energy stores.</p>
+              </>}
               <div className="flex justify-between bg-slate-950/60 p-1.5 rounded border border-slate-800">
-                <span>External Energy Added:</span>
+                <span>{energyPool ? 'Initial / Historical External Input:' : 'External Energy Added:'}</span>
                 <span className="text-emerald-400 font-bold">{formatJoules(ecoStats.totalExternalInflow)}</span>
               </div>
               <div className="flex justify-between bg-slate-950/60 p-1.5 rounded border border-slate-800">
@@ -2930,7 +2935,7 @@ export default function App() {
                 <span className="text-orange-400 font-bold">{formatJoules(ecoStats.totalMechanicalHeat)}</span>
               </div>
               <div className="flex justify-between bg-slate-950/60 p-1.5 rounded border border-slate-800">
-                <span>Recorded Losses & Rejections:</span>
+                <span>{energyPool ? 'Cumulative Other Returns:' : 'Recorded Losses & Rejections:'}</span>
                 <span className="text-slate-400 font-bold">{formatJoules(ecoStats.totalRecordedLosses)}</span>
               </div>
             </div>

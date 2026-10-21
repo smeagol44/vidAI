@@ -30,7 +30,7 @@ flowchart TD
 - [Recurrent brain architecture](Waking-Learning#recurrent-brain-architecture) and [personal learning loop](Waking-Learning#personal-learning-loop)
 - [Motor control loop](Motor-Control#motor-control-loop)
 - [Sensory feedback loop](Sensory-Behavior#sensory-feedback-loop)
-- [Chemical energy transfers](Ecology-Baseline#chemical-energy-transfers) and [egg lifecycle](Ecology-Baseline#egg-lifecycle)
+- [Closed energy transfers](Ecology-Baseline#closed-energy-transfers), [open-world transfers](Ecology-Baseline#chemical-energy-transfers) and [egg lifecycle](Ecology-Baseline#egg-lifecycle)
 - [Worker and display architecture](Simulation-Performance#worker-and-display-architecture)
 
 ## Systems

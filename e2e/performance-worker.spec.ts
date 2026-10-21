@@ -32,11 +32,10 @@ for (const mainthread of [false, true]) test(`closed-budget conversion, controls
   expect(converted.state.energyPool.reserve).toBe(0);
   expect(converted.state.organisms).toEqual(source.state.organisms);
   expect(converted.state.prngState).toEqual(source.state.prngState);
-  await page.getByLabel('Total world energy', {exact: true}).evaluate(node => {
-    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(node, '0');
-    node.dispatchEvent(new Event('input', {bubbles: true}));
-    node.dispatchEvent(new Event('change', {bubbles: true}));
-  });
+  const budget = page.getByLabel('Total world energy', {exact: true});
+  await expect(budget).toHaveValue(String(converted.state.energyPool.budget));
+  await budget.focus();
+  await budget.press('Home');
   await expect.poll(async () => (await read()).state.energyPool.budget).toBe(0);
   const debt = await read();
   expect(debt.state.energyPool.reserve).toBe(-embodiedEnergy(state));
