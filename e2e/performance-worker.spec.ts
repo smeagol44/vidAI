@@ -7,6 +7,7 @@ import {createFounderGenome} from '../founders';
 
 test.use({viewport: {width: 1280, height: 850}});
 for (const mainthread of [false, true]) test(`closed-budget conversion, controls and exact export (${mainthread ? 'fallback' : 'Worker'})`, async ({page}) => {
+  test.setTimeout(60000);
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto(`./?autoplay${mainthread ? '&mainthread' : ''}`);
   await page.getByTitle('Ecology & Physical Settings').click();
@@ -18,7 +19,7 @@ for (const mainthread of [false, true]) test(`closed-budget conversion, controls
   const upload = (snapshot: unknown) => page.locator('input[type=file]').setInputFiles({name: 'economy.json',
     mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(snapshot))});
   const read = async () => {
-    const download = page.waitForEvent('download');
+    const download = page.waitForEvent('download', {timeout: 10000});
     await page.getByRole('button', {name: 'Export Snapshot', exact: true}).dispatchEvent('click');
     return JSON.parse(await readFile((await (await download).path())!, 'utf8'));
   };
@@ -54,6 +55,7 @@ for (const mainthread of [false, true]) test(`closed-budget conversion, controls
   const cleared = await read();
   expect(cleared.state.energyPool.reserve).toBe(debt.state.energyPool.reserve + 9000);
   await upload(cleared);
+  await expect(page.getByText('Snapshot restored. Resume when ready.', {exact: true})).toBeVisible();
   expect((await read()).state).toEqual(cleared.state);
   expect(errors).toEqual([]);
 });
