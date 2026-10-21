@@ -6,8 +6,10 @@ import {createInitialWorld, addExternalOrganism} from '../world';
 import {createFounderGenome} from '../founders';
 
 test.use({viewport: {width: 1280, height: 850}});
+// Software-rendered tanks plus repeated import/download interactions can exceed
+// 30s in CI. Keep individual assertion timeouts and all state checks unchanged.
+test.setTimeout(60000);
 for (const mainthread of [false, true]) test(`closed-budget conversion, controls and exact export (${mainthread ? 'fallback' : 'Worker'})`, async ({page}) => {
-  test.setTimeout(60000);
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto(`./?autoplay${mainthread ? '&mainthread' : ''}`);
   await page.getByTitle('Ecology & Physical Settings').click();
