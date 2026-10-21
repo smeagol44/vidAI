@@ -53,13 +53,15 @@ stored genes; they do not pass through this calibration.
 | --- | --- |
 | Starting population | 18 |
 | Starting design diversity | At most five randomly selected featured designs |
-| Maximum living population | 30 |
-| Plant-food target | 275 |
+| Population slots (living creatures + eggs) | 30 |
+| Initial plant nutrients | 275 |
+| Nutrient count cap | Unlimited (funded, subject to safety capacity) |
 | Nutrient distribution | Uniform |
 | Initial UI seed | Random, editable and reusable on reset |
 
 The Featured Showcase requests one of each featured design, subject to the
-living-population cap. Lowering the cap does not remove existing creatures.
+population cap. Eggs reserve slots in closed worlds; lowering the cap does
+not remove existing occupants or block slot-neutral hatching.
 Explicit seeds reproduce a world under the same implementation and settings;
 imported worlds retain their stored settings, genes and random state.
 

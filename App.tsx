@@ -1,4 +1,6 @@
 import {NEW_PHYSICS_REGIME, type PhysicsRegime} from './foundationPhysics';
+import {enableClosedEconomy, occupiedPopulation, setWorldEnergy, EGG_LIFETIME_MULTIPLIER,
+  embodiedEnergy} from './energyEconomy';
 // tslint:disable
 /* eslint-disable */
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
@@ -293,6 +295,8 @@ export default function App() {
   const [nutrientInflowRate, setNutrientInflowRate] = useState<number>((getConfig('nutrientInflowRate') as number) ?? 15);
   // Default uniform until repeated natural-feeding evidence favors hotspots.
   const [physicsRegime, setPhysicsRegime] = useState<PhysicsRegime>(NEW_PHYSICS_REGIME);
+  const [ecologyRegime, setEcologyRegime] = useState<'closed-v1' | undefined>('closed-v1');
+  const [nutrientLimit, setNutrientLimit] = useState<number | null>(null);
   const [nutrientPattern, setNutrientPattern] = useState<'uniform' | 'blooms'>('uniform');
   const [kinshipProtectionEnabled, setKinshipProtectionEnabled] = useState<boolean>(true);
   const [gravity, setGravity] = useState(0);
@@ -413,6 +417,7 @@ export default function App() {
 
   // Render replica when the Worker is active; authoritative state only in fallback mode.
   const simStateRef = useRef<SimulationState>({
+    energyPool: {regime: 'closed-v1', budget: 0, reserve: 0},
     simTime: 0,
     organisms: [],
     eggs: [],
@@ -435,6 +440,7 @@ export default function App() {
   // A selected egg remains a reference to actual kernel state; no duplicated
   // incubation/clearance counters or saved UI-only status fields.
   const selectedEgg = selectedEggId ? simStateRef.current.eggs.find(egg => egg.id === selectedEggId) : null;
+  const energyPool = simStateRef.current.energyPool;
 
   // Telemetry Performance Tracker
   const realTimeTrackerRef = useRef({
@@ -536,8 +542,8 @@ export default function App() {
   const currentSettings = useCallback((): SimulationSettings => ({worldWidth, worldHeight, waterViscosity,
     targetNutrients: targetNutrientAbundance, inflowRate: nutrientInflowRate,
     nutrientPattern, kinshipProtection: kinshipProtectionEnabled,
-    mutationSeverity, gravity, maxOrganisms, physicsRegime}),
-    [worldWidth, worldHeight, waterViscosity, targetNutrientAbundance, nutrientInflowRate, nutrientPattern, kinshipProtectionEnabled, gravity, maxOrganisms, mutationSeverity, physicsRegime]);
+    mutationSeverity, gravity, maxOrganisms, physicsRegime, ecologyRegime, nutrientLimit}),
+    [worldWidth, worldHeight, waterViscosity, targetNutrientAbundance, nutrientInflowRate, nutrientPattern, kinshipProtectionEnabled, gravity, maxOrganisms, mutationSeverity, physicsRegime, ecologyRegime, nutrientLimit]);
 
   workerSettingsRef.current = currentSettings();
   const workerAction = (action: WorldAction) => workerClientRef.current!.action(action)
@@ -545,6 +551,23 @@ export default function App() {
   const authoritativeSnapshot = async (metadata: Record<string, unknown> = {}) =>
     workerClientRef.current ? workerClientRef.current.snapshot(metadata)
       : createSnapshot(simStateRef.current, currentSettings(), metadata);
+
+  const convertWorldEnergy = async () => {
+    try {
+      const exact = restoreSnapshot(await authoritativeSnapshot());
+      enableClosedEconomy(exact.state);
+      const config = {...exact.settings, ecologyRegime: 'closed-v1' as const, nutrientLimit: null};
+      replaceWorld(exact.state, config);
+      setEcologyRegime('closed-v1'); setNutrientLimit(null);
+      setEcoStats(prev => ({...prev, ...collectWorldStats(exact.state, config.targetNutrients)}));
+      setSaveNotification('Closed budget enabled using current stores; historical losses were not reclaimed.');
+    } catch (error) {setSaveNotification(String(error));}
+  };
+
+  const changeWorldEnergy = (joules: number) => {
+    if (workerClientRef.current) void workerAction({kind: 'energy-budget', joules});
+    else {setWorldEnergy(simStateRef.current, joules); setEcoStats(prev => ({...prev}));}
+  };
 
   const repairSwimmingInWorld = async () => {
     try {
@@ -607,6 +630,7 @@ export default function App() {
       replaceWorld(restored.state, v);
       setEcoStats(prev => ({...prev, ...collectWorldStats(restored.state, v.targetNutrients)}));
       setPhysicsRegime(v.physicsRegime ?? 'legacy-v0');
+      setEcologyRegime(v.ecologyRegime); setNutrientLimit(v.nutrientLimit ?? null);
       setWorldWidth(v.worldWidth); setWorldHeight(v.worldHeight); setGravity(v.gravity ?? 0);
       setWaterViscosity(v.waterViscosity); setTargetNutrientAbundance(v.targetNutrients); setNutrientInflowRate(v.inflowRate);
       setNutrientPattern(v.nutrientPattern ?? 'uniform');
@@ -635,8 +659,10 @@ export default function App() {
   // Initialize Simulation
   const initGame = useCallback(
     (preset = 'standard') => {
-      const config = {...currentSettings(), physicsRegime: NEW_PHYSICS_REGIME};
+      const config = {...currentSettings(), physicsRegime: NEW_PHYSICS_REGIME,
+        ecologyRegime: 'closed-v1' as const, nutrientLimit: null};
       setPhysicsRegime(NEW_PHYSICS_REGIME);
+      setEcologyRegime('closed-v1'); setNutrientLimit(null);
       replaceWorld(createInitialWorld(config, simulationSeed, founderMode, preset, getConfig('initialOrganisms')), config);
       popHistoryRef.current = [simStateRef.current.organisms.length];
       setEcoStats(prev => ({...prev, ...collectWorldStats(simStateRef.current, targetNutrientAbundance)}));
@@ -669,7 +695,7 @@ export default function App() {
     if (workerClientRef.current) {
       const cam = cameraRef.current;
       void workerAction({kind: 'spawn', x: cam.x, y: cam.y, archetype, genome: customGenome}).then(id => {
-        if (typeof id !== 'string') {if (id === null) setSaveNotification('Population cap reached.'); return;}
+        if (typeof id !== 'string') {if (id === null) setSaveNotification('No population slot or insufficient world energy.'); return;}
         setSelectedOrgId(id); setSelectedEggId(null);
         setSelectedSpecimen(simStateRef.current.organisms.find(o => o.id === id) ?? null);
         gameAudio.playPowerupChime();
@@ -678,13 +704,13 @@ export default function App() {
       return;
     }
     const s = simStateRef.current;
-    if (s.organisms.filter(o => !o.dissolving).length >= maxOrganisms) { setSaveNotification('Population cap reached.'); return; }
+    if (occupiedPopulation(s) >= maxOrganisms) { setSaveNotification('Population slots full.'); return; }
     const cam = cameraRef.current;
     const ox = clampVal(cam.x + s.prng.range(-80, 80), 100, worldWidth - 100);
     const oy = clampVal(cam.y + s.prng.range(-80, 80), 100, worldHeight - 100);
     const genome = customGenome ? structuredClone(customGenome) : createArchetypeGenome(archetype, 1, [], s.prng);
     const specimen = addExternalOrganism(s, genome, currentSettings(), ox, oy);
-    if (!specimen) return;
+    if (!specimen) {setSaveNotification('Insufficient world energy to fund this creature.'); return;}
 
     setSelectedOrgId(specimen.id);
     setSelectedSpecimen(specimen);
@@ -868,6 +894,7 @@ export default function App() {
     const s = simStateRef.current;
 
     const settings: SimulationSettings = {
+      ecologyRegime, nutrientLimit,
       physicsRegime,
       worldWidth,
       worldHeight,
@@ -951,7 +978,7 @@ export default function App() {
       popHistoryRef.current.push(s.organisms.filter(o => !o.dissolving).length);
       if (popHistoryRef.current.length > 60) popHistoryRef.current.shift();
 
-      if (s.organisms.length === 0 && s.eggs.length === 0) {
+      if (!s.energyPool && s.organisms.length === 0 && s.eggs.length === 0) {
         if (gameState.status === 'PLAYING') {
           setGameState((prev) => ({...prev, status: 'GAME_OVER'}));
           gameAudio.playDefeatMotif();
@@ -1512,7 +1539,7 @@ export default function App() {
 
           <div className="flex items-center gap-1.5 text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Food: <strong className="text-white">{ecoStats.nutrientCount}</strong><span className="text-emerald-300/60"> / {ecoStats.targetNutrients}</span></span>
+            <span>Food: <strong className="text-white">{ecoStats.nutrientCount}</strong><span className="text-emerald-300/60"> / {energyPool ? nutrientLimit ?? '∞' : ecoStats.targetNutrients}</span></span>
           </div>
         </div>
 
@@ -1651,7 +1678,7 @@ export default function App() {
 
         {/* EGG INSPECTOR — same kernel clearance and funded values used for hatching. */}
         {selectedEgg && (() => {
-          const status = evaluateEggHatchStatus(selectedEgg, currentSettings(), simStateRef.current.organisms);
+          const status = evaluateEggHatchStatus(selectedEgg, currentSettings(), simStateRef.current.organisms, energyPool);
           const parent = simStateRef.current.organisms.find(org => org.id === selectedEgg.parentOrgId);
           const parentName = parent?.genome.name ?? simStateRef.current.lineage.get(selectedEgg.parentOrgId)?.name;
           const progress = Math.round(Math.min(1, selectedEgg.incubationProgress) * 100);
@@ -1676,6 +1703,10 @@ export default function App() {
                 <div>Funded hatch reserve: <span className="text-emerald-300">{formatJoules(selectedEgg.fundedReserve)}</span></div>
                 <div>Total funded energy: <span className="text-white">{formatJoules(totalFunding)}</span></div>
                 <div>Body requirement: <span className="text-white">{formatJoules(selectedEgg.genome.bodyCost)}</span></div>
+                {energyPool && <>
+                  <div>Hatch reserve target: <span className="text-white">{formatJoules(selectedEgg.hatchReserveTarget ?? 0)}</span></div>
+                  <div>Expires in: <span className="text-amber-200">{Math.max(0, EGG_LIFETIME_MULTIPLIER * selectedEgg.totalIncubationTime - (selectedEgg.ageSeconds ?? 0)).toFixed(1)} simulation seconds</span></div>
+                </>}
                 <div>Inherited future egg reserve fraction: <span className="text-white">{Math.round(selectedEgg.genome.eggReserveFraction * 100)}%</span></div>
                 <div className="pt-1">Incubation: <span className="text-amber-200">{progress}%</span> · {selectedEgg.totalIncubationTime.toFixed(1)}s total</div>
                 <div className="bg-slate-950 rounded-full h-1.5 border border-slate-700 overflow-hidden">
@@ -1720,7 +1751,7 @@ export default function App() {
             ecoStats.simTime,
             ecoStats.livingCount,
             ecoStats.eggCount,
-            maxOrganisms,
+            maxOrganisms, 75, Boolean(energyPool),
           );
 
           return (
@@ -1949,7 +1980,7 @@ export default function App() {
               {/* Inflow Rate */}
               <div>
                 <div className="flex justify-between items-center mb-1 text-slate-300 text-[11px]">
-                  <span className="font-bold text-purple-300">Nutrient Inflow Rate:</span>
+                  <span className="font-bold text-purple-300">{energyPool ? 'Nutrient Recycling Rate:' : 'Nutrient Inflow Rate:'}</span>
                   <span className="text-purple-400 font-bold">
                     {nutrientInflowRate === 0 ? '0.0 items/s (Disabled)' : `${nutrientInflowRate.toFixed(1)} items/s`}
                   </span>
@@ -1978,8 +2009,28 @@ export default function App() {
                 </button>
                 <p className="text-[10px] text-slate-400">Keeps your creatures and ecosystem; applies repaired movement.</p>
               </div>}
-              {/* Target Abundance */}
-              <div>
+              {energyPool ? <div className="space-y-2 text-[11px]" data-testid="closed-energy-controls">
+                <p className="text-cyan-200">Closed world energy budget</p>
+                <label className="flex justify-between">Maximum nutrients <strong>{nutrientLimit ?? 'Unlimited'}</strong></label>
+                <label className="flex gap-2"><input type="checkbox" aria-label="Unlimited nutrients"
+                  checked={nutrientLimit === null} onChange={e => setNutrientLimit(e.target.checked ? null : 275)} />Unlimited</label>
+                <input aria-label="Maximum nutrients" type="range" min="0" max="2200" step="1"
+                  disabled={nutrientLimit === null} value={nutrientLimit ?? 2200}
+                  onChange={e => setNutrientLimit(Number(e.target.value))} className="w-full accent-emerald-400" />
+                <label className="flex justify-between">Total world energy <strong>{formatJoules(energyPool.budget)}</strong></label>
+                <input aria-label="Total world energy" type="range" min="0" max={Math.max(10000000, energyPool.budget)} step="1000"
+                  value={energyPool.budget} onChange={e => changeWorldEnergy(Number(e.target.value))} className="w-full accent-cyan-400" />
+                <div>Embodied energy: {formatJoules(embodiedEnergy(simStateRef.current))}</div>
+                <div className={energyPool.reserve < 0 ? 'text-amber-300' : 'text-emerald-300'}>
+                  {energyPool.reserve < 0 ? 'World debt' : 'World reserve'}: {formatJoules(Math.abs(energyPool.reserve))}
+                </div>
+                <div>Population slots: {ecoStats.livingCount + ecoStats.eggCount} / {maxOrganisms} (creatures + eggs)</div>
+                <p className="text-slate-400">Food, new creatures and incubation draw from this reserve. Debt pauses nutrient creation and hatching. Capacity safety: 2,200 food particles and 75 eggs; excess remains aggregate without losing energy.</p>
+              </div> : <div>
+                <button onClick={() => void convertWorldEnergy()} className="w-full rounded border border-cyan-400/50 px-2 py-1 text-cyan-200">
+                  Convert this world to a closed energy budget
+                </button>
+                <p className="text-[10px] text-slate-400">This saved world keeps its original open economy until converted. Conversion keeps current stores and enables egg slots, incubation uptake and expiry.</p>
                 <div className="flex justify-between items-center mb-1 text-slate-300 text-[11px]">
                   <span>Nutrient Target Abundance:</span>
                   <span className="text-emerald-300 font-bold">{targetNutrientAbundance}</span>
@@ -1994,7 +2045,7 @@ export default function App() {
                   onChange={(e) => setTargetNutrientAbundance(parseInt(e.target.value, 10))}
                   className="w-full h-2 accent-emerald-400 cursor-pointer bg-slate-950 rounded-lg"
                 />
-              </div>
+              </div>}
 
               <p className="text-[10px] text-slate-400">Limit applies to inflow, Feed and Feed All. Existing food remains until eaten or cleared; remains keep their stored energy.</p>
               <div className="space-y-1">
@@ -2011,7 +2062,7 @@ export default function App() {
                 onClick={() => {
                   if (workerClientRef.current) void workerAction({kind: 'clear-food'});
                   else clearFreeNutrients(simStateRef.current);
-                  setSaveNotification('Free nutrients cleared; removed energy recorded.');
+                  setSaveNotification(energyPool ? 'Free nutrients returned to the world reserve.' : 'Free nutrients cleared; removed energy recorded.');
                   setTimeout(() => setSaveNotification(null), 2500);
                 }}>Clear Free Nutrients</button>
               <div>
@@ -2030,8 +2081,8 @@ export default function App() {
                   onChange={e => setGravity(Number(e.target.value))} className="w-full h-2 accent-cyan-400" />
               </div>
               <div>
-                <label className="flex justify-between text-[11px] text-slate-300">Maximum Living Creatures <strong>{maxOrganisms}</strong></label>
-                <input aria-label="Maximum living creatures" type="range" min="1" max="150" step="1" value={maxOrganisms}
+                <label className="flex justify-between text-[11px] text-slate-300">{energyPool ? 'Maximum Creatures + Eggs' : 'Maximum Living Creatures'} <strong>{maxOrganisms}</strong></label>
+                <input aria-label={energyPool ? "Maximum creatures + eggs" : "Maximum living creatures"} type="range" min="1" max="150" step="1" value={maxOrganisms}
                   onChange={e => setMaxOrganisms(Number(e.target.value))} className="w-full h-2 accent-purple-400" />
                 <p className="text-[10px] text-slate-400">Lowering the cap stops additions; existing creatures continue living.</p>
               </div>
@@ -2510,7 +2561,7 @@ export default function App() {
                 ecoStats.simTime,
                 ecoStats.livingCount,
                 ecoStats.eggCount,
-                maxOrganisms,
+                maxOrganisms, 75, Boolean(energyPool),
               );
 
               const totalBurnRate = Math.max(
@@ -2849,6 +2900,7 @@ export default function App() {
             </div>
 
             <div className="space-y-1.5 text-[10px] text-slate-300">
+              {energyPool && <p className="text-cyan-200">Returns below are cumulative diagnostics, already recycled into the reserve. They are not additional energy stores.</p>}
               <div className="flex justify-between bg-slate-950/60 p-1.5 rounded border border-slate-800">
                 <span>External Energy Added:</span>
                 <span className="text-emerald-400 font-bold">{formatJoules(ecoStats.totalExternalInflow)}</span>
@@ -2870,11 +2922,11 @@ export default function App() {
                 <span className="text-emerald-300 font-bold">{formatJoules(ecoStats.totalFoodEnergy)}</span>
               </div>
               <div className="flex justify-between bg-slate-950/60 p-1.5 rounded border border-slate-800">
-                <span>Metabolic Heat Dissipation:</span>
+                <span>{energyPool ? 'Cumulative Metabolic Return:' : 'Metabolic Heat Dissipation:'}</span>
                 <span className="text-rose-400 font-bold">{formatJoules(ecoStats.totalMetabolicHeat)}</span>
               </div>
               <div className="flex justify-between bg-slate-950/60 p-1.5 rounded border border-slate-800">
-                <span>Mechanical Work Heat:</span>
+                <span>{energyPool ? 'Cumulative Motor Return:' : 'Mechanical Work Heat:'}</span>
                 <span className="text-orange-400 font-bold">{formatJoules(ecoStats.totalMechanicalHeat)}</span>
               </div>
               <div className="flex justify-between bg-slate-950/60 p-1.5 rounded border border-slate-800">

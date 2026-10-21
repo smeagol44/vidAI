@@ -26,6 +26,8 @@ port.onmessage = ({data}: MessageEvent) => {
       if (host.selected !== data.selected) dirty = true;
       if ((data.settings.physicsRegime ?? 'legacy-v0') !== (host.settings.physicsRegime ?? 'legacy-v0'))
         throw new Error('Physics regime can change only by resetting the world');
+      if (data.settings.ecologyRegime !== host.settings.ecologyRegime)
+        throw new Error('Ecology regime can change only by resetting the world');
       host.settings = {...data.settings, physicsRegime: host.settings.physicsRegime ?? 'legacy-v0'} as SimulationSettings; host.speed = data.speed;
       host.running = data.running; host.selected = data.selected; return;
     }

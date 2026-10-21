@@ -4,6 +4,8 @@ import {compiledBrain, compiledDeltas, alignPlasticRecords, invalidateCompiledBr
 import {resolveBodyContacts} from './contacts';
 import {NutrientSightGrid} from './sightBroadphase';
 import {OrderedSpatialIndex, type SpatialBounds} from './spatialIndex';
+import {type EnergyPool, occupiedPopulation, eggEnergyRequirement, fundIncubatingEggs,
+  initializeClosedEgg, EGG_LIFETIME_MULTIPLIER, FOOD_SAFETY_LIMIT} from './energyEconomy';
 // ============================================================================
 // 1. DETERMINISTIC PRNG (xoshiro128++)
 // ============================================================================
@@ -354,6 +356,8 @@ export interface Egg {
   colorHue: number;
   readyToHatch: boolean;
   hatchHeading?: number; // Chosen once; blocked eggs do not redraw randomness each tick.
+  ageSeconds?: number;
+  hatchReserveTarget?: number;
 }
 
 export interface Nutrient {
@@ -439,6 +443,9 @@ export interface SimulationLedger {
 }
 
 export interface SimulationSettings {
+  ecologyRegime?: 'closed-v1';
+  /** null means no ecological count cap; a visible particle safety limit remains. */
+  nutrientLimit?: number | null;
   /** Omitted by historical callers: exact legacy continuation. */
   physicsRegime?: PhysicsRegime;
   worldWidth: number;
@@ -455,6 +462,7 @@ export interface SimulationSettings {
 }
 
 export interface SimulationState {
+  energyPool?: EnergyPool;
   initialSeed?: number;
   simTime: number;
   organisms: Organism[];
@@ -549,6 +557,7 @@ export function evaluateReproductionAffordability(
   eggCount: number,
   maxOrgs = 50,
   maxEggs = 75,
+  populationIncludesEggs = false,
 ): {
   eligible: boolean;
   affordableCount: number;
@@ -576,7 +585,9 @@ export function evaluateReproductionAffordability(
   const remainingCooldown = Math.max(0, cooldown - timeSinceRepro);
 
   const affordableCount = Math.max(0, Math.floor(availableForReproduction / eggCost));
-  const actualClutchSize = Math.min(desiredCount, affordableCount);
+  const actualClutchSize = Math.max(0, Math.min(desiredCount, affordableCount,
+    populationIncludesEggs ? maxOrgs - livingCount - eggCount : Infinity,
+    populationIncludesEggs ? maxEggs - eggCount : Infinity));
 
   if (org.dissolving || org.dissolveAlpha < 1.0) {
     return {
@@ -613,7 +624,7 @@ export function evaluateReproductionAffordability(
     };
   }
 
-  if (livingCount >= maxOrgs) {
+  if (livingCount + (populationIncludesEggs ? eggCount : 0) >= maxOrgs) {
     return {
       eligible: false,
       affordableCount,
@@ -827,6 +838,10 @@ export function nutrientBloomCenters(state: Pick<SimulationState, 'initialSeed'>
 /** Shared by initialization, environmental inflow, Feed and Feed All. */
 export function nutrientSpawnSlots(state: SimulationState, settings: SimulationSettings): number {
   const plants = state.nutrients.filter(n => n.kind !== 'carrion').length;
+  if (state.energyPool) return Math.max(0, Math.min(
+    (settings.nutrientLimit ?? Infinity) - plants,
+    FOOD_SAFETY_LIMIT - state.nutrients.length,
+    Math.floor(Math.max(0, state.energyPool.reserve) / NUTRIENT_ENERGY_VALUE)));
   return Math.max(0, Math.min(Math.floor(settings.targetNutrients) - plants, 2200 - state.nutrients.length));
 }
 
@@ -851,7 +866,8 @@ export function addNutrients(state: SimulationState, settings: SimulationSetting
       y: center ? clampVal(center.y + prng.range(-center.spread, center.spread), 40, settings.worldHeight - 40) : prng.range(40, settings.worldHeight - 40),
       vx: 0, vy: 0, energyValue: NUTRIENT_ENERGY_VALUE, radius: getNutrientRadius(NUTRIENT_ENERGY_VALUE),
       bottomTimer: 0, pulseTimer: prng.range(0, Math.PI * 2)});
-    state.ledger.externalInflow += NUTRIENT_ENERGY_VALUE;
+    if (state.energyPool) state.energyPool.reserve -= NUTRIENT_ENERGY_VALUE;
+    else state.ledger.externalInflow += NUTRIENT_ENERGY_VALUE;
   }
   return count;
 }
@@ -3264,17 +3280,24 @@ export function findClearHatchHeading(egg: Egg, settings: SimulationSettings, or
 }
 
 export type EggHatchStatus = 'incubating' | 'nonviable' | 'population-cap' |
-  'orientation-pending' | 'space-blocked' | 'tank-boundary' | 'clear';
+  'orientation-pending' | 'space-blocked' | 'tank-boundary' | 'clear' | 'world-debt' | 'funding' | 'expired';
 
 /** Kernel-derived inspection, not a second, approximate hatching algorithm. */
-export function evaluateEggHatchStatus(egg: Egg, settings: SimulationSettings, organisms: Organism[]): {
+export function evaluateEggHatchStatus(egg: Egg, settings: SimulationSettings, organisms: Organism[], pool?: EnergyPool): {
   status: EggHatchStatus; message: string; clearHeading: number | null;
 } {
+  if (pool && (egg.ageSeconds ?? 0) >= EGG_LIFETIME_MULTIPLIER * egg.totalIncubationTime)
+    return {status: 'expired', message: 'Expired; will become carrion', clearHeading: null};
   if (egg.incubationProgress < 1) return {status: 'incubating',
     message: 'Incubating — not ready yet', clearHeading: null};
-  if (egg.fundedReserve + egg.fundedStructural < egg.genome.bodyCost) return {
+  if (pool && pool.reserve < 0) return {status: 'world-debt',
+    message: 'Ready, waiting for world energy debt to clear', clearHeading: null};
+  if (pool && (egg.fundedReserve + egg.fundedStructural < egg.genome.bodyCost
+    || egg.fundedReserve + egg.fundedStructural + 1e-7 < eggEnergyRequirement(egg)))
+    return {status: 'funding', message: 'Waiting for incubation energy; may recover before expiry', clearHeading: null};
+  if (!pool && egg.fundedReserve + egg.fundedStructural < egg.genome.bodyCost) return {
     status: 'nonviable', message: 'Insufficient funded body energy; will become remains', clearHeading: null};
-  if (organisms.filter(o => !o.dissolving).length >= (settings.maxOrganisms ?? 50)) return {
+  if (!pool && organisms.filter(o => !o.dissolving).length >= (settings.maxOrganisms ?? 50)) return {
     status: 'population-cap', message: 'Ready, blocked by living population cap', clearHeading: null};
   if (egg.hatchHeading === undefined) return {
     status: 'orientation-pending', message: 'Ready; orientation will be chosen on the next tick', clearHeading: null};
@@ -3366,6 +3389,24 @@ function evaluateOrganismBrain(org: Organism, dt: number): void {
   
 }
 
+/** At the particle safety limit, aggregate remains rather than losing energy.
+ * Allow one carrion slot above the normal food limit if all slots hold plants. */
+function closedCarrion(state: SimulationState, x: number, y: number, energy: number): void {
+  if (energy <= 0) return;
+  const existing = state.nutrients.length >= FOOD_SAFETY_LIMIT
+    ? state.nutrients.find(n => n.kind === 'carrion') : undefined;
+  if (existing) {
+    existing.energyValue += energy;
+    existing.radius = getNutrientRadius(existing.energyValue);
+    existing.decayTimeRemaining = CARRION_DECAY_SECONDS;
+    return;
+  }
+  state.nutrients.push({id: `REM-${state.prng.nextUint32().toString(36)}`,
+    kind: 'carrion', decayTimeRemaining: CARRION_DECAY_SECONDS,
+    x, y, vx: 0, vy: 0, energyValue: energy, radius: getNutrientRadius(energy),
+    bottomTimer: 0, pulseTimer: state.prng.range(0, Math.PI * 2)});
+}
+
 export function stepSimulation(
   state: SimulationState,
   settings: SimulationSettings,
@@ -3389,11 +3430,12 @@ export function stepSimulation(
   const caustics = state.caustics;
   const ledger = state.ledger;
   const prng = state.prng;
+  let returnedEnergy = 0;
 
   // Carrion does not suppress environmental plant-food replenishment.
   const plantCount = nutrients.filter(n => n.kind !== 'carrion').length;
   // 1. Environmental Nutrient Inflow
-  if (plantCount >= targetNutrientsVal || inflowRateVal <= 0) {
+  if ((state.energyPool ? nutrientSpawnSlots(state, settings) <= 0 : plantCount >= targetNutrientsVal) || inflowRateVal <= 0) {
     state.nutrientAccumulator = 0;
   } else {
     state.nutrientAccumulator += inflowRateVal * dt;
@@ -3411,6 +3453,11 @@ export function stepSimulation(
     const nut = nutrients[i];
     if (nut.kind === 'carrion') {
       nut.decayTimeRemaining = Math.max(0, (nut.decayTimeRemaining ?? CARRION_DECAY_SECONDS) - dt);
+      if (state.energyPool && nut.decayTimeRemaining === 0) {
+        state.energyPool.reserve += nut.energyValue;
+        nutrients.splice(i--, 1);
+        continue;
+      }
       if (nut.decayTimeRemaining === 0 && decaySlots > 0) {
         decaySlots--;
         nut.kind = 'nutrient';
@@ -3442,9 +3489,19 @@ export function stepSimulation(
   }
 
   let sharedHatchObstacles: HatchBounds[] | undefined;
+  fundIncubatingEggs(state, dt);
   // 4. Incubating Multi-Egg Clutches (Full energy accounting: non-viable damaged eggs decompose without duplicate hatching)
   for (let i = eggs.length - 1; i >= 0; i--) {
     const egg = eggs[i];
+    if (state.energyPool) {
+      egg.ageSeconds = (egg.ageSeconds ?? 0) + dt;
+      if (egg.ageSeconds >= EGG_LIFETIME_MULTIPLIER * egg.totalIncubationTime) {
+        closedCarrion(state, egg.x, egg.y, egg.fundedStructural + egg.fundedReserve);
+        eggs.splice(i, 1);
+        onEvent?.('egg_loss');
+        continue;
+      }
+    }
     egg.incubationProgress = Math.min(1.0, egg.incubationProgress + dt / egg.totalIncubationTime);
     egg.pulseTimer += dt * 4.5;
     egg.vy += gravity * dt;
@@ -3464,6 +3521,11 @@ export function stepSimulation(
     // Check viability at completion
     if (egg.incubationProgress >= 1.0) {
       const requiredBodyCost = egg.genome.bodyCost;
+      if (state.energyPool && (state.energyPool.reserve < 0 || remainingEggEnergy < requiredBodyCost
+        || remainingEggEnergy + 1e-7 < eggEnergyRequirement(egg))) {
+        egg.readyToHatch = true;
+        continue;
+      }
 
       if (remainingEggEnergy < requiredBodyCost) {
         // Nonviable eggs leave edible remains, with no unfunded energy.
@@ -3490,7 +3552,7 @@ export function stepSimulation(
 
       // Successful Hatching: Exactly fundedStructural becomes structural biomass, remaining becomes usable reserve
       egg.readyToHatch = true;
-      if (organisms.filter(o => !o.dissolving).length < (settings.maxOrganisms ?? 50)) {
+      if (state.energyPool || organisms.filter(o => !o.dissolving).length < (settings.maxOrganisms ?? 50)) {
         egg.hatchHeading ??= prng.range(0, Math.PI * 2);
         sharedHatchObstacles ??= hatchObstacles(organisms);
         const heading = hatchPlacement(egg, settings, organisms, sharedHatchObstacles).heading;
@@ -3558,7 +3620,10 @@ export function stepSimulation(
       if (org.dissolveAlpha <= 0) {
         const deadPos = org.segments[0];
         const totalRemainingEnergy = Math.max(0, org.structuralBiomass) + Math.max(0, org.energy);
-        if (totalRemainingEnergy > 0 && nutrients.length < 2200) {
+        if (state.energyPool) {
+          closedCarrion(state, clampVal(deadPos.x, 40, worldWidth - 40),
+            clampVal(deadPos.y, 40, worldHeight - 40), totalRemainingEnergy);
+        } else if (totalRemainingEnergy > 0 && nutrients.length < 2200) {
           nutrients.push({
             id: `REM-${prng.nextUint32().toString(36)}`,
             kind: 'carrion', decayTimeRemaining: CARRION_DECAY_SECONDS,
@@ -3769,10 +3834,14 @@ export function stepSimulation(
     // Mutations in a living animal's learned offsets change subsequent
     // motor commands only, with their own debited metabolic cost.
     if ((g.plasticityRate ?? 0) > 0) {
-      org.plasticityEnergyRate = applyWakingPlasticity(org, dt, ledger) / dt;
+      const motorLearningCost = applyWakingPlasticity(org, dt, ledger);
+      org.plasticityEnergyRate = motorLearningCost / dt;
+      returnedEnergy += motorLearningCost;
     }
     if ((g.sensoryPlasticityRate ?? 0) > 0) {
-      const sensoryCost = applySensoryAssociations(org, dt, ledger) / dt;
+      const sensoryCostJ = applySensoryAssociations(org, dt, ledger);
+      returnedEnergy += sensoryCostJ;
+      const sensoryCost = sensoryCostJ / dt;
       // The displayed rate is THIS tick's debit, not a running sum when
       // sensory learning evolves without the older motor-learning allele.
       org.plasticityEnergyRate = ((g.plasticityRate ?? 0) > 0
@@ -3834,6 +3903,7 @@ export function stepSimulation(
     org.energy = Math.max(0.0, org.energy - requiredExpenditure);
     ledger.metabolicDissipation += totalBasalDissipation * paidFraction;
     ledger.mechanicalWorkHeat += frameMechanicalWork * (corrected ? 1 : paidFraction);
+    returnedEnergy += totalBasalDissipation * paidFraction + frameMechanicalWork * (corrected ? 1 : paidFraction);
 
   }
   // Feeding has its own post-movement index; sight bounds must never be reused.
@@ -3876,6 +3946,7 @@ export function stepSimulation(
         remainingIntake = Math.max(0, remainingIntake - transfer);
         org.energy += absorbed;
         ledger.metabolicDissipation += transfer - absorbed;
+        returnedEnergy += transfer - absorbed;
         org.isFeedingHighlight = .2;
         recordFeedingEvent(org, state.simTime, mouth.id, mouth.mouthType, category, absorbed);
         return transfer;
@@ -3935,6 +4006,7 @@ export function stepSimulation(
           egg.fundedStructural = Math.max(0, egg.fundedStructural - (transfer - reserve));
           if (egg.fundedReserve + egg.fundedStructural <= 2) {
             ledger.recordedLosses += egg.fundedReserve + egg.fundedStructural;
+            returnedEnergy += egg.fundedReserve + egg.fundedStructural;
             org.eggsPredated = (org.eggsPredated || 0) + 1;
             org.preyEaten++; org.foodEaten++;
             eggs.splice(i, 1); oralEggGrid = undefined;
@@ -3958,6 +4030,7 @@ export function stepSimulation(
         food.radius = getNutrientRadius(food.energyValue);
         if (food.energyValue <= 1) {
           ledger.recordedLosses += food.energyValue;
+          returnedEnergy += food.energyValue;
           org.foodEaten++;
           nutrients.splice(i, 1);
           if (onEvent) onEvent('eat');
@@ -3983,10 +4056,11 @@ export function stepSimulation(
 
     if (
       org.isGravid &&
-      organisms.filter(o => !o.dissolving).length < (settings.maxOrganisms ?? 50) &&
+      occupiedPopulation(state) < (settings.maxOrganisms ?? 50) &&
       eggs.length < 75
     ) {
-      const clutchCount = Math.min(actualClutchSize, 75 - eggs.length);
+      const clutchCount = Math.min(actualClutchSize, 75 - eggs.length,
+        state.energyPool ? (settings.maxOrganisms ?? 50) - occupiedPopulation(state) : Infinity);
 
       if (clutchCount >= 1) {
         const rearSeg = org.segments[org.segments.length - 1];
@@ -4015,7 +4089,7 @@ export function stepSimulation(
             const angleSpread = (k - (clutchCount - 1) / 2) * 0.35;
             const layAngle = rearSeg.angle + Math.PI + angleSpread;
 
-            eggs.push({
+            const laidEgg: Egg = {
               id: `EGG-${prng.nextUint32().toString(36).substring(0, 5)}`,
               clutchId,
               parentOrgId: org.id,
@@ -4031,7 +4105,9 @@ export function stepSimulation(
               pulseTimer: k * 0.4,
               colorHue: babyGenome.hue,
               readyToHatch: false,
-            });
+            };
+            if (state.energyPool) initializeClosedEgg(laidEgg);
+            eggs.push(laidEgg);
           }
         }
 
@@ -4046,6 +4122,7 @@ export function stepSimulation(
 
     org.isGravid = evaluateReproductionAffordability(
       org, state.simTime, organisms.filter(o => !o.dissolving).length, eggs.length, settings.maxOrganisms ?? 50,
+      75, Boolean(state.energyPool),
     ).eligible;
 
     // F. Starvation & Senescence (Precise Cause Attribution)
@@ -4075,5 +4152,6 @@ export function stepSimulation(
   if (bubbles.length > 60) {
     bubbles.splice(0, bubbles.length - 60);
   }
+  if (state.energyPool) state.energyPool.reserve += returnedEnergy;
 }
 

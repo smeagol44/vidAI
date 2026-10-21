@@ -1,4 +1,5 @@
 import {markLineageChanged} from './lineageChanges';
+import {enableClosedEconomy, occupiedPopulation} from './energyEconomy';
 import {
   XoshiroPRNG, spawnOrganism, createArchetypeGenome, getDietClassification,
   addNutrients, type ArchetypeId, type Genome,
@@ -7,11 +8,13 @@ import {
 import {FEATURED_BLUEPRINTS, createFounderGenome, sampleFounderGenomes, type FounderMode} from './founders';
 
 export function addExternalOrganism(s: SimulationState, g: Genome, settings: SimulationSettings, x: number, y: number, heading?: number) {
-  if (s.organisms.filter(o => !o.dissolving).length >= (settings.maxOrganisms ?? 100)) return null;
+  if (occupiedPopulation(s) >= (settings.maxOrganisms ?? 100)) return null;
   const genome = structuredClone(g);
   const org = spawnOrganism(genome, x, y, heading ?? s.prng.range(0, Math.PI * 2), undefined, undefined, s.prng);
+  if (s.energyPool && s.energyPool.reserve < org.energy + org.structuralBiomass) return null;
   s.organisms.push(org); s.totalBirths++;
-  s.ledger.externalInflow += org.energy + org.structuralBiomass;
+  if (s.energyPool) s.energyPool.reserve -= org.energy + org.structuralBiomass;
+  else s.ledger.externalInflow += org.energy + org.structuralBiomass;
   s.lineage.set(org.id, {id: org.id, name: genome.name, parentIds: [], generation: genome.generation,
     birthTime: s.simTime, offspringCount: 0, archetype: genome.archetype ?? 'Custom',
     hue: genome.hue, diet: getDietClassification(genome.mouths).label, genome});
@@ -38,6 +41,12 @@ export function createInitialWorld(settings: SimulationSettings, seed = 4242, mo
   addNutrients(s, settings, settings.targetNutrients);
   for (let i = 0; i < 28; i++) s.caustics.push({x: prng.range(0, settings.worldWidth), y: prng.range(0, settings.worldHeight),
     radius: prng.range(140, 320), speed: prng.range(.2, .55), alpha: prng.range(.04, .1), angle: prng.range(0, Math.PI * 2)});
+  if (settings.ecologyRegime === 'closed-v1') {
+    enableClosedEconomy(s);
+    // The count cap changes distribution, never the initial total grant.
+    while (s.nutrients.length > (settings.nutrientLimit ?? Infinity))
+      s.energyPool!.reserve += s.nutrients.pop()!.energyValue;
+  }
   return s;
 }
 

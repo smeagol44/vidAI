@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - 'simulation.worker.ts'
+      - 'energyEconomy.ts'
+      - 'tests/closed-energy.test.ts'
       - 'foundationPhysics.ts'
       - 'tests/foundation-physics.test.ts'
       - 'scripts/check-worker.mjs'

@@ -1,5 +1,53 @@
 # Project status — 2026-10-21
 
+## Closed ecological energy and finite eggs — v0.35.0
+
+- New application worlds have a finite pool initialized from actual seeded
+  stores, initially 275 food particles plus funded founders, with zero reserve.
+  Nutrient cap defaults to Unlimited; conversion and all manual food/life spend
+  reserve. Budget edits can introduce debt. Expenditure, unassimilated food,
+  clearing and carrion return energy exactly once. Cumulative counters are
+  diagnostics, excluded from current closed stocks.
+- Population slots include eggs. Laying clamps each clutch to available slots;
+  hatching replaces a reserved slot even above a lowered cap. Parent-funded
+  laying during debt is allowed. Hatching waits for debt, funding and clearance.
+- Parent egg costs and all starter/brain/body/diet genes remain unchanged. New
+  closed eggs have a reserve target 10% above the parent's paid reserve, capped
+  by inherited capacity, plus an uptake rate of 10% of target per incubation
+  duration. Positive world reserves fund shared uptake proportionally. Bites
+  can prevent a hatch or permit later recovery. This is abstract incubation
+  energy, not a local heat simulation. Maximum age is three incubation periods;
+  expired eggs transfer all funding to carrion, which later repays world debt.
+- Food capacity remains 2200 ordinary slots; overflow remains aggregate into
+  carrion, with one extra carrion slot if all ordinary slots are plants. Merging
+  restarts that carrion's decay timer. No capacity loss of energy. Population
+  defaults to 30 combined slots, adjustable to 150; the 75-egg safety limit remains.
+  Closed worlds continue recycling after extinction rather than auto-pausing.
+- Schema v13 persists pool and egg targets/timers. Old schemas retain exact open
+  ecology and all saved physics modes. Explicit conversion uses current stores,
+  zero reserve and known incubation age only, never accumulated historical sinks.
+  Reset creates a new closed world. Brain stays v7; no 3D or sleep/replay work.
+- Mechanism checks cover conserved transfers, partial physical egg predation,
+  recovery/expiry/debt, slot-neutral hatching, capped laying, overflow aggregation,
+  exact save continuation and Worker/direct equivalence. The nine frozen starters
+  retain byte-identical canonical organism state after five accounting-only
+  seconds; existing recovery and historical complete-state hashes remain gates.
+- Paired unassisted 60-second nine-starter showcase observations (seeds 17/73):
+  open and closed both end with 9/11 living creatures and 0 eggs. Closed nutrient
+  counts are 271/267 versus open 275/275. Closed budget remains 972000 J; open
+  external inputs rise to 1017000/1026000 J. Maximum closed stock error is below
+  1.5e-8 J. One seed naturally hatches two offspring in both modes; this does not
+  establish sustained multigeneration ecology or prove the incubation constants.
+- Timing: the first ecological closed run has a 27.6s wall-time outlier versus
+  6.3s open; the other pair is 9.2s closed versus 8.7s open. Alternating same-state
+  ten-second comparisons isolate accounting from food differences and retain
+  identical aggregate distance. Full values, including repeat timing and CPU
+  usage, are retained in `docs/experiments/closed-energy-v1.json`. These are
+  diagnostic timings, not a browser FPS claim.
+- Still open: coherent normalized replacement drag/muscles, solver constraint/
+  contact/limit energy, legacy clamp dependence, longer ecology, evaluation of
+  incubation constants and allocation priorities, and higher capacity defaults.
+
 ## Swimming recovery — v0.34.1
 
 - The v0.34.0 default caused a severe locomotion failure. Formula/accounting

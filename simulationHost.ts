@@ -1,4 +1,5 @@
 import {watchLineage} from './lineageChanges';
+import {occupiedPopulation, setWorldEnergy} from './energyEconomy';
 import {stepSimulation, addNutrients, nutrientSpawnSlots, createArchetypeGenome,
   clampVal, type Genome, type SimulationState, type SimulationSettings,
   type Organism, type Egg, type LineageRecord, type ArchetypeId} from './simulation';
@@ -7,6 +8,7 @@ import {addExternalOrganism} from './world';
 
 export type WorldSnapshot = ReturnType<typeof createSnapshot>;
 export type WorldAction =
+  | {kind: 'energy-budget'; joules: number}
   | {kind: 'feed'; x: number; y: number; count: number}
   | {kind: 'feed-all'} | {kind: 'clear-food'}
   | {kind: 'resize'; width: number; height: number}
@@ -50,6 +52,7 @@ export class SimulationHost {
   }
   action(action: WorldAction): string | number | null {
     const s = this.state, config = this.settings;
+    if (action.kind === 'energy-budget') {setWorldEnergy(s, action.joules); return s.energyPool!.reserve;}
     if (action.kind === 'feed') return addNutrients(s, config, action.count,
       {x: action.x, y: action.y, spread: 80});
     if (action.kind === 'clear-food') return clearFreeNutrients(s);
@@ -69,7 +72,7 @@ export class SimulationHost {
       }
       return added;
     }
-    if (s.organisms.filter(o => !o.dissolving).length >= (config.maxOrganisms ?? 100)) return null;
+    if (occupiedPopulation(s) >= (config.maxOrganisms ?? 100)) return null;
     const x = clampVal(action.x + s.prng.range(-80, 80), 100, config.worldWidth - 100);
     const y = clampVal(action.y + s.prng.range(-80, 80), 100, config.worldHeight - 100);
     const g = action.genome ? structuredClone(action.genome)

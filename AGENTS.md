@@ -1,3 +1,37 @@
+# Closed ecological economy and eggs (v0.35.0)
+
+- New application worlds explicitly use `ecologyRegime: closed-v1`; omitted
+  kernel settings remain open for historical callers/tests. Pool presence owns
+  the live regime; never switch ecology or physics through control packets.
+- `energyPool` is a LIVE stock: embodied bodies/reserves/food/eggs plus signed
+  reserve equals budget. Heat/loss counters stay cumulative diagnostics and
+  are not stock terms. Return actual expenditure once, never differences of
+  large historical counters. Budget edits are authoritative Worker actions.
+- Normal nutrient generation, Feed/Feed All and manual life spend available
+  reserve. Count caps bank energy; lowering caps deletes nothing. Carrion decays
+  to reserve, including across debt zero. At the 2200-food safety limit, merge
+  remains into carrion or allow one extra carrion slot, retaining every joule.
+- Closed population occupancy is living creatures + eggs; clamp each clutch
+  before charging. Hatching replaces a slot even above a subsequently lowered
+  cap. Keep the separate 75-egg safety limit visible. Do not remove old occupants.
+- Closed eggs save ageSeconds and hatchReserveTarget. Parent funding is unchanged;
+  target is parent-funded reserve plus 10%, capped by baby storage. Shared uptake
+  rate is target * .1 / incubation seconds, funded proportionally from positive
+  reserve. Repair missing structure then reserve. No heat-source/temperature model.
+- Laying during world debt is allowed if parent-funded and a slot exists.
+  Hatching requires body+target energy, completed incubation, nonnegative world
+  reserve and physical clearance. Blocked/damaged eggs age until 3*incubation,
+  then become carrion exactly once. Expiry wins on the boundary. Zero reserve
+  does not block an already-funded hatch. Closed extinct worlds keep recycling.
+- New closed saves use schema v13; open snapshots stay v12 and exact. Conversion
+  uses only present stores, zero world reserve, known incubation progress for age
+  (ready eggs get two incubation periods of grace), and remaining reserve for the
+  new target. Never reclaim historical expenditure or invent prior egg uptake.
+- `tests/closed-energy.test.ts`, production Worker checks and focused CI browser
+  controls protect the new mode and legacy import. Frozen starter/body/brain/diet
+  settings and all physics equations remain unchanged. Longer ecology and
+  higher computational capacities remain open; preserve preproduction disclosure.
+
 # Swimming recovery and release policy (v0.34.1, current)
 
 - New worlds use `paid-work-v2`: established drag/inertia-based muscles and

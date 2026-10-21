@@ -1,11 +1,12 @@
 import {NEW_PHYSICS_REGIME} from './foundationPhysics';
+import {embodiedEnergy, FOOD_SAFETY_LIMIT} from './energyEconomy';
 import {
   XoshiroPRNG, migrateOrganismBrain, ensureBrainLayout, calculateBodyCost,
   calculateMaxEnergyCapacity, clampVal, getPartCornerVertices,
   getBrainLayout, getDietClassification, brainEdgeKey, CARRION_DECAY_SECONDS, MAX_OUTPUTS, MAX_SURFACE_ORGANS, MAX_NEURAL_INPUTS, MAX_HIDDEN, MAX_ENABLED_BRAIN_EDGES, MAX_BRAIN_MEMORY_SECONDS, MAX_PLASTIC_MOTOR_SYNAPSES, MAX_PLASTIC_SENSORY_SYNAPSES, MAX_LEARNED_MOTOR_DELTA, plasticMotorEdges, plasticSensoryEdges, surfacePlacementProblems, morphologyProblems, type Genome, type SimulationSettings, type SimulationState, type Organism,
 } from './simulation';
 
-export const BUILD_VERSION = '0.34.1';
+export const BUILD_VERSION = '0.35.0';
 export const DEFAULT_SETTINGS: SimulationSettings = {
   physicsRegime: NEW_PHYSICS_REGIME,
   worldWidth: 2400, worldHeight: 1500, waterViscosity: .18,
@@ -16,6 +17,7 @@ export const LEGACY_SETTINGS: SimulationSettings = {...DEFAULT_SETTINGS, physics
 export const CREDITS = 'By Hernán Garro & Federico Regueira';
 
 export function totalAccountedEnergy(s: SimulationState): number {
+  if (s.energyPool) return embodiedEnergy(s) + s.energyPool.reserve;
   return s.organisms.reduce((sum, o) => sum + o.energy + o.structuralBiomass, 0)
     + s.eggs.reduce((sum, e) => sum + e.fundedReserve + e.fundedStructural, 0)
     + s.nutrients.reduce((sum, n) => sum + n.energyValue, 0)
@@ -25,6 +27,7 @@ export function totalAccountedEnergy(s: SimulationState): number {
 export function clearFreeNutrients(s: SimulationState): number {
   const removed = s.nutrients.filter(n => n.kind !== 'carrion').reduce((sum, n) => sum + n.energyValue, 0);
   s.ledger.recordedLosses += removed;
+  if (s.energyPool) s.energyPool.reserve += removed;
   s.nutrients = s.nutrients.filter(n => n.kind === 'carrion');
   s.nutrientAccumulator = 0;
   return removed;
@@ -56,7 +59,9 @@ export function resizeWorld(s: SimulationState, old: SimulationSettings, width: 
 
 export function createSnapshot(s: SimulationState, settings: SimulationSettings, metadata: Record<string, unknown> = {}) {
   const {prng, lineage, ...data} = s;
-  const snapshot = {schemaVersion: '12.0.0', build: BUILD_VERSION, metadata, settings: {...settings, physicsRegime: settings.physicsRegime ?? 'legacy-v0'},
+  const snapshot = {schemaVersion: s.energyPool ? '13.0.0' : '12.0.0', build: BUILD_VERSION, metadata, settings: {...settings,
+    ...(s.energyPool ? {ecologyRegime: 'closed-v1' as const, nutrientLimit: settings.nutrientLimit ?? null} : {}),
+    physicsRegime: settings.physicsRegime ?? 'legacy-v0'},
     state: {...data, prngState: prng.getState(), lineage: [...lineage]}};
   // Canonical JSON representation also drops optional undefined fields in memory.
   return JSON.parse(JSON.stringify(snapshot)) as typeof snapshot;
@@ -195,7 +200,7 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     assert(input.length <= 25_000_000, 'file exceeds 25 MB'); return JSON.parse(input);
   })() : structuredClone(input);
   assert(raw && typeof raw === 'object', 'document');
-  assert(['12.0.0', '11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
+  assert(['13.0.0', '12.0.0', '11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
   const legacy = raw.schemaVersion === '3.0.0';
   const data = legacy ? raw : raw.state;
   assert(data && typeof data === 'object', 'state');
@@ -203,8 +208,18 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   // Historical omitted fields retain their original values; new-world defaults
   // must not silently change old snapshot ecology.
   const settings: SimulationSettings = {...DEFAULT_SETTINGS, targetNutrients: 400, maxOrganisms: 100, physicsRegime: 'legacy-v0', ...raw.settings};
-  if (raw.schemaVersion !== '12.0.0') settings.physicsRegime = 'legacy-v0';
+  if (raw.schemaVersion !== '12.0.0' && raw.schemaVersion !== '13.0.0') settings.physicsRegime = 'legacy-v0';
   else assert(['legacy-v0', 'surface-work-v1', NEW_PHYSICS_REGIME].includes(raw.settings?.physicsRegime), 'physics regime');
+  const closed = raw.schemaVersion === '13.0.0';
+  assert(closed ? settings.ecologyRegime === 'closed-v1' && data.energyPool?.regime === 'closed-v1'
+    : settings.ecologyRegime === undefined && data.energyPool === undefined, 'ecology regime');
+  if (closed) {
+    const pool = data.energyPool;
+    assert(Number.isFinite(pool.budget) && pool.budget >= 0 && pool.budget <= 1e9
+      && Number.isFinite(pool.reserve), 'world energy pool');
+    assert(settings.nutrientLimit === null || (Number.isInteger(settings.nutrientLimit)
+      && settings.nutrientLimit! >= 0 && settings.nutrientLimit! <= FOOD_SAFETY_LIMIT), 'nutrient limit');
+  }
   for (const [key, min, max] of [['worldWidth', 800, 4800], ['worldHeight', 600, 3000], ['waterViscosity', 0, .8],
     ['targetNutrients', 0, 800], ['inflowRate', 0, 150], ['gravity', -200, 200], ['maxOrganisms', 1, 150], ['mutationSeverity', 0, 1]] as const) {
     assert(typeof settings[key] === 'number' && Number.isFinite(settings[key]) && settings[key]! >= min && settings[key]! <= max, `setting ${key}`);
@@ -213,13 +228,13 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   assert(settings.nutrientPattern === 'uniform' || settings.nutrientPattern === 'blooms', 'nutrient distribution');
   assert(typeof settings.kinshipProtection === 'boolean', 'kinship setting');
   for (const [key, limit] of [['organisms', 500], ['eggs', 300], ['nutrients', 2200], ['lineage', 20000]] as const) {
-    assert(Array.isArray(data[key]) && data[key].length <= limit, key);
+    assert(Array.isArray(data[key]) && data[key].length <= (closed && key === 'nutrients' ? FOOD_SAFETY_LIMIT + 1 : limit), key);
   }
   assert(Array.isArray(data.prngState) && data.prngState.length === 4 && data.prngState.every((n: unknown) => Number.isInteger(n) && Number(n) >= 0 && Number(n) <= 0xffffffff)
     && data.prngState.some((n: number) => n !== 0), 'PRNG state');
   const prng = new XoshiroPRNG(); prng.setState(data.prngState);
   const organisms: Organism[] = data.organisms.map((o: Organism) => {
-    if (raw.schemaVersion === '12.0.0' || raw.schemaVersion === '11.0.0') {
+    if (raw.schemaVersion === '13.0.0' || raw.schemaVersion === '12.0.0' || raw.schemaVersion === '11.0.0') {
       assert(o.genome.brainVersion === 7, 'current brain version');
     } else {
       if (raw.schemaVersion === '10.0.0') assert(o.genome.brainVersion === 6, 'previous brain version');
@@ -321,6 +336,10 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     assert([egg.x, egg.y, egg.vx, egg.vy, egg.fundedReserve, egg.fundedStructural, egg.incubationProgress, egg.totalIncubationTime].every(Number.isFinite)
       && (egg.hatchHeading === undefined || Number.isFinite(egg.hatchHeading))
       && egg.fundedReserve >= 0 && egg.fundedStructural >= 0 && egg.totalIncubationTime > 0, 'egg state');
+    if (closed) assert(Number.isFinite(egg.ageSeconds) && egg.ageSeconds >= 0
+      && Number.isFinite(egg.hatchReserveTarget) && egg.hatchReserveTarget >= 0
+      && egg.hatchReserveTarget <= egg.genome.maxEnergyCapacity
+      && egg.incubationProgress >= 0 && egg.incubationProgress <= 1, 'closed egg state');
   }
   for (const n of data.nutrients) {
     assert([n.x, n.y, n.vx, n.vy, n.energyValue, n.radius].every(Number.isFinite) && n.energyValue >= 0 && n.radius > 0, 'nutrient state');
@@ -328,6 +347,8 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     assert(n.decayTimeRemaining === undefined || (Number.isFinite(n.decayTimeRemaining) && n.decayTimeRemaining >= 0 && n.decayTimeRemaining <= CARRION_DECAY_SECONDS), 'food decay timer');
     assert(n.kind !== 'carrion' || n.decayTimeRemaining !== undefined, 'carrion decay timer');
   }
+  if (closed && data.nutrients.length > FOOD_SAFETY_LIMIT)
+    assert(data.nutrients.some((n: {kind?: string}) => n.kind === 'carrion'), 'overflow carrion slot');
   const ledger = data.ledger;
   assert(ledger && ['externalInflow', 'metabolicDissipation', 'mechanicalWorkHeat', 'recordedLosses'].every(k => Number.isFinite(ledger[k]) && ledger[k] >= 0), 'energy ledger');
   assert(Number.isFinite(data.simTime) && data.simTime >= 0, 'simulation time');
@@ -346,6 +367,8 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   };
   delete (state as unknown as Record<string, unknown>).prngState;
   for (const rec of state.lineage.values()) rec.genome = validateGenome(rec.genome);
+  if (closed) assert(Math.abs(totalAccountedEnergy(state) - state.energyPool!.budget)
+    <= Math.max(1e-5, state.energyPool!.budget * 1e-10), 'world energy conservation');
   return {state, settings, metadata: raw.metadata ?? {legacyImport: true}};
 }
 
@@ -361,7 +384,8 @@ export function diagnosticReport(s: SimulationState, settings: SimulationSetting
         const diet = getDietClassification(o.genome.mouths).category;
         counts[diet] = (counts[diet] ?? 0) + 1; return counts;
       }, {})},
-    energy: {...s.ledger, accounted: totalAccountedEnergy(s), errorJ: totalAccountedEnergy(s) - s.ledger.externalInflow},
+    energy: {...s.ledger, ...(s.energyPool ? {pool: {...s.energyPool}, embodied: embodiedEnergy(s)} : {}),
+      accounted: totalAccountedEnergy(s), errorJ: totalAccountedEnergy(s) - (s.energyPool?.budget ?? s.ledger.externalInflow)},
     recentDeaths: s.recentDeaths,
     selected: selected ? {motorDiagnostics: selected.motorDiagnostics, id: selected.id, name: selected.genome.name, generation: selected.genome.generation,
       age: selected.age, lifespan: selected.maxLifespan, energy: selected.energy, capacity: selected.genome.maxEnergyCapacity,

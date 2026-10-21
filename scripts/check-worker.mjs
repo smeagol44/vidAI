@@ -3,6 +3,9 @@ import {Worker} from 'node:worker_threads';
 import {readdir} from 'node:fs/promises';
 import {createInitialWorld} from '../world.ts';
 import {DEFAULT_SETTINGS, createSnapshot, restoreSnapshot} from '../persistence.ts';
+import {enableClosedEconomy, setWorldEnergy} from '../energyEconomy.ts';
+import {totalAccountedEnergy} from '../persistence.ts';
+import {stepSimulation} from '../simulation.ts';
 
 // Exercise the actual production-built Worker with real cross-thread cloning.
 // Only the browser's message port is adapted to node:worker_threads.
@@ -81,5 +84,33 @@ try {
   const rejected = await receive(value => value.id === -77);
   assert.equal(rejected.type, 'error'); assert.match(rejected.message, /regime/);
   assert.equal((await request('snapshot', {}, 3)).settings.physicsRegime, 'legacy-v0');
-  console.log('Production Worker: exact export, capped commands, independent stepping, pause, both physics regimes, regime-switch rejection and stale-world rejection passed.');
+  const closed = restoreSnapshot(fed).state;
+  enableClosedEconomy(closed);
+  const closedSettings = {...settings, ecologyRegime: 'closed-v1', nutrientLimit: null};
+  const closedSource = createSnapshot(closed, closedSettings);
+  send({type: 'reset', snapshot: closedSource, epoch: 4});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 4);
+  assert.equal((await request('snapshot', {}, 4)).schemaVersion, '13.0.0');
+  assert.equal(await request('action', {action: {kind: 'feed', count: 1, x: 800, y: 600}}, 4), 0);
+  const raised = closed.energyPool.budget + 6000;
+  await request('action', {action: {kind: 'energy-budget', joules: raised}}, 4);
+  assert.equal(await request('action', {action: {kind: 'feed', count: 2, x: 800, y: 600}}, 4), 2);
+  const ready = await request('snapshot', {}, 4);
+  const direct = restoreSnapshot(ready).state;
+  send({type: 'ack', epoch: 4});
+  send({type: 'control', epoch: 4, settings: closedSettings, speed: 1, selected: null, running: true});
+  await new Promise(resolve => setTimeout(resolve, 100));
+  send({type: 'control', epoch: 4, settings: closedSettings, speed: 1, selected: null, running: false});
+  const closedPaused = await request('snapshot', {}, 4);
+  const ticks = Math.round((closedPaused.state.simTime - ready.state.simTime) * 60);
+  assert.ok(ticks > 0);
+  for (let i = 0; i < ticks; i++) stepSimulation(direct, closedSettings, 1 / 60);
+  assert.deepEqual(closedPaused.state, createSnapshot(direct, closedSettings).state);
+  await request('action', {action: {kind: 'energy-budget', joules: 0}}, 4);
+  setWorldEnergy(direct, 0);
+  assert.deepEqual((await request('snapshot', {}, 4)).state, createSnapshot(direct, closedSettings).state);
+  assert.ok(Math.abs(totalAccountedEnergy(direct)) < 1e-5);
+  send({type: 'control', epoch: 4, id: -78, settings, speed: 1, selected: null, running: false});
+  assert.match((await receive(value => value.id === -78)).message, /Ecology regime/);
+  console.log('Production Worker: open/closed exact exports, funded commands, independent stepping, debt, direct equivalence, all physics regimes, regime-switch and stale-world rejection passed.');
 } finally { await worker.terminate(); }

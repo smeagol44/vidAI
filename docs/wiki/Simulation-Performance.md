@@ -59,8 +59,8 @@ fixed-tick behavior when the Worker is unavailable or explicitly disabled.
 
 These optimizations preserve physical substeps, sensing rates and numerical
 ordering. Spatial/neural scratch is transient and never saved. New corpses
-produce one conserved-chemical-energy circle when capacity permits; stored
-fragments remain intact on import. See [Ecology](Ecology-Baseline).
+produce one conserved-energy circle; closed worlds aggregate carrion at the
+food safety limit instead of discarding it. Stored fragments remain intact on import. See [Ecology](Ecology-Baseline).
 
 ## FPS and simulation speed
 
@@ -92,3 +92,16 @@ Chromium/Firefox checks cover actual UI/Worker integration in CI.
 Synthetic and component measurements do not predict a user's browser FPS.
 Historical timing tables are in
 [project status](https://github.com/smeagol44/vidAI/blob/main/docs/PROJECT_STATUS.md).
+
+## Economy state and capacity
+
+Closed worlds persist their live reserve/budget and egg age/target in schema v13;
+open saved worlds retain schema v12 and exact behavior. Budget edits are Worker
+actions between ticks. Imports and explicit conversion use authoritative state;
+control packets cannot switch physics or ecology regimes.
+
+Population remains bounded at 30 slots initially (living creatures plus eggs in
+closed worlds), adjustable to 150. The separate 75-egg computational limit is
+retained. Food conversion stops at 2,200 particles and banks remaining energy;
+one extra carrion slot plus carrion aggregation preserves remains at capacity.
+Unlimited ecological nutrients does not remove these computational safeguards.

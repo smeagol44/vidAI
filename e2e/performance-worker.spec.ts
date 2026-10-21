@@ -1,10 +1,53 @@
 import {test, expect} from '@playwright/test';
 import {readFile} from 'node:fs/promises';
 import {DEFAULT_SETTINGS, createSnapshot} from '../persistence';
+import {embodiedEnergy} from '../energyEconomy';
 import {createInitialWorld, addExternalOrganism} from '../world';
 import {createFounderGenome} from '../founders';
 
 test.use({viewport: {width: 1280, height: 850}});
+for (const mainthread of [false, true]) test(`closed-budget conversion, controls and exact export (${mainthread ? 'fallback' : 'Worker'})`, async ({page}) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.goto(`./?autoplay${mainthread ? '&mainthread' : ''}`);
+  await page.getByTitle('Ecology & Physical Settings').click();
+  await expect(page.getByLabel('Unlimited nutrients', {exact: true})).toBeChecked();
+  const config = {...DEFAULT_SETTINGS, targetNutrients: 3, inflowRate: 0};
+  const state = createInitialWorld(config, 91, 'balanced', 'standard', 1);
+  state.ledger.recordedLosses += 100000000;
+  const source = createSnapshot(state, config);
+  const upload = (snapshot: unknown) => page.locator('input[type=file]').setInputFiles({name: 'economy.json',
+    mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(snapshot))});
+  const read = async () => {
+    const download = page.waitForEvent('download');
+    await page.getByRole('button', {name: 'Export Snapshot', exact: true}).dispatchEvent('click');
+    return JSON.parse(await readFile((await (await download).path())!, 'utf8'));
+  };
+  await upload(source);
+  await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
+  await page.getByRole('button', {name: 'Convert this world to a closed energy budget', exact: true}).dispatchEvent('click');
+  await expect(page.getByTestId('closed-energy-controls')).toBeVisible();
+  const converted = await read();
+  expect(converted.schemaVersion).toBe('13.0.0');
+  expect(converted.state.energyPool.budget).toBe(embodiedEnergy(state));
+  expect(converted.state.energyPool.reserve).toBe(0);
+  expect(converted.state.organisms).toEqual(source.state.organisms);
+  expect(converted.state.prngState).toEqual(source.state.prngState);
+  await page.getByLabel('Total world energy', {exact: true}).evaluate(node => {
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(node, '0');
+    node.dispatchEvent(new Event('input', {bubbles: true}));
+    node.dispatchEvent(new Event('change', {bubbles: true}));
+  });
+  await expect.poll(async () => (await read()).state.energyPool.budget).toBe(0);
+  const debt = await read();
+  expect(debt.state.energyPool.reserve).toBe(-embodiedEnergy(state));
+  await page.getByRole('button', {name: 'Clear Free Nutrients', exact: true}).dispatchEvent('click');
+  await expect.poll(async () => (await read()).state.nutrients.length).toBe(0);
+  const cleared = await read();
+  expect(cleared.state.energyPool.reserve).toBe(debt.state.energyPool.reserve + 9000);
+  await upload(cleared);
+  expect((await read()).state).toEqual(cleared.state);
+  expect(errors).toEqual([]);
+});
 for (const physicsRegime of ['paid-work-v2', 'surface-work-v1', 'legacy-v0'] as const) test(`worker imports/exports ${physicsRegime} and owns feeding/spawning while rendering stays independent`, async ({page}) => {
   const errors: string[] = []; const workers: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -63,8 +106,9 @@ test('new worlds use requested defaults and creature clicks keep diagnostics clo
   });
   await page.goto('./?autoplay');
   await page.getByTitle('Ecology & Physical Settings').click();
-  await expect(page.getByLabel('Nutrient target', {exact: true})).toHaveValue('275');
-  await expect(page.getByLabel('Maximum living creatures', {exact: true})).toHaveValue('30');
+  await expect(page.getByLabel('Unlimited nutrients', {exact: true})).toBeChecked();
+  await expect(page.getByTestId('closed-energy-controls')).toBeVisible();
+  await expect(page.getByLabel('Maximum creatures + eggs', {exact: true})).toHaveValue('30');
   await expect(page.locator('#simulation-seed')).toHaveValue('123456789');
 
   const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0};

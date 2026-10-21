@@ -53,7 +53,7 @@ motion, rather than a direct position command, closes the feedback loop.
 | `surface-work-v1` | Unit-depth four-face drag, geometric muscles and sequential paid impulses; kept for exact continuation of stored worlds |
 | `legacy-v0` | Original forces, integration and legacy billing; used by v3–v11 imports |
 
-Save schema v12 validates the regime. Export, fork, Worker commands and fallback
+Save schemas v12 (open economy) and v13 (closed economy) validate the regime. Export, fork, Worker commands and fallback
 preserve it. Reset creates a current-physics world. A stored surface-model world
 can explicitly select **Repair swimming in this world** in settings, keeping its
 creatures, eggs, food, time, PRNG and personal memory while changing future
