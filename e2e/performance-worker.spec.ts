@@ -19,23 +19,24 @@ for (const mainthread of [false, true]) test(`notifications expire and replaceme
   await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
   const notice = page.getByTestId('notification');
   await expect(notice).toContainText('Snapshot restored.');
-  // Advance wall-clock timers while physics is paused. No simulation-time expiry.
+  // Advance wall-clock timers while physics is paused. Skip intermediate canvas
+  // frames: replaying every frame makes a wall-clock timer test renderer-bound.
   await page.clock.install();
   const addLife = () => page.getByRole('button', {name: 'Add Life', exact: true}).dispatchEvent('click');
   const capacityText = /No population slot|Population slots full/;
   await addLife(); await expect(notice).toContainText(capacityText);
-  await page.clock.runFor(1500);
+  await page.clock.fastForward(1500);
   await addLife(); await expect(notice).toContainText(capacityText);
-  await page.clock.runFor(1500);
+  await page.clock.fastForward(1500);
   await expect(notice).toContainText(capacityText); // repeated identical text gets a fresh lifetime
   await page.getByRole('button', {name: 'Clear Free Nutrients', exact: true}).dispatchEvent('click');
   await expect(notice).toContainText('Free nutrients cleared');
-  await page.clock.runFor(1500);
+  await page.clock.fastForward(1500);
   await expect(notice).toContainText('Free nutrients cleared'); // predecessor must not clear replacement
-  await page.clock.runFor(1500);
+  await page.clock.fastForward(1500);
   await expect(notice).toHaveCount(0);
   await addLife(); await expect(notice).toContainText(capacityText);
-  await page.clock.runFor(3000);
+  await page.clock.fastForward(3000);
   await expect(notice).toHaveCount(0);
 });
 for (const mainthread of [false, true]) test(`closed-budget conversion, controls and exact export (${mainthread ? 'fallback' : 'Worker'})`, async ({page}) => {
