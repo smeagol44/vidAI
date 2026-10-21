@@ -297,6 +297,7 @@ export default function App() {
   const [physicsRegime, setPhysicsRegime] = useState<PhysicsRegime>(NEW_PHYSICS_REGIME);
   const [ecologyRegime, setEcologyRegime] = useState<'closed-v1' | undefined>('closed-v1');
   const [nutrientLimit, setNutrientLimit] = useState<number | null>(null);
+  const [energyBudgetDraft, setEnergyBudgetDraft] = useState<number | null>(null);
   const [nutrientPattern, setNutrientPattern] = useState<'uniform' | 'blooms'>('uniform');
   const [kinshipProtectionEnabled, setKinshipProtectionEnabled] = useState<boolean>(true);
   const [gravity, setGravity] = useState(0);
@@ -470,6 +471,10 @@ export default function App() {
   // A replacement world must never be stepped by a render holding its old settings.
   const [worldEpoch, setWorldEpoch] = useState(0);
   const worldEpochRef = useRef(0);
+  useEffect(() => {setEnergyBudgetDraft(null);}, [worldEpoch]);
+  useEffect(() => {
+    if (energyBudgetDraft !== null && energyPool?.budget === energyBudgetDraft) setEnergyBudgetDraft(null);
+  }, [energyPool?.budget, energyBudgetDraft]);
   const replaceWorld = useCallback((state: SimulationState, settings?: SimulationSettings) => {
     worldEpochRef.current++;
     simStateRef.current = state;
@@ -565,7 +570,14 @@ export default function App() {
   };
 
   const changeWorldEnergy = (joules: number) => {
-    if (workerClientRef.current) void workerAction({kind: 'energy-budget', joules});
+    // Keep the input stable until its authoritative frame arrives. Otherwise
+    // controlled-input restoration can send the preceding budget back on change.
+    setEnergyBudgetDraft(joules);
+    const epoch = worldEpochRef.current;
+    if (workerClientRef.current) void workerAction({kind: 'energy-budget', joules}).then(result => {
+      if (result === undefined && epoch === worldEpochRef.current)
+        setEnergyBudgetDraft(current => current === joules ? null : current);
+    });
     else {setWorldEnergy(simStateRef.current, joules); setEcoStats(prev => ({...prev}));}
   };
 
@@ -2017,9 +2029,9 @@ export default function App() {
                 <input aria-label="Maximum nutrients" type="range" min="0" max="2200" step="1"
                   disabled={nutrientLimit === null} value={nutrientLimit ?? 2200}
                   onChange={e => setNutrientLimit(Number(e.target.value))} className="w-full accent-emerald-400" />
-                <label className="flex justify-between">Total world energy <strong>{formatJoules(energyPool.budget)}</strong></label>
-                <input aria-label="Total world energy" type="range" min="0" max={Math.max(10000000, energyPool.budget)} step="1000"
-                  value={energyPool.budget} onChange={e => changeWorldEnergy(Number(e.target.value))} className="w-full accent-cyan-400" />
+                <label className="flex justify-between">Total world energy <strong>{formatJoules(energyBudgetDraft ?? energyPool.budget)}</strong></label>
+                <input aria-label="Total world energy" type="range" min="0" max={Math.max(10000000, energyPool.budget)} step="any"
+                  value={energyBudgetDraft ?? energyPool.budget} onChange={e => changeWorldEnergy(Number(e.target.value))} className="w-full accent-cyan-400" />
                 <div>Embodied energy: {formatJoules(embodiedEnergy(simStateRef.current))}</div>
                 <div className={energyPool.reserve < 0 ? 'text-amber-300' : 'text-emerald-300'}>
                   {energyPool.reserve < 0 ? 'World debt' : 'World reserve'}: {formatJoules(Math.abs(energyPool.reserve))}

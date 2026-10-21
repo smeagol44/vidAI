@@ -37,6 +37,16 @@ for (const mainthread of [false, true]) test(`closed-budget conversion, controls
   await budget.focus();
   await budget.press('Home');
   await expect.poll(async () => (await read()).state.energyPool.budget).toBe(0);
+  await budget.press('ArrowRight');
+  await expect.poll(async () => (await read()).state.energyPool.budget).toBeGreaterThan(0);
+  // An input/change pair must not restore the preceding authoritative value
+  // while the Worker frame is in flight.
+  await budget.evaluate(node => {
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(node, '0');
+    node.dispatchEvent(new Event('input', {bubbles: true}));
+    node.dispatchEvent(new Event('change', {bubbles: true}));
+  });
+  await expect.poll(async () => (await read()).state.energyPool.budget).toBe(0);
   const debt = await read();
   expect(debt.state.energyPool.reserve).toBe(-embodiedEnergy(state));
   await page.getByRole('button', {name: 'Clear Free Nutrients', exact: true}).dispatchEvent('click');
