@@ -28,6 +28,23 @@ Body geometry, relative timing, force limits and drag determine whether a
 stroke produces useful progress. No universal swimming or escape policy is
 imposed. Rigid hinged jellyfish do not have deformable bells or fluid jets.
 
+## Motor control loop
+
+```mermaid
+flowchart TD
+  N["Recurrent neural controller"] -->|"Angle"| T["Joint target calculation"]
+  N -->|"Drive and Amp"| R["Joint rhythm"]
+  G["Inherited phase, frequency, amplitude and optional harmonics"] --> R
+  R -->|"Optional oscillator mix"| T
+  T --> M["Bounded muscle torque"]
+  N -->|"Torque, Stiff and Engage"| M
+  M --> P["Hinges, body inertia and water drag"]
+  P -->|"Body and joint feedback"| N
+```
+
+The target calculation preserves the legacy path for older genes. Physical
+motion, rather than a direct position command, closes the feedback loop.
+
 ## Current physics and its limits
 
 With body-local velocity components `u` and `v`, width `w`, height `h`,

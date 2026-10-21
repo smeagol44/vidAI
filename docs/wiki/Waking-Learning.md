@@ -18,6 +18,38 @@ sleep/rest, experience replay and world-model dreaming are not implemented.
 Activation memory retains recent activity. Synaptic learning changes effective
 connection weights during life. Within-life neuron/topology growth is absent.
 
+## Recurrent brain architecture
+
+```mermaid
+flowchart TD
+  I["Physical sensory and body inputs"] -->|"Inherited input weights plus eligible retinal offsets"| H["Hidden-neuron activations"]
+  H -->|"Inherited recurrent weights and response times"| H
+  H -->|"Inherited output weights plus eligible motor offsets"| O["Six neural outputs per joint"]
+  O --> P["Physical joint motion and interaction"]
+  P --> I
+```
+
+Only enabled RGB-input and motor-output edges can acquire offsets, within
+the limits below. Recurrent weights and topology evolve through inheritance;
+learning does not rewrite them during life.
+
+## Personal learning loop
+
+```mermaid
+flowchart TD
+  N["Recent neural activity"] --> T["Personal eligibility traces"]
+  F["Actual absorbed food and optional bite-loss teaching"] --> U["Bounded personal offset update"]
+  T --> U
+  U --> W["Effective retinal and motor weights"]
+  W --> N
+  U --> C["Reserve cost recorded as heat"]
+  U --> M["Consolidation and forgetting"]
+  M --> W
+```
+
+Teaching uses the previous completed tick. Offspring inherit baseline genes
+and learning rules, never these acquired offsets, traces or consolidation.
+
 ## Learning rule and limits
 
 Optional inherited `plasticityRate` and `sensoryPlasticityRate` enable motor

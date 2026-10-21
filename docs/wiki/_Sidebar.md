@@ -1,6 +1,7 @@
 **VIDA 2D — Current Reference**
 
 - [[Overview and original plan|Home]]
+- [Diagrams](https://github.com/smeagol44/vidAI/wiki#diagrams)
 - [[Featured Starters and Specimen Bank|Featured-Starters]]
 - [[Movement and Motor Control|Motor-Control]]
 - [[Senses and Visually Guided Behavior|Sensory-Behavior]]

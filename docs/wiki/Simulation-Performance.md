@@ -20,6 +20,30 @@ Batches yield after about 8 ms. Overdue work resumes through MessageChannel;
 light worlds pace themselves and paused worlds idle. Unsupported Workers use
 a main-thread fallback; `?mainthread` explicitly selects it for diagnosis.
 
+## Worker and display architecture
+
+```mermaid
+flowchart TD
+  subgraph UI["UI thread"]
+    C["Controls and inspection requests"]
+    R["Read-only replica and canvas"]
+    S["Exact export, fork or diagnostics result"]
+  end
+  subgraph WK["Simulation Worker"]
+    A["Authoritative world, PRNG and personal memory"]
+    T["Complete fixed ticks at 1/60 second"]
+    A --> T
+    T --> A
+  end
+  C -->|"Epoch-tagged commands between ticks"| A
+  A -->|"At most 30 frame updates/s; one in flight"| R
+  R -->|"Frame acknowledgement"| A
+  A -->|"Authoritative requested snapshot"| S
+```
+
+Painting does not advance simulation time. The main-thread fallback retains
+fixed-tick behavior when the Worker is unavailable or explicitly disabled.
+
 ## Current optimizations
 
 | Area | Strategy |

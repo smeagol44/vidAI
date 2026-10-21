@@ -20,6 +20,25 @@ specialist mouths. Feeding requires physical contact; no steering or survival
 bonus is supplied. Pigment is independent of diet. Kin protection can restrict
 living-relative/related-egg feeding; carrion carries no kin protection.
 
+## Chemical energy transfers
+
+```mermaid
+flowchart TD
+  X["Recorded external input"] -->|"Environmental additions"| F["Finite food and remains"]
+  X -->|"Seeded or externally spawned bodies"| L["Living reserves and structural biomass"]
+  F -->|"Actual mouth assimilation"| L
+  F -->|"Unassimilated energy"| H["Recorded heat"]
+  L -->|"Metabolism, muscles and learning"| H
+  L -->|"Parent funding"| E["Egg structure and reserves"]
+  E -->|"Successful hatch"| L
+  L -->|"Death and dissolution"| F
+  F -->|"Capacity overflow or removal"| D["Recorded energy losses"]
+```
+
+This sketches transfers between chemical-energy stores. It is not a diagram
+of mechanical work conservation. Other removals are also ledgered; remains
+mineralization changes food type without creating energy.
+
 ## Funded eggs and lifecycle
 
 Egg funding transfers the child's structural cost plus
@@ -36,6 +55,22 @@ later overlapping hatches. An egg laid is not yet a hatched birth or an adult.
 Death, dissolution and lifespan limits are implemented. Juvenile/adult/aging
 labels do not imply physical growth, local tissue healing or gradual senescence;
 those systems remain unimplemented.
+
+## Egg lifecycle
+
+```mermaid
+flowchart TD
+  P["Mature parent with sufficient reserves"] -->|"Pay child structure and reserve; retain parent floor"| E["Funded incubating egg"]
+  E -->|"Incubation complete"| C{"Population room and clear contained body?"}
+  C -->|"No"| W["Wait with funding and heading retained"]
+  W --> C
+  C -->|"Yes"| H["Hatch and immediately occupy space"]
+  H --> J["Juvenile with inherited genes and fresh neural state"]
+  E -->|"Physical consumption or removal"| R["Energy transferred or recorded as lost"]
+```
+
+The cycle is conditional: a laid egg can be eaten or remain blocked, and a
+hatchling still has to survive and acquire energy before reproducing.
 
 ## Environmental food
 

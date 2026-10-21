@@ -4,6 +4,8 @@ A creature's recurrent controller receives physical sensory/internal inputs
 and commands its joints. Seeing, recognizing, reaching and eating an object
 are separate capabilities; reliable pursuit and escape remain unproven.
 
+## Sensory feedback loop
+
 ```mermaid
 flowchart TD
   V[Physical RGB rays] --> N[Recurrent controller]

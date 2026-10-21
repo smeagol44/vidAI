@@ -30,6 +30,21 @@ motor genotypes and all 55 legacy founders retain their prior genes. Every
 selected allele remains mutable. Imported animals and saved specimens keep
 their stored genomes; they are not rewritten by starter calibration.
 
+## Starter construction
+
+```mermaid
+flowchart TD
+  L["55 legacy designs"] -->|"Nine distinct donor families"| C["Featured constructors"]
+  L --> B["Legacy Bank"]
+  M["Selected motor alleles for CUR-003/008/009"] --> C
+  C --> F["Nine featured genotypes"]
+  F --> S["Sample up to five designs for a new world"]
+  F --> K["Featured Bank and explicit Showcase"]
+```
+
+Constructors create new genomes. Imports and saved specimens retain their
+stored genes; they do not pass through this calibration.
+
 ## New-world defaults
 
 | Setting | Default |

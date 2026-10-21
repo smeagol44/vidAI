@@ -1,5 +1,15 @@
 # Project status — 2026-10-20
 
+## Current-reference diagrams
+
+- Restored current schematics for the lifecycle, starter construction, recurrent
+  brain, personal learning, motor/sensory feedback, chemical-energy transfers,
+  egg lifecycle and Worker/display ownership after the reference cleanup removed
+  too much visual explanation. Added a Home index and sidebar link for discovery.
+- Diagrams retain the concise current text and distinguish personal learning
+  from inheritance, chemical accounting from mechanics, and rendering from
+  authoritative state. Documentation only; no runtime or version change.
+
 ## Current-reference documentation cleanup
 
 - Reconciled all eight maintained Wiki files against the v0.33 implementation,

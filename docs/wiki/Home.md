@@ -10,6 +10,29 @@ unproven. This reference covers VIDA 2D; the separate 3D project is independent.
 
 [Play VIDA](https://smeagol44.github.io/vidAI/) · [Source](https://github.com/smeagol44/vidAI)
 
+## Simulation overview
+
+```mermaid
+flowchart TD
+  G["Inherited body, brain and learning rules"] --> A["Living creature"]
+  W["Physical world and finite food"] -->|"Senses and contact"| A
+  A -->|"Joint torques and feeding"| W
+  A -->|"Sufficient reserves and maturity"| E["Funded egg"]
+  E -->|"Incubation, population and space permit"| O["Offspring with mutated inherited genes"]
+  O --> A
+  A -->|"Death and dissolution"| R["Finite remains"]
+  R --> W
+```
+
+## Diagrams
+
+- [Starter construction](Featured-Starters#starter-construction)
+- [Recurrent brain architecture](Waking-Learning#recurrent-brain-architecture) and [personal learning loop](Waking-Learning#personal-learning-loop)
+- [Motor control loop](Motor-Control#motor-control-loop)
+- [Sensory feedback loop](Sensory-Behavior#sensory-feedback-loop)
+- [Chemical energy transfers](Ecology-Baseline#chemical-energy-transfers) and [egg lifecycle](Ecology-Baseline#egg-lifecycle)
+- [Worker and display architecture](Simulation-Performance#worker-and-display-architecture)
+
 ## Systems
 
 | Page | Covers |
