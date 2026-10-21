@@ -41,8 +41,8 @@ with the user's finite, recycled energy budget. This is planned work, not shippe
 behavior. Conservation here means the first law applied to VIDA's tracked
 ecological stores; recycling expenditure into food is the intended game rule.
 
-The stock invariant is **living biomass + living reserves + nutrients + carrion
-+ funded eggs + signed world reserve = configured world energy**. Bodies have
+The stock invariant is **living biomass + living reserves + nutrients + carrion +
+funded eggs + signed world reserve = configured world energy**. Bodies have
 anatomy-dependent construction value; food retains its actual remaining value
 after bites. Current cumulative heat/loss counters are diagnostics, not extra
 current stores. Crediting expenditure to the world reserve must not count the
