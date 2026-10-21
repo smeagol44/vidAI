@@ -54,6 +54,9 @@ Still open: longer multi-generation ecological validation; whether the initial
 10% incubation reserve topup and three-incubation lifespan give useful selection;
 recycling/uptake allocation alternatives; measured increases to population/egg/
 particle/save capacity. Retain the visible computational safeguards for now.
+Plant nutrients currently do not decay, so debt can stall after extinction when
+only nutrients retain energy. Clearing food or raising the budget resolves it;
+automatic abiotic decay would be a separate design decision, not an implied rule.
 Ledger closure does not establish useful ecology or solve mechanical-energy
 errors. No starter/body/brain/diet retuning or 3D/sleep work accompanies this change.
 

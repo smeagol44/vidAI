@@ -27,6 +27,10 @@
   uses only present stores, zero world reserve, known incubation progress for age
   (ready eggs get two incubation periods of grace), and remaining reserve for the
   new target. Never reclaim historical expenditure or invent prior egg uptake.
+- Plant nutrients do not decay. An extinct nutrient-only world can retain debt
+  indefinitely; do not promise automatic debt recovery. Clearing food returns
+  energy to reserve, or a manual budget increase can clear debt. Abiotic decay
+  is a separate design choice, not an authorized silent correction.
 - `tests/closed-energy.test.ts`, production Worker checks and focused CI browser
   controls protect the new mode and legacy import. Frozen starter/body/brain/diet
   settings and all physics equations remain unchanged. Longer ecology and

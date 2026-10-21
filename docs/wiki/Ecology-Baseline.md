@@ -25,6 +25,10 @@ This is an ecological stock ledger, not proof of solver mechanical conservation.
   and carrion decomposition repay debt; surplus beyond zero remains available.
   A funded egg can hatch at zero reserve. Debt is a signed budget adjustment,
   not negative physical energy.
+- Debt repayment requires a return flow. Plant nutrients do not decay; an
+  extinct world containing only nutrients can remain in debt indefinitely.
+  Clear Free Nutrients returns their energy to the reserve, or the player can
+  raise the budget. Automatic nutrient decay is not implemented.
 - Carrion decays into the reserve regardless of the nutrient cap; funded food
   conversion then uses that reserve. Extinct worlds keep recycling until paused.
 - The computational food limit is 2,200 particles. At that limit, remains merge

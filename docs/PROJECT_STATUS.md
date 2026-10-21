@@ -47,6 +47,11 @@
 - Still open: coherent normalized replacement drag/muscles, solver constraint/
   contact/limit energy, legacy clamp dependence, longer ecology, evaluation of
   incubation constants and allocation priorities, and higher capacity defaults.
+- Verified design limitation: plant nutrients never decay. With no consumers,
+  two 3000-J nutrients and a lowered 3000-J budget retain reserve -3000 J after
+  60 seconds (accounted total 3000 J). Conservation holds, but passive debt
+  recovery is not guaranteed. Clearing food or increasing the budget resolves
+  this state. Abiotic nutrient decay remains a user design decision.
 
 ## Swimming recovery — v0.34.1
 
