@@ -1686,7 +1686,7 @@ export default function App() {
           onPointerDown={handleCanvasDown} onPointerMove={handleCanvasMove}
           onPointerUp={e => handleCanvasUp(e)} onPointerCancel={e => handleCanvasUp(e, true)}
           onLostPointerCapture={() => { pointerDownStateRef.current.active = false; cameraRef.current.isDragging = false; }}
-          aria-label="Aquatic simulation" className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing block" />
+          aria-label="Aquatic simulation" data-world-epoch={worldEpoch} className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing block" />
 
         {/* EGG INSPECTOR — same kernel clearance and funded values used for hatching. */}
         {selectedEgg && (() => {

@@ -56,8 +56,10 @@ for (const mainthread of [false, true]) test(`closed-budget conversion, controls
   await expect.poll(async () => (await read()).state.nutrients.length).toBe(0);
   const cleared = await read();
   expect(cleared.state.energyPool.reserve).toBe(debt.state.energyPool.reserve + 9000);
+  const canvas = page.getByLabel('Aquatic simulation');
+  const epoch = Number(await canvas.getAttribute('data-world-epoch'));
   await upload(cleared);
-  await expect(page.getByText('Snapshot restored. Resume when ready.', {exact: true})).toBeVisible();
+  await expect(canvas).toHaveAttribute('data-world-epoch', String(epoch + 1));
   expect((await read()).state).toEqual(cleared.state);
   expect(errors).toEqual([]);
 });
