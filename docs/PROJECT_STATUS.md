@@ -28,6 +28,10 @@
 - User accepts persistent nutrient debt after extinction; no abiotic decay is
   needed. Manual additions still require funds. Previous limitation measurements
   remain below as historical evidence, not a pending feature request.
+- Alternating 120-tick throughput comparisons (15 creatures, 78 nutrients,
+  221 carrion) preserve exact final state: baseline/current 377/388 ms in the
+  first round, current/baseline 325/332 ms in the second. These short headless
+  measurements do not demonstrate a meaningful speed change or browser FPS.
 - Local fast checks: 268 tests passed; production build and real Worker operation
   passed. Focused Chromium/Firefox notification lifecycle checks run in PR CI.
 

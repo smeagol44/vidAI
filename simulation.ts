@@ -3042,10 +3042,15 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     if (corrected && !Number.isFinite(motorTorque)) throw new Error('Non-finite muscle torque');
     if (isNaN(motorTorque)) motorTorque = 0;
     if (surfaceModel) {
+      const beforeMotor = observe ? partKineticEnergy(parentPhys, g.parts[parentIdx], BASE_PART_DENSITY)
+        + partKineticEnergy(childPhys, childDef, BASE_PART_DENSITY) : 0;
       const paid = paidMotorImpulse(motorTorque, dt_sub, relAngVel,
         scratchInvInertias[parentIdx] + scratchInvInertias[childIdx], org.energy);
       childPhys.angVel += paid.impulse * scratchInvInertias[childIdx];
       parentPhys.angVel -= paid.impulse * scratchInvInertias[parentIdx];
+      if (observe) observe('sequential-motor', beforeMotor,
+        partKineticEnergy(parentPhys, g.parts[parentIdx], BASE_PART_DENSITY)
+        + partKineticEnergy(childPhys, childDef, BASE_PART_DENSITY));
       org.energy = Math.max(0, org.energy - paid.costJ);
       frameMechanicalWork += paid.costJ;
       org.motorDiagnostics!.positiveWorkJ += paid.positiveJ;

@@ -22,6 +22,9 @@ test('mechanical observation preserves exact snapshots in all physics and ecolog
       assert.deepEqual(createSnapshot(copy.state, copy.settings).state,
         createSnapshot(original.state, original.config).state);
       assert.ok(recorder.phases['anchor-constraint']!.samples > 0);
+      const netJ = Object.values(recorder.phases).reduce((sum, p) => sum + p.netJ, 0);
+      assert.ok(Math.abs(netJ - organismKineticEnergy(copy.state.organisms[0], BASE_PART_DENSITY)) < 1e-10,
+        'all kinetic-changing stages are attributed in each regime');
     }
   }
 });
