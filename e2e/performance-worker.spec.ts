@@ -10,6 +10,7 @@ test.use({viewport: {width: 1280, height: 850}});
 // 30s in CI. Keep individual assertion timeouts and all state checks unchanged.
 test.setTimeout(60000);
 for (const mainthread of [false, true]) test(`notifications expire and replacement/repeat restarts their lifetime (${mainthread ? 'fallback' : 'Worker'})`, async ({page}) => {
+  await page.clock.install();
   await page.goto(`./?autoplay${mainthread ? '&mainthread' : ''}`);
   await page.getByTitle('Ecology & Physical Settings').click();
   const settings = {...DEFAULT_SETTINGS, maxOrganisms: 1, targetNutrients: 0, inflowRate: 0};
@@ -21,7 +22,7 @@ for (const mainthread of [false, true]) test(`notifications expire and replaceme
   await expect(notice).toContainText('Snapshot restored.');
   // Advance wall-clock timers while physics is paused. Skip intermediate canvas
   // frames: replaying every frame makes a wall-clock timer test renderer-bound.
-  await page.clock.install();
+  await page.clock.pauseAt(new Date(await page.evaluate(() => Date.now()) + 1000));
   const addLife = () => page.getByRole('button', {name: 'Add Life', exact: true}).dispatchEvent('click');
   const capacityText = /No population slot|Population slots full/;
   await addLife(); await expect(notice).toContainText(capacityText);
