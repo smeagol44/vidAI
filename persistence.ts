@@ -5,7 +5,7 @@ import {
   getBrainLayout, getDietClassification, brainEdgeKey, CARRION_DECAY_SECONDS, MAX_OUTPUTS, MAX_SURFACE_ORGANS, MAX_NEURAL_INPUTS, MAX_HIDDEN, MAX_ENABLED_BRAIN_EDGES, MAX_BRAIN_MEMORY_SECONDS, MAX_PLASTIC_MOTOR_SYNAPSES, MAX_PLASTIC_SENSORY_SYNAPSES, MAX_LEARNED_MOTOR_DELTA, plasticMotorEdges, plasticSensoryEdges, surfacePlacementProblems, morphologyProblems, type Genome, type SimulationSettings, type SimulationState, type Organism,
 } from './simulation';
 
-export const BUILD_VERSION = '0.34.0';
+export const BUILD_VERSION = '0.34.1';
 export const DEFAULT_SETTINGS: SimulationSettings = {
   physicsRegime: NEW_PHYSICS_REGIME,
   worldWidth: 2400, worldHeight: 1500, waterViscosity: .18,
@@ -204,7 +204,7 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   // must not silently change old snapshot ecology.
   const settings: SimulationSettings = {...DEFAULT_SETTINGS, targetNutrients: 400, maxOrganisms: 100, physicsRegime: 'legacy-v0', ...raw.settings};
   if (raw.schemaVersion !== '12.0.0') settings.physicsRegime = 'legacy-v0';
-  else assert(raw.settings?.physicsRegime === 'legacy-v0' || raw.settings?.physicsRegime === NEW_PHYSICS_REGIME, 'physics regime');
+  else assert(['legacy-v0', 'surface-work-v1', NEW_PHYSICS_REGIME].includes(raw.settings?.physicsRegime), 'physics regime');
   for (const [key, min, max] of [['worldWidth', 800, 4800], ['worldHeight', 600, 3000], ['waterViscosity', 0, .8],
     ['targetNutrients', 0, 800], ['inflowRate', 0, 150], ['gravity', -200, 200], ['maxOrganisms', 1, 150], ['mutationSeverity', 0, 1]] as const) {
     assert(typeof settings[key] === 'number' && Number.isFinite(settings[key]) && settings[key]! >= min && settings[key]! <= max, `setting ${key}`);

@@ -1,5 +1,71 @@
 # Project status — 2026-10-21
 
+## Swimming recovery — v0.34.1
+
+- The v0.34.0 default caused a severe locomotion failure. Formula/accounting
+  checks passed while frozen starters lost nearly all travel; treating that as
+  an acceptable model consequence was a release error. Coherent drag and
+  geometric muscle scaling are **not closed foundations**. This entry supersedes
+  the closure claim below, which remains an experiment/release record.
+- New worlds use `paid-work-v2`: restored calibrated drag, established inertia-
+  based muscle gains/caps and the original simultaneous motor/force update.
+  The initial recovery candidate's sequential actuation still disrupted Lantern
+  and Broadwake, so it was rejected before release. No genes, starter anatomy,
+  brain weights, rhythm phases, food economics or reserve amounts are retuned.
+- Paid work is retained. Every joint samples the same pre-step state; positive
+  and negative actuator work integrate over the combined angular velocity
+  change, including shared-part motors and external torques. Split reversals,
+  no negative-work cross-joint credit or regeneration. A conservative common
+  torque-scale bound enforces available reserves BEFORE forces act; bill the
+  resulting measured positive work at 25% efficiency. No 40-J billing cap.
+- Both older regimes retain exact continuation. Two new pre-fix full-state
+  surface-model hashes (Darter/Broadwake) are regression references, alongside
+  existing legacy hashes. Schema stays v12, brain v7. New worlds/reset select
+  recovery; surface-model imports keep their mode unless the user explicitly
+  clicks **Repair swimming in this world**. That action resets the authoritative
+  snapshot with recovery physics, preserving the complete ecosystem and PRNG.
+- Frozen observation: all nine current genotypes, ordinary reserves, seed 711,
+  heading .37, viscosity .18, five food-free seconds:
+
+| Starter | Pre-v0.34 distance px | v0.34.0 distance px | Recovery distance px | Total expenditure vs pre-v0.34 |
+| --- | ---: | ---: | ---: | ---: |
+| CUR-001 | 190.499 | 0.618 | 190.499 | +0.95% |
+| CUR-002 | 39.050 | 0.922 | 39.050 | +0.60% |
+| CUR-003 | 40.967 | 0.135 | 40.967 | +4.54% |
+| CUR-004 | 44.781 | 2.399 | 44.781 | +2.82% |
+| CUR-005 | 80.962 | 0.272 | 81.096 | +8.21% |
+| CUR-006 | 21.828 | 0.248 | 20.711 | +9.36% |
+| CUR-007 | 29.493 | 1.026 | 29.493 | +2.20% |
+| CUR-008 | 88.995 | 0.300 | 88.995 | +1.93% |
+| CUR-009 | 64.698 | 0.171 | 64.699 | +2.43% |
+
+  Eight designs remain within 0.2% of their original distance; Broadwake loses
+  5.12%. More complete motor billing increases total five-second expenditure
+  0.60–9.36%, not free energy or hidden reserve refills. Darter's motor bill is
+  2.002 J versus the old estimator's 0.767 J. These effects were disclosed to
+  the user BEFORE production. Measurements do not establish long-term ecology.
+  Data: `docs/experiments/swimming-recovery-v2.json`; `npm run audit:foundation`.
+- A read-only pre-clamp counter in a scratch kernel confirmed prior legacy
+  speed-guard counts of 352/117/1136 for Lantern/Forktail/Broadwake under the same
+  assay. Recovery counts are 352/116/1106; the other six remain zero. The default
+  audit reports uninstrumented legacy counters as null, not a false zero.
+  Existing speed-clamp dependence remains an unresolved numerical limitation.
+- Verification: 250 fast tests, build, real production Worker, all four original
+  profile hashes, original cold continuation hashes, two surface-model hashes,
+  and paired Darter/Twin Oar finite off-axis food-acquisition recovery. Added
+  two-sided movement/total-cost regression gates for all nine frozen designs
+  and no added guard dependence. Tests must not silently refresh/relax these
+  baselines for a changed model. CI covers Chromium/Firefox import/reset and
+  explicit in-place repair; the Wiki's diagrams and indexes are retained.
+- Release policy: disclose material measured positive OR negative changes to the
+  user before production. A 10% numeric movement/cost tripwire adds a hard gate,
+  but qualitative drastic effects also require disclosure. Passing formulas,
+  conservation checks or CI cannot waive release judgment.
+- Still open: a justified functional surface/geometric replacement, constraint/
+  contact/limit mechanical-energy bounds, existing clamp usage and sustained
+  ecological benefit. No 3D work, sleep/replay or creature/brain tuning.
+
+
 ## Physics/biological foundation closure — v0.34.0
 
 - New `surface-work-v1` worlds integrate uniform normal resistance over four

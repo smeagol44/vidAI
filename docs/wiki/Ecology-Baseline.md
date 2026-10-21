@@ -48,7 +48,7 @@ whichever is larger. Higher reserves trade later reproduction for better-funded
 hatchlings. Existing funded eggs are not rebalanced during import.
 
 The old `reproductionThreshold` field is retired compatibility data: it never
-added a reserve-ratio gate to eligibility or laying. Corrected-world offspring
+added a reserve-ratio gate to eligibility or laying. Paid-work offspring
 keep its stored value without mutating it; legacy worlds retain their exact old
 mutation draws/behavior. No replacement threshold or funding rebalance is added.
 Maturity, cooldown, clutch size, child funding and retained-parent reserves

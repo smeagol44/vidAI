@@ -63,7 +63,7 @@ try {
   await receive(value => value.type === 'frame' && value.frame.epoch === 2);
   send({type: 'action', epoch: 1, id: -1, action: {kind: 'feed', count: 15, x: 800, y: 600}});
   assert.deepEqual((await request('snapshot', {}, 2)).state, source.state, 'Old-world commands cannot affect replacements');
-  assert.equal(paused.settings.physicsRegime, 'surface-work-v1');
+  assert.equal(paused.settings.physicsRegime, 'paid-work-v2');
   const legacySource = structuredClone(source);
   legacySource.schemaVersion = '11.0.0'; delete legacySource.settings.physicsRegime;
   send({type: 'reset', snapshot: legacySource, epoch: 3});

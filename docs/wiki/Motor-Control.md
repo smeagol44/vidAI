@@ -47,97 +47,98 @@ motion, rather than a direct position command, closes the feedback loop.
 
 ## Current physics and its limits
 
-New worlds use `surface-work-v1`. Imported v3–v11 worlds use `legacy-v0`;
-v12 snapshots explicitly persist and validate the regime. A world keeps its
-regime through export, fork, Worker commands and fallback. Reset creates a new
-world using current physics. The settings window identifies the active regime.
+| Persisted regime | Behavior |
+| --- | --- |
+| `paid-work-v2` (new worlds) | Established drag, inertia-based muscle strengths and simultaneous motor updates, with prepaid work and reserve limits |
+| `surface-work-v1` | Unit-depth four-face drag, geometric muscles and sequential paid impulses; kept for exact continuation of stored worlds |
+| `legacy-v0` | Original forces, integration and legacy billing; used by v3–v11 imports |
 
-### Surface drag
+Save schema v12 validates the regime. Export, fork, Worker commands and fallback
+preserve it. Reset creates a current-physics world. A stored surface-model world
+can explicitly select **Repair swimming in this world** in settings, keeping its
+creatures, eggs, food, time, PRNG and personal memory while changing future
+physics. Imports never silently convert regimes.
 
-Each rectangle is a unit-depth lamina. All four faces count, including connected
-or geometrically covered faces: no exposure clipping, shielding, wakes or fluid
-motion is simulated. Normal velocity is evaluated across each whole face as
-`v_face = v_COM + omega cross r`, rather than only at its midpoint. Integrating
-`dF = -mu * (v_face dot normal) * normal * ds` yields:
+### Working drag and muscle forces
+
+The current world model retains its calibrated anisotropic drag:
 
 ```text
-Fx_local = -2 * mu * h * u
+Fx_local = -0.05 * mu * h * u
 Fy_local = -2 * mu * w * v
 drag_torque = -mu * omega * (w^3 + h^3) / 6
-power = -2*mu*h*u^2 - 2*mu*w*v^2 - mu*(w^3+h^3)*omega^2/6
 ```
 
-This is one dissipative law for translation and rotation. Force rotates into
-world coordinates; the kernel retains its fixed substeps and explicit velocity
-integration. It follows the normal-resistance idea in Karl Sims's
-[*Evolving Virtual Creatures*, section 4](https://www.karlsims.com/papers/siggraph94.pdf).
-The equations and all-face policy are VIDA's 2D decisions; the paper does not
-provide an exact coefficient/exposure implementation to copy.
-
-### Muscles and units
-
-Simulation coordinates are pixels and seconds; mass remains
-`max(0.35, 0.4 * dimN * dimM)`, inertia `mass * (w^2+h^2)/12`.
-One mechanical simulation-energy unit is **1.75e-7 J**, retaining the former
-conversion as an explicit unit convention (equivalently 1 px = 1 mm and one
-mass unit = 0.175 kg). This is not independently calibrated biological tissue
-or real-water density. `mu` and muscle stress are constitutive model parameters.
-
-For each hinge, `section` is the smaller of the two attachment-face lengths,
-times unit depth. `lever` is the average of each part's smaller half-extent.
-Stress is 300 simulated force/px². With neural modifiers `stiff` and `torque`:
+For average connected-part inertia `Iavg` and the usual neural modifiers:
 
 ```text
-strength = stress * section * lever
-maxTorque = strength * torque
-kp = motorForce * strength * (480/2200) * stiff
-Ieff = 1 / (1/Iparent + 1/Ichild)
-kd = 1.4 * sqrt(kp * Ieff) * stiff
+kp = motorForce * Iavg * 480 * stiff
+kd = sqrt(kp * Iavg) * 1.4 * stiff
+maxTorque = Iavg * 2200 * torque
 command = clamp(kp * angleError - kd * relativeSpeed, +/-maxTorque) * engagement
 ```
 
-Unit depth stays fixed when 2D dimensions double: section/force doubles,
-lever doubles, torque quadruples, mass quadruples and inertia grows 16-fold.
-This explicitly differs from scaling every dimension of a 3D solid. Sims
-section 3.3 motivates cross-section-limited strength, not these 2D parameters.
-The controller still supports independent joints, silence and non-rhythmic motion.
+Every joint reads the same substep-start velocities. Equal/opposite motor
+commands accumulate with external forces before the original shared velocity
+update and hinge solve. Funded muscles retain the established force arithmetic;
+no founder/body/brain/phase/weight retuning supplies the recovery.
 
-### Paid actuation
+These are calibrated simulation forces. Axial drag is 1/40 of a uniform normal
+four-face reference; uniform 2D size doubling gives 16x torque. They are not
+claimed to be a coherent single surface law or biologically justified muscle
+scaling. Resolving that model remains open and must preserve functional movement.
+No wakes, shielding, fluid motion, deformable bells or jets are simulated.
 
-Each substep applies muscles as sequential equal/opposite angular impulses,
-before drag, external forces and hinge constraints. For impulse `J`, initial
-relative speed `r` and `S = 1/Iparent + 1/Ichild`, torque-only kinetic change is
-`J*r + 0.5*J^2*S`. The accounting integrates positive and negative work separately,
-splitting at a within-impulse reversal; braking cannot offset paid acceleration.
-Shared-part joints read velocities after earlier impulses.
+### Prepaid simultaneous work
 
-Positive work costs `positiveWorkJ / 0.25` chemical joules. Negative work
-dissipates without regeneration. The kernel shortens an impulse **before it
-acts** if reserves cannot pay, then debits it immediately. Zero reserves mean
-zero muscle impulse; later feeding can fund only subsequent substeps/ticks.
-There is no corrected-regime 40-J billing cap. Muscles spend before basal upkeep;
-that priority is a model choice, not extra funded energy.
+Commands remain simultaneous rather than updating one joint's velocity before
+calculating the next. For each constant substep angular impulse `J`, actuator
+work integrates `J * relativeAngularVelocity` along the actual linear velocity
+update, including other motors on shared parts and external torques. Split the
+integral at any reversal: positive work is paid independently of negative work
+on that or another joint. Acceleration from rest is included.
 
-Diagnostics expose per-tick positive work, negative work, budget-limited impulses
-and numerical speed-guard events. The 400 px/s and 20 rad/s guards remove motion,
-never grant it; their events are visible in exported organism diagnostics.
-`mechanicalWorkHeat` retains its historical field name but is a **chemical motor
-expenditure bucket**, including allocated mechanical work and inefficiency,
-not an assertion that all paid work instantly became thermodynamic heat.
+One mechanical simulation-energy unit is 1.75e-7 J; efficiency is 25%.
+Positive work costs `positiveWorkJ / 0.25`; negative work dissipates without
+regeneration. If all commands cannot be funded, a conservative work bound
+reduces their common amplitude before motion, preserving command balance.
+Zero reserves disable muscles. The final measured cost, not the bound, is
+charged immediately; later food cannot fund earlier movement. There is no new
+40-J billing cap. Muscles spend before basal upkeep, after any waking-learning
+charges; unpowered joints and passive contact still operate.
 
-The discrete solver still uses velocity bias, position projection, joint limits
-and contact impulses. Those operations can alter mechanical energy. Correct
-actuator billing and chemical-ledger closure do **not** prove full articulated
-mechanical conservation or exclude every constraint/contact exploit.
+The historical `mechanicalWorkHeat` name denotes chemical motor expenditure,
+including allocated work and inefficiency. It does not assert instantaneous
+thermodynamic heat. Chemical accounting excludes kinetic energy as a stored term.
+Diagnostics expose per-tick positive/negative work, reserve-limited commands
+and speed-clamp events (400 px/s, 20 rad/s). Existing guard usage on some body
+plans remains a limitation; a passing movement check does not resolve it.
 
-### Legacy continuation
+### Surface-model save continuation
 
-`legacy-v0` retains axial coefficient 0.05 versus transverse 2, the previous
-rotational term, inertia-scaled muscles, pre-update absolute-speed billing,
-40 J per-tick billing cap and original reserve debit/order. Historical full-state
-hashes and starter comparisons remain pinned to this regime, without changing
-their expected results. New frozen starters may swim less effectively under the
-corrected model; no automatic coefficient or genotype tuning compensates for it.
+Stored `surface-work-v1` worlds retain `Fx=-2*mu*h*u`, `Fy=-2*mu*w*v`, and the
+same integrated rotational drag, counting all four unit-depth faces even when
+connected/covered. Strength uses stress 300 times the smaller attachment
+cross-section and a mean internal lever; doubling lengths gives 4x torque.
+PD damping uses reduced pair inertia, and muscles apply sequential prepaid
+impulses. This mode's normal-resistance idea follows Karl Sims's
+[*Evolving Virtual Creatures*, section 4](https://www.karlsims.com/papers/siggraph94.pdf);
+its absolute strength normalization and movement performance are unresolved.
+The paper does not establish VIDA's coefficients or validate that normalization.
+
+### Remaining limitations and release checks
+
+The discrete solver uses velocity bias, position projection, limits and contact
+impulses, which can alter mechanical energy. Paid actuator work and chemical
+closure do not prove full solver-wide conservation or exclude every exploit.
+The normal-drag/geometric-muscle replacement is unresolved foundation work.
+
+A two-sided frozen-genome regression gate compares all nine featured designs
+against their pre-change movement and total energy expenditure. It catches
+large gains as well as losses; known food-acquisition checks remain. Material
+measured positive or negative changes must be disclosed to the user **before
+production**, even if formula/accounting tests pass. The 10% numeric tripwire is
+an additional gate, not permission to ignore other drastic qualitative changes.
 
 ## Offline starter development
 

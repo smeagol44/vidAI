@@ -25,8 +25,9 @@ function genomeFor(condition: TwinOarCondition): sim.Genome {
 /** Finite off-axis food, normal juvenile reserves and unmodified metabolism.
  * No per-tick intervention. Sixteen seconds is below normal maturity. */
 export function runTwinOarApproach(condition: TwinOarCondition,
-  setup: {side: number; distance: number; heading: number; viscosity: number}) {
-  const settings = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0,
+  setup: {side: number; distance: number; heading: number; viscosity: number},
+  physicsRegime: sim.SimulationSettings['physicsRegime'] = 'legacy-v0') {
+  const settings = {...LEGACY_SETTINGS, physicsRegime, targetNutrients: 0, inflowRate: 0,
     mutationSeverity: 0, waterViscosity: setup.viscosity};
   const state = createInitialWorld(settings, 811, 'balanced', 'standard', 0);
   const org = addExternalOrganism(state, genomeFor(condition), settings, 1200, 750, setup.heading)!;

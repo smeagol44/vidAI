@@ -1,24 +1,34 @@
-# Foundation regimes (v0.34.0, current; supersedes older physics/schema notes)
+# Swimming recovery and release policy (v0.34.1, current)
 
-- New worlds use `surface-work-v1`; v3–v11 imports and omitted kernel settings
-  retain `legacy-v0`. Schema v12 persists/validates the regime, brain stays v7.
-  Never change an existing world's regime through a control packet. Reset uses
-  current physics; exact exports/forks come from authoritative Worker state.
-- `foundationPhysics.ts` specifies unit-depth four-face drag, attachment-section
-  times lever torque, signed impulse work and 25% muscle efficiency. Positive
-  work is prepaid; split within-impulse braking/reversal, no regeneration or
-  40-J corrected billing cap. Do not replace it with pre-speed work estimates.
-- `reproductionThreshold` is retired compatibility data, not a laying gate.
-  Corrected offspring keep its value; retain the historical PRNG draw so other
-  mutations are unchanged. Funding/reserve and inspector rules remain intact.
-- Starter/body/brain/diet tuning is frozen. Historical behavioral assays and
-  search/profile hashes explicitly pin legacy physics. Corrected physics tests
-  assert analytical/causal behavior, not old gait performance. No golden refresh.
-- Routine checks: fast suite, build, real production Worker. `audit:foundation`
-  observes nine unchanged genomes for five seconds per regime without tuning.
-  Existing `audit:locomotion` and bounded search reproduce the legacy regime.
-- Chemical motor-expenditure closure is not complete mechanical conservation:
-  constraint bias/projection and contact remain limitations. Keep Wiki diagrams.
+- New worlds use `paid-work-v2`: established drag/inertia-based muscles and
+  simultaneous shared-step integration with prepaid signed work. The unsafe
+  absolute normalization in `surface-work-v1` is not the new-world default.
+  Coherent replacement drag/geometric scaling remains OPEN foundation work.
+- Keep exact `surface-work-v1` saves and `legacy-v0` old saves. Schema v12
+  validates all three regimes; brain stays v7. Never switch through a control
+  packet. Explicit UI repair obtains the authoritative snapshot and resets it
+  with current physics, retaining ecosystem state. Reset seeds current physics.
+- Paid v2 measures each joint along the combined velocity update, splitting
+  reversals. No cross-joint negative-work credit, regeneration, postpaid
+  actuation or billing cap. Reserve shortage scales all commands before motion.
+  Fully funded forces retain original arithmetic/order. v1 remains bit-exact.
+- Starter/body/brain/diet tuning stays frozen. `reproductionThreshold` is retired
+  in paid regimes, with historical draw ordering and unchanged egg economics.
+- The user requires material measured changes to be disclosed BEFORE production,
+  positive or negative. A drastic movement collapse must block publication even
+  when formulas, chemical closure and CI pass. Report concrete comparison first;
+  do not treat an expected physics change as a reason to waive release judgment.
+- `tests/swimming-recovery.test.ts` compares nine frozen designs with the old
+  movement and total expenditure, both directions (10% tripwire), food approach,
+  reserve limits, old/v1 continuation and no added guard dependence. Do not
+  weaken/refresh baselines to pass a changed model. Other drastic qualitative
+  changes also require preproduction disclosure, even below a numeric tripwire.
+- Routine checks: fast suite, build and real production Worker; focused browser
+  import/reset/repair smoke in CI. `audit:foundation` observes all three regimes.
+  Historical searches/audits/profile hashes remain explicitly legacy-pinned.
+- Constraint bias/projection, limits and contact mechanical energy remain open.
+  Speed clamps already occur in some legacy body plans; do not hide or label
+  those errors solved. Preserve current Wiki diagrams, Home and Sidebar indexes.
 
 # Bounded Twin Oar food approach (v0.33.1)
 

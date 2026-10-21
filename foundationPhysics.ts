@@ -1,8 +1,11 @@
 /** VIDA's unit-depth lamina model, independent of controller/genome tuning. */
 import type {PartDef} from './simulation';
 
-export type PhysicsRegime = 'legacy-v0' | 'surface-work-v1';
-export const NEW_PHYSICS_REGIME: PhysicsRegime = 'surface-work-v1';
+export type PhysicsRegime = 'legacy-v0' | 'surface-work-v1' | 'paid-work-v2';
+export const NEW_PHYSICS_REGIME: PhysicsRegime = 'paid-work-v2';
+export function usesPaidActuation(regime?: PhysicsRegime): boolean {
+  return regime === 'surface-work-v1' || regime === 'paid-work-v2';
+}
 // 1 px = 0.001 m; 1 mass unit = 0.175 kg. Hence 1 M px²/s² = 1.75e-7 J.
 export const MECHANICAL_JOULES = 1.75e-7;
 export const MUSCLE_EFFICIENCY = 0.25;
@@ -63,4 +66,45 @@ export function paidMotorImpulse(torque: number, dt: number, relativeSpeed: numb
   const negativeJ = -(speedAlong * brakingImpulse + .5 * inverseInertiaSum * brakingImpulse ** 2) * MECHANICAL_JOULES;
   return {impulse, positiveJ, negativeJ,
     costJ: Math.min(Math.max(0, reserveJ), positiveJ / MUSCLE_EFFICIENCY), limited};
+}
+
+/** Positive/negative actuator work along the shared substep velocity change.
+ * All commands read the same initial state. External torque contributes to
+ * angular travel but cannot offset positive work on a different joint. */
+export function paidMotorBatch(impulses: ArrayLike<number>, speeds: ArrayLike<number>,
+  externalChanges: ArrayLike<number>, motorChanges: ArrayLike<number>, count: number, reserveJ: number) {
+  let positive = 0, negative = 0, boundA = 0, boundB = 0;
+  const measure = (scale: number) => {
+    positive = 0; negative = 0;
+    for (let j = 0; j < count; j++) {
+      const impulse = impulses[j] * scale;
+      const p0 = impulse * speeds[j];
+      const p1 = impulse * (speeds[j] + externalChanges[j] + scale * motorChanges[j]);
+      if (p0 >= 0 && p1 >= 0) positive += .5 * (p0 + p1);
+      else if (p0 <= 0 && p1 <= 0) negative -= .5 * (p0 + p1);
+      else {
+        const reversal = -p0 / (p1 - p0);
+        if (p0 > 0) {positive += .5 * p0 * reversal; negative -= .5 * p1 * (1 - reversal);}
+        else {negative -= .5 * p0 * reversal; positive += .5 * p1 * (1 - reversal);}
+      }
+    }
+  };
+  let scale = reserveJ > 0 ? 1 : 0;
+  measure(scale);
+  const available = Math.max(0, reserveJ) * MUSCLE_EFFICIENCY / MECHANICAL_JOULES;
+  if (positive > available) {
+    // A conservative bound avoids assuming the signed per-joint work is
+    // monotone as all shared-part impulses are reduced together.
+    for (let j = 0; j < count; j++) {
+      boundA += Math.abs(impulses[j]) * (Math.abs(speeds[j]) + .5 * Math.abs(externalChanges[j]));
+      boundB += .5 * Math.abs(impulses[j] * motorChanges[j]);
+    }
+    scale = boundB > 0 ? 2 * available / (boundA + Math.sqrt(boundA ** 2 + 4 * boundB * available))
+      : available / boundA;
+    scale = Math.min(1, Math.max(0, scale));
+    measure(scale);
+  }
+  const positiveJ = positive * MECHANICAL_JOULES, negativeJ = negative * MECHANICAL_JOULES;
+  return {scale, positiveJ, negativeJ,
+    costJ: Math.min(Math.max(0, reserveJ), positiveJ / MUSCLE_EFFICIENCY), limited: scale < 1};
 }

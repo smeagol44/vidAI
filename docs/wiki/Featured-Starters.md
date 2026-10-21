@@ -63,9 +63,9 @@ living-population cap. Lowering the cap does not remove existing creatures.
 Explicit seeds reproduce a world under the same implementation and settings;
 imported worlds retain their stored settings, genes and random state.
 
-Starter genes are frozen. Existing calibrations were measured with legacy
-physics; their effectiveness under corrected surface drag and muscles is not
-guaranteed. Imports retain their physics regime as well as stored genes.
+Starter genes are frozen. New worlds use their established force model with
+prepaid simultaneous work. Historical calibration assays remain pinned to
+legacy billing. Imported worlds retain their saved genes and physics regime.
 
 ## Selection and inspection
 

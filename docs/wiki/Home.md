@@ -4,7 +4,7 @@ VIDA is an aquatic artificial-life simulator. Articulated bodies, inherited
 neural controllers, individual experience and physical interactions determine
 behavior. Survival and reproduction depend on finite energy.
 
-**Implementation baseline: v0.34.0.** The core mechanisms exist; reliable
+**Implementation baseline: v0.34.1.** The core mechanisms exist; reliable
 foraging, predator pursuit and self-sustaining multigeneration ecosystems remain
 unproven. This reference covers VIDA 2D; the separate 3D project is independent.
 
@@ -60,10 +60,11 @@ workstream is complete as a bounded prototype. It did not replace original
 Phases 5 and 6 or establish sustainable ecology. Worker/render separation and
 the bounded offline starter search are implemented additional capabilities.
 
-New worlds use a coherent four-face drag law and geometric, prepaid muscles.
-Old saves retain their exact legacy regime; schema v12 persists the distinction.
-The unused reproduction-threshold promise is retired. Full solver mechanical
-conservation remains unproven; see [Movement](Motor-Control).
+New worlds use the established swimming forces with prepaid simultaneous
+muscle work. Saved worlds retain their explicit regime; surface-model worlds
+can opt into repaired swimming without losing their ecosystem. Coherent
+replacement drag/muscle scaling and full solver mechanical conservation remain
+unresolved; see [Movement](Motor-Control).
 
 ## Scope and maintenance
 

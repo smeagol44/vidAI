@@ -546,6 +546,16 @@ export default function App() {
     workerClientRef.current ? workerClientRef.current.snapshot(metadata)
       : createSnapshot(simStateRef.current, currentSettings(), metadata);
 
+  const repairSwimmingInWorld = async () => {
+    try {
+      const exact = restoreSnapshot(await authoritativeSnapshot());
+      const config = {...exact.settings, physicsRegime: NEW_PHYSICS_REGIME};
+      replaceWorld(exact.state, config);
+      setPhysicsRegime(NEW_PHYSICS_REGIME);
+      setSaveNotification('Swimming repaired. Your ecosystem has been kept.');
+    } catch (error) {setSaveNotification(`Swimming repair failed: ${String(error)}`);}
+  };
+
   const changeTankSize = (width: number, height: number) => {
     if (workerClientRef.current) void workerAction({kind: 'resize', width, height});
     resizeWorld(simStateRef.current, currentSettings(), width, height);
@@ -1956,9 +1966,18 @@ export default function App() {
               </div>
 
               <p data-testid="physics-regime" className="text-[10px] text-slate-400">
-                Physics: {physicsRegime === 'legacy-v0' ? 'Legacy (saved world)' : 'Surface drag / paid muscles'}.
+                Physics: {physicsRegime === 'legacy-v0' ? 'Legacy (saved world)'
+                  : physicsRegime === 'surface-work-v1' ? 'Surface model (v0.34.0 saved world)'
+                  : 'Restored swimming / paid muscles'}.
                 {' '}Reset starts a world with current physics.
               </p>
+              {physicsRegime === 'surface-work-v1' && <div>
+                <button onClick={() => void repairSwimmingInWorld()}
+                  className="w-full rounded border border-cyan-400/50 px-2 py-1 text-xs text-cyan-200">
+                  Repair swimming in this world
+                </button>
+                <p className="text-[10px] text-slate-400">Keeps your creatures and ecosystem; applies repaired movement.</p>
+              </div>}
               {/* Target Abundance */}
               <div>
                 <div className="flex justify-between items-center mb-1 text-slate-300 text-[11px]">

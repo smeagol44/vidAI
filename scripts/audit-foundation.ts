@@ -6,7 +6,7 @@ import {createInitialWorld, addExternalOrganism} from '../world';
 import {DEFAULT_SETTINGS, totalAccountedEnergy} from '../persistence';
 import {stepSimulation, calculateOrganismCOM, getCardinalAnchor, getChildAnchorForParentDir} from '../simulation';
 const results = [];
-for (const design of FEATURED_BLUEPRINTS) for (const physicsRegime of ['legacy-v0', 'surface-work-v1'] as const) {
+for (const design of FEATURED_BLUEPRINTS) for (const physicsRegime of ['legacy-v0', 'surface-work-v1', 'paid-work-v2'] as const) {
   const settings = {...DEFAULT_SETTINGS, physicsRegime, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
   const state = createInitialWorld(settings, 711, 'balanced', 'standard', 0);
   const org = addExternalOrganism(state, createFounderGenome(design.id), settings, 1200, 750, .37)!;
@@ -34,11 +34,12 @@ for (const design of FEATURED_BLUEPRINTS) for (const physicsRegime of ['legacy-v
     spentJ:initialReserve-org.energy,motorCostJ:state.ledger.mechanicalWorkHeat,
     positiveWorkJ:physicsRegime==='legacy-v0'?null:positiveWorkJ,
     negativeWorkJ:physicsRegime==='legacy-v0'?null:negativeWorkJ,
-    energyLimitedImpulses,numericalGuardEvents,maxAnchorError,energyErrorJ});
+    energyLimitedImpulses:physicsRegime==='legacy-v0'?null:energyLimitedImpulses,
+    numericalGuardEvents:physicsRegime==='legacy-v0'?null:numericalGuardEvents,maxAnchorError,energyErrorJ});
 }
-const report={protocol:'foundation-frozen-genomes-v1',seed:711,heading:.37,viscosity:.18,
+const report={protocol:'foundation-frozen-genomes-v2',seed:711,heading:.37,viscosity:.18,
   notes:['Five seconds, no food, normal reserves, unchanged current genes; no ecological or gait optimization claim.',
     'Anchor error is sampled after complete ticks; all substep constraint/contact energy errors are not bounded by this observation.',
-    'Legacy positive/negative work was not measured by that regime.'],results};
+    'Legacy positive/negative work and substep guard events are not instrumented in that regime; null means unmeasured, not zero.'],results};
 const output=process.argv[2];if(output)writeFileSync(output,JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify(report,null,2));

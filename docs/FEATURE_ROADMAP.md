@@ -21,13 +21,18 @@ separation and the spatial/neural/contact/lineage optimizations are deployed.
 These capabilities do not establish sustainable ecology or the original
 roughly 100-creature/1,000-part performance ambition.
 
-## Foundation closure
+## Foundation status and swimming recovery
 
-v0.34 implements coherent unit-depth face-normal drag, geometric muscle scaling,
-prepaid positive motor work (including acceleration/reversals), finite-reserve
-impulse limits and retirement of the unused reproduction-threshold promise.
-Schema v12 explicitly separates corrected new worlds from exact legacy saves.
-Starter/body/brain/diet tuning is frozen for this milestone.
+v0.34.1 restores established drag, muscle strength and simultaneous actuation
+for new worlds, retaining prepaid positive work, reserve-limited actuation and
+retirement of the unused reproduction-threshold promise. Schema v12 preserves
+all three stored regimes. Existing surface-model worlds can explicitly repair
+swimming while keeping their ecosystem. Starter/body/brain/diet tuning stays frozen.
+
+The four-face/geometric-muscle replacement is **not closed**: its absolute
+normalization destroyed movement. A future replacement needs demonstrated
+physical validity and functional movement, with material positive/negative
+changes disclosed before production. Formula tests alone cannot approve release.
 
 ## Next ecological goal
 
@@ -46,8 +51,8 @@ no guarantee that every genotype or seed survives is intended.
 
 | Work | Current gap |
 | --- | --- |
-| Solver mechanical energy | Actuator work is prepaid and acceleration-aware in corrected worlds. Constraint bias/projection, contact and joint-limit energy remain unproven; chemical closure does not bound their error. |
-| Fluid and tissue fidelity | Coherent four-face drag and unit-depth attachment/lever muscles are implemented. Covered-face clipping, wakes, fluid motion and biological parameter calibration remain approximations/extensions. |
+| Solver mechanical energy | Actuator work is prepaid and acceleration-aware in paid-work worlds. Constraint bias/projection, contact and joint-limit energy remain unproven; chemical closure does not bound their error. |
+| Fluid and tissue fidelity | The default retains calibrated anisotropic drag and inertia-scaled strength. A coherent surface/geometric replacement with justified absolute normalization and useful motion remains open; the surface mode is preserved only for stored-world continuation. |
 | Contact fidelity | Discrete collision substeps, flexible directly hinged-neighbor intersections, and simplified food/egg response remain. |
 | Remaining trait trade-offs | `reproductionThreshold` is explicitly retired; child/parent funding remains unchanged. A broad audit/redesign of other biological trade-offs is outside this correction. |
 | Scale | Current anatomy is capped at seven parts; larger worlds/brains and any increased part limit need measured throughput and correct continuation. |

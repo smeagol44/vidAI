@@ -9,7 +9,7 @@ import {SimulationHost} from '../simulationHost';
 const dt = 1 / 60;
 const near = (a: number, b: number, tolerance = 1e-8) => assert.ok(Math.abs(a-b) < tolerance, `${a} != ${b}`);
 function fixture(parts = 1, width = 14, height = 7, mu = .18, heading = 0, legacy = false) {
-  const settings = {...(legacy ? LEGACY_SETTINGS : DEFAULT_SETTINGS), targetNutrients: 0, inflowRate: 0,
+  const settings = {...(legacy ? LEGACY_SETTINGS : DEFAULT_SETTINGS), physicsRegime: legacy ? 'legacy-v0' as const : 'surface-work-v1' as const, targetNutrients: 0, inflowRate: 0,
     mutationSeverity: 0, waterViscosity: mu, gravity: 0};
   const state = createInitialWorld(settings, 97, 'balanced', 'standard', 0);
   const g = createFounderGenome('FND-001');

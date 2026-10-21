@@ -1,4 +1,4 @@
-import {muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
+import {paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
 import {markLineageChanged} from './lineageChanges';
 import {compiledBrain, compiledDeltas, alignPlasticRecords, invalidateCompiledBrain} from './neuralRuntime';
 import {resolveBodyContacts} from './contacts';
@@ -477,6 +477,11 @@ export const NUM_SUBSTEPS = 4; // 4 Substeps @ 1/240s for smooth, symplectic int
 const scratchFx = new Float64Array(16);
 const scratchFy = new Float64Array(16);
 const scratchTorque = new Float64Array(16);
+const scratchMotorTorque = new Float64Array(16);
+const scratchMotorImpulses = new Float64Array(16);
+const scratchMotorSpeeds = new Float64Array(16);
+const scratchMotorExternalChanges = new Float64Array(16);
+const scratchMotorChanges = new Float64Array(16);
 const scratchMasses = new Float64Array(16);
 const scratchInvMasses = new Float64Array(16);
 const scratchInertias = new Float64Array(16);
@@ -2497,7 +2502,7 @@ export function mutateGenome(parent: Genome, severity = 0.25, customPrng: Xoshir
     eggReserveFraction: mutate(parent.eggReserveFraction, 0.05, 0.2, 0.55),
     reproductionThreshold: (() => {
       const historical = mutate(parent.reproductionThreshold, 0.04, 0.50, 0.80);
-      return physicsRegime === 'surface-work-v1' ? parent.reproductionThreshold : historical;
+      return usesPaidActuation(physicsRegime) ? parent.reproductionThreshold : historical;
     })(),
     reproductionCooldown: mutate(parent.reproductionCooldown, 1, 12.0, 25.0),
     maxLifespan: mutate(parent.maxLifespan, 20, 220, 550),
@@ -2947,7 +2952,9 @@ export function calculateJointMotorTarget(def: PartDef, phase: number, amplitude
 
 function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number): number {
   const g = org.genome, numJoints = org.joints.length;
-  const corrected = settings.physicsRegime === 'surface-work-v1';
+  const corrected = usesPaidActuation(settings.physicsRegime);
+  const surfaceModel = settings.physicsRegime === 'surface-work-v1';
+  const simultaneousPaid = settings.physicsRegime === 'paid-work-v2';
   const mu = settings.waterViscosity ?? .22, gravity = settings.gravity ?? 0;
   const {worldWidth, worldHeight} = settings;
   const partCount = org.segments.length;
@@ -3007,7 +3014,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     joint.currentRelAngVel = relAngVel;
 
     const avgInertia = (scratchInertias[parentIdx] + scratchInertias[childIdx]) * 0.5;
-    const muscle = corrected ? muscleParameters(g.parts[parentIdx], childDef,
+    const muscle = surfaceModel ? muscleParameters(g.parts[parentIdx], childDef,
       scratchInertias[parentIdx], scratchInertias[childIdx], g.motorForce, stiffnessDampingMod, peakTorqueMod) : null;
     const kp = muscle?.kp ?? g.motorForce * avgInertia * 480.0 * stiffnessDampingMod;
     const kd = muscle?.kd ?? Math.sqrt(kp * avgInertia) * 1.4 * stiffnessDampingMod;
@@ -3017,7 +3024,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     motorTorque = clampVal(motorTorque, -maxTorque, maxTorque) * joint.engagement;
     if (corrected && !Number.isFinite(motorTorque)) throw new Error('Non-finite muscle torque');
     if (isNaN(motorTorque)) motorTorque = 0;
-    if (corrected) {
+    if (surfaceModel) {
       const paid = paidMotorImpulse(motorTorque, dt_sub, relAngVel,
         scratchInvInertias[parentIdx] + scratchInvInertias[childIdx], org.energy);
       childPhys.angVel += paid.impulse * scratchInvInertias[childIdx];
@@ -3032,11 +3039,13 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       joint.appliedTorque = motorTorque;
       const deltaTheta = Math.abs(relAngVel * dt_sub);
       const stepJointWork = Math.abs(motorTorque) * deltaTheta * FORCE_COST_MULTIPLIER;
-      if (!isNaN(stepJointWork) && isFinite(stepJointWork)) frameMechanicalWork += stepJointWork;
+      if (!simultaneousPaid && !isNaN(stepJointWork) && isFinite(stepJointWork)) frameMechanicalWork += stepJointWork;
       scratchTorque[childIdx] += motorTorque;
       scratchTorque[parentIdx] -= motorTorque;
     }
   }
+
+  if (simultaneousPaid) scratchMotorTorque.set(scratchTorque);
 
   // Integrated Hydrodynamic Drag
   for (let i = 0; i < partCount; i++) {
@@ -3048,13 +3057,13 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     const u = seg.vx * cosA + seg.vy * sinA;
     const v = -seg.vx * sinA + seg.vy * cosA;
 
-    const resistance = corrected ? surfaceResistance(def.width, def.height, mu) : null;
+    const resistance = surfaceModel ? surfaceResistance(def.width, def.height, mu) : null;
     const fLocalX = -(resistance?.x ?? LONGITUDINAL_DRAG * mu * def.height) * u; // Normal forces on the end faces; legacy retains its axial calibration.
-    const fLocalY = corrected ? -resistance!.y * v : -2.0 * mu * def.width * v;  // Normal anisotropic fluid drag
+    const fLocalY = surfaceModel ? -resistance!.y * v : -2.0 * mu * def.width * v;  // Normal anisotropic fluid drag
 
     const fDragWorldX = fLocalX * cosA - fLocalY * sinA;
     const fDragWorldY = fLocalX * sinA + fLocalY * cosA;
-    const fDragTorque = corrected ? -resistance!.angular * seg.angVel
+    const fDragTorque = surfaceModel ? -resistance!.angular * seg.angVel
       : -(mu * seg.angVel * (def.width * def.width * def.width + def.height * def.height * def.height)) / 6.0;
 
     scratchFx[i] += fDragWorldX;
@@ -3095,6 +3104,33 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
         scratchTorque[i] += rx * fy - ry * 0;
       }
     }
+  }
+
+  if (simultaneousPaid) {
+    for (let j = 0; j < numJoints; j++) {
+      const child = j + 1, parent = g.parts[child].parentIndex;
+      scratchMotorImpulses[j] = org.joints[j].appliedTorque * dt_sub;
+      scratchMotorSpeeds[j] = org.segments[child].angVel - org.segments[parent].angVel;
+      scratchMotorChanges[j] = dt_sub * (scratchMotorTorque[child] * scratchInvInertias[child]
+        - scratchMotorTorque[parent] * scratchInvInertias[parent]);
+      scratchMotorExternalChanges[j] = dt_sub * (
+        (scratchTorque[child] - scratchMotorTorque[child]) * scratchInvInertias[child]
+        - (scratchTorque[parent] - scratchMotorTorque[parent]) * scratchInvInertias[parent]);
+    }
+    const paid = paidMotorBatch(scratchMotorImpulses, scratchMotorSpeeds,
+      scratchMotorExternalChanges, scratchMotorChanges, numJoints, org.energy);
+    // Preserve the proven force/integration arithmetic exactly when funded.
+    if (paid.scale < 1) {
+      for (let i = 0; i < partCount; i++) scratchTorque[i] += (paid.scale - 1) * scratchMotorTorque[i];
+      for (let j = 0; j < numJoints; j++) {
+        if (org.joints[j].appliedTorque !== 0) org.motorDiagnostics!.energyLimitedImpulses++;
+        org.joints[j].appliedTorque *= paid.scale;
+      }
+    }
+    org.energy = Math.max(0, org.energy - paid.costJ);
+    frameMechanicalWork += paid.costJ;
+    org.motorDiagnostics!.positiveWorkJ += paid.positiveJ;
+    org.motorDiagnostics!.negativeWorkJ += paid.negativeJ;
   }
 
   for (let i = 0; i < partCount; i++) {
@@ -3748,7 +3784,7 @@ export function stepSimulation(
   // All bodies advance on the same substep clock. Resolve solid body/self-contact
   // before feeding, so mouths bite at the physical contact surface.
   const active = organisms.filter(org => !org.dissolving);
-  const corrected = settings.physicsRegime === 'surface-work-v1';
+  const corrected = usesPaidActuation(settings.physicsRegime);
   if (corrected) for (const org of active) org.motorDiagnostics = {
     positiveWorkJ: 0, negativeWorkJ: 0, energyLimitedImpulses: 0, numericalGuardEvents: 0};
   const work = new Map(active.map(org => [org, 0]));

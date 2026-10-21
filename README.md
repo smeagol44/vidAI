@@ -69,8 +69,10 @@ Bank, export/import and diagnostics. Click a creature for general status;
 The initial UI seed is random and editable; reset reuses the displayed seed.
 Current saves use schema v12 and brain v7, including a validated physics regime.
 Older v3–v11 snapshots continue with exact legacy physics/energy rules; new
-worlds use coherent surface drag and prepaid muscle work. PRNG, personal memory
-and stored genes remain intact. Reset starts a new world with current physics. Imports pause for inspection;
+worlds use the established swimming forces with prepaid simultaneous muscle work. PRNG, personal memory
+and stored genes remain intact. Stored surface-model worlds can explicitly repair
+swimming in settings without discarding their ecosystem. Reset uses current
+physics. Imports pause for inspection;
 starter calibration never rewrites stored genomes.
 
 Vite's Pages base is `/vidAI/`; update `vite.config.ts` if moving the project.
