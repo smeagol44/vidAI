@@ -1,5 +1,43 @@
 # Project status — 2026-10-21
 
+## Full mouth contact geometry — v0.36.0
+
+- New application worlds opt into capsule-v1: prey rectangles now contact the
+  full inherited span thickened by the existing radius, matching food/egg contact.
+  Tank outlines and Bank previews show the real aperture. No inherited widths,
+  radii, rates, assimilation, anatomy, controller or swimming forces are retuned.
+- Existing saves retain their original line-plus-centre-disk prey shape and
+  schemas v12/v13. Explicit UI upgrade changes only the model on an authoritative
+  snapshot. New schema v14 strictly stores the model, independently of all three
+  physics regimes and either economy. Worker control cannot change it.
+- `docs/experiments/mouth-contact-v1.json`: 375-position contact grid detects 74
+  old/139 corrected contacts, 65 additions and no losses. The endpoint kernel
+  control absorbs 0 → 48 J per tick; head-on and slight body overlap both 48 → 48 J;
+  clear misses 0 → 0 J. Geometry includes tangent, degenerate, containment, collinear
+  and independently rotated prey checks. Funding and chemical closure remain exact
+  within floating-point error.
+- All nine frozen five-second food-free swims retain exactly equal complete
+  states, not just displacement (Darter 190.4994 px). Two unassisted 60 s showcase
+  pairs (seeds 17/73) retain 9/11 living, zero deaths and 0/2 offspring in both
+  contact modes. Seed 17 intake is unchanged. Seed 73 prey absorption increases
+  1968 → 4200 J (+113.4%), nutrients 64032 → 60720 J (-5.17%); total reserve 121496 J
+  versus 125417 J. This material feeding effect was disclosed before production.
+  Max closed-stock error is below 1.5e-8 J. No reliable pursuit or sustained ecology
+  claim follows from these short pairs. All prey intake in these samples is by
+  omnivores; specialist carnivores eat nothing in either model. Per-diet intake
+  and diagnostic timings are retained in JSON.
+- Local 273 fast tests, build and real production Worker pass. Worker/direct
+  equality and forbidden mode switches are checked for all six combinations of
+  contact-enabled physics/ecology. Browser coverage checks exact explicit upgrade,
+  old imports, current reset and displayed version in Worker/fallback modes.
+- Corrected a release-label oversight: the 0.35.1 code patch was deployed with
+  BUILD_VERSION still 0.35.0. Current UI/export build is 0.36.0 and a version check
+  guards consistency with package.json. No retrospective code rollback occurred.
+- Closed: endpoint hit-area inconsistency and undersized aperture visualization.
+  Open: biological mouth/diet balance, reliable hunting, solver bias/limit energy,
+  speed-clamp dependence and coherent drag/muscle normalization. Starter/brain
+  tuning, 3D and sleep/replay remain untouched.
+
 ## Transient UI corrections and kinetic audit — v0.35.1
 
 - Centralized notification expiry at 2500 ms wall time. Every caller now expires,

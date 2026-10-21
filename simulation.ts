@@ -1,3 +1,4 @@
+import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
 import {partKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
 import {paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
 import {markLineageChanged} from './lineageChanges';
@@ -444,6 +445,8 @@ export interface SimulationLedger {
 }
 
 export interface SimulationSettings {
+  /** Omitted retains exact historical prey-contact geometry. */
+  mouthContactModel?: 'capsule-v1';
   ecologyRegime?: 'closed-v1';
   /** null means no ecological count cap; a visible particle safety limit remains. */
   nutrientLimit?: number | null;
@@ -3941,8 +3944,7 @@ export function stepSimulation(
       const cos = Math.cos(phys.angle), sin = Math.sin(phys.angle);
       const cx = phys.x + cos * anchor.x - sin * anchor.y;
       const cy = phys.y + sin * anchor.x + cos * anchor.y;
-      const mouthRadius = mouth.mouthType === 'carnivore' ? 4.5 : mouth.mouthType === 'omnivore' ? 4 : 3.5;
-      const halfAperture = Math.max(mouthRadius, mouth.intakeWidth * .5);
+      const {radius: mouthRadius, halfSpan: halfAperture} = mouthDimensions(mouth);
       const normal = getCardinalOutwardNormal(mouth.direction);
       const tx = cos * -normal.y - sin * normal.x;
       const ty = sin * -normal.y + cos * normal.x;
@@ -3983,7 +3985,9 @@ export function stepSimulation(
             // unlike a fixed 70px cutoff, this also handles large mutated parts.
             const reach = Math.hypot(def.width, def.height) * .5 + halfAperture + mouthRadius;
             if (Math.abs(pos.x - cx) > reach || Math.abs(pos.y - cy) > reach) continue;
-            contact = mouthApertureContactsPart(cx, cy, x1, y1, x2, y2, mouthRadius, pos, def);
+            contact = settings.mouthContactModel === 'capsule-v1'
+              ? capsuleContactsPart(x1, y1, x2, y2, mouthRadius, pos, def)
+              : mouthApertureContactsPart(cx, cy, x1, y1, x2, y2, mouthRadius, pos, def);
           }
           if (!contact) continue;
           feedback.contact = 1;

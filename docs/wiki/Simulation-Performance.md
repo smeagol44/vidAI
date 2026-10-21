@@ -95,8 +95,11 @@ Historical timing tables are in
 
 ## Economy state and capacity
 
-Closed worlds persist their live reserve/budget and egg age/target in schema v13;
-open saved worlds retain schema v12 and exact behavior. Budget edits are Worker
+Worlds with full capsule mouth contact use schema v14, independently of physics
+or open/closed ecology. Historical contact worlds retain v13 when closed and v12
+when open, with exact continuation. Closed saves persist live reserve/budget and
+egg age/target. Explicit mouth upgrade obtains the authoritative snapshot and
+changes only the contact model; control packets cannot switch it. Budget edits are Worker
 actions between ticks. Imports and explicit conversion use authoritative state;
 control packets cannot switch physics or ecology regimes.
 

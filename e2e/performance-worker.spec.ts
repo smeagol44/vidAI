@@ -157,6 +157,8 @@ test('new worlds use requested defaults and creature clicks keep diagnostics clo
   await expect(page.getByTestId('closed-energy-controls')).toBeVisible();
   await expect(page.getByLabel('Maximum creatures + eggs', {exact: true})).toHaveValue('30');
   await expect(page.locator('#simulation-seed')).toHaveValue('123456789');
+  await expect(page.getByTestId('mouth-contact-model')).toContainText('Full rounded aperture');
+  await expect(page.getByTestId('build-version')).toHaveText('v0.36.0');
 
   const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0};
   const state = createInitialWorld(settings, 91, 'balanced', 'standard', 0);
@@ -202,6 +204,12 @@ for (const fallback of [false, true]) test(`legacy import and current reset agre
     return JSON.parse(await readFile((await (await downloaded).path())!,'utf8'));
   };
   expect((await exportState()).settings.physicsRegime).toBe('legacy-v0');
+  await expect(page.getByTestId('mouth-contact-model')).toContainText('Legacy saved geometry');
+  await page.getByRole('button', {name: 'Update mouth contact geometry', exact: true}).dispatchEvent('click');
+  await expect(page.getByTestId('mouth-contact-model')).toContainText('Full rounded aperture');
+  const updated = await exportState();
+  expect(updated.schemaVersion).toBe('14.0.0'); expect(updated.settings.mouthContactModel).toBe('capsule-v1');
+  expect(updated.settings.physicsRegime).toBe('legacy-v0'); expect(updated.state).toEqual(source.state);
   await page.getByRole('button',{name:'RESUME SIMULATION',exact:true}).click();
   await page.getByTitle('Close settings (✕)').click();
   await page.keyboard.press('Escape');
@@ -210,6 +218,7 @@ for (const fallback of [false, true]) test(`legacy import and current reset agre
   await expect(page.getByTestId('physics-regime')).toContainText('Restored swimming');
   await page.keyboard.press('Space');
   const reset=await exportState();expect(reset.settings.physicsRegime).toBe('paid-work-v2');
+  expect(reset.schemaVersion).toBe('14.0.0'); expect(reset.settings.mouthContactModel).toBe('capsule-v1');
   expect(reset.state.organisms.some((o: any)=>o.motorDiagnostics?.positiveWorkJ>0)).toBe(true);
   expect(errors).toEqual([]);
 });

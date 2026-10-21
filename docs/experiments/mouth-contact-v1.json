@@ -1,0 +1,398 @@
+{
+  "protocol": "mouth-capsule-contact-v1",
+  "geometry": {
+    "samples": 375,
+    "oldContacts": 74,
+    "newContacts": 139,
+    "additions": 65,
+    "losses": 0
+  },
+  "controls": [
+    {
+      "encounter": "endpoint",
+      "model": "legacy",
+      "absorbedJ": 0,
+      "ledgerErrorJ": -3.637978807091713e-12
+    },
+    {
+      "encounter": "endpoint",
+      "model": "capsule-v1",
+      "absorbedJ": 48,
+      "ledgerErrorJ": -3.637978807091713e-12
+    },
+    {
+      "encounter": "head-on",
+      "model": "legacy",
+      "absorbedJ": 48,
+      "ledgerErrorJ": -3.637978807091713e-12
+    },
+    {
+      "encounter": "head-on",
+      "model": "capsule-v1",
+      "absorbedJ": 48,
+      "ledgerErrorJ": -3.637978807091713e-12
+    },
+    {
+      "encounter": "overlap",
+      "model": "legacy",
+      "absorbedJ": 48,
+      "ledgerErrorJ": -3.637978807091713e-12
+    },
+    {
+      "encounter": "overlap",
+      "model": "capsule-v1",
+      "absorbedJ": 48,
+      "ledgerErrorJ": -3.637978807091713e-12
+    },
+    {
+      "encounter": "far",
+      "model": "legacy",
+      "absorbedJ": 0,
+      "ledgerErrorJ": -3.637978807091713e-12
+    },
+    {
+      "encounter": "far",
+      "model": "capsule-v1",
+      "absorbedJ": 0,
+      "ledgerErrorJ": -3.637978807091713e-12
+    }
+  ],
+  "swimming": [
+    {
+      "id": "CUR-001",
+      "model": "legacy",
+      "seconds": 5,
+      "displacementPx": 190.4994092650809,
+      "reserveSpentJ": 131.04583774935054
+    },
+    {
+      "id": "CUR-001",
+      "model": "capsule-v1",
+      "seconds": 5,
+      "displacementPx": 190.4994092650809,
+      "reserveSpentJ": 131.04583774935054
+    },
+    {
+      "id": "CUR-002",
+      "model": "legacy",
+      "seconds": 5,
+      "displacementPx": 39.04960172765563,
+      "reserveSpentJ": 135.34090869694592
+    },
+    {
+      "id": "CUR-002",
+      "model": "capsule-v1",
+      "seconds": 5,
+      "displacementPx": 39.04960172765563,
+      "reserveSpentJ": 135.34090869694592
+    },
+    {
+      "id": "CUR-003",
+      "model": "legacy",
+      "seconds": 5,
+      "displacementPx": 40.96657961070125,
+      "reserveSpentJ": 160.40525807453014
+    },
+    {
+      "id": "CUR-003",
+      "model": "capsule-v1",
+      "seconds": 5,
+      "displacementPx": 40.96657961070125,
+      "reserveSpentJ": 160.40525807453014
+    },
+    {
+      "id": "CUR-004",
+      "model": "legacy",
+      "seconds": 5,
+      "displacementPx": 44.781469500070486,
+      "reserveSpentJ": 106.08954003944928
+    },
+    {
+      "id": "CUR-004",
+      "model": "capsule-v1",
+      "seconds": 5,
+      "displacementPx": 44.781469500070486,
+      "reserveSpentJ": 106.08954003944928
+    },
+    {
+      "id": "CUR-005",
+      "model": "legacy",
+      "seconds": 5,
+      "displacementPx": 81.09567467543901,
+      "reserveSpentJ": 196.56934825387907
+    },
+    {
+      "id": "CUR-005",
+      "model": "capsule-v1",
+      "seconds": 5,
+      "displacementPx": 81.09567467543901,
+      "reserveSpentJ": 196.56934825387907
+    },
+    {
+      "id": "CUR-006",
+      "model": "legacy",
+      "seconds": 5,
+      "displacementPx": 20.711421809546138,
+      "reserveSpentJ": 225.23471314743801
+    },
+    {
+      "id": "CUR-006",
+      "model": "capsule-v1",
+      "seconds": 5,
+      "displacementPx": 20.711421809546138,
+      "reserveSpentJ": 225.23471314743801
+    },
+    {
+      "id": "CUR-007",
+      "model": "legacy",
+      "seconds": 5,
+      "displacementPx": 29.49322828280543,
+      "reserveSpentJ": 169.50123218756926
+    },
+    {
+      "id": "CUR-007",
+      "model": "capsule-v1",
+      "seconds": 5,
+      "displacementPx": 29.49322828280543,
+      "reserveSpentJ": 169.50123218756926
+    },
+    {
+      "id": "CUR-008",
+      "model": "legacy",
+      "seconds": 5,
+      "displacementPx": 88.99453540708751,
+      "reserveSpentJ": 163.91960821036446
+    },
+    {
+      "id": "CUR-008",
+      "model": "capsule-v1",
+      "seconds": 5,
+      "displacementPx": 88.99453540708751,
+      "reserveSpentJ": 163.91960821036446
+    },
+    {
+      "id": "CUR-009",
+      "model": "legacy",
+      "seconds": 5,
+      "displacementPx": 64.69857340259024,
+      "reserveSpentJ": 157.11908380719797
+    },
+    {
+      "id": "CUR-009",
+      "model": "capsule-v1",
+      "seconds": 5,
+      "displacementPx": 64.69857340259024,
+      "reserveSpentJ": 157.11908380719797
+    }
+  ],
+  "ecology": [
+    {
+      "seed": 17,
+      "model": "legacy",
+      "seconds": 60,
+      "simTime": 60,
+      "livingCount": 9,
+      "eggCount": 0,
+      "maxGeneration": 1,
+      "avgGeneration": 1,
+      "totalBirths": 9,
+      "totalDeaths": 0,
+      "fastestSpeed": 33.1,
+      "nutrientCount": 271,
+      "carrionCount": 0,
+      "targetNutrients": 275,
+      "totalStoredBiomass": 57000,
+      "totalStoredReserves": 124522,
+      "totalEggEnergy": 0,
+      "totalFoodEnergy": 790410,
+      "totalExternalInflow": 972000,
+      "totalMetabolicHeat": 29336,
+      "totalMechanicalHeat": 732,
+      "totalRecordedLosses": 0,
+      "herbivoreCount": 4,
+      "carnivoreCount": 2,
+      "omnivoreCount": 3,
+      "absorbedJ": {
+        "Nutrient": 51672,
+        "Carrion": 0,
+        "Prey": 0,
+        "Egg": 0
+      },
+      "absorbedByDietJ": {
+        "Herbivore": {
+          "Nutrient": 28800,
+          "Carrion": 0,
+          "Prey": 0,
+          "Egg": 0
+        },
+        "Omnivore": {
+          "Nutrient": 22872,
+          "Carrion": 0,
+          "Prey": 0,
+          "Egg": 0
+        }
+      },
+      "reserveJ": 68.19309743095215,
+      "maxErrorJ": 1.4901161193847656e-8,
+      "runtimeMs": 3977
+    },
+    {
+      "seed": 17,
+      "model": "capsule-v1",
+      "seconds": 60,
+      "simTime": 60,
+      "livingCount": 9,
+      "eggCount": 0,
+      "maxGeneration": 1,
+      "avgGeneration": 1,
+      "totalBirths": 9,
+      "totalDeaths": 0,
+      "fastestSpeed": 33.1,
+      "nutrientCount": 271,
+      "carrionCount": 0,
+      "targetNutrients": 275,
+      "totalStoredBiomass": 57000,
+      "totalStoredReserves": 124522,
+      "totalEggEnergy": 0,
+      "totalFoodEnergy": 790410,
+      "totalExternalInflow": 972000,
+      "totalMetabolicHeat": 29336,
+      "totalMechanicalHeat": 732,
+      "totalRecordedLosses": 0,
+      "herbivoreCount": 4,
+      "carnivoreCount": 2,
+      "omnivoreCount": 3,
+      "absorbedJ": {
+        "Nutrient": 51672,
+        "Carrion": 0,
+        "Prey": 0,
+        "Egg": 0
+      },
+      "absorbedByDietJ": {
+        "Herbivore": {
+          "Nutrient": 28800,
+          "Carrion": 0,
+          "Prey": 0,
+          "Egg": 0
+        },
+        "Omnivore": {
+          "Nutrient": 22872,
+          "Carrion": 0,
+          "Prey": 0,
+          "Egg": 0
+        }
+      },
+      "reserveJ": 68.19309743095215,
+      "maxErrorJ": 1.4901161193847656e-8,
+      "runtimeMs": 3912
+    },
+    {
+      "seed": 73,
+      "model": "legacy",
+      "seconds": 60,
+      "simTime": 60,
+      "livingCount": 11,
+      "eggCount": 0,
+      "maxGeneration": 2,
+      "avgGeneration": 1.2,
+      "totalBirths": 11,
+      "totalDeaths": 0,
+      "fastestSpeed": 47.8,
+      "nutrientCount": 267,
+      "carrionCount": 0,
+      "targetNutrients": 275,
+      "totalStoredBiomass": 67290,
+      "totalStoredReserves": 125417,
+      "totalEggEnergy": 0,
+      "totalFoodEnergy": 777960,
+      "totalExternalInflow": 972000,
+      "totalMetabolicHeat": 34276,
+      "totalMechanicalHeat": 757,
+      "totalRecordedLosses": 0,
+      "herbivoreCount": 6,
+      "carnivoreCount": 2,
+      "omnivoreCount": 3,
+      "absorbedJ": {
+        "Nutrient": 64032,
+        "Carrion": 0,
+        "Prey": 1968,
+        "Egg": 0
+      },
+      "absorbedByDietJ": {
+        "Herbivore": {
+          "Nutrient": 44784,
+          "Carrion": 0,
+          "Prey": 0,
+          "Egg": 0
+        },
+        "Omnivore": {
+          "Nutrient": 19248,
+          "Carrion": 0,
+          "Prey": 1968,
+          "Egg": 0
+        }
+      },
+      "reserveJ": 1332.7152308942896,
+      "maxErrorJ": 1.30385160446167e-8,
+      "runtimeMs": 6263
+    },
+    {
+      "seed": 73,
+      "model": "capsule-v1",
+      "seconds": 60,
+      "simTime": 60,
+      "livingCount": 11,
+      "eggCount": 0,
+      "maxGeneration": 2,
+      "avgGeneration": 1.2,
+      "totalBirths": 11,
+      "totalDeaths": 0,
+      "fastestSpeed": 50.3,
+      "nutrientCount": 267,
+      "carrionCount": 0,
+      "targetNutrients": 275,
+      "totalStoredBiomass": 67290,
+      "totalStoredReserves": 121496,
+      "totalEggEnergy": 0,
+      "totalFoodEnergy": 782100,
+      "totalExternalInflow": 972000,
+      "totalMetabolicHeat": 33993,
+      "totalMechanicalHeat": 821,
+      "totalRecordedLosses": 0,
+      "herbivoreCount": 6,
+      "carnivoreCount": 2,
+      "omnivoreCount": 3,
+      "absorbedJ": {
+        "Nutrient": 60720,
+        "Carrion": 0,
+        "Prey": 4200,
+        "Egg": 0
+      },
+      "absorbedByDietJ": {
+        "Herbivore": {
+          "Nutrient": 41040,
+          "Carrion": 0,
+          "Prey": 0,
+          "Egg": 0
+        },
+        "Omnivore": {
+          "Nutrient": 19680,
+          "Carrion": 0,
+          "Prey": 4200,
+          "Egg": 0
+        }
+      },
+      "reserveJ": 1113.5148086725599,
+      "maxErrorJ": 1.3387762010097504e-8,
+      "runtimeMs": 4692
+    }
+  ],
+  "notes": [
+    "Inherited aperture width, radii, rates, assimilation, organs, controllers and swimming forces are unchanged.",
+    "Prey contact changes from line plus central disk to the same full capsule used for free food and eggs.",
+    "Controlled endpoint contact is intentionally improved; circle-food contact is unchanged.",
+    "Five-second no-food swimming states are exactly equal for each frozen starter.",
+    "Two unassisted 60-second showcase pairs do not establish reliable pursuit or sustained ecology. Receipt buffers are bounded.",
+    "Runtime values are diagnostic headless timings, not browser FPS or a performance gate."
+  ]
+}

@@ -1,3 +1,4 @@
+import {mouthDimensions} from './mouthGeometry';
 import * as sim from './simulation';
 import {EcologyIntakeObserver} from './ecologyAudit';
 import type {FoodCategory, Organism, SimulationState} from './simulation';
@@ -77,8 +78,7 @@ export function nearestEdibleFreeFoodGap(org: Organism, state: SimulationState):
     const normal = sim.getCardinalOutwardNormal(mouth.direction);
     const tx = cos * -normal.y - sin * normal.x;
     const ty = sin * -normal.y + cos * normal.x;
-    const radius = mouth.mouthType === 'carnivore' ? 4.5 : mouth.mouthType === 'omnivore' ? 4 : 3.5;
-    const half = Math.max(radius, mouth.intakeWidth * .5);
+    const {radius, halfSpan: half} = mouthDimensions(mouth);
     const x1 = cx - tx * half, y1 = cy - ty * half;
     const x2 = cx + tx * half, y2 = cy + ty * half;
     for (const food of state.nutrients) {

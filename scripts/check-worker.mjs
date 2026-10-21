@@ -5,6 +5,7 @@ import {createInitialWorld} from '../world.ts';
 import {DEFAULT_SETTINGS, createSnapshot, restoreSnapshot} from '../persistence.ts';
 import {enableClosedEconomy, setWorldEnergy} from '../energyEconomy.ts';
 import {totalAccountedEnergy} from '../persistence.ts';
+import {mouthContactFixture} from '../mouthContactAudit.ts';
 import {stepSimulation} from '../simulation.ts';
 
 // Exercise the actual production-built Worker with real cross-thread cloning.
@@ -112,5 +113,28 @@ try {
   assert.ok(Math.abs(totalAccountedEnergy(direct)) < 1e-5);
   send({type: 'control', epoch: 4, id: -78, settings, speed: 1, selected: null, running: false});
   assert.match((await receive(value => value.id === -78)).message, /Ecology regime/);
-  console.log('Production Worker: open/closed exact exports, funded commands, independent stepping, debt, direct equivalence, all physics regimes, regime-switch and stale-world rejection passed.');
+  let mouthEpoch = 10;
+  for (const physicsRegime of ['legacy-v0', 'surface-work-v1', 'paid-work-v2']) for (const closed of [false, true]) {
+    const probe = mouthContactFixture('capsule-v1'); probe.config.physicsRegime = physicsRegime;
+    if (closed) {enableClosedEconomy(probe.state); probe.config.ecologyRegime = 'closed-v1'; probe.config.nutrientLimit = null;}
+    const source = createSnapshot(probe.state, probe.config), epoch = mouthEpoch++;
+    send({type: 'reset', epoch, snapshot: source});
+    await receive(value => value.type === 'frame' && value.frame.epoch === epoch);
+    const initial = await request('snapshot', {}, epoch);
+    assert.equal(initial.schemaVersion, '14.0.0'); assert.deepEqual(initial, source);
+    const direct = restoreSnapshot(initial).state;
+    send({type: 'ack', epoch});
+    send({type: 'control', epoch, settings: probe.config, speed: 1, selected: null, running: true});
+    await new Promise(resolve => setTimeout(resolve, 80));
+    send({type: 'control', epoch, settings: probe.config, speed: 1, selected: null, running: false});
+    const after = await request('snapshot', {}, epoch);
+    const ticks = Math.round(after.state.simTime * 60); assert.ok(ticks > 0);
+    for (let i = 0; i < ticks; i++) stepSimulation(direct, probe.config, 1 / 60);
+    assert.deepEqual(after.state, createSnapshot(direct, probe.config).state);
+    assert.ok(after.state.organisms[0].recentFeedings.some(e => e.energyTransferred > 0));
+    send({type: 'control', epoch, id: -100 - epoch, settings: {...probe.config, mouthContactModel: undefined}, speed: 1, running: false});
+    assert.match((await receive(value => value.id === -100 - epoch)).message, /Mouth contact model/);
+    assert.deepEqual((await request('snapshot', {}, epoch)).state, after.state);
+  }
+  console.log('Production Worker: open/closed exact exports, funded commands, independent stepping, debt, direct equivalence, all physics regimes, mouth contact in all six physics/ecology combinations, regime-switch and stale-world rejection passed.');
 } finally { await worker.terminate(); }

@@ -77,10 +77,25 @@ specialist mouths. Feeding requires physical contact; no steering or survival
 bonus is supplied. Pigment is independent of diet. Kin protection can restrict
 living-relative/related-egg feeding; carrion carries no kin protection.
 
-Mouth size and hit-area review remains pending: displayed markers, inherited
-aperture span, rotated prey and endpoint contact, and collision obstruction must
-be evaluated together. Current mouth reach, transfer rates and diet permissions
-remain unchanged.
+### Physical mouth aperture
+
+New worlds use a **rounded capsule**: the inherited `intakeWidth` span (half-span
+at least the contact radius), thickened by 4.5 px for carnivores, 4 px for omnivores
+or 3.5 px for herbivores. Prey rectangles, nutrient circles and eggs all use that
+full aperture. Endpoint grazing, containment and rotated prey count only on
+physical overlap; tank body contacts still resolve before feeding. No steering,
+automatic feeding, new reach outside this capsule or increased transfer rate is
+provided. A narrow-host mouth can overhang its face; inherited widths are not
+silently clamped or resized.
+
+The tank aperture overlay shows that actual capsule at physical size. Bank
+previews show the inherited span and radius. Mouth icons and bite animation are
+cosmetic and do not change contact. Older saved worlds keep their original prey
+shape (span line plus central disk) until **Update mouth contact geometry** is
+chosen in settings. That authoritative upgrade retains the entire ecosystem,
+energy, random state, genes, brain, physics and economy; reset uses current contact.
+The same correction applies to carnivore and omnivore prey contact; diet balance
+and broader biological mouth sizing remain separate design work.
 
 ## Chemical energy transfers
 

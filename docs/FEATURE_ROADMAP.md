@@ -69,10 +69,12 @@ errors. No starter/body/brain/diet retuning or 3D/sleep work accompanies this ch
   pose projection has no immediate kinetic change, but can affect later bias.
   The solver correction itself remains open. Preserve saved regimes and compare
   all nine frozen swimmers before proposing any replacement for production.
-- Review mouth size and physical hit area together: inherited intake span,
-  visible marker, rotated prey contact, aperture endpoints and body-collision
-  obstruction. Treat contact correctness separately from brain or diet-rate
-  tuning. This is an explicit user priority, not permission for hidden reach.
+- Full rounded mouth aperture is implemented for new worlds and explicit saved-
+  world upgrades. Display and prey detection now use the inherited span with the
+  same contact radius as nutrients/eggs. Endpoint, rotated and collision-contact
+  checks pass; no genes/rates are retuned. Further biological mouth-size/diet
+  balance remains separate from this geometry correction. Robust natural pursuit
+  and longer ecological validation remain open.
 - Notification expiry is centralized and hinge dots are removed. Physical joints
   remain necessary; marker removal reduces canvas work, not Worker joint work.
 

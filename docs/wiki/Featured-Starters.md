@@ -4,6 +4,10 @@ The Bank has **Featured**, **Legacy**, **My saved specimens** and **All**
 collections, with text search, family/diet filters, previews and spawning.
 Nine featured genotypes coexist with all 55 original legacy designs.
 
+Bank previews draw mouths at their inherited aperture span and contact radius,
+including overhang, rather than shrinking every mouth to a small dot. This is a
+visualization change; catalogue anatomy and genes are unchanged.
+
 ## Featured designs
 
 | Identity | Source anatomy | Diet | Body plan |

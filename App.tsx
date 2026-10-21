@@ -1,3 +1,4 @@
+import {mouthDimensions} from './mouthGeometry';
 import {NEW_PHYSICS_REGIME, type PhysicsRegime} from './foundationPhysics';
 import {enableClosedEconomy, occupiedPopulation, setWorldEnergy, EGG_LIFETIME_MULTIPLIER,
   embodiedEnergy} from './energyEconomy';
@@ -294,6 +295,7 @@ export default function App() {
   const [targetNutrientAbundance, setTargetNutrientAbundance] = useState<number>(clampVal(getConfig('targetNutrientCount') ?? 275, 0, 800));
   const [nutrientInflowRate, setNutrientInflowRate] = useState<number>((getConfig('nutrientInflowRate') as number) ?? 15);
   // Default uniform until repeated natural-feeding evidence favors hotspots.
+  const [mouthContactModel, setMouthContactModel] = useState<'capsule-v1' | undefined>('capsule-v1');
   const [physicsRegime, setPhysicsRegime] = useState<PhysicsRegime>(NEW_PHYSICS_REGIME);
   const [ecologyRegime, setEcologyRegime] = useState<'closed-v1' | undefined>('closed-v1');
   const [nutrientLimit, setNutrientLimit] = useState<number | null>(null);
@@ -546,8 +548,8 @@ export default function App() {
   const currentSettings = useCallback((): SimulationSettings => ({worldWidth, worldHeight, waterViscosity,
     targetNutrients: targetNutrientAbundance, inflowRate: nutrientInflowRate,
     nutrientPattern, kinshipProtection: kinshipProtectionEnabled,
-    mutationSeverity, gravity, maxOrganisms, physicsRegime, ecologyRegime, nutrientLimit}),
-    [worldWidth, worldHeight, waterViscosity, targetNutrientAbundance, nutrientInflowRate, nutrientPattern, kinshipProtectionEnabled, gravity, maxOrganisms, mutationSeverity, physicsRegime, ecologyRegime, nutrientLimit]);
+    mutationSeverity, gravity, maxOrganisms, physicsRegime, ecologyRegime, nutrientLimit, mouthContactModel}),
+    [worldWidth, worldHeight, waterViscosity, targetNutrientAbundance, nutrientInflowRate, nutrientPattern, kinshipProtectionEnabled, gravity, maxOrganisms, mutationSeverity, physicsRegime, ecologyRegime, nutrientLimit, mouthContactModel]);
 
   workerSettingsRef.current = currentSettings();
   const workerAction = (action: WorldAction) => workerClientRef.current!.action(action)
@@ -578,6 +580,16 @@ export default function App() {
         setEnergyBudgetDraft(current => current === joules ? null : current);
     });
     else {setWorldEnergy(simStateRef.current, joules); setEcoStats(prev => ({...prev}));}
+  };
+
+  const updateMouthContact = async () => {
+    try {
+      const exact = restoreSnapshot(await authoritativeSnapshot());
+      const config = {...exact.settings, mouthContactModel: 'capsule-v1' as const};
+      replaceWorld(exact.state, config);
+      setMouthContactModel('capsule-v1');
+      setSaveNotification('Mouth contact updated. Creatures, energy and swimming kept.');
+    } catch (error) {setSaveNotification(`Mouth update failed: ${String(error)}`);}
   };
 
   const repairSwimmingInWorld = async () => {
@@ -639,6 +651,7 @@ export default function App() {
       replaceWorld(restored.state, v);
       setEcoStats(prev => ({...prev, ...collectWorldStats(restored.state, v.targetNutrients)}));
       setPhysicsRegime(v.physicsRegime ?? 'legacy-v0');
+      setMouthContactModel(v.mouthContactModel);
       setEcologyRegime(v.ecologyRegime); setNutrientLimit(v.nutrientLimit ?? null);
       setWorldWidth(v.worldWidth); setWorldHeight(v.worldHeight); setGravity(v.gravity ?? 0);
       setWaterViscosity(v.waterViscosity); setTargetNutrientAbundance(v.targetNutrients); setNutrientInflowRate(v.inflowRate);
@@ -668,7 +681,8 @@ export default function App() {
   const initGame = useCallback(
     (preset = 'standard') => {
       const config = {...currentSettings(), physicsRegime: NEW_PHYSICS_REGIME,
-        ecologyRegime: 'closed-v1' as const, nutrientLimit: null};
+        ecologyRegime: 'closed-v1' as const, nutrientLimit: null, mouthContactModel: 'capsule-v1' as const};
+      setMouthContactModel('capsule-v1');
       setPhysicsRegime(NEW_PHYSICS_REGIME);
       setEcologyRegime('closed-v1'); setNutrientLimit(null);
       replaceWorld(createInitialWorld(config, simulationSeed, founderMode, preset, getConfig('initialOrganisms')), config);
@@ -902,7 +916,7 @@ export default function App() {
     const s = simStateRef.current;
 
     const settings: SimulationSettings = {
-      ecologyRegime, nutrientLimit,
+      ecologyRegime, nutrientLimit, mouthContactModel,
       physicsRegime,
       worldWidth,
       worldHeight,
@@ -1315,12 +1329,11 @@ export default function App() {
           const isCarn = mouth.mouthType === 'carnivore';
           const isOmni = mouth.mouthType === 'omnivore';
 
-          const mouthRadius = isCarn ? 4.5 : isOmni ? 4.0 : 3.5;
+          const {radius: mouthRadius, halfSpan: halfAperture} = mouthDimensions(mouth);
           const lastBite = org.recentFeedings?.filter(event => event.mouthId === mouth.id).at(-1);
           const activity = Math.max(org.mouthFeedback?.[mouth.id]?.intake ?? 0,
             lastBite ? clampVal(1 - (s.simTime - lastBite.timestamp) / .3, 0, 1) : 0);
           const opening = activity * (.5 + .5 * Math.sin(s.simTime * 28));
-          const halfAperture = Math.max(mouthRadius, mouth.intakeWidth * 0.5);
 
           // Physical Feeding Aperture Slot Indicator (Visible under HUD toggle or selection)
           if (showMouthApertures || isSelected) {
@@ -1333,23 +1346,36 @@ export default function App() {
             const a2x = mouthLoc.x + tanX * halfAperture;
             const a2y = mouthLoc.y + tanY * halfAperture;
 
-            // Aperture span line
-            ctx.beginPath();
-            ctx.moveTo(a1x, a1y);
-            ctx.lineTo(a2x, a2y);
-            ctx.strokeStyle = isCarn ? '#f43f5e' : isOmni ? '#c084fc' : '#34d399';
-            ctx.lineWidth = Math.max(1.5, 2.5 / zoom);
-            ctx.stroke();
+            if (mouthContactModel === 'capsule-v1') {
+              // Same rounded span and radius as nutrient, egg and prey contact.
+              ctx.translate(mouthLoc.x, mouthLoc.y);
+              ctx.rotate(Math.atan2(tanY, tanX));
+              ctx.beginPath();
+              ctx.roundRect(-halfAperture - mouthRadius, -mouthRadius,
+                2 * (halfAperture + mouthRadius), 2 * mouthRadius, mouthRadius);
+              ctx.fillStyle = isCarn ? 'rgba(244,63,94,.35)' : isOmni ? 'rgba(192,132,252,.35)' : 'rgba(52,211,153,.35)';
+              ctx.strokeStyle = isCarn ? '#f43f5e' : isOmni ? '#c084fc' : '#34d399';
+              ctx.lineWidth = Math.max(.5, 1 / zoom);
+              ctx.fill(); ctx.stroke();
+            } else {
+              // Aperture span line
+              ctx.beginPath();
+              ctx.moveTo(a1x, a1y);
+              ctx.lineTo(a2x, a2y);
+              ctx.strokeStyle = isCarn ? '#f43f5e' : isOmni ? '#c084fc' : '#34d399';
+              ctx.lineWidth = Math.max(1.5, 2.5 / zoom);
+              ctx.stroke();
 
-            // Geometric contact halo
-            ctx.beginPath();
-            ctx.arc(mouthLoc.x, mouthLoc.y, mouthRadius, 0, Math.PI * 2);
-            ctx.fillStyle = isCarn
-              ? 'rgba(244, 63, 94, 0.35)'
-              : isOmni
-              ? 'rgba(192, 132, 252, 0.35)'
-              : 'rgba(52, 211, 153, 0.35)';
-            ctx.fill();
+              // Geometric contact halo
+              ctx.beginPath();
+              ctx.arc(mouthLoc.x, mouthLoc.y, mouthRadius, 0, Math.PI * 2);
+              ctx.fillStyle = isCarn
+                ? 'rgba(244, 63, 94, 0.35)'
+                : isOmni
+                ? 'rgba(192, 132, 252, 0.35)'
+                : 'rgba(52, 211, 153, 0.35)';
+              ctx.fill();
+            }
             ctx.restore();
           }
 
@@ -2005,6 +2031,13 @@ export default function App() {
                 </button>
                 <p className="text-[10px] text-slate-400">Keeps your creatures and ecosystem; applies repaired movement.</p>
               </div>}
+              <div data-testid="mouth-contact-model" className="text-[10px] text-slate-400">
+                Mouth contact: {mouthContactModel === 'capsule-v1' ? 'Full rounded aperture' : 'Legacy saved geometry'}.
+                {!mouthContactModel && <button onClick={() => void updateMouthContact()}
+                  className="mt-1 w-full rounded border border-rose-400/50 px-2 py-1 text-xs text-rose-200">
+                  Update mouth contact geometry
+                </button>}
+              </div>
               {energyPool ? <div className="space-y-2 text-[11px]" data-testid="closed-energy-controls">
                 <p className="text-cyan-200">Closed world energy budget</p>
                 <label className="flex justify-between">Maximum nutrients <strong>{nutrientLimit ?? 'Unlimited'}</strong></label>

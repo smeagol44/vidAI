@@ -1,3 +1,26 @@
+# Full mouth aperture (v0.36.0)
+
+- New application worlds use `mouthContactModel: capsule-v1`. Omitted means the
+  exact historical prey shape (span line plus centre disk). Do not add the flag
+  to DEFAULT_SETTINGS or silently change old imported worlds. Explicit UI upgrade
+  resets an authoritative snapshot with the new setting, preserving all state.
+- Schema v14 requires capsule-v1 and permits independently open/closed ecology and
+  all three physics regimes. Old open/closed saves remain v12/v13. Reject unknown,
+  missing or smuggled contact models. Worker control packets cannot switch modes.
+- `mouthGeometry.ts` owns existing radii (4.5/4/3.5) and inherited half-span. Use
+  the same rounded capsule for prey, nutrients and eggs in new worlds, and show
+  that actual aperture in the tank and Bank previews. No gene resizing, face-width
+  clamp, eating-rate, assimilation, diet, brain or swimming-force changes.
+- `audit:mouth-contact` records geometry coverage, real collision/bite controls,
+  nine exactly unchanged food-free swims and two 60 s closed showcase pairs. Seed 73
+  prey absorption increases 1968 → 4200 J (+113%); nutrients 64032 → 60720 J (-5.2%),
+  both still 11 living/two offspring. Disclosed before production. This does not
+  establish reliable hunting, balanced diets or sustained ecology. Extra prey
+  intake was by omnivores; specialist carnivores ate nothing in these short pairs.
+- The visible BUILD_VERSION and package release must match (covered by a test).
+  The prior 0.35.1 patch accidentally retained a 0.35.0 display/export build label;
+  its code was deployed, but the label was stale. Current release corrects it.
+
 # UI corrections and mechanical observation (v0.35.1)
 
 - All transient messages use `useNotification`: one 2500-ms wall-clock lifetime,
@@ -16,9 +39,8 @@
   immediate kinetic change. Solver correction remains open; retain all regimes.
 - User accepts indebted extinct worlds without abiotic nutrient decay. No decay
   work is needed. Adding a creature still needs funded reserve.
-- Mouth size and hit detection are explicitly pending together: visible markers,
-  inherited aperture, endpoint/rotated contact and collision obstruction. Keep
-  this ahead of ecological/brain tuning; do not silently change old save feeding.
+- Mouth contact now follows the separate model above. Broader mouth/diet balance
+  tuning remains deferred; do not silently change old save feeding.
 
 # Closed ecological economy and eggs (v0.35.0)
 
@@ -45,7 +67,8 @@
   reserve and physical clearance. Blocked/damaged eggs age until 3*incubation,
   then become carrion exactly once. Expiry wins on the boundary. Zero reserve
   does not block an already-funded hatch. Closed extinct worlds keep recycling.
-- New closed saves use schema v13; open snapshots stay v12 and exact. Conversion
+- Without capsule contact, closed saves use schema v13 and open saves v12;
+  capsule snapshots use v14 with either economy. All preserve exact continuation. Conversion
   uses only present stores, zero world reserve, known incubation progress for age
   (ready eggs get two incubation periods of grace), and remaining reserve for the
   new target. Never reclaim historical expenditure or invent prior egg uptake.
