@@ -1,3 +1,4 @@
+import {muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
 import {markLineageChanged} from './lineageChanges';
 import {compiledBrain, compiledDeltas, alignPlasticRecords, invalidateCompiledBrain} from './neuralRuntime';
 import {resolveBodyContacts} from './contacts';
@@ -249,7 +250,7 @@ export interface Genome {
   maturityAge: number;         // seconds until sexual maturity (10.0..45.0s)
   incubationTime: number;      // seconds
   eggReserveFraction: number;  // fraction of budget to reserve
-  reproductionThreshold: number; // energy ratio needed
+  reproductionThreshold: number; // Retired compatibility allele; funding/reserve rules govern laying.
   reproductionCooldown: number;  // cooldown in seconds
   maxLifespan: number;          // seconds
   metabolicEfficiency: number;
@@ -332,6 +333,7 @@ export interface Organism {
   traceHistory?: Array<{x: number; y: number; time: number}>;
   recentFeedings?: FeedingEvent[];
   mouthFeedback?: Record<string, {contact: number; intake: number}>;
+  motorDiagnostics?: {positiveWorkJ: number; negativeWorkJ: number; energyLimitedImpulses: number; numericalGuardEvents: number};
   biteFeedbackJ?: number; // Actual reserve/tissue energy physically bitten since the last neural tick.
 }
 
@@ -437,6 +439,8 @@ export interface SimulationLedger {
 }
 
 export interface SimulationSettings {
+  /** Omitted by historical callers: exact legacy continuation. */
+  physicsRegime?: PhysicsRegime;
   worldWidth: number;
   worldHeight: number;
   waterViscosity: number;
@@ -2231,7 +2235,7 @@ export function mutateBrainTopology(g: Genome, operation: BrainTopologyOperation
 }
 
 // Structural Topology Mutation with Strict No-Wide-to-Wide Validation
-export function mutateGenome(parent: Genome, severity = 0.25, customPrng: XoshiroPRNG = rng): Genome {
+export function mutateGenome(parent: Genome, severity = 0.25, customPrng: XoshiroPRNG = rng, physicsRegime?: PhysicsRegime): Genome {
   const mutChance = clampVal(severity, 0, 1);
   const mutScale = mutChance * 1.2;
   if (mutChance === 0) {
@@ -2491,7 +2495,10 @@ export function mutateGenome(parent: Genome, severity = 0.25, customPrng: Xoshir
     maturityAge: mutatedMaturityAge,
     incubationTime: mutate(parent.incubationTime, 1, 5.0, 20.0),
     eggReserveFraction: mutate(parent.eggReserveFraction, 0.05, 0.2, 0.55),
-    reproductionThreshold: mutate(parent.reproductionThreshold, 0.04, 0.50, 0.80),
+    reproductionThreshold: (() => {
+      const historical = mutate(parent.reproductionThreshold, 0.04, 0.50, 0.80);
+      return physicsRegime === 'surface-work-v1' ? parent.reproductionThreshold : historical;
+    })(),
     reproductionCooldown: mutate(parent.reproductionCooldown, 1, 12.0, 25.0),
     maxLifespan: mutate(parent.maxLifespan, 20, 220, 550),
     metabolicEfficiency: mutate(parent.metabolicEfficiency, 0.05, 0.85, 1.35),
@@ -2940,6 +2947,7 @@ export function calculateJointMotorTarget(def: PartDef, phase: number, amplitude
 
 function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number): number {
   const g = org.genome, numJoints = org.joints.length;
+  const corrected = settings.physicsRegime === 'surface-work-v1';
   const mu = settings.waterViscosity ?? .22, gravity = settings.gravity ?? 0;
   const {worldWidth, worldHeight} = settings;
   const partCount = org.segments.length;
@@ -2999,23 +3007,35 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     joint.currentRelAngVel = relAngVel;
 
     const avgInertia = (scratchInertias[parentIdx] + scratchInertias[childIdx]) * 0.5;
-    const kp = g.motorForce * avgInertia * 480.0 * stiffnessDampingMod;
-    const kd = Math.sqrt(kp * avgInertia) * 1.4 * stiffnessDampingMod;
+    const muscle = corrected ? muscleParameters(g.parts[parentIdx], childDef,
+      scratchInertias[parentIdx], scratchInertias[childIdx], g.motorForce, stiffnessDampingMod, peakTorqueMod) : null;
+    const kp = muscle?.kp ?? g.motorForce * avgInertia * 480.0 * stiffnessDampingMod;
+    const kd = muscle?.kd ?? Math.sqrt(kp * avgInertia) * 1.4 * stiffnessDampingMod;
 
     let motorTorque = kp * (targetAngle - currentRelAngle) - kd * relAngVel;
-    const maxTorque = avgInertia * 2200.0 * peakTorqueMod;
+    const maxTorque = muscle?.maxTorque ?? avgInertia * 2200.0 * peakTorqueMod;
     motorTorque = clampVal(motorTorque, -maxTorque, maxTorque) * joint.engagement;
+    if (corrected && !Number.isFinite(motorTorque)) throw new Error('Non-finite muscle torque');
     if (isNaN(motorTorque)) motorTorque = 0;
-    joint.appliedTorque = motorTorque;
-
-    const deltaTheta = Math.abs(relAngVel * dt_sub);
-    const stepJointWork = Math.abs(motorTorque) * deltaTheta * FORCE_COST_MULTIPLIER;
-    if (!isNaN(stepJointWork) && isFinite(stepJointWork)) {
-      frameMechanicalWork += stepJointWork;
+    if (corrected) {
+      const paid = paidMotorImpulse(motorTorque, dt_sub, relAngVel,
+        scratchInvInertias[parentIdx] + scratchInvInertias[childIdx], org.energy);
+      childPhys.angVel += paid.impulse * scratchInvInertias[childIdx];
+      parentPhys.angVel -= paid.impulse * scratchInvInertias[parentIdx];
+      org.energy = Math.max(0, org.energy - paid.costJ);
+      frameMechanicalWork += paid.costJ;
+      org.motorDiagnostics!.positiveWorkJ += paid.positiveJ;
+      org.motorDiagnostics!.negativeWorkJ += paid.negativeJ;
+      org.motorDiagnostics!.energyLimitedImpulses += Number(paid.limited);
+      joint.appliedTorque = paid.impulse / dt_sub;
+    } else {
+      joint.appliedTorque = motorTorque;
+      const deltaTheta = Math.abs(relAngVel * dt_sub);
+      const stepJointWork = Math.abs(motorTorque) * deltaTheta * FORCE_COST_MULTIPLIER;
+      if (!isNaN(stepJointWork) && isFinite(stepJointWork)) frameMechanicalWork += stepJointWork;
+      scratchTorque[childIdx] += motorTorque;
+      scratchTorque[parentIdx] -= motorTorque;
     }
-
-    scratchTorque[childIdx] += motorTorque;
-    scratchTorque[parentIdx] -= motorTorque;
   }
 
   // Integrated Hydrodynamic Drag
@@ -3028,12 +3048,14 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     const u = seg.vx * cosA + seg.vy * sinA;
     const v = -seg.vx * sinA + seg.vy * cosA;
 
-    const fLocalX = -LONGITUDINAL_DRAG * mu * def.height * u; // Tangential resistance; normal drag remains stronger.
-    const fLocalY = -2.0 * mu * def.width * v;  // Normal anisotropic fluid drag
+    const resistance = corrected ? surfaceResistance(def.width, def.height, mu) : null;
+    const fLocalX = -(resistance?.x ?? LONGITUDINAL_DRAG * mu * def.height) * u; // Normal forces on the end faces; legacy retains its axial calibration.
+    const fLocalY = corrected ? -resistance!.y * v : -2.0 * mu * def.width * v;  // Normal anisotropic fluid drag
 
     const fDragWorldX = fLocalX * cosA - fLocalY * sinA;
     const fDragWorldY = fLocalX * sinA + fLocalY * cosA;
-    const fDragTorque = -(mu * seg.angVel * (def.width * def.width * def.width + def.height * def.height * def.height)) / 6.0;
+    const fDragTorque = corrected ? -resistance!.angular * seg.angVel
+      : -(mu * seg.angVel * (def.width * def.width * def.width + def.height * def.height * def.height)) / 6.0;
 
     scratchFx[i] += fDragWorldX;
     scratchFy[i] += fDragWorldY + gravity * scratchMasses[i];
@@ -3082,6 +3104,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     seg.angVel += scratchTorque[i] * scratchInvInertias[i] * dt_sub;
 
     const spd = Math.hypot(seg.vx, seg.vy);
+    if (corrected && (spd > 400 || Math.abs(seg.angVel) > 20)) org.motorDiagnostics!.numericalGuardEvents++;
     if (spd > 400.0) {
       seg.vx = (seg.vx / spd) * 400.0;
       seg.vy = (seg.vy / spd) * 400.0;
@@ -3725,6 +3748,9 @@ export function stepSimulation(
   // All bodies advance on the same substep clock. Resolve solid body/self-contact
   // before feeding, so mouths bite at the physical contact surface.
   const active = organisms.filter(org => !org.dissolving);
+  const corrected = settings.physicsRegime === 'surface-work-v1';
+  if (corrected) for (const org of active) org.motorDiagnostics = {
+    positiveWorkJ: 0, negativeWorkJ: 0, energyLimitedImpulses: 0, numericalGuardEvents: 0};
   const work = new Map(active.map(org => [org, 0]));
   const substeps = Math.max(NUM_SUBSTEPS, Math.ceil(dt * 240));
   for (let sub = 0; sub < substeps; sub++) {
@@ -3735,8 +3761,8 @@ export function stepSimulation(
     const org = active[index], g = org.genome;
     let frameMechanicalWork = work.get(org)!;
 
-    // Clamp mechanical work to prevent frame 0 impulse spikes from draining reserves
-    frameMechanicalWork = Math.min(MAX_FRAME_MOTOR_WORK, frameMechanicalWork);
+    // Historical saves retain their old billing cap; corrected impulses are prepaid.
+    if (!corrected) frameMechanicalWork = Math.min(MAX_FRAME_MOTOR_WORK, frameMechanicalWork);
 
     // Mass-Weighted COM Speed & Odometry
     const comData = calculateOrganismCOM(org);
@@ -3766,12 +3792,12 @@ export function stepSimulation(
     org.totalEnergyRate = basalRate + sensoryRate + motorRate + (org.plasticityEnergyRate ?? 0);
 
     // Deduct expenditure and ensure reserves strictly stop at 0.0 (no negative reserves)
-    const requiredExpenditure = totalBasalDissipation + frameMechanicalWork;
+    const requiredExpenditure = totalBasalDissipation + (corrected ? 0 : frameMechanicalWork);
     const paidFraction = requiredExpenditure > 0
       ? Math.min(1, org.energy / requiredExpenditure) : 0;
     org.energy = Math.max(0.0, org.energy - requiredExpenditure);
     ledger.metabolicDissipation += totalBasalDissipation * paidFraction;
-    ledger.mechanicalWorkHeat += frameMechanicalWork * paidFraction;
+    ledger.mechanicalWorkHeat += frameMechanicalWork * (corrected ? 1 : paidFraction);
 
   }
   // Feeding has its own post-movement index; sight bounds must never be reused.
@@ -3933,7 +3959,7 @@ export function stepSimulation(
 
         for (let k = 0; k < clutchCount; k++) {
           if (eggs.length >= 75) break;
-          const babyGenome = mutateGenome(g, mutationSeverity, prng);
+          const babyGenome = mutateGenome(g, mutationSeverity, prng, settings.physicsRegime);
           babyGenome.parentIds = [org.id];
           const offspringBodyCost = babyGenome.bodyCost;
           const allocatedReserve = getEggReserveFunding(g);

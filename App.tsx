@@ -1,3 +1,4 @@
+import {NEW_PHYSICS_REGIME, type PhysicsRegime} from './foundationPhysics';
 // tslint:disable
 /* eslint-disable */
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
@@ -291,6 +292,7 @@ export default function App() {
   const [targetNutrientAbundance, setTargetNutrientAbundance] = useState<number>(clampVal(getConfig('targetNutrientCount') ?? 275, 0, 800));
   const [nutrientInflowRate, setNutrientInflowRate] = useState<number>((getConfig('nutrientInflowRate') as number) ?? 15);
   // Default uniform until repeated natural-feeding evidence favors hotspots.
+  const [physicsRegime, setPhysicsRegime] = useState<PhysicsRegime>(NEW_PHYSICS_REGIME);
   const [nutrientPattern, setNutrientPattern] = useState<'uniform' | 'blooms'>('uniform');
   const [kinshipProtectionEnabled, setKinshipProtectionEnabled] = useState<boolean>(true);
   const [gravity, setGravity] = useState(0);
@@ -534,8 +536,8 @@ export default function App() {
   const currentSettings = useCallback((): SimulationSettings => ({worldWidth, worldHeight, waterViscosity,
     targetNutrients: targetNutrientAbundance, inflowRate: nutrientInflowRate,
     nutrientPattern, kinshipProtection: kinshipProtectionEnabled,
-    mutationSeverity, gravity, maxOrganisms}),
-    [worldWidth, worldHeight, waterViscosity, targetNutrientAbundance, nutrientInflowRate, nutrientPattern, kinshipProtectionEnabled, gravity, maxOrganisms, mutationSeverity]);
+    mutationSeverity, gravity, maxOrganisms, physicsRegime}),
+    [worldWidth, worldHeight, waterViscosity, targetNutrientAbundance, nutrientInflowRate, nutrientPattern, kinshipProtectionEnabled, gravity, maxOrganisms, mutationSeverity, physicsRegime]);
 
   workerSettingsRef.current = currentSettings();
   const workerAction = (action: WorldAction) => workerClientRef.current!.action(action)
@@ -594,6 +596,7 @@ export default function App() {
       const v = restored.settings;
       replaceWorld(restored.state, v);
       setEcoStats(prev => ({...prev, ...collectWorldStats(restored.state, v.targetNutrients)}));
+      setPhysicsRegime(v.physicsRegime ?? 'legacy-v0');
       setWorldWidth(v.worldWidth); setWorldHeight(v.worldHeight); setGravity(v.gravity ?? 0);
       setWaterViscosity(v.waterViscosity); setTargetNutrientAbundance(v.targetNutrients); setNutrientInflowRate(v.inflowRate);
       setNutrientPattern(v.nutrientPattern ?? 'uniform');
@@ -622,7 +625,9 @@ export default function App() {
   // Initialize Simulation
   const initGame = useCallback(
     (preset = 'standard') => {
-      replaceWorld(createInitialWorld(currentSettings(), simulationSeed, founderMode, preset, getConfig('initialOrganisms')));
+      const config = {...currentSettings(), physicsRegime: NEW_PHYSICS_REGIME};
+      setPhysicsRegime(NEW_PHYSICS_REGIME);
+      replaceWorld(createInitialWorld(config, simulationSeed, founderMode, preset, getConfig('initialOrganisms')), config);
       popHistoryRef.current = [simStateRef.current.organisms.length];
       setEcoStats(prev => ({...prev, ...collectWorldStats(simStateRef.current, targetNutrientAbundance)}));
 
@@ -853,6 +858,7 @@ export default function App() {
     const s = simStateRef.current;
 
     const settings: SimulationSettings = {
+      physicsRegime,
       worldWidth,
       worldHeight,
       waterViscosity,
@@ -1949,6 +1955,10 @@ export default function App() {
                 />
               </div>
 
+              <p data-testid="physics-regime" className="text-[10px] text-slate-400">
+                Physics: {physicsRegime === 'legacy-v0' ? 'Legacy (saved world)' : 'Surface drag / paid muscles'}.
+                {' '}Reset starts a world with current physics.
+              </p>
               {/* Target Abundance */}
               <div>
                 <div className="flex justify-between items-center mb-1 text-slate-300 text-[11px]">
@@ -2927,7 +2937,7 @@ export default function App() {
               Recurrent Neural Brains & Hydrodynamic Artificial Life
             </p>
             <p className="text-slate-300 text-sm leading-relaxed mb-6">
-              Observe swimming creatures driven by inherited recurrent neural networks, genuine fluid hydrodynamics, and closed-loop thermodynamics!
+              Observe swimming creatures driven by inherited recurrent neural networks, surface water resistance, and finite energy reserves.
             </p>
 
             <div className="w-full flex flex-col gap-3">

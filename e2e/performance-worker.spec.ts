@@ -5,15 +5,18 @@ import {createInitialWorld, addExternalOrganism} from '../world';
 import {createFounderGenome} from '../founders';
 
 test.use({viewport: {width: 1280, height: 850}});
-test('worker imports/exports exact paused state and owns feeding/spawning while rendering stays independent', async ({page}) => {
+for (const physicsRegime of ['surface-work-v1', 'legacy-v0'] as const) test(`worker imports/exports ${physicsRegime} and owns feeding/spawning while rendering stays independent`, async ({page}) => {
   const errors: string[] = []; const workers: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('worker', worker => workers.push(worker.url()));
   await page.goto('./?autoplay');
   await page.getByTitle('Ecology & Physical Settings').click();
-  const settings = {...DEFAULT_SETTINGS, targetNutrients: 80, inflowRate: 0};
+  const settings = {...DEFAULT_SETTINGS, physicsRegime, targetNutrients: 80, inflowRate: 0};
   const world = createInitialWorld({...settings, targetNutrients: 0}, 91, 'balanced', 'standard', 2);
   const source = createSnapshot(world, settings);
+  if (physicsRegime === 'legacy-v0') {
+    source.schemaVersion = '11.0.0'; delete (source.settings as Partial<typeof settings>).physicsRegime;
+  }
   await page.locator('input[type=file]').setInputFiles({name: 'worker-test.json', mimeType: 'application/json',
     buffer: Buffer.from(JSON.stringify(source))});
   await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
@@ -36,6 +39,7 @@ test('worker imports/exports exact paused state and owns feeding/spawning while 
   await page.keyboard.press('Space');
   await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
   const after = await exportState();
+  expect(after.settings.physicsRegime).toBe(physicsRegime);
   expect(after.state.simTime).toBeGreaterThan(.1);
   expect(after.state.organisms).toHaveLength(3);
   expect(after.state.nutrients.length).toBeGreaterThan(0);
@@ -88,5 +92,33 @@ test('new worlds use requested defaults and creature clicks keep diagnostics clo
   await page.getByTitle('Close Diagnostics Window (✕)').click();
   await badge.getByRole('button', {name: 'Inspect', exact: true}).click();
   await expect(inspector.getByLabel('Pruning threshold', {exact: true})).toHaveValue('0.5');
+  expect(errors).toEqual([]);
+});
+
+for (const fallback of [false, true]) test(`legacy import and current reset agree in ${fallback ? 'fallback' : 'Worker'}`, async ({page}) => {
+  const errors: string[]=[];page.on('pageerror',error=>errors.push(error.message));
+  await page.goto(`./?autoplay${fallback ? '&mainthread' : ''}`);
+  await page.getByTitle('Ecology & Physical Settings').click();
+  const settings={...DEFAULT_SETTINGS,physicsRegime:'legacy-v0' as const,targetNutrients:0,inflowRate:0};
+  const source=createSnapshot(createInitialWorld(settings,91,'balanced','standard',2),settings);
+  source.schemaVersion='11.0.0';delete (source.settings as Partial<typeof settings>).physicsRegime;
+  await page.locator('input[type=file]').setInputFiles({name:'old-world.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(source))});
+  await expect(page.getByRole('button',{name:'RESUME SIMULATION',exact:true})).toBeVisible();
+  await expect(page.getByTestId('physics-regime')).toContainText('Legacy');
+  const exportState=async()=>{
+    const downloaded=page.waitForEvent('download');
+    await page.getByRole('button',{name:'Export Snapshot',exact:true}).dispatchEvent('click');
+    return JSON.parse(await readFile((await (await downloaded).path())!,'utf8'));
+  };
+  expect((await exportState()).settings.physicsRegime).toBe('legacy-v0');
+  await page.getByRole('button',{name:'RESUME SIMULATION',exact:true}).click();
+  await page.getByTitle('Close settings (✕)').click();
+  await page.keyboard.press('Escape');
+  await page.getByRole('button',{name:'RESEED SOUP',exact:true}).click();
+  await page.getByTitle('Ecology & Physical Settings').click();
+  await expect(page.getByTestId('physics-regime')).toContainText('Surface drag');
+  await page.keyboard.press('Space');
+  const reset=await exportState();expect(reset.settings.physicsRegime).toBe('surface-work-v1');
+  expect(reset.state.organisms.some((o: any)=>o.motorDiagnostics?.positiveWorkJ>0)).toBe(true);
   expect(errors).toEqual([]);
 });

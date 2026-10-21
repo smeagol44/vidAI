@@ -3,7 +3,7 @@
 import * as sim from './simulation';
 import {createFounderGenome} from './founders';
 import {addExternalOrganism, createInitialWorld} from './world';
-import {DEFAULT_SETTINGS, totalAccountedEnergy} from './persistence';
+import {LEGACY_SETTINGS, totalAccountedEnergy} from './persistence';
 import {FoodAcquisitionObserver} from './foodAcquisitionAudit';
 
 export type TwinOarCondition = 'catalogue' | 'current' | 'gait-only' | 'retinal-disconnected';
@@ -26,7 +26,7 @@ function genomeFor(condition: TwinOarCondition): sim.Genome {
  * No per-tick intervention. Sixteen seconds is below normal maturity. */
 export function runTwinOarApproach(condition: TwinOarCondition,
   setup: {side: number; distance: number; heading: number; viscosity: number}) {
-  const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0,
+  const settings = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0,
     mutationSeverity: 0, waterViscosity: setup.viscosity};
   const state = createInitialWorld(settings, 811, 'balanced', 'standard', 0);
   const org = addExternalOrganism(state, genomeFor(condition), settings, 1200, 750, setup.heading)!;
@@ -57,7 +57,7 @@ export function runTwinOarApproach(condition: TwinOarCondition,
  * Only CUR-002's inherited calibration/initial phase differs between worlds.
  * The observers never modify food placement, steering, maturity or reserves. */
 export function runTwinOarScatteredPair(seed: number) {
-  const settings = {...DEFAULT_SETTINGS, targetNutrients: 275};
+  const settings = {...LEGACY_SETTINGS, targetNutrients: 275};
   const measure = (condition: 'catalogue' | 'current') => {
     const state = createInitialWorld(settings, seed, 'balanced', 'showcase');
     const org = state.organisms.find(o => o.genome.id === 'CUR-002')!;

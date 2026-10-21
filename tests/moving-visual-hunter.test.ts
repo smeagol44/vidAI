@@ -3,9 +3,9 @@ import {test} from 'node:test';
 import * as sim from '../simulation';
 import {createFounderGenome} from '../founders';
 import {createInitialWorld, addExternalOrganism} from '../world';
-import {createSnapshot, restoreSnapshot, validateGenome, totalAccountedEnergy, DEFAULT_SETTINGS} from '../persistence';
+import {createSnapshot, restoreSnapshot, validateGenome, totalAccountedEnergy, LEGACY_SETTINGS} from '../persistence';
 
-const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, kinshipProtection: false};
+const settings = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, kinshipProtection: false};
 const dt = 1 / 60;
 const wrap = (n: number) => Math.atan2(Math.sin(n), Math.cos(n));
 

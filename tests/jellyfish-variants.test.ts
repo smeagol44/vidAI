@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {FOUNDER_BLUEPRINTS, createFounderBankItems, createFounderGenome} from '../founders';
-import {DEFAULT_SETTINGS, validateGenome, totalAccountedEnergy} from '../persistence';
+import {LEGACY_SETTINGS, validateGenome, totalAccountedEnergy} from '../persistence';
 import {createInitialWorld, addExternalOrganism} from '../world';
 import {calculateOrganismCOM, morphologyProblems, surfacePlacementProblems, stepSimulation} from '../simulation';
 
 const ids = ['FND-052', 'FND-053', 'FND-054', 'FND-055'];
-const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
+const settings = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
 
 test('55 founders have unique anatomy and valid organs in both brain modes; all five jellyfish appear in the bank', () => {
   assert.equal(FOUNDER_BLUEPRINTS.length, 55);

@@ -3,9 +3,9 @@ import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
 import * as sim from '../simulation';
 import {createInitialWorld, addExternalOrganism} from '../world';
-import {DEFAULT_SETTINGS, createSnapshot, restoreSnapshot, totalAccountedEnergy} from '../persistence';
+import {LEGACY_SETTINGS, createSnapshot, restoreSnapshot, totalAccountedEnergy} from '../persistence';
 
-const settings = {...DEFAULT_SETTINGS, worldWidth: 12000, worldHeight: 12000, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
+const settings = {...LEGACY_SETTINGS, worldWidth: 12000, worldHeight: 12000, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
 function fixture(single = false) {
   const g = sim.createReferenceNematodeGenome(new sim.XoshiroPRNG(9));
   if (single) { g.parts = [g.parts[0]]; g.eyes = []; }
@@ -165,7 +165,7 @@ test('current snapshots preserve motor ramps and oral feedback for exact continu
   const savedSettings = {...settings, worldWidth: 4800, worldHeight: 3000};
   org.segments.forEach(p => { p.x -= 3600; p.y -= 4500; });
   const saved = createSnapshot(s, savedSettings), restored = restoreSnapshot(saved);
-  assert.equal(saved.schemaVersion, '11.0.0');
+  assert.equal(saved.schemaVersion, '12.0.0');
   assert.deepEqual(createSnapshot(restored.state, restored.settings), saved);
   for (let i = 0; i < 120; i++) { sim.stepSimulation(s, savedSettings, 1 / 60); sim.stepSimulation(restored.state, savedSettings, 1 / 60); }
   assert.deepEqual(createSnapshot(s, savedSettings), createSnapshot(restored.state, savedSettings));

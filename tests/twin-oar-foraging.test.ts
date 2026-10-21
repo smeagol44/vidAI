@@ -4,7 +4,7 @@ import {test} from 'node:test';
 import {createFounderGenome, FEATURED_BLUEPRINTS, FOUNDER_BLUEPRINTS} from '../founders';
 import {runTwinOarApproach, TWIN_OAR_APPROACH_CONDITIONS} from '../foragingAudit';
 import {createInitialWorld, addExternalOrganism} from '../world';
-import {createSnapshot, restoreSnapshot, DEFAULT_SETTINGS, validateGenome} from '../persistence';
+import {createSnapshot, restoreSnapshot, LEGACY_SETTINGS, validateGenome} from '../persistence';
 import {stepSimulation, mutateGenome, XoshiroPRNG} from '../simulation';
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
@@ -47,7 +47,7 @@ test('calibration changes only new Twin Oar genes; old saves and the other 63 de
     copy.parts[2].cpgPhaseOffset = 0; return copy;
   };
   assert.deepEqual(strip(current), strip(original), 'anatomy, metabolism and other inherited traits unchanged');
-  const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
+  const settings = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
   const state = createInitialWorld(settings, 311, 'balanced', 'standard', 0);
   addExternalOrganism(state, original, settings, 1200, 750, .23);
   for (let i = 0; i < 30; i++) stepSimulation(state, settings, 1 / 60);

@@ -1,3 +1,25 @@
+# Foundation regimes (v0.34.0, current; supersedes older physics/schema notes)
+
+- New worlds use `surface-work-v1`; v3–v11 imports and omitted kernel settings
+  retain `legacy-v0`. Schema v12 persists/validates the regime, brain stays v7.
+  Never change an existing world's regime through a control packet. Reset uses
+  current physics; exact exports/forks come from authoritative Worker state.
+- `foundationPhysics.ts` specifies unit-depth four-face drag, attachment-section
+  times lever torque, signed impulse work and 25% muscle efficiency. Positive
+  work is prepaid; split within-impulse braking/reversal, no regeneration or
+  40-J corrected billing cap. Do not replace it with pre-speed work estimates.
+- `reproductionThreshold` is retired compatibility data, not a laying gate.
+  Corrected offspring keep its value; retain the historical PRNG draw so other
+  mutations are unchanged. Funding/reserve and inspector rules remain intact.
+- Starter/body/brain/diet tuning is frozen. Historical behavioral assays and
+  search/profile hashes explicitly pin legacy physics. Corrected physics tests
+  assert analytical/causal behavior, not old gait performance. No golden refresh.
+- Routine checks: fast suite, build, real production Worker. `audit:foundation`
+  observes nine unchanged genomes for five seconds per regime without tuning.
+  Existing `audit:locomotion` and bounded search reproduce the legacy regime.
+- Chemical motor-expenditure closure is not complete mechanical conservation:
+  constraint bias/projection and contact remain limitations. Keep Wiki diagrams.
+
 # Bounded Twin Oar food approach (v0.33.1)
 
 - Newly constructed CUR-002 shifts its SOUTH paddle phase by pi and, in balanced

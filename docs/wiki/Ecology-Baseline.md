@@ -47,6 +47,13 @@ funds 3,500 J. Parents retain at least 12% of storage capacity or 2,000 J,
 whichever is larger. Higher reserves trade later reproduction for better-funded
 hatchlings. Existing funded eggs are not rebalanced during import.
 
+The old `reproductionThreshold` field is retired compatibility data: it never
+added a reserve-ratio gate to eligibility or laying. Corrected-world offspring
+keep its stored value without mutating it; legacy worlds retain their exact old
+mutation draws/behavior. No replacement threshold or funding rebalance is added.
+Maturity, cooldown, clutch size, child funding and retained-parent reserves
+remain the actual biological rules, shared by the inspector and kernel.
+
 The egg inspector reports funding, incubation and actual population/space/tank
 blockers. Ready eggs wait for a contained, clear whole-body envelope and retain
 their heading/funding while blocked. Each successful hatch immediately blocks
@@ -89,7 +96,9 @@ not the application default.
 `ecologyAudit.ts` and `ecologyBaseline.ts` measure actual intake, reserves,
 laid eggs, hatched/seeded births, death causes and chemical energy balance.
 The ledger accounts for reserves, structural biomass, funded eggs, food, heat
-and recorded losses against external inflow. This does not certify full
+and recorded losses against external inflow. The historically named motor-heat
+bucket includes chemical energy allocated to work and inefficiency, excluding
+kinetic energy as a stored ledger term. This does not certify full
 mechanical-energy conservation; see [Movement](Motor-Control).
 
 Intake observers sample each completed tick and count only increments of

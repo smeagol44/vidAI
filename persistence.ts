@@ -1,15 +1,18 @@
+import {NEW_PHYSICS_REGIME} from './foundationPhysics';
 import {
   XoshiroPRNG, migrateOrganismBrain, ensureBrainLayout, calculateBodyCost,
   calculateMaxEnergyCapacity, clampVal, getPartCornerVertices,
   getBrainLayout, getDietClassification, brainEdgeKey, CARRION_DECAY_SECONDS, MAX_OUTPUTS, MAX_SURFACE_ORGANS, MAX_NEURAL_INPUTS, MAX_HIDDEN, MAX_ENABLED_BRAIN_EDGES, MAX_BRAIN_MEMORY_SECONDS, MAX_PLASTIC_MOTOR_SYNAPSES, MAX_PLASTIC_SENSORY_SYNAPSES, MAX_LEARNED_MOTOR_DELTA, plasticMotorEdges, plasticSensoryEdges, surfacePlacementProblems, morphologyProblems, type Genome, type SimulationSettings, type SimulationState, type Organism,
 } from './simulation';
 
-export const BUILD_VERSION = '0.33.1';
+export const BUILD_VERSION = '0.34.0';
 export const DEFAULT_SETTINGS: SimulationSettings = {
+  physicsRegime: NEW_PHYSICS_REGIME,
   worldWidth: 2400, worldHeight: 1500, waterViscosity: .18,
   targetNutrients: 275, inflowRate: 15, nutrientPattern: 'uniform', kinshipProtection: true,
   mutationSeverity: .25, gravity: 0, maxOrganisms: 30,
 };
+export const LEGACY_SETTINGS: SimulationSettings = {...DEFAULT_SETTINGS, physicsRegime: 'legacy-v0'};
 export const CREDITS = 'By Hernán Garro & Federico Regueira';
 
 export function totalAccountedEnergy(s: SimulationState): number {
@@ -53,7 +56,7 @@ export function resizeWorld(s: SimulationState, old: SimulationSettings, width: 
 
 export function createSnapshot(s: SimulationState, settings: SimulationSettings, metadata: Record<string, unknown> = {}) {
   const {prng, lineage, ...data} = s;
-  const snapshot = {schemaVersion: '11.0.0', build: BUILD_VERSION, metadata, settings,
+  const snapshot = {schemaVersion: '12.0.0', build: BUILD_VERSION, metadata, settings: {...settings, physicsRegime: settings.physicsRegime ?? 'legacy-v0'},
     state: {...data, prngState: prng.getState(), lineage: [...lineage]}};
   // Canonical JSON representation also drops optional undefined fields in memory.
   return JSON.parse(JSON.stringify(snapshot)) as typeof snapshot;
@@ -192,14 +195,16 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     assert(input.length <= 25_000_000, 'file exceeds 25 MB'); return JSON.parse(input);
   })() : structuredClone(input);
   assert(raw && typeof raw === 'object', 'document');
-  assert(['11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
+  assert(['12.0.0', '11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
   const legacy = raw.schemaVersion === '3.0.0';
   const data = legacy ? raw : raw.state;
   assert(data && typeof data === 'object', 'state');
   finiteTree(data);
   // Historical omitted fields retain their original values; new-world defaults
   // must not silently change old snapshot ecology.
-  const settings: SimulationSettings = {...DEFAULT_SETTINGS, targetNutrients: 400, maxOrganisms: 100, ...raw.settings};
+  const settings: SimulationSettings = {...DEFAULT_SETTINGS, targetNutrients: 400, maxOrganisms: 100, physicsRegime: 'legacy-v0', ...raw.settings};
+  if (raw.schemaVersion !== '12.0.0') settings.physicsRegime = 'legacy-v0';
+  else assert(raw.settings?.physicsRegime === 'legacy-v0' || raw.settings?.physicsRegime === NEW_PHYSICS_REGIME, 'physics regime');
   for (const [key, min, max] of [['worldWidth', 800, 4800], ['worldHeight', 600, 3000], ['waterViscosity', 0, .8],
     ['targetNutrients', 0, 800], ['inflowRate', 0, 150], ['gravity', -200, 200], ['maxOrganisms', 1, 150], ['mutationSeverity', 0, 1]] as const) {
     assert(typeof settings[key] === 'number' && Number.isFinite(settings[key]) && settings[key]! >= min && settings[key]! <= max, `setting ${key}`);
@@ -214,7 +219,7 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     && data.prngState.some((n: number) => n !== 0), 'PRNG state');
   const prng = new XoshiroPRNG(); prng.setState(data.prngState);
   const organisms: Organism[] = data.organisms.map((o: Organism) => {
-    if (raw.schemaVersion === '11.0.0') {
+    if (raw.schemaVersion === '12.0.0' || raw.schemaVersion === '11.0.0') {
       assert(o.genome.brainVersion === 7, 'current brain version');
     } else {
       if (raw.schemaVersion === '10.0.0') assert(o.genome.brainVersion === 6, 'previous brain version');
@@ -223,6 +228,12 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
       migrateOrganismBrain(o); // Keep original activations and PRNG; tau=0 preserves earlier dynamics.
     }
     o.genome = validateGenome(o.genome);
+    if (o.motorDiagnostics !== undefined) {
+      const d = o.motorDiagnostics;
+      assert(d && [d.positiveWorkJ, d.negativeWorkJ, d.energyLimitedImpulses, d.numericalGuardEvents]
+        .every(v => typeof v === 'number' && Number.isFinite(v) && v >= 0)
+        && Number.isInteger(d.energyLimitedImpulses) && Number.isInteger(d.numericalGuardEvents), 'motor diagnostics');
+    }
     assert(typeof o.id === 'string' && Array.isArray(o.segments) && o.segments.length === o.genome.parts.length
       && Array.isArray(o.joints) && o.joints.length === o.segments.length - 1, 'organism articulation');
     assert(o.segments.every(p => [p.x, p.y, p.vx, p.vy, p.angle, p.angVel].every(Number.isFinite)), 'physical state');
@@ -352,7 +363,7 @@ export function diagnosticReport(s: SimulationState, settings: SimulationSetting
       }, {})},
     energy: {...s.ledger, accounted: totalAccountedEnergy(s), errorJ: totalAccountedEnergy(s) - s.ledger.externalInflow},
     recentDeaths: s.recentDeaths,
-    selected: selected ? {id: selected.id, name: selected.genome.name, generation: selected.genome.generation,
+    selected: selected ? {motorDiagnostics: selected.motorDiagnostics, id: selected.id, name: selected.genome.name, generation: selected.genome.generation,
       age: selected.age, lifespan: selected.maxLifespan, energy: selected.energy, capacity: selected.genome.maxEnergyCapacity,
       bodyParts: selected.genome.parts.length, eyes: selected.genome.eyes.length, neuralInputs: selected.neuralInputs.length,
       speed: selected.speed, clutches: selected.clutchesLaid, offspring: selected.offspringCount,

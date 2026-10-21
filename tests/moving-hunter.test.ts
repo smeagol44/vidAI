@@ -3,9 +3,9 @@ import {test} from 'node:test';
 import * as sim from '../simulation';
 import {createFounderGenome} from '../founders';
 import {createInitialWorld, addExternalOrganism} from '../world';
-import {DEFAULT_SETTINGS, totalAccountedEnergy} from '../persistence';
+import {LEGACY_SETTINGS, totalAccountedEnergy} from '../persistence';
 
-const settings = {...DEFAULT_SETTINGS,targetNutrients:0,inflowRate:0,mutationSeverity:0,kinshipProtection:false};
+const settings = {...LEGACY_SETTINGS,targetNutrients:0,inflowRate:0,mutationSeverity:0,kinshipProtection:false};
 type Response = 'connected'|'disconnected';
 function trial(response:Response, hunterSpeed:number, separation:number, hunterAngle=0, preyId='FND-001', steps=180, placeByRearEdge=false){
  const state=createInitialWorld(settings,733,'unbiased','standard',0);

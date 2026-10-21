@@ -5,10 +5,10 @@ import {renderToStaticMarkup} from 'react-dom/server';
 import * as sim from '../simulation';
 import {createFounderGenome, FOUNDER_BLUEPRINTS} from '../founders';
 import {createInitialWorld, addExternalOrganism} from '../world';
-import {createSnapshot, DEFAULT_SETTINGS, restoreSnapshot, totalAccountedEnergy, validateGenome} from '../persistence';
+import {createSnapshot, LEGACY_SETTINGS, restoreSnapshot, totalAccountedEnergy, validateGenome} from '../persistence';
 import BrainGraph from '../BrainGraph';
 
-const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, waterViscosity: 0};
+const settings = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, waterViscosity: 0};
 const world = () => createInitialWorld(settings, 4321, 'unbiased', 'standard', 0);
 const seeded = (n: number) => new sim.XoshiroPRNG(n);
 function singleMemoryBrain(tau: number) {
@@ -159,7 +159,7 @@ test('v10 snapshot resumes inherited slow-memory dynamics with exact continuatio
   o.neuralHidden[0] = .2;
   sim.stepSimulation(s, settings, 1 / 60);
   const saved = createSnapshot(s, settings), restored = restoreSnapshot(saved);
-  assert.equal(saved.schemaVersion, '11.0.0');
+  assert.equal(saved.schemaVersion, '12.0.0');
   assert.deepEqual(createSnapshot(restored.state, restored.settings), saved);
   for (let t = 0; t < 15; t++) {
     sim.stepSimulation(s, settings, 1 / 60);

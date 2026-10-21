@@ -9,7 +9,7 @@ const root = resolve(process.argv[2] ?? '.');
 const sim = await import(pathToFileURL(resolve(root, 'simulation.ts')).href);
 const {createInitialWorld, addExternalOrganism} = await import(pathToFileURL(resolve(root, 'world.ts')).href);
 const {createFounderGenome} = await import(pathToFileURL(resolve(root, 'founders.ts')).href);
-const {DEFAULT_SETTINGS, createSnapshot} = await import(pathToFileURL(resolve(root, 'persistence.ts')).href);
+const {LEGACY_SETTINGS: DEFAULT_SETTINGS, createSnapshot} = await import(pathToFileURL(resolve(root, 'persistence.ts')).href);
 // Pin historical founder alleles so new starter calibrations do not silently
 // replace the worlds used to assert exact saved-kernel continuation.
 function catalogueWorld(settings, count) {

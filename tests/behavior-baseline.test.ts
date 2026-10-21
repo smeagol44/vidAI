@@ -3,11 +3,11 @@ import {test} from 'node:test';
 import * as sim from '../simulation';
 import {createFounderGenome} from '../founders';
 import {createInitialWorld, addExternalOrganism} from '../world';
-import {DEFAULT_SETTINGS, totalAccountedEnergy} from '../persistence';
+import {LEGACY_SETTINGS, totalAccountedEnergy} from '../persistence';
 
 // Four seeded, paired counterfactuals. Compare identical genomes/settings;
 // blanking retinal synapses holds the no-target baseline, not the whole brain.
-const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
+const settings = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
 const ox = 1200, oy = 750, seconds = 3, dt = 1 / 60;
 function removeVisualWeights(g: sim.Genome) {
   for (let i = 0; i < g.inputKeys!.length; i++) {

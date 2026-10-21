@@ -3,10 +3,10 @@ import {test} from 'node:test';
 import * as sim from '../simulation';
 import {createFounderGenome} from '../founders';
 import {createInitialWorld, addExternalOrganism} from '../world';
-import {DEFAULT_SETTINGS, totalAccountedEnergy, createSnapshot, restoreSnapshot, validateGenome} from '../persistence';
+import {LEGACY_SETTINGS, totalAccountedEnergy, createSnapshot, restoreSnapshot, validateGenome} from '../persistence';
 
 type Strategy = 'neutral' | 'ampUp' | 'ampDown' | 'driveUp' | 'driveDown' | 'torqueUp' | 'angleUp' | 'angleDown' | 'engageDown';
-const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, kinshipProtection: false};
+const settings = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, kinshipProtection: false};
 const dt = 1 / 60;
 function run(strategy: Strategy, angle: number, gap: number, duration = 2.5, variant?: sim.Genome) {
   const state = createInitialWorld(settings, 732, 'unbiased', 'standard', 0);

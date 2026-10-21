@@ -1,5 +1,78 @@
 # Project status — 2026-10-21
 
+## Physics/biological foundation closure — v0.34.0
+
+- New `surface-work-v1` worlds integrate uniform normal resistance over four
+  unit-depth rectangular faces, including connected/covered faces. This removes
+  the extra axial 1/40 calibration and uses the same surface law for torque.
+  No wake/exposure clipping/fluid-motion claim. Sims section 4 is the conceptual
+  source; explicit 2D integration and coefficients are VIDA choices.
+- Muscle peak strength now uses attachment cross-section times an internal
+  lever. With depth held at one, doubling 2D lengths yields 2x force and 4x
+  torque, rather than 16x inertia-derived strength. PD damping uses reduced
+  pair inertia. Conversion, stress, gains and efficiency are specified in the
+  current Movement Wiki; they are model parameters, not calibrated tissue.
+- Corrected actuation applies sequential equal/opposite torque impulses and
+  measures torque-only work including acceleration from rest. Positive and
+  negative work are separated at reversals. Positive work costs chemical energy
+  at 25% efficiency, before the impulse; insufficient reserves shorten the
+  impulse. Negative work dissipates without regeneration. No 40-J billing cap.
+  The existing motor-heat field remains chemical expenditure, not literal
+  instantaneous thermodynamic heat. Constraints and drag act afterward.
+- Causal kernel test reproduces unpaid legacy actuation at zero reserves and
+  demonstrates zero corrected motor impulse/cost at zero reserves. Contact
+  food acquired afterward funds only subsequent motor impulses. Chemical
+  closure, no external-force COM propulsion, passive joint correction and
+  bounded sampled hinge gaps are checked. Numerical speed clamps remain
+  dissipative guards with per-tick diagnostics; non-finite muscle torque fails
+  visibly. This is NOT complete mechanical-energy conservation of the solver.
+- `reproductionThreshold` is explicitly retired compatibility data. Corrected
+  offspring keep its value without mutating it; legacy mutation and PRNG order
+  remain exact. No arbitrary new fullness gate or changed egg funding. Maturity,
+  cooldown, clutch, child structural/reserve costs and parent floor still govern
+  laying/inspection. Broad biological redesign remains outside this milestone.
+- Save schema v12 requires the persisted regime. v3–v11 imports choose legacy;
+  existing current brain revision remains v7. UI imports, exports/forks,
+  fallback, Worker reset and commands agree; live regime switches are rejected.
+  Reset starts current physics. Historical complete-state goldens are unchanged;
+  prior behavioral/calibration assays explicitly select legacy physics.
+- Bounded observation: nine identical current starter genomes, two regimes,
+  seed 711, heading 0.37, viscosity 0.18, five food-free seconds, ordinary reserves.
+  No founder/anatomy/brain/diet tuning and no optimization. Results:
+
+  | Starter | Legacy displacement px | Corrected displacement px | Legacy motor J | Corrected motor J |
+  | --- | ---: | ---: | ---: | ---: |
+  | CUR-001 | 190.499 | 0.618 | 0.7667 | 0.0224 |
+  | CUR-002 | 39.050 | 0.922 | 0.5588 | 0.1704 |
+  | CUR-003 | 40.967 | 0.135 | 4.1458 | 0.0736 |
+  | CUR-004 | 44.781 | 2.399 | 0.6992 | 0.1548 |
+  | CUR-005 | 80.962 | 0.272 | 4.1856 | 0.1481 |
+  | CUR-006 | 21.828 | 0.248 | 3.3676 | 0.2913 |
+  | CUR-007 | 29.493 | 1.026 | 2.1312 | 0.1357 |
+  | CUR-008 | 88.995 | 0.300 | 1.7576 | 0.1612 |
+  | CUR-009 | 64.698 | 0.171 | 2.8981 | 0.0825 |
+
+  Corrected starters swim substantially less effectively. This is a reported
+  model consequence, not compensated with hidden thrust, cost subsidies or new
+  calibration. Maximum post-tick corrected anchor gap is 0.0153 px; no numerical
+  speed guard fires. Chemical discrepancy stays below 1e-6 J. This five-second
+  observation establishes neither food acquisition nor sustained ecology.
+  Full results: `docs/experiments/foundation-v1.json`; `npm run audit:foundation`.
+- Verified locally: 235 fast tests (including nine new analytical/causal checks),
+  TypeScript/Vite build, actual production Worker in both regimes, legacy physics
+  audit, all four historical profile hashes and all existing fast continuation
+  hashes. CI additionally exercises Chromium/Firefox import/reset/fallback
+  smoke and reproduces the historical bounded search. Wiki source diagrams,
+  Home index and Sidebar are preserved.
+- Closed: coherent drag specification/implementation; justified unit-depth
+  muscle scaling; prepaid actuator work and identified unpaid-actuation path;
+  retirement of the disconnected reproduction-threshold promise; old-save
+  regime handling. Still open: full solver-wide mechanical-energy error bounds
+  for bias/projection, limits and contact, real-fluid/tissue fidelity, useful
+  corrected-world swimming/foraging and sustained ecological benefit. Those
+  are not implied by passing chemical or actuator checks. No 3D or sleep work.
+
+
 ## Twin Oar physical food approach — v0.33.1
 
 - Followed the acquisition census with three 10-second and six 40-second

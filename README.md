@@ -67,9 +67,10 @@ Bank, export/import and diagnostics. Click a creature for general status;
 **Inspect** opens diagnostics with display pruning reset to 0.5.
 
 The initial UI seed is random and editable; reset reuses the displayed seed.
-Current saves use schema v11 and brain v7, preserving PRNG, learned state and
-stored genes for exact continuation in the current implementation. Older v3–v10
-snapshots import through validation/migration. Imports pause for inspection;
+Current saves use schema v12 and brain v7, including a validated physics regime.
+Older v3–v11 snapshots continue with exact legacy physics/energy rules; new
+worlds use coherent surface drag and prepaid muscle work. PRNG, personal memory
+and stored genes remain intact. Reset starts a new world with current physics. Imports pause for inspection;
 starter calibration never rewrites stored genomes.
 
 Vite's Pages base is `/vidAI/`; update `vite.config.ts` if moving the project.

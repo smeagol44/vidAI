@@ -80,7 +80,7 @@ making a memory permanent.
 Costs debit usable reserves into metabolic heat and are limited by available
 energy. Learning cannot create calories or change shared inherited weights.
 
-Save schema **v11** preserves personal offsets, traces and consolidation
+Save schema **v12** preserves personal offsets, traces and consolidation
 with strict identity/bounds validation. Creatures without the relevant genes
 do not acquire them merely by importing a save. The Brain inspector displays
 effective inherited-plus-acquired weights, learning rates and costs.

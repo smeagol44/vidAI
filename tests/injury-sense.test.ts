@@ -78,7 +78,7 @@ test('queued real predation stimulus saves and continues exactly in schema 11', 
   sim.stepSimulation(s, settings, dt);
   assert.ok(prey.biteFeedbackJ! > 0);
   const saved = createSnapshot(s, settings), restored = restoreSnapshot(saved);
-  assert.equal(saved.schemaVersion, '11.0.0');
+  assert.equal(saved.schemaVersion, '12.0.0');
   assert.equal(restored.state.organisms.find(o => o.id === prey.id)!.biteFeedbackJ, prey.biteFeedbackJ);
   assert.deepEqual(createSnapshot(restored.state, settings), saved);
   for (let i = 0; i < 3; i++) {

@@ -80,7 +80,7 @@ test('learned retinal associations retain exact save continuation, decay and do 
   step(state,28);
   assert.ok(learnedSize(org)>1e-5);
   const snapshot=createSnapshot(state,settings);
-  assert.equal(snapshot.schemaVersion,'11.0.0');
+  assert.equal(snapshot.schemaVersion,'12.0.0');
   const clone=restoreSnapshot(snapshot);
   assert.deepEqual(createSnapshot(clone.state,settings),snapshot);
   step(state,4);step(clone.state,4);

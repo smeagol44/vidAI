@@ -3,9 +3,9 @@ import {test} from 'node:test';
 import * as sim from '../simulation';
 import {createFounderGenome} from '../founders';
 import {createInitialWorld, addExternalOrganism} from '../world';
-import {createSnapshot, restoreSnapshot, validateGenome, totalAccountedEnergy, DEFAULT_SETTINGS} from '../persistence';
+import {createSnapshot, restoreSnapshot, validateGenome, totalAccountedEnergy, LEGACY_SETTINGS} from '../persistence';
 
-const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, waterViscosity: .22};
+const settings = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, waterViscosity: .22};
 const world = (seed = 451) => createInitialWorld(settings, seed, 'unbiased', 'standard', 0);
 const rng = (seed: number) => new sim.XoshiroPRNG(seed);
 function command(org: sim.Organism, name: string, value: number, joint = 0) {
@@ -151,7 +151,7 @@ test('current save continuation preserves optional motor genes, phases and energ
   command(org, 'Amp', -.8);
   tick(s, 11);
   const saved = createSnapshot(s, settings), restored = restoreSnapshot(saved);
-  assert.equal(saved.schemaVersion, '11.0.0', 'motor alleles coexist with the new injury-sensing save schema');
+  assert.equal(saved.schemaVersion, '12.0.0', 'motor alleles coexist with the new injury-sensing save schema');
   assert.deepEqual(createSnapshot(restored.state, settings), saved);
   tick(s, 9); tick(restored.state, 9);
   assert.deepEqual(createSnapshot(restored.state, settings), createSnapshot(s, settings));

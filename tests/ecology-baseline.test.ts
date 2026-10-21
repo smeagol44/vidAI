@@ -70,13 +70,13 @@ test('unassisted founder ecologies and food-removed counterfactuals have measure
   }))));
 });
 
-test('paired off-axis swimming measures genuine nutrient absorption rather than retinal visibility alone', () => {
+test('historical legacy paired off-axis swimming measures genuine nutrient absorption rather than retinal visibility alone', () => {
   const rows = [];
   let visuallyBetter = 0, successfulSighted = 0;
   for (const seed of ECOLOGY_SEEDS.slice(0,2)) for (const side of [-1,1] as const)
     for (const distance of [135,160] as const) {
-      const seen = runControlledGrazing(seed, side, distance, true);
-      const blind = runControlledGrazing(seed, side, distance, false);
+      const seen = runControlledGrazing(seed, side, distance, true, 'legacy-v0');
+      const blind = runControlledGrazing(seed, side, distance, false, 'legacy-v0');
       conserved(seen); conserved(blind);
       if (seen.absorbedJ.Nutrient > blind.absorbedJ.Nutrient + 1) visuallyBetter++;
       if (seen.absorbedJ.Nutrient > 0) successfulSighted++;

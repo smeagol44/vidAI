@@ -63,5 +63,22 @@ try {
   await receive(value => value.type === 'frame' && value.frame.epoch === 2);
   send({type: 'action', epoch: 1, id: -1, action: {kind: 'feed', count: 15, x: 800, y: 600}});
   assert.deepEqual((await request('snapshot', {}, 2)).state, source.state, 'Old-world commands cannot affect replacements');
-  console.log('Production Worker: exact export, capped commands, independent stepping, pause and stale-world rejection passed.');
+  assert.equal(paused.settings.physicsRegime, 'surface-work-v1');
+  const legacySource = structuredClone(source);
+  legacySource.schemaVersion = '11.0.0'; delete legacySource.settings.physicsRegime;
+  send({type: 'reset', snapshot: legacySource, epoch: 3});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 3);
+  const oldSettings = {...settings, physicsRegime: 'legacy-v0'};
+  assert.equal((await request('snapshot', {}, 3)).settings.physicsRegime, 'legacy-v0');
+  send({type: 'control', epoch: 3, settings: oldSettings, speed: 1, selected: null, running: true});
+  await new Promise(resolve => setTimeout(resolve, 100));
+  send({type: 'control', epoch: 3, settings: oldSettings, speed: 1, selected: null, running: false});
+  const oldPaused = await request('snapshot', {}, 3);
+  assert.ok(oldPaused.state.simTime > .025);
+  assert.ok(oldPaused.state.organisms.every(o => o.motorDiagnostics === undefined));
+  send({type: 'control', epoch: 3, id: -77, settings, speed: 1, selected: null, running: true});
+  const rejected = await receive(value => value.id === -77);
+  assert.equal(rejected.type, 'error'); assert.match(rejected.message, /regime/);
+  assert.equal((await request('snapshot', {}, 3)).settings.physicsRegime, 'legacy-v0');
+  console.log('Production Worker: exact export, capped commands, independent stepping, pause, both physics regimes, regime-switch rejection and stale-world rejection passed.');
 } finally { await worker.terminate(); }

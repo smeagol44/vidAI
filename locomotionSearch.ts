@@ -4,7 +4,7 @@
 import {XoshiroPRNG, stepSimulation, calculateOrganismCOM, clampVal,
   getCardinalAnchor, getChildAnchorForParentDir, MAX_FRAME_MOTOR_WORK,
   type Genome, type SimulationSettings} from './simulation';
-import {DEFAULT_SETTINGS, totalAccountedEnergy, validateGenome} from './persistence';
+import {LEGACY_SETTINGS, totalAccountedEnergy, validateGenome} from './persistence';
 import {createInitialWorld, addExternalOrganism} from './world';
 
 export interface SwimTrial {
@@ -16,7 +16,7 @@ export interface SwimTrial {
 }
 export interface SwimConditions {seconds?: number; heading?: number; viscosity?: number; seed?: number}
 const DT = 1 / 60;
-const settings: SimulationSettings = {...DEFAULT_SETTINGS, worldWidth: 12000, worldHeight: 12000,
+const settings: SimulationSettings = {...LEGACY_SETTINGS, worldWidth: 12000, worldHeight: 12000,
   targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, gravity: 0};
 
 /** Score real progress after settling, sustained into the last third. The
@@ -35,7 +35,7 @@ export function evaluateSwimmer(genome: Genome, conditions: SwimConditions = {})
   const seconds = conditions.seconds ?? 6;
   if (!Number.isFinite(seconds) || seconds < 3 || seconds > 30)
     throw new Error('Swimming trials must last 3–30 simulated seconds');
-  const heading = conditions.heading ?? 0, viscosity = conditions.viscosity ?? DEFAULT_SETTINGS.waterViscosity;
+  const heading = conditions.heading ?? 0, viscosity = conditions.viscosity ?? LEGACY_SETTINGS.waterViscosity;
   if (!Number.isFinite(heading) || !Number.isFinite(viscosity) || viscosity < 0 || viscosity > 1)
     throw new Error('Invalid swimming conditions');
   const config = {...settings, waterViscosity: viscosity};

@@ -4,14 +4,14 @@ import {createHash} from 'node:crypto';
 import * as sim from '../simulation';
 import {createFounderGenome} from '../founders';
 import {createInitialWorld, addExternalOrganism} from '../world';
-import {DEFAULT_SETTINGS, createSnapshot, restoreSnapshot, totalAccountedEnergy} from '../persistence';
+import {LEGACY_SETTINGS, createSnapshot, restoreSnapshot, totalAccountedEnergy} from '../persistence';
 import {compiledBrain, compiledDeltas, invalidateCompiledBrain, alignPlasticRecords} from '../neuralRuntime';
 import {rectangleContact} from '../contacts';
 import {referenceContact} from './support/reference-contact';
 import {watchLineage, markLineageChanged} from '../lineageChanges';
 import {SimulationHost, RenderReplica} from '../simulationHost';
 
-const config = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
+const config = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
 function fixture(mode = 'masked-learned') {
   const state = createInitialWorld(config, 711, 'balanced', 'standard', 0);
   const g = createFounderGenome('FND-001');

@@ -6,7 +6,7 @@ import {evaluateSwimmer, searchSwimmer, scoreSwimTrial, mutateSwimmer, acceptSwi
 import {FEATURED_BLUEPRINTS, FOUNDER_BLUEPRINTS, createFounderGenome} from '../founders';
 import {XoshiroPRNG, stepSimulation, mutateGenome} from '../simulation';
 import {createInitialWorld, addExternalOrganism} from '../world';
-import {DEFAULT_SETTINGS, validateGenome, createSnapshot, restoreSnapshot} from '../persistence';
+import {LEGACY_SETTINGS, validateGenome, createSnapshot, restoreSnapshot} from '../persistence';
 
 const selected = ['CUR-003', 'CUR-008', 'CUR-009'];
 test('physics audit measures dissipative rotated drag, passive spin, free momentum and actual size scaling', () => {
@@ -77,7 +77,7 @@ test('the other six featured and all 55 legacy genomes remain exactly unchanged'
 });
 
 test('stored pre-calibration CUR-003 genome resumes the exact v0.32.1 cold continuation', () => {
-  const config = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
+  const config = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
   const state = createInitialWorld(config, 311, 'balanced', 'standard', 0);
   addExternalOrganism(state, createFounderGenome('CUR-003', 'balanced', {locomotion: 'catalogue'}), config, 1200, 750, 0);
   for (let i = 0; i < 40; i++) stepSimulation(state, config, 1 / 60);

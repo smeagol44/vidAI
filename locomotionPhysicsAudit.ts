@@ -2,11 +2,11 @@
 import assert from 'node:assert/strict';
 import {createFounderGenome} from './founders';
 import {createInitialWorld, addExternalOrganism} from './world';
-import {DEFAULT_SETTINGS, totalAccountedEnergy} from './persistence';
+import {LEGACY_SETTINGS, totalAccountedEnergy} from './persistence';
 import {stepSimulation, remapBrain, calculateBodyCost, calculateMaxEnergyCapacity,
   BASE_PART_DENSITY, LONGITUDINAL_DRAG, type Genome} from './simulation';
 
-const settings = {...DEFAULT_SETTINGS, worldWidth: 12000, worldHeight: 12000,
+const settings = {...LEGACY_SETTINGS, worldWidth: 12000, worldHeight: 12000,
   targetNutrients: 0, inflowRate: 0, gravity: 0, mutationSeverity: 0};
 function body(parts: number, scale = 1): Genome {
   const g = createFounderGenome('FND-001');

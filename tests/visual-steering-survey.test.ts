@@ -3,12 +3,12 @@ import {test} from 'node:test';
 import * as sim from '../simulation';
 import {createFounderGenome} from '../founders';
 import {createInitialWorld, addExternalOrganism} from '../world';
-import {createSnapshot, restoreSnapshot, DEFAULT_SETTINGS, totalAccountedEnergy} from '../persistence';
+import {createSnapshot, restoreSnapshot, LEGACY_SETTINGS, totalAccountedEnergy} from '../persistence';
 
 // Paired off-axis perception/action trials: controller receives only retinal
 // RGB/distance and its existing internal senses. Target coordinates are used
 // by the test for setup and metrics, NEVER by the creature or its motor kernel.
-const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
+const settings = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
 type Mode = 'calibrated' | 'legacy-visual' | 'retinal-blind';
 type Stimulus = 'food' | 'body';
 const ox = 1200, oy = 750, dt = 1 / 60;

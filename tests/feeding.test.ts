@@ -164,7 +164,7 @@ test('new saves continue exactly through carrion decay, and old v4 food remains 
   const {s, org, x} = setup(); org.genome.colorMutationRate = .4;
   s.nutrients = [food(x + 200, 'carrion')]; s.nutrients[0].decayTimeRemaining = .025;
   const snapshot = createSnapshot(s, settings), restored = restoreSnapshot(snapshot);
-  assert.equal(snapshot.schemaVersion, '11.0.0');
+  assert.equal(snapshot.schemaVersion, '12.0.0');
   assert.deepEqual(createSnapshot(restored.state, restored.settings), snapshot);
   for (let i = 0; i < 3; i++) { sim.stepSimulation(s, settings, 1 / 60); sim.stepSimulation(restored.state, settings, 1 / 60); }
   assert.deepEqual(createSnapshot(s, settings), createSnapshot(restored.state, settings));

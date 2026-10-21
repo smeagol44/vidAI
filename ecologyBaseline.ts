@@ -62,8 +62,9 @@ function disconnectRetina(g: sim.Genome): void {
   });
 }
 
-export function runControlledGrazing(seed: number, side: -1 | 1, distance: 135 | 160, vision: boolean) {
-  const settings = {...baseSettings, targetNutrients: 0, mutationSeverity: 0};
+export function runControlledGrazing(seed: number, side: -1 | 1, distance: 135 | 160, vision: boolean,
+  physicsRegime = DEFAULT_SETTINGS.physicsRegime) {
+  const settings = {...baseSettings, physicsRegime, targetNutrients: 0, mutationSeverity: 0};
   const state = createInitialWorld(settings, seed, 'unbiased', 'standard', 0);
   const genome = createFounderGenome('FND-001', 'balanced');
   genome.maturityAge = 1000; // short assay isolates feeding, not breeding

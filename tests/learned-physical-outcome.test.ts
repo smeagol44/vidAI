@@ -3,9 +3,9 @@ import {test} from 'node:test';
 import * as sim from '../simulation';
 import {createFounderGenome} from '../founders';
 import {createInitialWorld, addExternalOrganism} from '../world';
-import {DEFAULT_SETTINGS, createSnapshot, restoreSnapshot, totalAccountedEnergy} from '../persistence';
+import {LEGACY_SETTINGS, createSnapshot, restoreSnapshot, totalAccountedEnergy} from '../persistence';
 
-const settings={...DEFAULT_SETTINGS, targetNutrients:0, inflowRate:0, mutationSeverity:0};
+const settings={...LEGACY_SETTINGS, targetNutrients:0, inflowRate:0, mutationSeverity:0};
 const dt=1/60;
 const step=(world:sim.SimulationState,n:number)=>{for(let t=0;t<n;t++)sim.stepSimulation(world,settings,dt);};
 function addFood(world:sim.SimulationState,id:string,x:number,y:number,amount=3000){
@@ -84,7 +84,7 @@ test('real learned experience is compared against its own erased-experience phys
 });
 
 test('a populated tank can step 100 learning-capable articulated animals without unbounded synapse state',()=>{
- const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, maxOrganisms: 100};
+ const settings = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, maxOrganisms: 100};
  const world=createInitialWorld(settings,861,'unbiased','standard',0);
  const g=createFounderGenome('FND-001','balanced');
  g.plasticityRate=.6;

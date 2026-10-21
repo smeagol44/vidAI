@@ -3,10 +3,10 @@ import {test} from 'node:test';
 import {FEATURED_BLUEPRINTS, FEATURED_STARTER_SPECS, FOUNDER_BLUEPRINTS,
   createFounderBankItems, createFounderGenome, sampleFounderGenomes} from '../founders';
 import * as sim from '../simulation';
-import {DEFAULT_SETTINGS, totalAccountedEnergy, validateGenome} from '../persistence';
+import {LEGACY_SETTINGS, totalAccountedEnergy, validateGenome} from '../persistence';
 import {addExternalOrganism, createInitialWorld} from '../world';
 
-const settings = {...DEFAULT_SETTINGS, worldWidth: 2400, worldHeight: 1500,
+const settings = {...LEGACY_SETTINGS, worldWidth: 2400, worldHeight: 1500,
   targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
 
 test('nine distinct, mutable featured designs coexist with 55 original legacy identities', () => {
