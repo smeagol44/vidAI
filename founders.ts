@@ -64,13 +64,18 @@ export const isFeaturedFounderId = (id: string): boolean =>
   FEATURED_STARTER_SPECS.some(spec => spec.id === id);
 
 export function createFounderGenome(id: string, mode: FounderMode = 'balanced',
-  options: {locomotion?: 'current' | 'catalogue'} = {}): Genome {
+  options: {locomotion?: 'current' | 'catalogue'; foraging?: 'current' | 'catalogue'} = {}): Genome {
   const blueprint = FEATURED_BLUEPRINTS.find(f => f.id === id) ?? FOUNDER_BLUEPRINTS.find(f => f.id === id);
   if (!blueprint) throw new Error(`Unknown founder ${id}`);
   const d = structuredClone(blueprint);
   const featured = FEATURED_STARTER_SPECS.find(spec => spec.id === id);
   const sourceId = featured?.source ?? id;
   const {parts, eyes, mouths, hue, saturation, lightness} = d.morphology;
+  // New Twin Oar genomes: align the paired paddles so the body travels toward
+  // its forward mouth, then use the reviewed mutable grazer steering gains.
+  // Catalogue fixtures and stored genomes retain their original alleles.
+  const calibratedTwinOar = id === 'CUR-002' && options.foraging !== 'catalogue';
+  if (calibratedTwinOar) parts[2].cpgPhaseOffset += Math.PI;
   // Physically verified head-first gait calibration (Phase 5): this axial
   // swimmer's original tail wave carried its mouth/eyes *backwards* relative
   // to food. Reversing the inherited joint phase progression, not adding a
@@ -120,7 +125,7 @@ export function createFounderGenome(id: string, mode: FounderMode = 'balanced',
     g.weightsHO = g.weightsHO.map(row => row.map(w => w * .1));
     g.biasesO = g.biasesO.map(b => b * .1);
   }
-  if (mode === 'balanced') addRetinalSteeringPrior(g, d.diet, sourceId === 'FND-001');
+  if (mode === 'balanced') addRetinalSteeringPrior(g, d.diet, sourceId === 'FND-001' || calibratedTwinOar);
   if (featured) {
     // RGB receptor gains and learning rates are ordinary mutable alleles.
     // They affect real retinal rays and paid synaptic changes, never add an
@@ -138,11 +143,11 @@ export function createFounderGenome(id: string, mode: FounderMode = 'balanced',
 }
 
 /** Heritable retinal-to-joint steering using only attenuated RGB ray inputs.
- * The stronger FND-001 allele was selected by paired off-axis *physical*
- * feeding trials; no target position, object type or danger flag is fed to
- * the controller. Other founders retain their original weak prior exactly.
+ * Stronger grazer gains are used by the reviewed Darter and featured Twin Oar
+ * calibrations, measured with paired physical feeding trials. No target
+ * position, object type or danger flag is fed to the controller.
  */
-function addRetinalSteeringPrior(g: Genome, diet: MouthType, calibratedDarter = false): void {
+function addRetinalSteeringPrior(g: Genome, diet: MouthType, calibratedGrazer = false): void {
   // Green contrast for grazers, red/blue contrast for predators. Omnivores blend both.
   const color = diet === 'herbivore' ? [-.5, 1, -.25]
     : diet === 'carnivore' ? [.7, -.7, .5] : [.3, .5, .2];
@@ -151,7 +156,7 @@ function addRetinalSteeringPrior(g: Genome, diet: MouthType, calibratedDarter = 
       const angle = getCardinalBaseAngle(eye.direction) + (r / (RAYS_PER_EYE - 1) - .5) * eye.fov;
       for (let c = 0; c < 3; c++) {
         const i = (e * RAYS_PER_EYE + r) * 4 + c;
-        const sensitivity = (calibratedDarter ? 1.5 : .2) * Math.sin(angle) * color[c] / Math.sqrt(g.eyes.length);
+        const sensitivity = (calibratedGrazer ? 1.5 : .2) * Math.sin(angle) * color[c] / Math.sqrt(g.eyes.length);
         g.weightsIH[0][i] += sensitivity;
         g.weightsIH[1][i] -= sensitivity;
         g.biasesH[0] -= sensitivity * WATER_AMBIENT_RGB[c];
@@ -160,8 +165,8 @@ function addRetinalSteeringPrior(g: Genome, diet: MouthType, calibratedDarter = 
     }
   });
   for (let j = 0; j < g.parts.length - 1; j++) {
-    g.weightsHO[j * OUTPUTS_PER_JOINT][0] += calibratedDarter ? -.5 : .04;
-    g.weightsHO[j * OUTPUTS_PER_JOINT][1] += calibratedDarter ? .5 : -.04;
+    g.weightsHO[j * OUTPUTS_PER_JOINT][0] += calibratedGrazer ? -.5 : .04;
+    g.weightsHO[j * OUTPUTS_PER_JOINT][1] += calibratedGrazer ? .5 : -.04;
   }
 }
 

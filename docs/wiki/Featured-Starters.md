@@ -9,7 +9,7 @@ Nine featured genotypes coexist with all 55 original legacy designs.
 | Identity | Source anatomy | Diet | Body plan |
 | --- | --- | --- | --- |
 | CUR-001 Darter Scout | FND-001 Three-link Darter | Herbivore | Small axial swimmer with head-first gait and retinal steering |
-| CUR-002 Twin Oar Grazer | FND-006 Twin Oar | Herbivore | Paired articulated paddles |
+| CUR-002 Twin Oar Grazer | FND-006 Twin Oar | Herbivore | Paired paddles with mouth-first timing and retinal steering |
 | CUR-003 Tidewheel Browser | FND-021 Fourway Fan | Herbivore | Radial fan |
 | CUR-004 Lantern Filterer | FND-052 Lantern Jellyfish | Herbivore | Hinged rectangular bell |
 | CUR-005 Forktail Opportunist | FND-019 Extended Fork | Omnivore | Forked axial body |
@@ -25,10 +25,11 @@ specialize the featured genotypes. The two carnivores have reduced or zero
 initial green sensitivity. Pigment remains independent of diet.
 
 New CUR-003, CUR-008 and CUR-009 genomes also receive selected motor alleles
-from the [offline swimming search](Motor-Control). The other six featured
-motor genotypes and all 55 legacy founders retain their prior genes. Every
-selected allele remains mutable. Imported animals and saved specimens keep
-their stored genomes; they are not rewritten by starter calibration.
+from the [offline swimming search](Motor-Control). New CUR-002 genomes use
+mouth-first paddle timing and, in Balanced mode, stronger inherited retinal
+steering. The other five featured motor genotypes and all 55 legacy founders
+retain their prior genes. Every selected allele remains mutable. Imported
+animals and saved specimens keep their stored genomes; they are not rewritten by starter calibration.
 
 ## Starter construction
 
@@ -37,6 +38,7 @@ flowchart TD
   L["55 legacy designs"] -->|"Nine distinct donor families"| C["Featured constructors"]
   L --> B["Legacy Bank"]
   M["Selected motor alleles for CUR-003/008/009"] --> C
+  G["CUR-002 paddle timing and retinal prior"] --> C
   C --> F["Nine featured genotypes"]
   F --> S["Sample up to five designs for a new world"]
   F --> K["Featured Bank and explicit Showcase"]

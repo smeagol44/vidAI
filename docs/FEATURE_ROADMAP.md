@@ -15,7 +15,8 @@ is optional and unimplemented.
 
 The separate B-A–B-D movement/behavior/measurement workstream is complete as a
 bounded prototype. Nine featured starters coexist with 55 legacy designs.
-Three featured gaits use selected offline-evolved motor alleles. Worker/render
+Three featured gaits use selected offline-evolved motor alleles; Twin Oar has
+reviewed mouth-first paddle timing and a stronger mutable retinal prior. Worker/render
 separation and the spatial/neural/contact/lineage optimizations are deployed.
 These capabilities do not establish sustainable ecology or the original
 roughly 100-creature/1,000-part performance ambition.
@@ -27,7 +28,7 @@ funded laying → successful hatching → viable offspring across generations**.
 
 1. Use the existing acquisition census on representative current starters to distinguish absent/undetected edible stimuli, inadequate approach, mouth-access failures and insufficient net energy.
 2. Correct specific demonstrated control, geometry or cost problems. Preserve mutable behavior and avoid prolonged manual brain tuning, hidden targeting, automatic survival aid or a mandatory diet quota.
-3. Establish naturally earned reproduction for a representative grazer, then extend to omnivores and predators. Pre-funded adults and deliberately placed test food remain controlled mechanisms, not proof of ecosystem viability.
+3. Make naturally earned reproduction repeatable across seeds for a representative grazer, then extend to omnivores and predators. Pre-funded adults and deliberately placed test food remain controlled mechanisms, not proof of ecosystem viability.
 4. Evaluate selection and retained-versus-erased learning after the food/reproduction loop works. A short survivor count or a larger brain alone is not an ecological success criterion.
 
 Use bounded, causal comparisons. Extinction remains a legitimate outcome;

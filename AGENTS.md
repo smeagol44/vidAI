@@ -1,3 +1,22 @@
+# Bounded Twin Oar food approach (v0.33.1)
+
+- Newly constructed CUR-002 shifts its SOUTH paddle phase by pi and, in balanced
+  mode, uses the reviewed strong grazer retinal/Angle prior. These are mutable
+  inherited alleles, not runtime targeting. FND-006, the other 63 designs,
+  physics, reserves and food economics remain unchanged. Imports never calibrate.
+- `{foraging: 'catalogue'}` reconstructs the pre-change CUR-002 genes. Historical
+  performance and empty-water search fixtures explicitly disable this new
+  calibration as well as the v0.33 locomotion selection. Keep existing state
+  hashes; do not refresh them to hide a changed fixture.
+- `foragingAudit.ts` is offline only. `npm run audit:foraging` compares finite
+  off-axis food with catalogue, gait-only and retinal-disconnected controls,
+  plus three 40-second, 275-food showcase pairs. Normal juvenile reserves and
+  unmodified metabolism; no per-tick food placement or control intervention.
+- Controlled approach improves; scattered intake improves in two seeds and
+  worsens in one. Do not claim universal foraging, natural Twin Oar reproduction,
+  learned benefit or sustainable ecology. Avoid extending this into an unbounded
+  founder/brain tuning campaign. Focused checks: `tests/twin-oar-foraging.test.ts`.
+
 # Current performance architecture (v0.32.1)
 
 - The user explicitly brought performance work forward. `simulation.worker.ts`

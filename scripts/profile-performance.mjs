@@ -15,7 +15,7 @@ const {DEFAULT_SETTINGS, createSnapshot} = await import(pathToFileURL(resolve(ro
 function catalogueWorld(settings, count) {
   const state = createInitialWorld(settings, 711, 'balanced', 'standard', count);
   for (const org of state.organisms) {
-    org.genome = createFounderGenome(org.genome.id, 'balanced', {locomotion: 'catalogue'});
+    org.genome = createFounderGenome(org.genome.id, 'balanced', {locomotion: 'catalogue', foraging: 'catalogue'});
     org.joints.forEach((joint, i) => {joint.phase = org.genome.parts[i + 1].cpgPhaseOffset || 0;});
     state.lineage.get(org.id).genome = org.genome;
   }

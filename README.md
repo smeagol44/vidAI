@@ -49,6 +49,7 @@ The Worker check needs the production build first. Optional tools:
 | `npm test` | Full simulation test suite |
 | `npm run test:e2e` | Browser suite; install the corresponding Playwright browsers first |
 | `npm run benchmark:ecology` | Bounded read-only ecological reports |
+| `npm run audit:foraging` | Twin Oar physical food approach and scattered-food comparisons |
 | `npm run audit:locomotion` | Passive drag/spin and muscle-scaling checks |
 | `npm run search:locomotion -- --check` | Reproduce the bounded starter calibration |
 | `npm run benchmark:performance -- --baseline /path/to/checkout` | Identical-state kernel comparison |

@@ -98,8 +98,18 @@ evaluation from Karl Sims's *Evolving Virtual Creatures* (1994); efficiency
 weighting and promotion guards are VIDA-specific. Stronger empty-water
 swimming does not establish mouth-first travel, food capture or fitness.
 
+## Food-oriented starter calibration
+
+New CUR-002 Twin Oar genomes shift the SOUTH paddle phase by half a cycle,
+aligning travel with the forward mouth. Balanced mode pairs that timing with
+stronger mutable retinal/Angle weights. The live controller still receives
+ordinary RGB and body feedback; food locations and audit scores remain offline.
+Controlled food approach improves, while scattered-food intake remains
+seed-dependent. Physics, metabolic costs and stored genomes are unchanged.
+
 ## Developer entry points
 
+- `npm run audit:foraging`: Twin Oar finite-food controls and three short scattered-food pairs.
 - `npm run audit:locomotion`: actual-kernel passive drag/spin and size-scaling checks.
 - `npm run search:locomotion -- --check`: reproduce the committed default selection.
 - `--id CUR-003`, `--seed`, `--generations` (1–8), `--offspring` (1–16) and `--output report.json`: bounded search options; `--check` requires the default budget/seed.

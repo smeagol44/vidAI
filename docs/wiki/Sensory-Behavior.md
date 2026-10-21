@@ -49,8 +49,11 @@ modulate [personal synaptic learning](Waking-Learning) when aversion evolves.
 
 Balanced founder mode adds mutable retinal-to-joint steering weights; Unbiased
 mode omits that prior. FND-001 and its featured Darter derivative retain the
-stronger reviewed green-contrast steering prior. These are inherited initial
-weights, separate from changes acquired during an individual's life.
+stronger reviewed green-contrast steering prior. New CUR-002 Twin Oar genomes
+also use this stronger prior, paired with mouth-first paddle timing. Finite
+food tests show vision-dependent approach; gains with naturally scattered
+food vary by seed. These are inherited initial weights, separate from changes
+acquired during an individual's life. Existing saved genomes keep their genes.
 
 Rare topology mutations can add an isolated neuron linking:
 

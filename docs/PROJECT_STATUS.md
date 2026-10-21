@@ -1,4 +1,52 @@
-# Project status — 2026-10-20
+# Project status — 2026-10-21
+
+## Twin Oar physical food approach — v0.33.1
+
+- Followed the acquisition census with three 10-second and six 40-second
+  sighted/retinal-disconnected showcase observations at the current 275-food
+  target. Grazers already make real intake and reserve gains. In the original
+  seed-41 sighted world, Darter earned two funded eggs and one Gen-2 hatch;
+  this isolated outcome does not establish reliable multigeneration ecology.
+- Twin Oar was a concrete control obstacle: little mouth-first travel and
+  weaker natural intake with its original visual controller in two of three
+  short comparisons. Exploratory budget: 36 ten-second steering-only trials,
+  32 paddle-phase trials, and 20 combined timing/steering trials. Steering
+  alone did not overcome the original gait. Selected the smaller successful
+  combined prior, reusing the reviewed Darter grazer gains, rather than the
+  largest trial gain. No ongoing search or runtime fitness code was added.
+- New CUR-002 genomes shift only the SOUTH paddle phase by pi and use strong
+  retinal/Angle gains in balanced mode. All genes remain mutable. Anatomy,
+  sensors, mouths, lifecycle economics, neural architecture, metabolism and
+  physics are unchanged. All other eight featured and 55 legacy genomes are
+  bit-identical; stored genomes never pass through founder calibration.
+- Eight held-out 16-second finite-food conditions use +/-0.45-radian food
+  offsets, distances 135/160 px, headings 0.8/-1.2 and viscosities 0.15/0.22.
+  Current genes absorb the full 2,400 J in 8/8, gaining about 1,970 J reserves.
+  Original, gait-only and retinal-disconnected controls absorb zero in 8/8
+  each. Expenditure rises less than 1%; no sampled work cap or invalid pose,
+  and chemical discrepancy stays below 1e-5 J. These are physical assays with
+  explicit finite food, not randomly encountered resources or learned behavior.
+- Three 40-second, nine-juvenile showcase pairs use normal 275-food Uniform
+  initialization and inflow, differing only in CUR-002's initial calibration:
+
+  | Seed | Original absorbed J | Current absorbed J | Original reserve gain J | Current reserve gain J |
+  | --- | ---: | ---: | ---: | ---: |
+  | 17 | 2,400 | 3,936 | 1,325 | 2,860 |
+  | 29 | 2,400 | 7,200 | 1,325 | 6,124 |
+  | 41 | 4,800 | 2,592 | 3,725 | 1,516 |
+
+  Total intake rises 43%, but one seed regresses substantially. No Twin Oar
+  eggs are laid in these intervals. This supports corrected food approach,
+  not universal natural foraging, earned Twin Oar reproduction, selection,
+  learned benefit or sustainable ecology. Do not tune indefinitely against
+  these seeds. Reproduction across representative seeds remains the next goal.
+- `npm run audit:foraging -- --output report.json` reproduces the paired
+  observations. Full measured values: `docs/experiments/twin-oar-foraging-v1.json`.
+- Verification: 226 fast tests, TypeScript/Vite build, production Worker check,
+  original bounded swimming search, all four historical complete-state profile
+  hashes, and a new cold v0.33.0 CUR-002 continuation hash pass. Historical
+  fixtures pin both catalogue options; no golden hashes were rewritten.
+
 
 ## Current-reference diagrams
 

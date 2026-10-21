@@ -24,7 +24,7 @@ const audit = auditLocomotionPhysics();
 const results = [];
 for (const [index, spec] of FEATURED_BLUEPRINTS.entries()) {
   if (selected && spec.id !== selected) continue;
-  const original = createFounderGenome(spec.id, 'balanced', {locomotion: 'catalogue'});
+  const original = createFounderGenome(spec.id, 'balanced', {locomotion: 'catalogue', foraging: 'catalogue'});
   const search = searchSwimmer(original, {...settings, seed: settings.seed + index * 1009});
   const baselines = trials.map(t => evaluateSwimmer(original, t));
   const candidates = trials.map(t => evaluateSwimmer(search.genome, t));
@@ -35,7 +35,7 @@ for (const [index, spec] of FEATURED_BLUEPRINTS.entries()) {
     genes: {motorFrequency: search.genome.motorFrequency, motorForce: search.genome.motorForce,
       parts: search.genome.parts.slice(1).map(p => ({id: p.id, cpgPhaseOffset: p.cpgPhaseOffset,
         cpgAmp: p.cpgAmp, cpgFreqMult: p.cpgFreqMult, oscillatorMix: p.oscillatorMix, waveHarmonics: p.waveHarmonics}))}};
-  if (check) assert.deepEqual(createFounderGenome(spec.id), accepted ? search.genome : original,
+  if (check) assert.deepEqual(createFounderGenome(spec.id, 'balanced', {foraging: 'catalogue'}), accepted ? search.genome : original,
     `Committed starter calibration differs from the bounded search: ${spec.id}`);
   results.push(row);
   console.log(JSON.stringify({id: spec.id, accepted, evaluations: search.evaluations, rejected: search.rejected,
