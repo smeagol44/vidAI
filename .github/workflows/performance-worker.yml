@@ -3,6 +3,9 @@ on:
   pull_request:
     paths:
       - 'simulation.worker.ts'
+      - 'foundationPhysics.ts'
+      - 'tests/foundation-physics.test.ts'
+      - 'scripts/check-worker.mjs'
       - 'App.tsx'
       - 'BrainGraph.tsx'
       - 'persistence.ts'

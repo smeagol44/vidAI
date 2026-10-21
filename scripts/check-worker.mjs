@@ -68,7 +68,8 @@ try {
   legacySource.schemaVersion = '11.0.0'; delete legacySource.settings.physicsRegime;
   send({type: 'reset', snapshot: legacySource, epoch: 3});
   await receive(value => value.type === 'frame' && value.frame.epoch === 3);
-  const oldSettings = {...settings, physicsRegime: 'legacy-v0'};
+  const oldSettings = {...settings}; delete oldSettings.physicsRegime;
+  send({type: 'control', epoch: 3, settings: oldSettings, speed: 1, selected: null, running: false});
   assert.equal((await request('snapshot', {}, 3)).settings.physicsRegime, 'legacy-v0');
   send({type: 'control', epoch: 3, settings: oldSettings, speed: 1, selected: null, running: true});
   await new Promise(resolve => setTimeout(resolve, 100));
