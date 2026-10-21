@@ -95,6 +95,49 @@ drastic positive or negative effect before production. Do not claim sustained
 ecology from ledger closure. Update the actual Wiki as each feature ships,
 preserving its diagrams; keep unimplemented details in this roadmap.
 
+### Egg population slots, reserve uptake and expiry — planned
+
+Extend the closed-economy foundation with these requested lifecycle rules. They
+are not current behavior: eggs presently receive parent-funded body/reserve
+energy and can wait indefinitely for population or physical hatch space.
+
+- **Population occupancy = living creatures + unhatched eggs.** Each
+  laid egg reserves one slot immediately. Limit every clutch to remaining slots;
+  at the cap, lay no eggs and charge no egg funding. Manual creature additions
+  obey the same occupancy rule. Hatching replaces its own reserved slot, so the
+  population cap cannot block that replacement, including after the player
+  lowers the cap. Existing occupants remain; new additions wait. Egg consumption
+  or conversion to carrion releases its slot. Dissolving dead animals and
+  carrion do not reserve living-population slots.
+- Preserve parent-paid embryo construction and starting reserves. Proposed
+  additional reserve accumulation during incubation is **world-reserve uptake**,
+  never energy production: debit available world energy by exactly the amount
+  credited to the egg. Bound uptake by a rate and inherited reserve capacity;
+  no uptake while the reserve is zero/negative and no borrowing into debt.
+  Specify the rate, target and allocation alongside nutrient conversion before
+  implementation so egg iteration order cannot monopolize shared funds.
+- Permit fully parent-funded laying during world debt when a population slot
+  exists. **Block hatching while world reserve is negative**, as the user's
+  explicit environmental viability rule. A parent-funded egg does not require
+  new energy merely to transfer into a hatchling; this gate is additional to
+  conservation. Zero reserve alone does not block an otherwise funded hatch.
+  If debt clears before expiry, a ready, viable egg with body clearance may hatch.
+- Add a persisted age/expiry measured in simulation time that keeps advancing
+  while hatching is blocked by debt or physical space. An initial proposal is
+  normal incubation plus two incubation periods of grace (maximum age 3 times
+  its incubation duration); the exact grace remains a design value to review,
+  not a new starter/genome adjustment or a claim of biological realism.
+  At expiry, convert all remaining body/reserve funding into edible carrion
+  exactly once, without disappearing energy at a particle cap. Normal carrion
+  decay subsequently credits the world reserve and can repay debt.
+- Keep the UI/inspector's occupied slots, debt-blocked hatch status and expiry
+  countdown consistent with the authoritative Worker. Preserve old saves under
+  their existing ecology behavior; explicit conversion must define age for
+  already-incubated eggs without inventing past uptake or retroactive decay.
+  Validate clutch boundaries, slot-neutral hatching at/above cap, debt recovery,
+  zero-reserve funded hatching, expiry/feeding transfers, uptake conservation,
+  exact saved timers and Worker/direct equivalence before shipping.
+
 ## Next ecological goal
 
 Close the loop through **unassisted food acquisition → enough net energy →
