@@ -1,5 +1,18 @@
 # Project status — 2026-10-20
 
+## Current-reference documentation cleanup
+
+- Reconciled all eight maintained Wiki files against the v0.33 implementation,
+  separating implemented capability from unproven ecological outcomes. Removed
+  historical trial narratives in favor of links to this experiment record.
+- Corrected learning/sleep status, 275-food/30-creature defaults, 18 initial
+  creatures, deployed Worker ownership, current save schema and bounded starter
+  calibration. Preserved physics/work-accounting and measurement limitations.
+- Replaced stale, contradictory README/roadmap text with concise current scope,
+  linked feature references and remaining priorities. No runtime or version change.
+- Checked internal documentation targets and source constants; normal PR CI
+  validates fast tests/build, followed by actual Wiki publication on merge.
+
 ## Sims-inspired bounded swimming development — v0.33.0
 
 - User approved auditing drag/muscle scaling and a small offline search using

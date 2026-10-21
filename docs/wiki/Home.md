@@ -1,21 +1,52 @@
-# VIDA — Current Feature Reference
+# VIDA 2D — Current Feature Reference
 
-Documentation for the **current 2D VIDA simulation**. Each page describes what the latest game does, how its mechanisms work, and its known limitations. Feature pages are **updated in place** rather than duplicated for each release.
+VIDA is an aquatic artificial-life simulator. Articulated bodies, inherited
+neural controllers, individual experience and physical interactions determine
+behavior. Survival and reproduction depend on finite energy.
 
-## Simulation systems
+**Implementation baseline: v0.33.0.** The core mechanisms exist; reliable
+foraging, predator pursuit and self-sustaining multigeneration ecosystems remain
+unproven. This reference covers VIDA 2D; the separate 3D project is independent.
 
-- [Simulation Performance](https://github.com/smeagol44/vidAI/wiki/Simulation-Performance) — ordered spatial vision/feeding, Worker separation, rendering, remaining bottlenecks and desktop considerations.
-- [Featured Starters and Specimen Bank](https://github.com/smeagol44/vidAI/wiki/Featured-Starters) — nine featured, mutable genotypes; 55 accessible legacy designs; selection and ecological limits.
-- [Movement and Motor Control](https://github.com/smeagol44/vidAI/wiki/Motor-Control) — optional oscillators, direct joint positioning, inherited motor parameters, physical work and limits.
-- [Senses and Visually Guided Behavior](https://github.com/smeagol44/vidAI/wiki/Sensory-Behavior) — true retinal rays, inherited neural steering, measured food approach and unresolved threat recognition.
-- [Ecology Baseline and Energy Auditing](https://github.com/smeagol44/vidAI/wiki/Ecology-Baseline) — reproducible feeding, egg, death and conservation metrics, plus clearly stated population-level limits.
-- [Waking Synaptic Learning](https://github.com/smeagol44/vidAI/wiki/Waking-Learning) — heritable learning capacity, acquired motor weights, reward from real feeding, energy costs and unproven ecological benefit.
+[Play VIDA](https://smeagol44.github.io/vidAI/) · [Source](https://github.com/smeagol44/vidAI)
 
-More current-feature pages will be added as those systems are worked on; this is not an attempt to document all existing systems at once.
+## Systems
 
-## Reading and maintaining this Wiki
+| Page | Covers |
+| --- | --- |
+| [Featured Starters and Specimen Bank](Featured-Starters) | Nine featured designs, 55 legacy designs, defaults and selection |
+| [Movement and Motor Control](Motor-Control) | Physical joints, mutable rhythms, drag, muscle scaling and offline swimming search |
+| [Senses and Visually Guided Behavior](Sensory-Behavior) | Retina, spectral sensitivity, feedback and inherited sensory responses |
+| [Waking Synaptic Learning](Waking-Learning) | Brain architecture, activation memory, personal learning and inheritance |
+| [Ecology and Energy Auditing](Ecology-Baseline) | Feeding, funded eggs, food distribution and ecological measurements |
+| [Simulation Performance](Simulation-Performance) | Worker ownership, rendering, optimizations, saves and throughput limits |
 
-- **[Play VIDA](https://smeagol44.github.io/vidAI/)** · **[Source repository](https://github.com/smeagol44/vidAI)**
-- Keep pages concise, with diagrams, grounded settings and explicit limitations.
-- No historical changelogs or milestone journals here. The repository's `docs/PROJECT_STATUS.md` records experiments and version changes separately.
-- These pages are maintained from `docs/wiki/` in the main repository and synchronized into the Wiki by GitHub Actions. Future edits should update those source pages to avoid being overwritten at the next synchronization.
+## Original plan and current status
+
+| Original phase | Status |
+| --- | --- |
+| 1 — Variable neural architecture | Implemented: stable identities and variable hidden-neuron counts |
+| 2 — Inherited structural brain evolution | Implemented: offspring can mutate neurons and connections |
+| 3 — Biological trade-offs and egg inspection | Core scope implemented; some other inherited trait trade-offs remain open |
+| 4 — Evolvable activation-memory timescales | Implemented |
+| 5 — Learning during individual lives | Bounded waking-learning feature set implemented; ecological usefulness remains inconsistent |
+| 6 — Optional rest/sleep and experience replay | Not implemented; world-model dreaming is also absent |
+
+The additional **B-A–B-D** movement, sensory-behavior and ecological-measurement
+workstream is complete as a bounded prototype. It did not replace original
+Phases 5 and 6 or establish sustainable ecology. Worker/render separation and
+the bounded offline starter search are implemented additional capabilities.
+
+## Scope and maintenance
+
+The next ecological goal is unassisted food acquisition followed by genuinely
+funded laying, hatching and reproduction across generations. Physical growth,
+local tissue repair, gradual senescence and within-life structural brain growth
+remain unimplemented. Current anatomy is capped at seven parts; the original
+roughly 100-creature/1,000-part performance ambition remains unverified.
+
+These pages describe current implementation and limitations, without release
+history. Detailed experiments stay in
+[project status](https://github.com/smeagol44/vidAI/blob/main/docs/PROJECT_STATUS.md);
+priorities stay in the [roadmap](https://github.com/smeagol44/vidAI/blob/main/docs/FEATURE_ROADMAP.md).
+The maintained source is `docs/wiki/`, automatically published to this Wiki.

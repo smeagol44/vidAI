@@ -1,13 +1,11 @@
-**VIDA — Current Reference**
+**VIDA 2D — Current Reference**
 
-- [[Home]]
-- **Specimen Bank**
-  - [[Featured Starters and Legacy Designs|Featured-Starters]]
-- **Simulation systems**
-  - [[Simulation Performance|Simulation-Performance]]
-  - [[Movement and Motor Control|Motor-Control]]
-  - [[Senses and Visually Guided Behavior|Sensory-Behavior]]
-  - [[Ecology Baseline and Energy Auditing|Ecology-Baseline]]
-  - [[Waking Synaptic Learning|Waking-Learning]]
+- [[Overview and original plan|Home]]
+- [[Featured Starters and Specimen Bank|Featured-Starters]]
+- [[Movement and Motor Control|Motor-Control]]
+- [[Senses and Visually Guided Behavior|Sensory-Behavior]]
+- [[Waking Synaptic Learning|Waking-Learning]]
+- [[Ecology and Energy Auditing|Ecology-Baseline]]
+- [[Simulation Performance|Simulation-Performance]]
 
-[Play the latest version](https://smeagol44.github.io/vidAI/)
+[Play VIDA](https://smeagol44.github.io/vidAI/)

@@ -1,144 +1,70 @@
 # Simulation Performance
 
-VIDA 2D runs the authoritative 1/60-second simulation in a Web Worker.
-Canvas painting, camera controls and the interface remain on the main
-thread. All creatures continue sensing, moving, eating and evolving
-off-camera; rendering never decides which organisms are simulated.
+The authoritative **1/60-second simulation runs in a Web Worker**. Rendering
+and controls remain on the UI thread. Every creature continues sensing,
+moving and evolving off-camera. Worker separation is integrated and deployed.
 
-## Neural and learning execution
+## State ownership and rendering
 
-Neural topology is compiled into transient numeric masks and plastic-edge
-indices. The inner neural loops read actual genome weights in their
-original order, without serializing a JSON edge identifier for each
-synapse on every tick. Dense rows use direct loops; masked rows use sorted
-enabled-source lists, avoiding a mask lookup for every multiplication.
-Learned deltas remain separate additions in their original order.
-Topology changes invalidate the cache; changing
-weights never leaves cached weight values behind.
+World commands run between complete fixed ticks. Exports, forks and diagnostics
+use authoritative Worker state, including randomness and acquired memory;
+render replicas are not saves. Epochs reject stale-world messages.
 
-Individual acquired synapse records and temporary numeric buffers are
-reused. Aligned acquired records overwrite their compiled eligible slots directly;
-imported or edited lists clear only eligible slots before rebuilding deltas.
-Removed records and topology changes cannot retain stale offsets. Genetic and somatic memory remain separate, energy-paid and
-bounded. Saved edge identities, PRNG, learning arithmetic and existing
-brain structure are preserved. Caches are never saved.
+Render transport is bounded to 30 updates/s with one frame in flight. Genomes
+travel once; lineage sends actual changed records after an initial transfer.
+Heavy neural arrays travel only for a selected creature with diagnostics open.
+Canvas painting can run independently of those updates. Paused worlds do not
+stream unchanged frames; Worker errors pause visibly.
 
-## Kernel geometry and hatching
+Batches yield after about 8 ms. Overdue work resumes through MessageChannel;
+light worlds pace themselves and paused worlds idle. Unsupported Workers use
+a main-thread fallback; `?mainthread` explicitly selects it for diagnosis.
 
-Ready eggs still try the same eight orientations every simulated tick.
-Their clearance checks share the living-body bounds for that tick's egg
-pass. Each successful hatch immediately adds the newborn's bounds, so
-later eggs cannot hatch through it. The index is rebuilt on the next tick;
-blocked eggs retain all funding and their stored heading.
+## Current optimizations
 
-The velocity constraint solver computes anchors, effective masses,
-position bias and angle-limit error once per substep. These values remain
-constant through its ten velocity iterations; all ten impulses and all
-four physical substeps are retained. Body-contact wrappers are reused,
-but moving bounds are recomputed on every contact pass in original order.
+| Area | Strategy |
+| --- | --- |
+| Neural evaluation | Transient topology/masks and ordered enabled-row loops; live weights remain authoritative |
+| Personal learning | Reused records/buffers; aligned records overwrite eligible slots directly |
+| Vision | Conservative physical-bounds ray queries in original candidate order |
+| Feeding | Separate post-movement aperture indexes, invalidated when food/eggs change |
+| Contacts | Reused cell buckets, pair ownership, current-pass rotations and fixed clipping buffers |
+| Hinges/hatching | Reuse invariant geometry within its valid solve/pass; refresh moving bounds and add newborn bounds immediately |
+| Lineage | Subscribe to births, laying and deaths instead of rescanning unchanged ancestors |
+| Painting | Cached food/remains glows and viewport culling of paint calls |
 
-Vision builds one physical-bounds index for food, eggs and living body
-parts before movement. Ray queries follow only the cells crossed by the
-ray through each horizontal slab, including boundaries and oversized objects.
-Candidates are deduplicated and sorted into the original food/egg/body
-and array order. Exact intersection geometry, closest-hit ties, occlusion
-and live reserve-dependent pigment remain authoritative.
+These optimizations preserve physical substeps, sensing rates and numerical
+ordering. Spatial/neural scratch is transient and never saved. New corpses
+produce one conserved-chemical-energy circle when capacity permits; stored
+fragments remain intact on import. See [Ecology](Ecology-Baseline).
 
-Feeding builds separate indexes from post-physics positions. Mouths query
-their aperture bounds, retaining original descending prey/egg/food order.
-Food removals rebuild the next mouth's index; egg predation invalidates
-its index, and newly laid eggs remain visible to later mouths in that tick.
-No sensing or feeding frequency is reduced.
+## FPS and simulation speed
 
-Contacts reuse bounded cell buckets and use first-shared-cell ownership
-to remove duplicate pairs in the original order. All moving bounds are
-recomputed every pass. Hinge projection reuses only unchanged masses and
-local anchors; moving angles and impulses are recomputed each iteration.
-Rectangle narrowphase reuses the current pass's rotations and two fixed clipping
-buffers. Positional contact corrections still read current centers; hinge
-projection refreshes rotations and bounds before the next pass. SAT axes,
-clipping order, centroids and impulses retain their original arithmetic.
+**FPS** measures presentation. **Steps/s** measures physical ticks completed.
+Real-time 1x requires 60 ticks/s; 5x requires 300. A responsive display can coexist
+with a CPU-limited simulation that falls short of its requested multiplier.
 
-## Rendering and remains
+There is no universal browser-speed guarantee. The original roughly
+100-creature/1,000-part ambition is unverified, and current anatomy is capped
+at seven parts. Joints, ray geometry, evolved brains and population size can
+still dominate cost. Native packaging alone does not remove those costs;
+compiled/WASM kernels are a separate future option.
 
-- Three reusable glow images cover ordinary nutrients, larger nutrients
-  and carrion. Each visible particle scales the appropriate image rather
-  than constructing its own radial gradient every frame.
-- Food, eggs and caustics outside the viewport skip paint calls.
-- Every newly dissolved organism leaves **one larger edible carrion
-  circle** holding its remaining reserve plus tissue energy. Its radius
-  follows the existing energy-to-radius rule and shrinks during feeding.
-  This replaces the former collection of 3000-J fragments. Full-buffer
-  losses remain recorded in the energy ledger.
-- Old saved fragments remain intact when imported. The new corpse layout
-  intentionally changes future food geometry and random draws at death;
-  importing a save never deletes or silently merges its existing remains.
+## Checks and diagnostics
 
-## Worker state and controls
+```sh
+npm run test:fast
+npm run build
+npm run test:worker
+```
 
-The Worker is the sole owner of living state and randomness. Feed, Feed All,
-spawn, clear-food and resize requests execute between complete ticks.
-Exports, forks and diagnostic reports request exact authoritative state,
-including PRNG and all acquired memories; render frames are never used
-as saves.
+The Worker check executes the production bundle on a real thread. Focused
+Chromium/Firefox checks cover actual UI/Worker integration in CI.
 
-Lineage transport sends the complete history once after reset/import, then only
-records marked by actual spawning, hatching, egg laying or death. Repeated edits
-coalesce until the next frame; unchanged ancestors are not scanned. Subscriptions
-are transient and detached on world reset, with no journal in headless worlds or
-save files. Future lineage edits must mark the corresponding record.
+- `npm run benchmark:performance -- --baseline /path/to/checkout`: same-state kernel comparison.
+- `node --import tsx scripts/profile-performance.mjs [checkout] [output.json]`: four bounded CPU profiles, including a synthetic Gen-6 tank. Original catalogue genes/phases pin the historical state hashes.
+- `node --import tsx scripts/benchmark-runtime-components.mjs <baseline-checkout>`: isolated collision, learning-buffer and lineage costs.
 
-Render updates are bounded to 30 per second, with **one frame in flight**.
-Genomes transfer once, lineage sends changed records, and heavy neural
-inspector state is sent only for the selected animal while diagnostics are open. Paused worlds do
-not stream unchanged frames. World epochs discard stale messages after
-reset/import. Worker errors pause the simulation visibly.
-
-Worker batches yield after about 8 ms. When ticks are overdue, the next
-batch queues through a MessageChannel rather than adding a nested-timer
-wait. Light worlds still sleep until another tick is due, and paused
-worlds use an idle timer. Time spent computing counts toward pacing.
-This does not make an expensive tick cheaper or parallelize the kernel.
-
-Unsupported Workers retain the main-thread execution path. The diagnostic
-URL option `?mainthread` explicitly selects it. A CPU-bound Worker can
-still fall short of the requested simulation speed; separation protects
-UI responsiveness without inventing extra simulated time.
-
-## Measurements and checks
-
-The HUD distinguishes **FPS** from **Steps/s**. At 1x, 60 physical ticks
-per real second is real-time simulation; at 5x the target is 300.
-Render FPS alone does not measure simulation throughput.
-
-- `npm run test:fast` includes complete-state hashes captured before the
-  neural optimization, cold-cache saves, Worker-host command accounting
-  and one-circle corpse conservation, Worker pacing and conservative spatial queries.
-- `npm run build` then `npm run test:worker` execute the actual production
-  Worker bundle on a separate thread, checking independent progress,
-  paused exact exports, commands and stale-world rejection.
-- Dedicated Chromium and Firefox smoke checks cover the UI's real Worker,
-  import/export, pause, Feed, Add Life and selection/defaults in GitHub Actions.
-- `npm run benchmark:performance` measures 15 creatures, 78 nutrients
-  and 221 remains with evolved connection masks. An optional local
-  `--baseline` checkout compares timings and requires identical final
-  states. This is a kernel benchmark, not a browser FPS promise.
-
-- `node --import tsx scripts/profile-performance.mjs [checkout]` samples
-  four bounded kernels: 15 founders, 30 second-generation animals, the
-  same 30 with 75 blocked eggs (each with 200 nutrients/180 remains), and
-  34 generation-six creatures with 272 nutrients, 27 eggs and 3 remains.
-  The last is synthetic and matches reported counts, not a user's exact save.
-  Reports can be written to a second path argument and compared with
-  `node scripts/compare-performance.mjs before.json after.json`.
-  Original hashes and cross-checkout comparisons require exact continuation.
-  The throughput diagnosis workflow is opt-in outside its development branch.
-- `node --import tsx scripts/benchmark-runtime-components.mjs <baseline-checkout>`
-  compares bounded collision clipping, 96-hidden-neuron learning-buffer preparation
-  and unchanged 10,000-record lineage frames, with alternating implementation order.
-  These isolate overhead and do not predict total simulation speed.
-
-Joint constraints, remaining ray geometry and large evolved neural layouts
-can still dominate CPU time. Profile actual evolved worlds before the
-next optimization. Native desktop packaging alone does not remove those
-costs; compiled/WASM kernels remain a separate future option.
+Synthetic and component measurements do not predict a user's browser FPS.
+Historical timing tables are in
+[project status](https://github.com/smeagol44/vidAI/blob/main/docs/PROJECT_STATUS.md).
