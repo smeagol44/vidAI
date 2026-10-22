@@ -137,17 +137,18 @@ export function anisotropicFaceResistance(width: number, height: number, mu: num
   };
 }
 
-/** Fixed reference pair: 14x7 px rectangles, 2x1 structural cells each,
- * unit depth, base simulation density 0.40. This deliberately matches the
- * existing passive-v3 max torque and PD stiffness on that PAIR ONLY, instead
- * of calibrating separately for every starter. Joints across the same
- * contact section have area proportional to shared width times unit depth;
- * their torque capacity is proportional to area times characteristic lever.
- * Doubling every length thus gives 4x torque, rather than inertia's 16x.
- * Tissue stress is STILL a calibrated simulation value, not biological data. */
+/** Anatomical reference, chosen BEFORE comparison from Darter's first
+ * actual parent/child joint (FND-001 P0–P1): 35x21 px / 35x14 px,
+ * density=0.40, unit depth, 5x3 and 5x2 grid cells. This calibrates
+ * the replacement to existing v3 maximum torque and stiffness AT THAT
+ * fixed reference only. Other body plans and size mutations are not fit.
+ * Contact section times lever scales torque as L^2 under uniform size
+ * scaling, versus the old inertia's L^4. Reference strength is empirical,
+ * not a measured biological tissue-stress coefficient. */
 export const MUSCLE_REFERENCE = Object.freeze({
-  widthPx: 14, heightPx: 7, baseDensity: 0.40,
-  cellsAcross: 2, cellsAlong: 1, sectionPx: 7, leverPx: 3.5,
+  parentWidthPx: 35, parentHeightPx: 21, parentCellsN: 5, parentCellsM: 3,
+  childWidthPx: 35, childHeightPx: 14, childCellsN: 5, childCellsM: 2,
+  baseDensity: 0.40, sectionPx: 14, leverPx: 8.75,
 });
 export function anatomicalMuscleParameters(parent: PartDef, child: PartDef,
   parentInertia: number, childInertia: number, force: number, stiffness: number, torqueMod: number) {
@@ -157,8 +158,11 @@ export function anatomicalMuscleParameters(parent: PartDef, child: PartDef,
     ? child.height : child.width;
   const sectionPx = Math.min(acrossParent, acrossChild);
   const leverPx = (Math.min(parent.width, parent.height) + Math.min(child.width, child.height)) / 4;
-  const referenceMass = MUSCLE_REFERENCE.cellsAcross * MUSCLE_REFERENCE.cellsAlong * MUSCLE_REFERENCE.baseDensity;
-  const referenceInertia = referenceMass * (MUSCLE_REFERENCE.widthPx ** 2 + MUSCLE_REFERENCE.heightPx ** 2) / 12;
+  const r = MUSCLE_REFERENCE;
+  const parentMass = r.parentCellsN * r.parentCellsM * r.baseDensity;
+  const childMass = r.childCellsN * r.childCellsM * r.baseDensity;
+  const referenceInertia = (parentMass * (r.parentWidthPx ** 2 + r.parentHeightPx ** 2)
+    + childMass * (r.childWidthPx ** 2 + r.childHeightPx ** 2)) / 24;
   const scale = (sectionPx * leverPx) / (MUSCLE_REFERENCE.sectionPx * MUSCLE_REFERENCE.leverPx);
   const kp = force * referenceInertia * 480 * scale * stiffness;
   const averageInertia = (parentInertia + childInertia) / 2;

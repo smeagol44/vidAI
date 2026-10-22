@@ -17,15 +17,20 @@ test('anisotropic face law matches existing linear drag and its own rotational i
   }
 });
 
-test('fixed reference pair matches existing absolute strength, while geometric size doubles torque 4x', () => {
-  const p=createFounderGenome('CUR-001').parts[0], c=createFounderGenome('CUR-001').parts[1];
-  const parent={...p,width:14,height:7,dimN:2,dimM:1};
-  const child={...c,width:14,height:7,dimN:2,dimM:1,attachmentPoint:'EAST' as const};
-  const i=MUSCLE_REFERENCE.cellsAcross*MUSCLE_REFERENCE.cellsAlong*MUSCLE_REFERENCE.baseDensity*(14**2+7**2)/12;
-  const ref=anatomicalMuscleParameters(parent,child,i,i,1.2,1,1);
-  close(ref.kp,1.2*i*480);close(ref.maxTorque,i*2200);
+test('actual fixed Darter reference preserves its original strength, while size scaling changes exponent', () => {
+  const genome=createFounderGenome('CUR-001');
+  const parent=genome.parts[0], child=genome.parts[1];
+  assert.equal(parent.width,MUSCLE_REFERENCE.parentWidthPx);
+  assert.equal(parent.height,MUSCLE_REFERENCE.parentHeightPx);
+  assert.equal(child.width,MUSCLE_REFERENCE.childWidthPx);
+  assert.equal(child.height,MUSCLE_REFERENCE.childHeightPx);
+  const mass=(p:typeof parent)=>p.dimN*p.dimM*MUSCLE_REFERENCE.baseDensity;
+  const inertia=(p:typeof parent)=>mass(p)*(p.width**2+p.height**2)/12;
+  const iParent=inertia(parent), iChild=inertia(child), avg=(iParent+iChild)/2;
+  const ref=anatomicalMuscleParameters(parent,child,iParent,iChild,1.2,1,1);
+  close(ref.kp,1.2*avg*480);close(ref.maxTorque,avg*2200);
   const big=(x:typeof parent)=>({...x,width:x.width*2,height:x.height*2,dimN:x.dimN*2,dimM:x.dimM*2});
-  const larger=anatomicalMuscleParameters(big(parent),big(child),i*16,i*16,1.2,1,1);
+  const larger=anatomicalMuscleParameters(big(parent),big(child),iParent*16,iChild*16,1.2,1,1);
   close(larger.maxTorque/ref.maxTorque,4);
   close(larger.kp/ref.kp,4);
   close(larger.kd/ref.kd,8);
