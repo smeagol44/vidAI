@@ -1,3 +1,4 @@
+import type {ActuationObserver} from './actuationObservation';
 import {gatedTorque, type GateArchitecture, type GateMode} from './experiments/gatedMotor';
 import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
 import {partKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
@@ -2980,7 +2981,7 @@ export function calculateJointMotorTarget(def: PartDef, phase: number, amplitude
   return clampVal((oscillation + angleCommand * directRange) * def.maxAngle, -def.maxAngle, def.maxAngle);
 }
 
-function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number, observe?: MechanicalObserver): number {
+function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number, observe?: MechanicalObserver, observeActuation?: ActuationObserver, auditTime = 0): number {
   const g = org.genome, numJoints = org.joints.length;
   const corrected = usesPaidActuation(settings.physicsRegime);
   const surfaceModel = settings.physicsRegime === 'surface-work-v1';
@@ -3000,6 +3001,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
   }
 
   let frameMechanicalWork = 0;
+  let auditBudgetScale = 1;
   scratchFx.fill(0);
   scratchFy.fill(0);
   scratchTorque.fill(0);
@@ -3015,6 +3017,8 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     const childPhys = org.segments[childIdx];
 
     let motorTorque: number;
+    let auditRaw = 0, auditCeiling = 0, auditCommand = 0, auditModeSignal = 0;
+    let auditWave = 0, auditStrength = 0, auditProportional = 0, auditDamping = 0;
     if (g.motorController) {
       const c = g.motorController, count = c.architecture === 'two-output' ? 2 : 3;
       const offset = j * count;
@@ -3022,7 +3026,8 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       // not an anatomical muscle law (#60) or coherent fluid/unit model (#61).
       const maxTorque = (scratchInertias[parentIdx] + scratchInertias[childIdx]) * .5 * 2200;
       joint.phase = (joint.phase + 2 * Math.PI * g.motorFrequency * childDef.cpgFreqMult * dt_sub) % (2 * Math.PI);
-      const wave = clampVal(evaluateMotorWave(joint.phase, childDef.waveHarmonics) * childDef.cpgAmp, -1, 1);
+      const rawWave = evaluateMotorWave(joint.phase, childDef.waveHarmonics) * childDef.cpgAmp;
+      const wave = clampVal(rawWave, -1, 1);
       const result = gatedTorque(c.architecture === 'two-output'
         ? {architecture: c.architecture, mode: org.neuralOutputs[offset], command: org.neuralOutputs[offset + 1]}
         : {architecture: c.architecture, mode: org.neuralOutputs[offset], direct: org.neuralOutputs[offset + 1], strength: org.neuralOutputs[offset + 2]},
@@ -3034,6 +3039,11 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       joint.currentRelAngle = Math.atan2(Math.sin(relative), Math.cos(relative));
       joint.currentRelAngVel = childPhys.angVel - parentPhys.angVel;
       motorTorque = result.torque;
+      if (observeActuation) {
+        auditCeiling = maxTorque; auditModeSignal = org.neuralOutputs[offset];
+        auditCommand = org.neuralOutputs[offset + (result.mode === 'oscillator' && c.architecture === 'three-output' ? 2 : 1)]; auditWave = rawWave; auditStrength = result.oscillatorStrength;
+        auditRaw = result.mode === 'oscillator' ? rawWave * result.oscillatorStrength * maxTorque : result.torque;
+      }
     } else {
       const outBase = j * OUTPUTS_PER_JOINT;
       const angleCommand = org.neuralOutputs[outBase] || 0;
@@ -3073,11 +3083,22 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
 
       motorTorque = kp * (targetAngle - currentRelAngle) - kd * relAngVel;
       const maxTorque = muscle?.maxTorque ?? avgInertia * 2200.0 * peakTorqueMod;
+      if (observeActuation) {
+        auditRaw = motorTorque; auditCeiling = maxTorque; auditCommand = angleCommand;
+        auditProportional = kp * (targetAngle - currentRelAngle); auditDamping = -kd * relAngVel;
+      }
       motorTorque = clampVal(motorTorque, -maxTorque, maxTorque) * joint.engagement;
     }
     const relAngVel = childPhys.angVel - parentPhys.angVel;
     if (corrected && !Number.isFinite(motorTorque)) throw new Error('Non-finite muscle torque');
     if (isNaN(motorTorque)) motorTorque = 0;
+    if (observeActuation) observeActuation(Object.freeze({kind: 'demand', time: auditTime, organism: org.id, joint: j,
+      mode: g.motorController ? joint.gateMode! : 'servo', neuralCommand: auditCommand, modeSignal: auditModeSignal,
+      rawWave: auditWave, strength: auditStrength, rawTorque: auditRaw, requestedTorque: motorTorque,
+      ceiling: auditCeiling, baseCeiling: (scratchInertias[parentIdx] + scratchInertias[childIdx]) * .5 * 2200,
+      proportionalTorque: auditProportional, dampingTorque: auditDamping, engagement: joint.engagement ?? 1,
+      relativeAngle: joint.currentRelAngle, relativeSpeed: relAngVel, maxAngle: childDef.maxAngle, dt: dt_sub,
+      freeRelativeDelta: motorTorque * (scratchInvInertias[parentIdx] + scratchInvInertias[childIdx]) * dt_sub}));
     if (surfaceModel) {
       const beforeMotor = observe ? partKineticEnergy(parentPhys, g.parts[parentIdx], BASE_PART_DENSITY)
         + partKineticEnergy(childPhys, childDef, BASE_PART_DENSITY) : 0;
@@ -3178,6 +3199,9 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     }
     const paid = paidMotorBatch(scratchMotorImpulses, scratchMotorSpeeds,
       scratchMotorExternalChanges, scratchMotorChanges, numJoints, org.energy);
+    if (observeActuation) auditBudgetScale = paid.scale;
+    if (observeActuation) observeActuation(Object.freeze({kind: 'budget', time: auditTime, organism: org.id,
+      scale: paid.scale, availableJ: org.energy, positiveJ: paid.positiveJ, negativeJ: paid.negativeJ, costJ: paid.costJ}));
     // Preserve the proven force/integration arithmetic exactly when funded.
     if (paid.scale < 1) {
       for (let i = 0; i < partCount; i++) scratchTorque[i] += (paid.scale - 1) * scratchMotorTorque[i];
@@ -3190,18 +3214,24 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     frameMechanicalWork += paid.costJ;
     org.motorDiagnostics!.positiveWorkJ += paid.positiveJ;
     org.motorDiagnostics!.negativeWorkJ += paid.negativeJ;
+    if (observeActuation) for (let j = 0; j < numJoints; j++) observeActuation(Object.freeze({
+      kind: 'delivery', time: auditTime, organism: org.id, joint: j, appliedTorque: org.joints[j].appliedTorque,
+      budgetScale: paid.scale, motorRelativeDelta: scratchMotorChanges[j] * paid.scale,
+      externalRelativeDelta: scratchMotorExternalChanges[j], dt: dt_sub}));
   }
 
   for (let i = 0; i < partCount; i++) {
     const seg = org.segments[i];
     const beforeForces = observe ? partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY) : 0;
+    const auditIncomingAngularSpeed = observeActuation ? seg.angVel : 0;
     seg.vx += scratchFx[i] * scratchInvMasses[i] * dt_sub;
     seg.vy += scratchFy[i] * scratchInvMasses[i] * dt_sub;
     seg.angVel += scratchTorque[i] * scratchInvInertias[i] * dt_sub;
 
-    const beforeGuards = observe ? partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY) : 0;
+    const beforeGuards = observe || observeActuation ? partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY) : 0;
     observe?.('forces-and-motors', beforeForces, beforeGuards);
     const spd = Math.hypot(seg.vx, seg.vy);
+    const auditAngularSpeed = observeActuation ? seg.angVel : 0;
     if (corrected && (spd > 400 || Math.abs(seg.angVel) > 20)) org.motorDiagnostics!.numericalGuardEvents++;
     if (spd > 400.0) {
       seg.vx = (seg.vx / spd) * 400.0;
@@ -3209,6 +3239,13 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     }
     seg.angVel = clampVal(seg.angVel, -20.0, 20.0);
     if (observe) observe('speed-guards', beforeGuards, partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY));
+    if (observeActuation && (spd > 400 || Math.abs(auditAngularSpeed) > 20)) observeActuation(Object.freeze({
+      kind: 'guard', time: auditTime, organism: org.id, part: i, speed: spd, angularSpeed: auditAngularSpeed,
+      lostJ: beforeGuards - partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY),
+      incomingAngularSpeed: auditIncomingAngularSpeed,
+      motorAngularDelta: simultaneousPaid ? scratchMotorTorque[i] * auditBudgetScale * scratchInvInertias[i] * dt_sub : 0,
+      externalAngularDelta: (scratchTorque[i] - (simultaneousPaid ? scratchMotorTorque[i] * auditBudgetScale : 0)) * scratchInvInertias[i] * dt_sub,
+      withoutMotorAngularSpeed: auditIncomingAngularSpeed + (scratchTorque[i] - (simultaneousPaid ? scratchMotorTorque[i] * auditBudgetScale : 0)) * scratchInvInertias[i] * dt_sub}));
   }
 
   // A complete joint solve is one provisional impulse batch. Preserve its
@@ -3314,6 +3351,9 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
         p.angVel = scratchConstraintStart[k + 2] + scale * (p.angVel - scratchConstraintStart[k + 2]);
       }
     }
+    if (observeActuation) for (let i = 0; i < partCount; i++) observeActuation(Object.freeze({
+      kind: 'constraint', time: auditTime, organism: org.id, part: i,
+      beforeAngularSpeed: scratchConstraintStart[i * 3 + 2], afterAngularSpeed: org.segments[i].angVel, scale}));
     if (observe) observe('constraint-batch', beforeConstraints,
       org.segments.reduce((sum, p, i) => sum + partKineticEnergy(p, g.parts[i], BASE_PART_DENSITY), 0));
   }
@@ -3509,6 +3549,7 @@ export function stepSimulation(
   dt: number,
   onEvent?: (type: 'birth' | 'death' | 'eat' | 'clash' | 'egg_loss') => void,
   observeMechanics?: MechanicalObserver,
+  observeActuation?: ActuationObserver,
 ): void {
   const mu = settings.waterViscosity ?? 0.22;
   const worldWidth = settings.worldWidth;
@@ -3961,8 +4002,24 @@ export function stepSimulation(
   const work = new Map(active.map(org => [org, 0]));
   const substeps = Math.max(NUM_SUBSTEPS, Math.ceil(dt * 240));
   for (let sub = 0; sub < substeps; sub++) {
-    for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics));
+    for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics, observeActuation, state.simTime - dt + (sub + 1) * dt / substeps));
     resolveBodyContacts(active, BASE_PART_DENSITY, projectBodyJoints, observeMechanics);
+    if (observeActuation) for (const org of active) {
+      let maxAnchorPx = 0, maxLimitRad = 0;
+      for (let j = 1; j < org.segments.length; j++) {
+        const def = org.genome.parts[j], parent = org.genome.parts[def.parentIndex];
+        const a = org.segments[def.parentIndex], b = org.segments[j];
+        const pa = getCardinalAnchor(def.attachmentPoint, parent.width, parent.height);
+        const pb = getChildAnchorForParentDir(def.attachmentPoint, def.width, def.height);
+        maxAnchorPx = Math.max(maxAnchorPx, Math.hypot(
+          b.x + Math.cos(b.angle) * pb.x - Math.sin(b.angle) * pb.y - a.x - Math.cos(a.angle) * pa.x + Math.sin(a.angle) * pa.y,
+          b.y + Math.sin(b.angle) * pb.x + Math.cos(b.angle) * pb.y - a.y - Math.sin(a.angle) * pa.x - Math.cos(a.angle) * pa.y));
+        const relative = b.angle - a.angle - def.baseAngleOffset;
+        maxLimitRad = Math.max(maxLimitRad, Math.abs(Math.atan2(Math.sin(relative), Math.cos(relative))) - def.maxAngle);
+      }
+      observeActuation(Object.freeze({kind: 'pose', time: state.simTime - dt + (sub + 1) * dt / substeps,
+        organism: org.id, maxAnchorPx, maxLimitRad, maxAngularSpeed: Math.max(...org.segments.map(p => Math.abs(p.angVel)))}));
+    }
   }
   for (let index = active.length - 1; index >= 0; index--) {
     const org = active[index], g = org.genome;

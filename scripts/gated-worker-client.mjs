@@ -35,7 +35,7 @@ export async function startGatedWorker() {
       // Ordered messages guarantee reset completes before the snapshot request.
       return request('snapshot');
     },
-    async trial(snapshot, ticks) {await this.reset(snapshot); return request('experiment-step', {ticks});},
+    async trial(snapshot, ticks, options = {}) {await this.reset(snapshot); return request('experiment-step', {ticks, ...options});},
     close: () => worker.terminate(),
   };
 }

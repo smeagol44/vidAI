@@ -1,5 +1,30 @@
 # Project status — 2026-10-21
 
+## Causal torque-demand audit — draft #72, unmerged
+
+Read-only substep receipts and 54 bounded built-Worker trials are implemented.
+All 45 existing representative metric rows match the completed controller report
+exactly; the earlier raw report, physics, saves, genes and baselines are preserved.
+[Methods/findings](experiments/torque-demand-audit.md) and
+[raw receipts](experiments/torque-demand-v1.json) distinguish causal controls,
+one-step algebraic attribution and unresolved whole-run interpretations.
+
+No gated request is capacity-clipped or energy-limited; requested and paid torque
+match across 115,200 samples. Original reference torques fit the new envelope.
+Fresh-head legacy controls alone lose 75.75–94.10% travel (median 91.05%), making
+initialization a demonstrated confound. Gated demand is greater for Darter/Twin
+Oar but often lower for Branchstalker, so no universal scalar recovery is justified.
+Of 8,915 angular guards, 7,844 require the current motor increment at the fixed
+incoming state. Accepted passive constraint batches also create per-part overspeed
+(peak 25.63 rad/s); this does not contradict aggregate kinetic passivity.
+Substep tracking exposes an anchor peak 0.568 px versus tick-sampled 0.433 px.
+
+No architecture, gain, muscle law or release is approved. #61 needs an explicit
+length/mass/depth/fluid reference before #60 anatomical capacity/activation cost.
+Initialization, feedback and solver effects are not assigned whole-run percentage
+causes; earlier ecological failures remain unresolved. No search rerun, starter
+optimization, safeguard relaxation, merge or deployment occurs.
+
 ## Gated torque experiment — draft #72, testing-only and unmerged
 
 The explicit gated-controller genotype, schema v16 opt-in snapshots, saved mode

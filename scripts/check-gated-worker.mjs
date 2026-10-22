@@ -16,6 +16,13 @@ try {
     const source = createSnapshot(s, config), host = new SimulationHost(); host.reset(source, 1);
     const expected = measureWorkerTrial(host, 90), actual = await w.trial(source, 90);
     assert.deepEqual(actual.snapshot, host.snapshot()); assert.deepEqual(actual.metrics, expected);
+    const audited = await w.trial(source,90,{auditTorque:true});
+    assert.deepEqual(audited.snapshot,actual.snapshot); assert.deepEqual(audited.metrics,actual.metrics);
+    assert.equal(audited.torqueAudit.totals.deliveryErrorMax,0);
+    assert.equal(audited.torqueAudit.guards,actual.metrics.guards);
+    assert.ok(Math.abs(audited.torqueAudit.costJ-actual.metrics.motorJ)<1e-9);
+    assert.ok(audited.torqueAudit.guardDecompositionError<1e-10);
+
     // Restore an intermediate state with noninitial hysteresis mode and continue.
     const restored = restoreSnapshot(actual.snapshot);
     assert.deepEqual(createSnapshot(restored.state, restored.settings), actual.snapshot);

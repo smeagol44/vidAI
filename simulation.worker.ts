@@ -1,3 +1,4 @@
+import {createTorqueRecorder} from './experiments/torqueRecorder';
 import {SimulationHost, type WorldSnapshot, type WorldAction} from './simulationHost';
 import type {SimulationSettings} from './simulation';
 import {measureWorkerTrial} from './experiments/workerMetrics';
@@ -40,9 +41,12 @@ port.onmessage = ({data}: MessageEvent) => {
       if (host.running || host.settings.motorExperiment !== 'gated-torque-v1'
         || !Number.isInteger(data.ticks) || data.ticks < 1 || data.ticks > 3600)
         throw new Error('Paused explicit experimental world and 1–3600 ticks required');
-      const metrics = measureWorkerTrial(host, data.ticks);
+      if (data.auditTorque !== undefined && (typeof data.auditTorque !== 'boolean' || host.settings.physicsRegime !== 'passive-work-v3'))
+        throw new Error('Torque audit requires passive-work-v3 and a boolean selector');
+      const recorder = data.auditTorque ? createTorqueRecorder() : undefined;
+      const metrics = measureWorkerTrial(host, data.ticks, recorder?.observe);
       dirty = true;
-      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot()}});
+      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot(), ...(recorder ? {torqueAudit: recorder.report()} : {})}});
       return;
     }
     if (data.type === 'action') {
