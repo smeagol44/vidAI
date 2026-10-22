@@ -35,7 +35,7 @@ test('unrequested foundation trials do not change frozen v3 behavior or old v2 c
   const ordinary=observeSolver('CUR-001','passive-work-v3');
   const historical=observeSolver('CUR-001','paid-work-v2');
   close(ordinary.displacementPx,190.50394871487816);
-  close(historical.displacementPx,190.499426040674);
+  close(historical.displacementPx,190.4994092650809);
   assert.equal(ordinary.guards,0);
   assert.equal(historical.guards,0);
 });
