@@ -20,7 +20,14 @@
   completed, not simply ready for work. Keep In review/Testing stages when
   useful. Project Status custom-field transitions need Projects UI/API,
   whereas closure, PR merge, reopening and automatic intake are handled by
-  built-in workflows. When unable to update the Project, log the precise
+  built-in workflows.
+- Native intermediate Project Status updates are delegated through the owner-only
+  comment-command bridge documented in [Project Status Automation](docs/PROJECT_STATUS_AUTOMATION.md)
+  (issue #75). Once the owner adds the secret `VIDA_PROJECT_TOKEN` and a real
+  update is verified, emit `/vida status in-progress` as an exact issue/PR
+  comment at the start of active discussion, and verify Actions and the field.
+  Until activation, log pending board synchronization in #57; never claim a
+  field changed merely because the issue text was edited. When unable to update the Project, log the precise
   field transition needed in #57, never claim the card moved.
 - The Wiki documents only implemented behavior, not plans or historic
   changelogs. This issue index and the PRs hold decisions and experimental
