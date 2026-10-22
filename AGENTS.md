@@ -4,13 +4,24 @@
   verified roadmap, blocker references, decisions and handoff entry point.
   The [VIDA 2D Development board](https://github.com/users/smeagol44/projects/1/views/1) is the
   intended visual dashboard. [Issue #68](https://github.com/smeagol44/vidAI/issues/68)
-  tracks remaining board setup (backfill, fields, workflows), not creation.
-  Keep source issues and PRs authoritative until board automation is verified.
-  GitHub Projects v2 item fields cannot be mutated by the current GitHub connector.
+  documents the completed board setup, import and built-in workflows.
+  Repo issues and PRs remain the source of scope, decisions and evidence.
+  The current GitHub connector cannot mutate personal Projects v2 item fields;
+  record any required intermediate stage/field synchronization in #57.
 - Select one unblocked, bounded task, read its linked discussion and record
   whether each proposal is decided, rejected or unapproved. Link work branches,
   PRs, validation, significant performance/ecology changes and deployment in
   its issue. A checked task means verified work, not expected progress.
+- **In progress starts with active discussion**, investigation, experimental
+  design or implementation, not merely with coding. Track design decision state
+  separately: an In progress task may still have unresolved decisions. Needs
+  decision means awaiting a decision but not actively under discussion; Ready
+  means accepted/queued but not yet underway; Done means fully verified and
+  completed, not simply ready for work. Keep In review/Testing stages when
+  useful. Project Status custom-field transitions need Projects UI/API,
+  whereas closure, PR merge, reopening and automatic intake are handled by
+  built-in workflows. When unable to update the Project, log the precise
+  field transition needed in #57, never claim the card moved.
 - The Wiki documents only implemented behavior, not plans or historic
   changelogs. This issue index and the PRs hold decisions and experimental
   results. Preserve WORKER authority, physical correctness, saves and the
