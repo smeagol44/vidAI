@@ -1,5 +1,38 @@
 # Project status — 2026-10-21
 
+## Coherent fluid drag and anatomical muscle trial — rejected without runtime changes
+
+- A bounded experiment compared two proposed replacements independently and
+  together in the real passive-v3 solver (nine unchanged featured genomes at three
+  heading/viscosity conditions each, five seconds, normal reserves). Default
+  simulations, saved rules, Worker, starter bodies/brains and diet strengths were
+  untouched. Formula, complete kinetic-batch, ledger and fast/build checks passed,
+  but these do **not** justify movement-changing promotion.
+- The consistent anisotropic surface-traction model preserved the established
+  axial/transverse force coefficients and instead integrated the **same** 1/40
+  axial face coefficient into rotational drag. Its largest travel loss was
+  **−32.53% for Broadwake**; seven of 27 paired swims added speed guards.
+- Geometric muscle strength used contact section × internal lever, scaling
+  uniformly doubled torque as 4× instead of historical inertia-based 16×.
+  The initial arbitrary 14×7 px reference collapsed up to **93.78%** of travel.
+  Replacing it once with an actual, explicitly identified Darter P0–P1 reference
+  (35×21 / 35×14 px) recovered Darter (+1.86%, 190.50→194.04 px) but still
+  collapsed Branchstalker up to **−98.67%** and increased Lantern's travel by up
+  to **215.27%**. Under standard conditions Broadwake gained **147.07%**
+  travel and guards rose **1,106→1,273**; some cases spent over **70%** more
+  reserve. The combined variant's worst loss was **−98.40%**.
+- All candidates are **rejected for production**. PR #52 was deliberately closed
+  unmerged. No repeated reference search, gene retuning, weakening of movement
+  gates, new regime or save migration was performed. The existing calibrated
+  passive-work-v3 remains the current model and the speed limits remain known
+  approximations. Additional biological strength and fluid units require
+  independent justification before another model is promoted.
+- Raw measured summaries and representative rows:
+  `docs/experiments/coherent-fluid-muscle-trial-v1.json`.
+  Karl Sims's 1994 paper motivates normal-resistance swimming and strengths
+  based on part cross-section; it does not supply VIDA's absolute coefficients
+  or prove equivalence to its simplified 2D lamina model.
+
 ## Bounded speed-guard cause control — diagnostic only, v0.37.0 unchanged
 
 - A read-only five-second motor-off control was run for the three frozen passive-v3

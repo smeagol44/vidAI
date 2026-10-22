@@ -30,9 +30,15 @@ all three stored regimes. Existing surface-model worlds can explicitly repair
 swimming while keeping their ecosystem. Starter/body/brain/diet tuning stays frozen.
 
 The four-face/geometric-muscle replacement is **not closed**: its absolute
-normalization destroyed movement. A future replacement needs demonstrated
-physical validity and functional movement, with material positive/negative
-changes disclosed before production. Formula tests alone cannot approve release.
+normalization destroyed movement. A subsequent bounded coherent-spin /
+section × lever muscle comparison was also rejected: up to 32.5% travel loss
+from the spin correction, and up to 98.7% loss or 215% gain with a fixed
+reference anatomical muscle law. Candidate PR #52 stayed unmerged. The
+current passive-work-v3 law remains the working calibrated approximation.
+Another replacement needs independently justified absolute physical units,
+reference geometry, stable movement across body plans, and preproduction
+disclosure of material positive/negative changes. Formula tests alone cannot
+approve release; do not retune organisms or quietly reset movement baselines.
 
 ## Closed energy budget and egg lifecycle — implemented foundation
 

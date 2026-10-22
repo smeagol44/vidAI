@@ -185,6 +185,24 @@ the existing caps remain protective approximations. Raw controls are retained
 in `docs/experiments/guard-causality-v1.json`; the fast suite reproduces
 them without altering the live simulation.
 
+### Unpromoted coherent surface and anatomical-strength alternatives
+
+The current calibrated passive-work-v3 coefficients remain intentional
+approximations, not an integrated isotropic surface-fluid law or biological
+tissue-stress measurement. A bounded offline comparison applied the existing
+axial/transverse drag coefficients consistently to rotational resistance,
+and separately examined muscle torque proportional to contact cross-section
+times an internal lever, normalized against one actual Darter joint. Across
+nine frozen swimmers and three conditions, coherent rotational drag reduced
+Broadwake travel by up to 32.5%. The reference-normalized anatomical strength
+law produced losses up to 98.7% and gains above 215% with additional guards.
+These alternatives are **not** new save regimes, options or defaults: they
+failed the movement-preservation gate and are not shipped. The current game
+retains working calibrated forces until a physically justified replacement can
+preserve functional motion across different anatomies. Refer to
+`docs/experiments/coherent-fluid-muscle-trial-v1.json` and project status for
+the measured rejected candidates; the Wiki describes only the active model.
+
 ### Remaining limitations and release checks
 
 The discrete solver uses velocity bias, position projection, limits and contact
