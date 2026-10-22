@@ -23,10 +23,13 @@ export function jointErrors(org: Organism) {
 }
 
 export function observeSolver(id: string, physicsRegime: 'paid-work-v2' | 'passive-work-v3',
-  seconds = 5, heading = .37, viscosity = .18) {
+  seconds = 5, heading = .37, viscosity = .18, unpowered = false) {
   const config: SimulationSettings = {...DEFAULT_SETTINGS, physicsRegime, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, waterViscosity: viscosity};
   const state = createInitialWorld(config, 711, 'balanced', 'standard', 0);
-  const org = addExternalOrganism(state, createFounderGenome(id), config, 1200, 750, heading)!;
+  const genome = createFounderGenome(id);
+  // An offline causal control; production genomes and saved worlds are unchanged.
+  if (unpowered) genome.motorForce = 0;
+  const org = addExternalOrganism(state, genome, config, 1200, 750, heading)!;
   const start = calculateOrganismCOM(org), reserve = org.energy, recorder = mechanicalRecorder();
   let guards = 0, limitedBatches = 0, maxAnchorErrorPx = 0, maxLimitExcessRad = 0, maxConstraintGainJ = 0;
   const began = performance.now();
