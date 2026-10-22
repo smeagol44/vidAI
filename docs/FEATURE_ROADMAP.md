@@ -69,8 +69,13 @@ errors. No starter/body/brain/diet retuning or 3D/sleep work accompanies this ch
   pose projection has no immediate kinetic change, but can affect later bias.
   Current passive-work-v3 bounds each accepted complete joint batch against kinetic
   injection; old saves keep their exact solve until explicit stabilization.
-  All nine frozen swimmers pass at three tested conditions. Speed-clamp dependence,
-  pose-induced momentum/potential effects and broader contact fidelity remain open.
+  All nine frozen swimmers pass at three tested conditions. A subsequent motor-off
+  control of Lantern/Forktail/Broadwake shows zero guards without actuation;
+  powered Forktail still hits guards without contact impulses. This bounds
+  causal attribution but does not demonstrate a correct replacement or prove
+  contacts/pose cannot amplify powered motion. Retain current speed caps;
+  coherent drag/muscle normalization, pose-induced effects and broader contact
+  fidelity remain open.
 - Full rounded mouth aperture is implemented for new worlds and explicit saved-
   world upgrades. Display and prey detection now use the inherited span with the
   same contact radius as nutrients/eggs. Endpoint, rotated and collision-contact
