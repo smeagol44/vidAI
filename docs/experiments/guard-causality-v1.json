@@ -1,0 +1,66 @@
+{
+  "protocol": "v0.37.0-read-only-speed-guard-causality-v1",
+  "sourceMain": "7e3fbda90b1b2efe35e6d094d22fdfa5d2c33298",
+  "settings": {
+    "regime": "passive-work-v3",
+    "seed": 711,
+    "seconds": 5,
+    "headingRadians": 0.37,
+    "waterViscosity": 0.18,
+    "targetNutrients": 0,
+    "mutations": 0
+  },
+  "method": "Same frozen featured genome and pose, with all normal neural output evolution; controlled copy sets motorForce=0 at instantiation only. No kernel, contact, physics parameter, saves or production gene changes.",
+  "rows": [
+    {
+      "id": "CUR-004",
+      "name": "Lantern",
+      "powered": {
+        "guards": 352,
+        "clampLossJ": 0.11881353261131403,
+        "contactImpulseSamples": 3959,
+        "travelPx": 44.838572767615496
+      },
+      "unpowered": {
+        "guards": 0,
+        "clampLossJ": 0,
+        "contactImpulseSamples": 9600,
+        "travelPx": 0
+      }
+    },
+    {
+      "id": "CUR-005",
+      "name": "Forktail",
+      "powered": {
+        "guards": 116,
+        "clampLossJ": 0.0881062714114354,
+        "contactImpulseSamples": 0,
+        "travelPx": 81.09567467543901
+      },
+      "unpowered": {
+        "guards": 0,
+        "clampLossJ": 0,
+        "contactImpulseSamples": 0,
+        "travelPx": 0
+      }
+    },
+    {
+      "id": "CUR-006",
+      "name": "Broadwake",
+      "powered": {
+        "guards": 1106,
+        "clampLossJ": 2.484836695266852,
+        "contactImpulseSamples": 4389,
+        "travelPx": 20.711421809546138
+      },
+      "unpowered": {
+        "guards": 0,
+        "clampLossJ": 0,
+        "contactImpulseSamples": 0,
+        "travelPx": 0
+      }
+    }
+  ],
+  "conclusion": "Powered actuation is necessary for all observed guard events in these controls. Forktail proves contact impulses are not a necessary cause. This does not separate torque scale, feedback, contacts during motion, pose corrections or angular versus linear speed limits; no demonstrated safe solver correction follows.",
+  "disposition": "No physics changes or new save regime. Retain guards and frozen reference tests; document approximate solver, then approach fluid/muscle normalization as a separately justified experiment."
+}
