@@ -1,0 +1,1207 @@
+{
+  "protocol": "physical-reference-audit-v1",
+  "runtimeModelChanged": false,
+  "runtimeSourceCommit": "d7a68144b02225db37bb6a9583b057458ff47d52",
+  "priorCausalAuditCommit": "73f73981b61f37db6a439e5802e11ff7d5efe44f",
+  "current": {
+    "reference": {
+      "metresPerPixel": 0.001,
+      "secondsPerSecond": 1,
+      "kilogramsPerMass": 0.175
+    },
+    "factors": {
+      "length": 0.001,
+      "time": 1,
+      "mass": 0.175,
+      "area": 0.000001,
+      "volume": 1e-9,
+      "arealDensity": 175000,
+      "density": 174999999.99999997,
+      "velocity": 0.001,
+      "angularVelocity": 1,
+      "inertia": 1.75e-7,
+      "momentum": 0.000175,
+      "angularMomentum": 1.75e-7,
+      "force": 0.000175,
+      "torque": 1.75e-7,
+      "work": 1.75e-7,
+      "power": 1.75e-7,
+      "dynamicViscosity": 175,
+      "normalTractionCoefficient": 175000,
+      "linearResistance": 0.175,
+      "angularResistance": 1.75e-7
+    },
+    "currentWorkFactorJ": 1.75e-7,
+    "currentWorkFactorRatio": 1,
+    "bulkArealDensityKgM2": 1428.5714285714287,
+    "impliedDepthAt1000KgM3": 1.4285714285714286,
+    "effectiveViscosityAtParameter018PaS": 31.5
+  },
+  "unapprovedFixedDepthExample": {
+    "reference": {
+      "metresPerPixel": 0.001,
+      "secondsPerSecond": 1,
+      "kilogramsPerMass": 0.0008575
+    },
+    "factors": {
+      "length": 0.001,
+      "time": 1,
+      "mass": 0.0008575,
+      "area": 0.000001,
+      "volume": 1e-9,
+      "arealDensity": 857.5,
+      "density": 857499.9999999999,
+      "velocity": 0.001,
+      "angularVelocity": 1,
+      "inertia": 8.574999999999999e-10,
+      "momentum": 8.574999999999999e-7,
+      "angularMomentum": 8.574999999999999e-10,
+      "force": 8.574999999999999e-7,
+      "torque": 8.574999999999999e-10,
+      "work": 8.574999999999999e-10,
+      "power": 8.574999999999999e-10,
+      "dynamicViscosity": 0.8574999999999999,
+      "normalTractionCoefficient": 857.5,
+      "linearResistance": 0.0008575,
+      "angularResistance": 8.574999999999999e-10
+    },
+    "currentWorkFactorJ": 1.75e-7,
+    "currentWorkFactorRatio": 204.08163265306123,
+    "bulkArealDensityKgM2": 7.000000000000001,
+    "impliedDepthAt1000KgM3": 0.007000000000000001,
+    "effectiveViscosityAtParameter018PaS": 0.15435
+  },
+  "illustrativeWaterScales": [
+    {
+      "label": "micrometre pixels",
+      "metresPerPixel": 0.000001,
+      "lengthM": 0.000035,
+      "speedMS": 0.000049999999999999996,
+      "reynolds": 0.0017499999999999998,
+      "oscillatoryInertiaRatioAt1Hz": 0.00769690200129499
+    },
+    {
+      "label": "millimetre pixels",
+      "metresPerPixel": 0.001,
+      "lengthM": 0.035,
+      "speedMS": 0.05,
+      "reynolds": 1750,
+      "oscillatoryInertiaRatioAt1Hz": 7696.902001294994
+    }
+  ],
+  "summary": {
+    "parts": 46,
+    "minWidthPx": 7,
+    "maxWidthPx": 42,
+    "minHeightPx": 7,
+    "maxHeightPx": 42,
+    "maxAngularRatioToSameFaceWeights": 16.716417910447763,
+    "maxIsolatedEulerFraction": 0.02625,
+    "massFloorParts": 0
+  },
+  "bodies": [
+    {
+      "id": "CUR-001",
+      "parts": [
+        {
+          "id": "CUR-001-P0",
+          "widthPx": 35,
+          "heightPx": 21,
+          "mass": 6,
+          "inertia": 833,
+          "massKg": 1.0499999999999998,
+          "inertiaKgM2": 0.000145775,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 12.6,
+            "angular": 1564.08
+          },
+          "sameFaceWeightsAngular": 1293.19575,
+          "angularRatioToSameFaceWeights": 1.2094688681121941,
+          "isolatedEulerFractions": {
+            "x": 0.00013125,
+            "y": 0.008749999999999999,
+            "angular": 0.007823529411764705
+          }
+        },
+        {
+          "id": "CUR-001-P1",
+          "widthPx": 35,
+          "heightPx": 14,
+          "mass": 4,
+          "inertia": 473.6666666666667,
+          "massKg": 0.7,
+          "inertiaKgM2": 0.00008289166666666667,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 12.6,
+            "angular": 1368.57
+          },
+          "sameFaceWeightsAngular": 1288.308,
+          "angularRatioToSameFaceWeights": 1.0623003194888179,
+          "isolatedEulerFractions": {
+            "x": 0.00013125,
+            "y": 0.013125,
+            "angular": 0.012038793103448275
+          }
+        },
+        {
+          "id": "CUR-001-P2",
+          "widthPx": 42,
+          "heightPx": 7,
+          "mass": 2.4000000000000004,
+          "inertia": 362.6000000000001,
+          "massKg": 0.42000000000000004,
+          "inertiaKgM2": 0.00006345500000000001,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.063,
+            "y": 15.12,
+            "angular": 2232.93
+          },
+          "sameFaceWeightsAngular": 2222.89725,
+          "angularRatioToSameFaceWeights": 1.004513366508506,
+          "isolatedEulerFractions": {
+            "x": 0.00010937499999999998,
+            "y": 0.026249999999999996,
+            "angular": 0.02565878378378378
+          }
+        }
+      ]
+    },
+    {
+      "id": "CUR-002",
+      "parts": [
+        {
+          "id": "CUR-002-P0",
+          "widthPx": 28,
+          "heightPx": 28,
+          "mass": 6.4,
+          "inertia": 836.2666666666668,
+          "massKg": 1.1199999999999999,
+          "inertiaKgM2": 0.00014634666666666667,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.252,
+            "y": 10.08,
+            "angular": 1317.12
+          },
+          "sameFaceWeightsAngular": 675.024,
+          "angularRatioToSameFaceWeights": 1.9512195121951217,
+          "isolatedEulerFractions": {
+            "x": 0.00016406249999999998,
+            "y": 0.0065625,
+            "angular": 0.006562499999999999
+          }
+        },
+        {
+          "id": "CUR-002-P1",
+          "widthPx": 14,
+          "heightPx": 21,
+          "mass": 2.4000000000000004,
+          "inertia": 127.40000000000002,
+          "massKg": 0.42000000000000004,
+          "inertiaKgM2": 0.000022295000000000003,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 5.04,
+            "angular": 360.15000000000003
+          },
+          "sameFaceWeightsAngular": 89.26574999999998,
+          "angularRatioToSameFaceWeights": 4.034582132564843,
+          "isolatedEulerFractions": {
+            "x": 0.0003281249999999999,
+            "y": 0.008749999999999999,
+            "angular": 0.011778846153846154
+          }
+        },
+        {
+          "id": "CUR-002-P2",
+          "widthPx": 14,
+          "heightPx": 21,
+          "mass": 2.4000000000000004,
+          "inertia": 127.40000000000002,
+          "massKg": 0.42000000000000004,
+          "inertiaKgM2": 0.000022295000000000003,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 5.04,
+            "angular": 360.15000000000003
+          },
+          "sameFaceWeightsAngular": 89.26574999999998,
+          "angularRatioToSameFaceWeights": 4.034582132564843,
+          "isolatedEulerFractions": {
+            "x": 0.0003281249999999999,
+            "y": 0.008749999999999999,
+            "angular": 0.011778846153846154
+          }
+        },
+        {
+          "id": "CUR-002-P3",
+          "widthPx": 28,
+          "heightPx": 14,
+          "mass": 3.2,
+          "inertia": 261.3333333333333,
+          "massKg": 0.5599999999999999,
+          "inertiaKgM2": 0.000045733333333333325,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 10.08,
+            "angular": 740.88
+          },
+          "sameFaceWeightsAngular": 660.6179999999999,
+          "angularRatioToSameFaceWeights": 1.1214953271028039,
+          "isolatedEulerFractions": {
+            "x": 0.00016406249999999998,
+            "y": 0.013125,
+            "angular": 0.0118125
+          }
+        }
+      ]
+    },
+    {
+      "id": "CUR-003",
+      "parts": [
+        {
+          "id": "CUR-003-P0",
+          "widthPx": 21,
+          "heightPx": 21,
+          "mass": 3.6,
+          "inertia": 264.6,
+          "massKg": 0.63,
+          "inertiaKgM2": 0.000046305000000000005,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 7.56,
+            "angular": 555.66
+          },
+          "sameFaceWeightsAngular": 284.77575,
+          "angularRatioToSameFaceWeights": 1.9512195121951217,
+          "isolatedEulerFractions": {
+            "x": 0.00021874999999999998,
+            "y": 0.008749999999999999,
+            "angular": 0.008749999999999999
+          }
+        },
+        {
+          "id": "CUR-003-P1",
+          "widthPx": 14,
+          "heightPx": 28,
+          "mass": 3.2,
+          "inertia": 261.3333333333333,
+          "massKg": 0.5599999999999999,
+          "inertiaKgM2": 0.000045733333333333325,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.252,
+            "y": 5.04,
+            "angular": 740.88
+          },
+          "sameFaceWeightsAngular": 98.78399999999999,
+          "angularRatioToSameFaceWeights": 7.500000000000001,
+          "isolatedEulerFractions": {
+            "x": 0.00032812499999999997,
+            "y": 0.0065625,
+            "angular": 0.0118125
+          }
+        },
+        {
+          "id": "CUR-003-P2",
+          "widthPx": 14,
+          "heightPx": 28,
+          "mass": 3.2,
+          "inertia": 261.3333333333333,
+          "massKg": 0.5599999999999999,
+          "inertiaKgM2": 0.000045733333333333325,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.252,
+            "y": 5.04,
+            "angular": 740.88
+          },
+          "sameFaceWeightsAngular": 98.78399999999999,
+          "angularRatioToSameFaceWeights": 7.500000000000001,
+          "isolatedEulerFractions": {
+            "x": 0.00032812499999999997,
+            "y": 0.0065625,
+            "angular": 0.0118125
+          }
+        },
+        {
+          "id": "CUR-003-P3",
+          "widthPx": 28,
+          "heightPx": 14,
+          "mass": 3.2,
+          "inertia": 261.3333333333333,
+          "massKg": 0.5599999999999999,
+          "inertiaKgM2": 0.000045733333333333325,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 10.08,
+            "angular": 740.88
+          },
+          "sameFaceWeightsAngular": 660.6179999999999,
+          "angularRatioToSameFaceWeights": 1.1214953271028039,
+          "isolatedEulerFractions": {
+            "x": 0.00016406249999999998,
+            "y": 0.013125,
+            "angular": 0.0118125
+          }
+        },
+        {
+          "id": "CUR-003-P4",
+          "widthPx": 35,
+          "heightPx": 14,
+          "mass": 4,
+          "inertia": 473.6666666666667,
+          "massKg": 0.7,
+          "inertiaKgM2": 0.00008289166666666667,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 12.6,
+            "angular": 1368.57
+          },
+          "sameFaceWeightsAngular": 1288.308,
+          "angularRatioToSameFaceWeights": 1.0623003194888179,
+          "isolatedEulerFractions": {
+            "x": 0.00013125,
+            "y": 0.013125,
+            "angular": 0.012038793103448275
+          }
+        }
+      ]
+    },
+    {
+      "id": "CUR-004",
+      "parts": [
+        {
+          "id": "CUR-004-P0",
+          "widthPx": 14,
+          "heightPx": 21,
+          "mass": 2.4000000000000004,
+          "inertia": 127.40000000000002,
+          "massKg": 0.42000000000000004,
+          "inertiaKgM2": 0.000022295000000000003,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 5.04,
+            "angular": 360.15000000000003
+          },
+          "sameFaceWeightsAngular": 89.26574999999998,
+          "angularRatioToSameFaceWeights": 4.034582132564843,
+          "isolatedEulerFractions": {
+            "x": 0.0003281249999999999,
+            "y": 0.008749999999999999,
+            "angular": 0.011778846153846154
+          }
+        },
+        {
+          "id": "CUR-004-P1",
+          "widthPx": 14,
+          "heightPx": 7,
+          "mass": 0.8,
+          "inertia": 16.333333333333332,
+          "massKg": 0.13999999999999999,
+          "inertiaKgM2": 0.000002858333333333333,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.063,
+            "y": 5.04,
+            "angular": 92.61
+          },
+          "sameFaceWeightsAngular": 82.57724999999999,
+          "angularRatioToSameFaceWeights": 1.1214953271028039,
+          "isolatedEulerFractions": {
+            "x": 0.00032812499999999997,
+            "y": 0.02625,
+            "angular": 0.023625
+          }
+        },
+        {
+          "id": "CUR-004-P2",
+          "widthPx": 14,
+          "heightPx": 7,
+          "mass": 0.8,
+          "inertia": 16.333333333333332,
+          "massKg": 0.13999999999999999,
+          "inertiaKgM2": 0.000002858333333333333,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.063,
+            "y": 5.04,
+            "angular": 92.61
+          },
+          "sameFaceWeightsAngular": 82.57724999999999,
+          "angularRatioToSameFaceWeights": 1.1214953271028039,
+          "isolatedEulerFractions": {
+            "x": 0.00032812499999999997,
+            "y": 0.02625,
+            "angular": 0.023625
+          }
+        },
+        {
+          "id": "CUR-004-P3",
+          "widthPx": 21,
+          "heightPx": 7,
+          "mass": 1.2000000000000002,
+          "inertia": 49.00000000000001,
+          "massKg": 0.21000000000000002,
+          "inertiaKgM2": 0.000008575,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.063,
+            "y": 7.56,
+            "angular": 288.12
+          },
+          "sameFaceWeightsAngular": 278.08725,
+          "angularRatioToSameFaceWeights": 1.0360777058279371,
+          "isolatedEulerFractions": {
+            "x": 0.00021874999999999995,
+            "y": 0.026249999999999996,
+            "angular": 0.024499999999999994
+          }
+        },
+        {
+          "id": "CUR-004-P4",
+          "widthPx": 21,
+          "heightPx": 7,
+          "mass": 1.2000000000000002,
+          "inertia": 49.00000000000001,
+          "massKg": 0.21000000000000002,
+          "inertiaKgM2": 0.000008575,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.063,
+            "y": 7.56,
+            "angular": 288.12
+          },
+          "sameFaceWeightsAngular": 278.08725,
+          "angularRatioToSameFaceWeights": 1.0360777058279371,
+          "isolatedEulerFractions": {
+            "x": 0.00021874999999999995,
+            "y": 0.026249999999999996,
+            "angular": 0.024499999999999994
+          }
+        }
+      ]
+    },
+    {
+      "id": "CUR-005",
+      "parts": [
+        {
+          "id": "CUR-005-P0",
+          "widthPx": 28,
+          "heightPx": 21,
+          "mass": 4.800000000000001,
+          "inertia": 490.00000000000006,
+          "massKg": 0.8400000000000001,
+          "inertiaKgM2": 0.00008575000000000001,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 10.08,
+            "angular": 936.39
+          },
+          "sameFaceWeightsAngular": 665.5057499999999,
+          "angularRatioToSameFaceWeights": 1.407035175879397,
+          "isolatedEulerFractions": {
+            "x": 0.00016406249999999996,
+            "y": 0.008749999999999999,
+            "angular": 0.007962499999999999
+          }
+        },
+        {
+          "id": "CUR-005-P1",
+          "widthPx": 28,
+          "heightPx": 21,
+          "mass": 4.800000000000001,
+          "inertia": 490.00000000000006,
+          "massKg": 0.8400000000000001,
+          "inertiaKgM2": 0.00008575000000000001,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 10.08,
+            "angular": 936.39
+          },
+          "sameFaceWeightsAngular": 665.5057499999999,
+          "angularRatioToSameFaceWeights": 1.407035175879397,
+          "isolatedEulerFractions": {
+            "x": 0.00016406249999999996,
+            "y": 0.008749999999999999,
+            "angular": 0.007962499999999999
+          }
+        },
+        {
+          "id": "CUR-005-P2",
+          "widthPx": 14,
+          "heightPx": 28,
+          "mass": 3.2,
+          "inertia": 261.3333333333333,
+          "massKg": 0.5599999999999999,
+          "inertiaKgM2": 0.000045733333333333325,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.252,
+            "y": 5.04,
+            "angular": 740.88
+          },
+          "sameFaceWeightsAngular": 98.78399999999999,
+          "angularRatioToSameFaceWeights": 7.500000000000001,
+          "isolatedEulerFractions": {
+            "x": 0.00032812499999999997,
+            "y": 0.0065625,
+            "angular": 0.0118125
+          }
+        },
+        {
+          "id": "CUR-005-P3",
+          "widthPx": 14,
+          "heightPx": 28,
+          "mass": 3.2,
+          "inertia": 261.3333333333333,
+          "massKg": 0.5599999999999999,
+          "inertiaKgM2": 0.000045733333333333325,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.252,
+            "y": 5.04,
+            "angular": 740.88
+          },
+          "sameFaceWeightsAngular": 98.78399999999999,
+          "angularRatioToSameFaceWeights": 7.500000000000001,
+          "isolatedEulerFractions": {
+            "x": 0.00032812499999999997,
+            "y": 0.0065625,
+            "angular": 0.0118125
+          }
+        },
+        {
+          "id": "CUR-005-P4",
+          "widthPx": 14,
+          "heightPx": 21,
+          "mass": 2.4000000000000004,
+          "inertia": 127.40000000000002,
+          "massKg": 0.42000000000000004,
+          "inertiaKgM2": 0.000022295000000000003,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 5.04,
+            "angular": 360.15000000000003
+          },
+          "sameFaceWeightsAngular": 89.26574999999998,
+          "angularRatioToSameFaceWeights": 4.034582132564843,
+          "isolatedEulerFractions": {
+            "x": 0.0003281249999999999,
+            "y": 0.008749999999999999,
+            "angular": 0.011778846153846154
+          }
+        },
+        {
+          "id": "CUR-005-P5",
+          "widthPx": 21,
+          "heightPx": 14,
+          "mass": 2.4000000000000004,
+          "inertia": 127.40000000000002,
+          "massKg": 0.42000000000000004,
+          "inertiaKgM2": 0.000022295000000000003,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 7.56,
+            "angular": 360.15000000000003
+          },
+          "sameFaceWeightsAngular": 279.888,
+          "angularRatioToSameFaceWeights": 1.2867647058823533,
+          "isolatedEulerFractions": {
+            "x": 0.00021874999999999995,
+            "y": 0.013124999999999998,
+            "angular": 0.011778846153846154
+          }
+        }
+      ]
+    },
+    {
+      "id": "CUR-006",
+      "parts": [
+        {
+          "id": "CUR-006-P0",
+          "widthPx": 28,
+          "heightPx": 35,
+          "mass": 8,
+          "inertia": 1339.3333333333333,
+          "massKg": 1.4,
+          "inertiaKgM2": 0.0002343833333333333,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.315,
+            "y": 10.08,
+            "angular": 1944.8099999999997
+          },
+          "sameFaceWeightsAngular": 690.71625,
+          "angularRatioToSameFaceWeights": 2.8156424581005584,
+          "isolatedEulerFractions": {
+            "x": 0.0001640625,
+            "y": 0.00525,
+            "angular": 0.006050304878048779
+          }
+        },
+        {
+          "id": "CUR-006-P1",
+          "widthPx": 21,
+          "heightPx": 21,
+          "mass": 3.6,
+          "inertia": 264.6,
+          "massKg": 0.63,
+          "inertiaKgM2": 0.000046305000000000005,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 7.56,
+            "angular": 555.66
+          },
+          "sameFaceWeightsAngular": 284.77575,
+          "angularRatioToSameFaceWeights": 1.9512195121951217,
+          "isolatedEulerFractions": {
+            "x": 0.00021874999999999998,
+            "y": 0.008749999999999999,
+            "angular": 0.008749999999999999
+          }
+        },
+        {
+          "id": "CUR-006-P2",
+          "widthPx": 35,
+          "heightPx": 14,
+          "mass": 4,
+          "inertia": 473.6666666666667,
+          "massKg": 0.7,
+          "inertiaKgM2": 0.00008289166666666667,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 12.6,
+            "angular": 1368.57
+          },
+          "sameFaceWeightsAngular": 1288.308,
+          "angularRatioToSameFaceWeights": 1.0623003194888179,
+          "isolatedEulerFractions": {
+            "x": 0.00013125,
+            "y": 0.013125,
+            "angular": 0.012038793103448275
+          }
+        },
+        {
+          "id": "CUR-006-P3",
+          "widthPx": 21,
+          "heightPx": 21,
+          "mass": 3.6,
+          "inertia": 264.6,
+          "massKg": 0.63,
+          "inertiaKgM2": 0.000046305000000000005,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 7.56,
+            "angular": 555.66
+          },
+          "sameFaceWeightsAngular": 284.77575,
+          "angularRatioToSameFaceWeights": 1.9512195121951217,
+          "isolatedEulerFractions": {
+            "x": 0.00021874999999999998,
+            "y": 0.008749999999999999,
+            "angular": 0.008749999999999999
+          }
+        },
+        {
+          "id": "CUR-006-P4",
+          "widthPx": 21,
+          "heightPx": 21,
+          "mass": 3.6,
+          "inertia": 264.6,
+          "massKg": 0.63,
+          "inertiaKgM2": 0.000046305000000000005,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 7.56,
+            "angular": 555.66
+          },
+          "sameFaceWeightsAngular": 284.77575,
+          "angularRatioToSameFaceWeights": 1.9512195121951217,
+          "isolatedEulerFractions": {
+            "x": 0.00021874999999999998,
+            "y": 0.008749999999999999,
+            "angular": 0.008749999999999999
+          }
+        },
+        {
+          "id": "CUR-006-P5",
+          "widthPx": 7,
+          "heightPx": 14,
+          "mass": 0.8,
+          "inertia": 16.333333333333332,
+          "massKg": 0.13999999999999999,
+          "inertiaKgM2": 0.000002858333333333333,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 2.52,
+            "angular": 92.61
+          },
+          "sameFaceWeightsAngular": 12.347999999999999,
+          "angularRatioToSameFaceWeights": 7.500000000000001,
+          "isolatedEulerFractions": {
+            "x": 0.0006562499999999999,
+            "y": 0.013125,
+            "angular": 0.023625
+          }
+        },
+        {
+          "id": "CUR-006-P6",
+          "widthPx": 7,
+          "heightPx": 14,
+          "mass": 0.8,
+          "inertia": 16.333333333333332,
+          "massKg": 0.13999999999999999,
+          "inertiaKgM2": 0.000002858333333333333,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 2.52,
+            "angular": 92.61
+          },
+          "sameFaceWeightsAngular": 12.347999999999999,
+          "angularRatioToSameFaceWeights": 7.500000000000001,
+          "isolatedEulerFractions": {
+            "x": 0.0006562499999999999,
+            "y": 0.013125,
+            "angular": 0.023625
+          }
+        }
+      ]
+    },
+    {
+      "id": "CUR-007",
+      "parts": [
+        {
+          "id": "CUR-007-P0",
+          "widthPx": 28,
+          "heightPx": 21,
+          "mass": 4.800000000000001,
+          "inertia": 490.00000000000006,
+          "massKg": 0.8400000000000001,
+          "inertiaKgM2": 0.00008575000000000001,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 10.08,
+            "angular": 936.39
+          },
+          "sameFaceWeightsAngular": 665.5057499999999,
+          "angularRatioToSameFaceWeights": 1.407035175879397,
+          "isolatedEulerFractions": {
+            "x": 0.00016406249999999996,
+            "y": 0.008749999999999999,
+            "angular": 0.007962499999999999
+          }
+        },
+        {
+          "id": "CUR-007-P1",
+          "widthPx": 35,
+          "heightPx": 14,
+          "mass": 4,
+          "inertia": 473.6666666666667,
+          "massKg": 0.7,
+          "inertiaKgM2": 0.00008289166666666667,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 12.6,
+            "angular": 1368.57
+          },
+          "sameFaceWeightsAngular": 1288.308,
+          "angularRatioToSameFaceWeights": 1.0623003194888179,
+          "isolatedEulerFractions": {
+            "x": 0.00013125,
+            "y": 0.013125,
+            "angular": 0.012038793103448275
+          }
+        },
+        {
+          "id": "CUR-007-P2",
+          "widthPx": 14,
+          "heightPx": 21,
+          "mass": 2.4000000000000004,
+          "inertia": 127.40000000000002,
+          "massKg": 0.42000000000000004,
+          "inertiaKgM2": 0.000022295000000000003,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 5.04,
+            "angular": 360.15000000000003
+          },
+          "sameFaceWeightsAngular": 89.26574999999998,
+          "angularRatioToSameFaceWeights": 4.034582132564843,
+          "isolatedEulerFractions": {
+            "x": 0.0003281249999999999,
+            "y": 0.008749999999999999,
+            "angular": 0.011778846153846154
+          }
+        },
+        {
+          "id": "CUR-007-P3",
+          "widthPx": 21,
+          "heightPx": 14,
+          "mass": 2.4000000000000004,
+          "inertia": 127.40000000000002,
+          "massKg": 0.42000000000000004,
+          "inertiaKgM2": 0.000022295000000000003,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 7.56,
+            "angular": 360.15000000000003
+          },
+          "sameFaceWeightsAngular": 279.888,
+          "angularRatioToSameFaceWeights": 1.2867647058823533,
+          "isolatedEulerFractions": {
+            "x": 0.00021874999999999995,
+            "y": 0.013124999999999998,
+            "angular": 0.011778846153846154
+          }
+        },
+        {
+          "id": "CUR-007-P4",
+          "widthPx": 7,
+          "heightPx": 21,
+          "mass": 1.2000000000000002,
+          "inertia": 49.00000000000001,
+          "massKg": 0.21000000000000002,
+          "inertiaKgM2": 0.000008575,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 2.52,
+            "angular": 288.12
+          },
+          "sameFaceWeightsAngular": 17.23575,
+          "angularRatioToSameFaceWeights": 16.716417910447763,
+          "isolatedEulerFractions": {
+            "x": 0.0006562499999999998,
+            "y": 0.008749999999999999,
+            "angular": 0.024499999999999994
+          }
+        },
+        {
+          "id": "CUR-007-P5",
+          "widthPx": 21,
+          "heightPx": 14,
+          "mass": 2.4000000000000004,
+          "inertia": 127.40000000000002,
+          "massKg": 0.42000000000000004,
+          "inertiaKgM2": 0.000022295000000000003,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 7.56,
+            "angular": 360.15000000000003
+          },
+          "sameFaceWeightsAngular": 279.888,
+          "angularRatioToSameFaceWeights": 1.2867647058823533,
+          "isolatedEulerFractions": {
+            "x": 0.00021874999999999995,
+            "y": 0.013124999999999998,
+            "angular": 0.011778846153846154
+          }
+        }
+      ]
+    },
+    {
+      "id": "CUR-008",
+      "parts": [
+        {
+          "id": "CUR-008-P0",
+          "widthPx": 21,
+          "heightPx": 21,
+          "mass": 3.6,
+          "inertia": 264.6,
+          "massKg": 0.63,
+          "inertiaKgM2": 0.000046305000000000005,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 7.56,
+            "angular": 555.66
+          },
+          "sameFaceWeightsAngular": 284.77575,
+          "angularRatioToSameFaceWeights": 1.9512195121951217,
+          "isolatedEulerFractions": {
+            "x": 0.00021874999999999998,
+            "y": 0.008749999999999999,
+            "angular": 0.008749999999999999
+          }
+        },
+        {
+          "id": "CUR-008-P1",
+          "widthPx": 28,
+          "heightPx": 14,
+          "mass": 3.2,
+          "inertia": 261.3333333333333,
+          "massKg": 0.5599999999999999,
+          "inertiaKgM2": 0.000045733333333333325,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 10.08,
+            "angular": 740.88
+          },
+          "sameFaceWeightsAngular": 660.6179999999999,
+          "angularRatioToSameFaceWeights": 1.1214953271028039,
+          "isolatedEulerFractions": {
+            "x": 0.00016406249999999998,
+            "y": 0.013125,
+            "angular": 0.0118125
+          }
+        },
+        {
+          "id": "CUR-008-P2",
+          "widthPx": 28,
+          "heightPx": 14,
+          "mass": 3.2,
+          "inertia": 261.3333333333333,
+          "massKg": 0.5599999999999999,
+          "inertiaKgM2": 0.000045733333333333325,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 10.08,
+            "angular": 740.88
+          },
+          "sameFaceWeightsAngular": 660.6179999999999,
+          "angularRatioToSameFaceWeights": 1.1214953271028039,
+          "isolatedEulerFractions": {
+            "x": 0.00016406249999999998,
+            "y": 0.013125,
+            "angular": 0.0118125
+          }
+        },
+        {
+          "id": "CUR-008-P3",
+          "widthPx": 28,
+          "heightPx": 14,
+          "mass": 3.2,
+          "inertia": 261.3333333333333,
+          "massKg": 0.5599999999999999,
+          "inertiaKgM2": 0.000045733333333333325,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.126,
+            "y": 10.08,
+            "angular": 740.88
+          },
+          "sameFaceWeightsAngular": 660.6179999999999,
+          "angularRatioToSameFaceWeights": 1.1214953271028039,
+          "isolatedEulerFractions": {
+            "x": 0.00016406249999999998,
+            "y": 0.013125,
+            "angular": 0.0118125
+          }
+        },
+        {
+          "id": "CUR-008-P4",
+          "widthPx": 35,
+          "heightPx": 7,
+          "mass": 2,
+          "inertia": 212.33333333333334,
+          "massKg": 0.35,
+          "inertiaKgM2": 0.00003715833333333333,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.063,
+            "y": 12.6,
+            "angular": 1296.54
+          },
+          "sameFaceWeightsAngular": 1286.5072499999999,
+          "angularRatioToSameFaceWeights": 1.0077984403119378,
+          "isolatedEulerFractions": {
+            "x": 0.00013125,
+            "y": 0.02625,
+            "angular": 0.025442307692307688
+          }
+        },
+        {
+          "id": "CUR-008-P5",
+          "widthPx": 14,
+          "heightPx": 21,
+          "mass": 2.4000000000000004,
+          "inertia": 127.40000000000002,
+          "massKg": 0.42000000000000004,
+          "inertiaKgM2": 0.000022295000000000003,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 5.04,
+            "angular": 360.15000000000003
+          },
+          "sameFaceWeightsAngular": 89.26574999999998,
+          "angularRatioToSameFaceWeights": 4.034582132564843,
+          "isolatedEulerFractions": {
+            "x": 0.0003281249999999999,
+            "y": 0.008749999999999999,
+            "angular": 0.011778846153846154
+          }
+        }
+      ]
+    },
+    {
+      "id": "CUR-009",
+      "parts": [
+        {
+          "id": "CUR-009-P0",
+          "widthPx": 21,
+          "heightPx": 21,
+          "mass": 3.6,
+          "inertia": 264.6,
+          "massKg": 0.63,
+          "inertiaKgM2": 0.000046305000000000005,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 7.56,
+            "angular": 555.66
+          },
+          "sameFaceWeightsAngular": 284.77575,
+          "angularRatioToSameFaceWeights": 1.9512195121951217,
+          "isolatedEulerFractions": {
+            "x": 0.00021874999999999998,
+            "y": 0.008749999999999999,
+            "angular": 0.008749999999999999
+          }
+        },
+        {
+          "id": "CUR-009-P1",
+          "widthPx": 14,
+          "heightPx": 21,
+          "mass": 2.4000000000000004,
+          "inertia": 127.40000000000002,
+          "massKg": 0.42000000000000004,
+          "inertiaKgM2": 0.000022295000000000003,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 5.04,
+            "angular": 360.15000000000003
+          },
+          "sameFaceWeightsAngular": 89.26574999999998,
+          "angularRatioToSameFaceWeights": 4.034582132564843,
+          "isolatedEulerFractions": {
+            "x": 0.0003281249999999999,
+            "y": 0.008749999999999999,
+            "angular": 0.011778846153846154
+          }
+        },
+        {
+          "id": "CUR-009-P2",
+          "widthPx": 14,
+          "heightPx": 21,
+          "mass": 2.4000000000000004,
+          "inertia": 127.40000000000002,
+          "massKg": 0.42000000000000004,
+          "inertiaKgM2": 0.000022295000000000003,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.18899999999999997,
+            "y": 5.04,
+            "angular": 360.15000000000003
+          },
+          "sameFaceWeightsAngular": 89.26574999999998,
+          "angularRatioToSameFaceWeights": 4.034582132564843,
+          "isolatedEulerFractions": {
+            "x": 0.0003281249999999999,
+            "y": 0.008749999999999999,
+            "angular": 0.011778846153846154
+          }
+        },
+        {
+          "id": "CUR-009-P3",
+          "widthPx": 21,
+          "heightPx": 42,
+          "mass": 7.2,
+          "inertia": 1323,
+          "massKg": 1.26,
+          "inertiaKgM2": 0.00023152499999999998,
+          "arealDensityKgM2": 1428.5714285714287,
+          "massFloorActive": false,
+          "resistance": {
+            "x": 0.37799999999999995,
+            "y": 7.56,
+            "angular": 2500.47
+          },
+          "sameFaceWeightsAngular": 333.396,
+          "angularRatioToSameFaceWeights": 7.499999999999999,
+          "isolatedEulerFractions": {
+            "x": 0.00021874999999999998,
+            "y": 0.0043749999999999995,
+            "angular": 0.007874999999999998
+          }
+        }
+      ]
+    }
+  ]
+}

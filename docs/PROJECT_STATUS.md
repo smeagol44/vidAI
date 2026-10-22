@@ -1,3 +1,37 @@
+# Issue #61 physical reference audit — 2026-10-22, unmerged
+
+- Bounded branch `audit/physical-reference-61` targets testing `d7a6814` independently
+  of draft #72. No runtime/save/schema/default/organism/guard change. Existing #72
+  comparison and causal evidence at `73f7398` remain intact and unpromoted.
+- Offline SI conversion and geometry diagnostics inspect all nine frozen bodies
+  (46 parts). Existing 1 mm/px and .175 kg/M comment implies 1428.57 kg/m²,
+  or 1.42857 m depth at water-like density. Work conversion is arithmetically
+  consistent, but this is not a plausible thin-body interpretation.
+- The current generalized linear resistance dissipates energy, but rotational
+  damping differs from the integral of its translation's face weights. Maximum
+  spin coefficient ratio 16.7164 across these parts. This is not proof it caused
+  #72's regressions; the earlier rejected coherent-spin results remain rejected.
+- Proposed, NOT approved: 1 mm/px, 1 s/s, fixed 7 mm prisms at nominal 1000 kg/m³
+  and a finite-body-inertia quasi-steady viscous/pressure resistance approximation.
+  This would imply .0008575 kg/M and 8.575e-10 J/mechanical unit; changing work
+  units against current chemical stocks is consequential. The fluid approximation
+  omits added mass/wakes and cannot claim complete inertial fish physics.
+- Alternatives: microscale quasistatic swimming; variable-depth physical bodies;
+  reactive fluid-inertia/added-mass model. Owner decisions D1/D2 and limitations:
+  `docs/experiments/physical-reference-61.md`. Static raw diagnostic:
+  `docs/experiments/physical-reference-v1.json`; `npm run audit:physical-reference`.
+- Verification: 283/283 fast tests (280 testing-base checks + 3 new), 1/1 testing
+  metadata, TypeScript/build and real built Worker checks pass locally. Read-only
+  diagnostics leave representative full host snapshots/PRNG and all frozen genomes
+  unchanged. Existing movement/stability/energy/ecology baselines untouched.
+  Browser integration not exercised for this offline change; #72's previous
+  browser run 39827626399 is cancelled, not passed. No search/ecology rerun.
+- #61/#59/#72 actual Project Status In progress verified through Actions
+  39834724133 / 39834726778 / 39834730482. Wiki/deployed main v0.37.0 and testing
+  T1.1 unchanged. Exact next step: owner chooses depth/scale and fluid fidelity,
+  then a separate explicitly versioned testing implementation, starting with free
+  dissipation, impulse/work and constraint/timestep tests before frozen comparisons.
+
 # Project status — 2026-10-21
 
 ## Coherent fluid drag and anatomical muscle trial — rejected without runtime changes
