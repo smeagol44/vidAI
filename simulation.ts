@@ -1,3 +1,4 @@
+import {gatedTorque, type GateArchitecture, type GateMode} from './experiments/gatedMotor';
 import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
 import {partKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
 import {passiveConstraintScale, paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
@@ -215,6 +216,7 @@ export interface PartDef {
 export type ArchetypeId = 'eel' | 'flapper' | 'tadpole' | 'glider' | 'predator' | 'nematode' | 'random';
 
 export interface Genome {
+  motorController?: {version: 'gated-torque-v1'; architecture: GateArchitecture; hysteresisWidth: number};
   anatomyVersion?: 1; // Absent in legacy saves; new anatomy uses exclusive physical/organ faces.
   id: string;
   name?: string;
@@ -273,6 +275,7 @@ export interface PartPhys {
 }
 
 export interface JointState {
+  gateMode?: GateMode; // Experimental somatic state, persisted; newborns start DIRECT.
   phase: number;
   targetAngle: number;
   currentRelAngle: number;
@@ -445,6 +448,7 @@ export interface SimulationLedger {
 }
 
 export interface SimulationSettings {
+  motorExperiment?: 'gated-torque-v1'; // Explicit testing-only world; never inferred from genes.
   /** Omitted retains exact historical prey-contact geometry. */
   mouthContactModel?: 'capsule-v1';
   ecologyRegime?: 'closed-v1';
@@ -1159,7 +1163,7 @@ export function createXavierRecurrentNetwork(customPrng: XoshiroPRNG = rng, inpu
   return {weightsIH, weightsHH, biasesH, weightsHO, biasesO};
 }
 
-export function getBrainLayout(g: Pick<Genome, 'eyes' | 'parts'> & Partial<Pick<Genome, 'mouths'>>, internalSenses = true, injurySense = true) {
+export function getBrainLayout(g: Pick<Genome, 'eyes' | 'parts'> & Partial<Pick<Genome, 'mouths' | 'motorController'>>, internalSenses = true, injurySense = true) {
   const inputs: string[] = [];
   const labels: string[] = [];
   g.eyes.forEach((eye, e) => {
@@ -1186,7 +1190,9 @@ export function getBrainLayout(g: Pick<Genome, 'eyes' | 'parts'> & Partial<Pick<
     inputs.push('body:feeding', 'body:depth'); labels.push('Currently feeding', 'Depth / pressure');
     if (injurySense) {inputs.push('body:injury'); labels.push('Recently bitten (real energy loss)');}
   }
-  const outputs = g.parts.slice(1).flatMap(p => OUTPUT_LABELS.map(channel => `joint:${p.id}:${channel}`));
+  const channels = g.motorController ? (g.motorController.architecture === 'two-output'
+    ? ['Mode', 'Command'] : ['Mode', 'DirectTorque', 'OscillatorStrength']) : OUTPUT_LABELS;
+  const outputs = g.parts.slice(1).flatMap(p => channels.map(channel => `joint:${p.id}:${channel}`));
   return {inputs, labels, outputs};
 }
 
@@ -2123,7 +2129,8 @@ export function mutateBrainTopology(g: Genome, operation: BrainTopologyOperation
       count >= MAX_HIDDEN || enabledBrainEdgeCount(g) + g.parts.length > MAX_ENABLED_BRAIN_EDGES) return false;
     if (!mutateBrainTopology(g, 'add-neuron', customPrng)) return false;
     const h = g.hiddenIds!.length - 1, nodeId = g.hiddenIds![h];
-    const channels = ['Angle', 'Drive', 'Torque', 'Stiff', 'Amp', 'Engage'];
+    const channels = g.motorController ? (g.motorController.architecture === 'two-output'
+      ? ['Mode', 'Command'] : ['Mode', 'DirectTorque', 'OscillatorStrength']) : ['Angle', 'Drive', 'Torque', 'Stiff', 'Amp', 'Engage'];
     const selected = channels[customPrng.rangeInt(0, channels.length - 1)];
     const selectedOutputs = g.outputKeys!.map((key, i) => key.endsWith(':' + selected) ? i : -1).filter(i => i >= 0);
     const enabled = new Set(g.disabledConnections!);
@@ -2179,7 +2186,7 @@ export function mutateBrainTopology(g: Genome, operation: BrainTopologyOperation
     for (let o = 0; o < g.outputKeys!.length; o++) {
       const outputKey = g.outputKeys![o];
       const edge = brainEdgeKey('ho', outputKey, nodeId);
-      const turnJoint = outputKey.endsWith(':Angle');
+      const turnJoint = outputKey.endsWith(':Angle') || (!!g.motorController && /:(Command|DirectTorque)$/.test(outputKey));
       g.weightsHO[o][h] = turnJoint ? motorGain : 0;
       if (turnJoint) enabled.delete(edge); else enabled.add(edge);
     }
@@ -2491,6 +2498,7 @@ export function mutateGenome(parent: Genome, severity = 0.25, customPrng: Xoshir
   }
 
   const child: Genome = {
+    ...(parent.motorController ? {motorController: {...parent.motorController}} : {}),
     anatomyVersion: 1,
     id: `GEN-${customPrng.nextUint32().toString(36).substring(0, 5).toUpperCase()}`,
     name: parent.name,
@@ -2694,6 +2702,7 @@ export function spawnOrganism(
 
     joints.push({
       phase: pDef.cpgPhaseOffset || 0,
+      ...(genome.motorController ? {gateMode: 'direct' as const} : {}),
       targetAngle: 0,
       currentRelAngle: 0,
       currentRelAngVel: 0,
@@ -3005,45 +3014,68 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     const parentPhys = org.segments[parentIdx];
     const childPhys = org.segments[childIdx];
 
-    const outBase = j * OUTPUTS_PER_JOINT;
-    const angleCommand = org.neuralOutputs[outBase] || 0;
-    const motorFreqDrive = 1.0 + (org.neuralOutputs[outBase + 1] || 0) * 0.35;
-    const peakTorqueMod = clampVal(1.0 + (org.neuralOutputs[outBase + 2] || 0) * 0.4, 0.5, 1.6);
-    const stiffnessDampingMod = clampVal(1.0 + (org.neuralOutputs[outBase + 3] || 0) * 0.4, 0.4, 1.8);
-    joint.stiffness = stiffnessDampingMod;
-    // Zero on new channels preserves the inherited gait. Negative commands can
-    // reach exactly zero; positive amplitude commands permit stronger strokes.
-    const amplitudeTarget = clampVal(1 + (org.neuralOutputs[outBase + 4] || 0) * 1.5, 0, 1.75);
-    const engagementTarget = clampVal(1 + (org.neuralOutputs[outBase + 5] || 0) * 1.5, 0, 1);
-    const response = 1 - Math.exp(-dt_sub / MOTOR_RESPONSE_SECONDS);
-    joint.amplitude = (joint.amplitude ?? 1) + (amplitudeTarget - (joint.amplitude ?? 1)) * response;
-    joint.engagement = (joint.engagement ?? 1) + (engagementTarget - (joint.engagement ?? 1)) * response;
-    if (amplitudeTarget === 0 && joint.amplitude < .001) joint.amplitude = 0;
-    if (engagementTarget === 0 && joint.engagement < .001) joint.engagement = 0;
+    let motorTorque: number;
+    if (g.motorController) {
+      const c = g.motorController, count = c.architecture === 'two-output' ? 2 : 3;
+      const offset = j * count;
+      // Existing inertia-based ceiling is a provisional CONTROLLED assumption,
+      // not an anatomical muscle law (#60) or coherent fluid/unit model (#61).
+      const maxTorque = (scratchInertias[parentIdx] + scratchInertias[childIdx]) * .5 * 2200;
+      joint.phase = (joint.phase + 2 * Math.PI * g.motorFrequency * childDef.cpgFreqMult * dt_sub) % (2 * Math.PI);
+      const wave = clampVal(evaluateMotorWave(joint.phase, childDef.waveHarmonics) * childDef.cpgAmp, -1, 1);
+      const result = gatedTorque(c.architecture === 'two-output'
+        ? {architecture: c.architecture, mode: org.neuralOutputs[offset], command: org.neuralOutputs[offset + 1]}
+        : {architecture: c.architecture, mode: org.neuralOutputs[offset], direct: org.neuralOutputs[offset + 1], strength: org.neuralOutputs[offset + 2]},
+        joint.gateMode!, wave, maxTorque, c.hysteresisWidth);
+      joint.gateMode = result.mode;
+      joint.targetAngle = 0; joint.stiffness = 0;
+      joint.amplitude = result.oscillatorStrength; joint.engagement = result.mode === 'off' ? 0 : 1;
+      let relative = childPhys.angle - parentPhys.angle - childDef.baseAngleOffset;
+      joint.currentRelAngle = Math.atan2(Math.sin(relative), Math.cos(relative));
+      joint.currentRelAngVel = childPhys.angVel - parentPhys.angVel;
+      motorTorque = result.torque;
+    } else {
+      const outBase = j * OUTPUTS_PER_JOINT;
+      const angleCommand = org.neuralOutputs[outBase] || 0;
+      const motorFreqDrive = 1.0 + (org.neuralOutputs[outBase + 1] || 0) * 0.35;
+      const peakTorqueMod = clampVal(1.0 + (org.neuralOutputs[outBase + 2] || 0) * 0.4, 0.5, 1.6);
+      const stiffnessDampingMod = clampVal(1.0 + (org.neuralOutputs[outBase + 3] || 0) * 0.4, 0.4, 1.8);
+      joint.stiffness = stiffnessDampingMod;
+      // Zero on new channels preserves the inherited gait. Negative commands can
+      // reach exactly zero; positive amplitude commands permit stronger strokes.
+      const amplitudeTarget = clampVal(1 + (org.neuralOutputs[outBase + 4] || 0) * 1.5, 0, 1.75);
+      const engagementTarget = clampVal(1 + (org.neuralOutputs[outBase + 5] || 0) * 1.5, 0, 1);
+      const response = 1 - Math.exp(-dt_sub / MOTOR_RESPONSE_SECONDS);
+      joint.amplitude = (joint.amplitude ?? 1) + (amplitudeTarget - (joint.amplitude ?? 1)) * response;
+      joint.engagement = (joint.engagement ?? 1) + (engagementTarget - (joint.engagement ?? 1)) * response;
+      if (amplitudeTarget === 0 && joint.amplitude < .001) joint.amplitude = 0;
+      if (engagementTarget === 0 && joint.engagement < .001) joint.engagement = 0;
 
-    const jointFreq = g.motorFrequency * childDef.cpgFreqMult * motorFreqDrive;
-    joint.phase = (joint.phase + 2 * Math.PI * jointFreq * dt_sub) % (2 * Math.PI);
+      const jointFreq = g.motorFrequency * childDef.cpgFreqMult * motorFreqDrive;
+      joint.phase = (joint.phase + 2 * Math.PI * jointFreq * dt_sub) % (2 * Math.PI);
 
-    const targetAngle = calculateJointMotorTarget(childDef, joint.phase, joint.amplitude, angleCommand);
-    joint.targetAngle = targetAngle;
+      const targetAngle = calculateJointMotorTarget(childDef, joint.phase, joint.amplitude, angleCommand);
+      joint.targetAngle = targetAngle;
 
-    let currentRelAngle = childPhys.angle - parentPhys.angle - (childDef.baseAngleOffset || 0);
-    while (currentRelAngle > Math.PI) currentRelAngle -= Math.PI * 2;
-    while (currentRelAngle < -Math.PI) currentRelAngle += Math.PI * 2;
-    joint.currentRelAngle = currentRelAngle;
+      let currentRelAngle = childPhys.angle - parentPhys.angle - (childDef.baseAngleOffset || 0);
+      while (currentRelAngle > Math.PI) currentRelAngle -= Math.PI * 2;
+      while (currentRelAngle < -Math.PI) currentRelAngle += Math.PI * 2;
+      joint.currentRelAngle = currentRelAngle;
 
+      const relAngVel = childPhys.angVel - parentPhys.angVel;
+      joint.currentRelAngVel = relAngVel;
+
+      const avgInertia = (scratchInertias[parentIdx] + scratchInertias[childIdx]) * 0.5;
+      const muscle = surfaceModel ? muscleParameters(g.parts[parentIdx], childDef,
+        scratchInertias[parentIdx], scratchInertias[childIdx], g.motorForce, stiffnessDampingMod, peakTorqueMod) : null;
+      const kp = muscle?.kp ?? g.motorForce * avgInertia * 480.0 * stiffnessDampingMod;
+      const kd = muscle?.kd ?? Math.sqrt(kp * avgInertia) * 1.4 * stiffnessDampingMod;
+
+      motorTorque = kp * (targetAngle - currentRelAngle) - kd * relAngVel;
+      const maxTorque = muscle?.maxTorque ?? avgInertia * 2200.0 * peakTorqueMod;
+      motorTorque = clampVal(motorTorque, -maxTorque, maxTorque) * joint.engagement;
+    }
     const relAngVel = childPhys.angVel - parentPhys.angVel;
-    joint.currentRelAngVel = relAngVel;
-
-    const avgInertia = (scratchInertias[parentIdx] + scratchInertias[childIdx]) * 0.5;
-    const muscle = surfaceModel ? muscleParameters(g.parts[parentIdx], childDef,
-      scratchInertias[parentIdx], scratchInertias[childIdx], g.motorForce, stiffnessDampingMod, peakTorqueMod) : null;
-    const kp = muscle?.kp ?? g.motorForce * avgInertia * 480.0 * stiffnessDampingMod;
-    const kd = muscle?.kd ?? Math.sqrt(kp * avgInertia) * 1.4 * stiffnessDampingMod;
-
-    let motorTorque = kp * (targetAngle - currentRelAngle) - kd * relAngVel;
-    const maxTorque = muscle?.maxTorque ?? avgInertia * 2200.0 * peakTorqueMod;
-    motorTorque = clampVal(motorTorque, -maxTorque, maxTorque) * joint.engagement;
     if (corrected && !Number.isFinite(motorTorque)) throw new Error('Non-finite muscle torque');
     if (isNaN(motorTorque)) motorTorque = 0;
     if (surfaceModel) {
@@ -3425,7 +3457,7 @@ function evaluateOrganismBrain(org: Organism, dt: number): void {
   }
   
   const numJoints = org.segments.length - 1;
-  for (let o = 0; o < numJoints * OUTPUTS_PER_JOINT; o++) {
+  for (let o = 0; o < g.outputKeys!.length; o++) {
     let sum = g.biasesO[o] || 0;
     const hoRow = g.weightsHO[o];
     const enabledOutputs = plan.enabledHO[o];
@@ -3437,7 +3469,7 @@ function evaluateOrganismBrain(org: Organism, dt: number): void {
     } else for (let h = 0; h < hiddenCount; h++) sum += org.neuralHidden[h] * (hoRow?.[h] || 0);
     // Acquired synapse offsets alter the neural motor command, not genome
     // weights, and cannot activate a disabled connection.
-    if (learnedMotor && (g.plasticMotorScope === 'all' || g.outputKeys![o].endsWith(':Angle'))) {
+    if (learnedMotor && (g.plasticMotorScope === 'all' || (g.outputKeys![o].endsWith(':Angle') || (!!g.motorController && /:(Command|DirectTorque)$/.test(g.outputKeys![o]))))) {
       if (enabledOutputs) {
         for (let k = 0; k < enabledOutputs.length; k++) {
           const h = enabledOutputs[k], slot = o * hiddenCount + h;
@@ -3487,6 +3519,10 @@ export function stepSimulation(
   const mutationSeverity = settings.mutationSeverity ?? 0.25;
   const gravity = settings.gravity ?? 0;
 
+  if (settings.motorExperiment !== undefined && (settings.motorExperiment !== 'gated-torque-v1'
+    || settings.physicsRegime !== 'passive-work-v3')) throw new Error('Invalid experimental motor world');
+  if (settings.motorExperiment === undefined && (state.organisms.some(o => o.genome.motorController) || state.eggs.some(o => o.genome.motorController)))
+    throw new Error('Gated controllers require an explicit experimental world');
   state.simTime += dt;
   const organisms = state.organisms;
   const eggs = state.eggs;

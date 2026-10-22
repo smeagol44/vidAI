@@ -1,7 +1,8 @@
 /**
  * Experimental motor-gate semantics for issue #59.
  *
- * NOT connected to the Worker, persistence, genomes or live ecosystem.
+ * Opt-in testing-only genomes use this in the authoritative Worker. Legacy
+ * genomes keep their original six-channel servo.
  * The caller must provide actual oscillator output and externally justified
  * max torque; this code does not derive a biological muscle-strength law.
  * Deliberately no timer, ramp, dwell or arbitrary activation-rate limit.

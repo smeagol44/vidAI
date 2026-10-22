@@ -1,5 +1,25 @@
 # Project status — 2026-10-21
 
+## Gated torque experiment — draft #72, testing-only and unmerged
+
+The explicit gated-controller genotype, schema v16 opt-in snapshots, saved mode
+state and authoritative built-Worker comparison are implemented on
+`experiment/gated-controller-comparison-t1`, targeting `testing`. Legacy saves,
+production v0.37.0, testing T1.1 and all starter genes remain unchanged.
+[Detailed results](experiments/gated-controller-comparison.md) and
+[raw evidence](experiments/gated-worker-v1.json) distinguish valid outcomes,
+failed stability screens and the excluded/corrected first ecology harness pass.
+
+135 matched five-second swims show ~79–80% median paired travel loss, higher
+mechanical cost/guard dependence and mixed hysteresis effects despite ~21% fewer
+mode changes. The 468-evaluation search plus 72 held-out trials finds small valid
+Darter motion but no valid Twin Oar/Branchstalker candidates in its fixed budget.
+Ten closed 60s ecosystem runs produce zero candidate offspring versus legacy
+1/3 in seeds 17/73. Funding/chemical closure/passive batches and immediate
+physical-bite response pass; that does not qualify these policies for promotion.
+#59 remains In progress. #60/#61 strength, activation cost and units remain open;
+no final architecture, release, merge or deployment is approved by these results.
+
 ## Coherent fluid drag and anatomical muscle trial — rejected without runtime changes
 
 - A bounded experiment compared two proposed replacements independently and

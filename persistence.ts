@@ -59,7 +59,7 @@ export function resizeWorld(s: SimulationState, old: SimulationSettings, width: 
 
 export function createSnapshot(s: SimulationState, settings: SimulationSettings, metadata: Record<string, unknown> = {}) {
   const {prng, lineage, ...data} = s;
-  const snapshot = {schemaVersion: settings.physicsRegime === 'passive-work-v3' ? '15.0.0' : settings.mouthContactModel === 'capsule-v1' ? '14.0.0' : s.energyPool ? '13.0.0' : '12.0.0', build: BUILD_VERSION, metadata, settings: {...settings,
+  const snapshot = {schemaVersion: settings.motorExperiment ? '16.0.0' : settings.physicsRegime === 'passive-work-v3' ? '15.0.0' : settings.mouthContactModel === 'capsule-v1' ? '14.0.0' : s.energyPool ? '13.0.0' : '12.0.0', build: BUILD_VERSION, metadata, settings: {...settings,
     ...(s.energyPool ? {ecologyRegime: 'closed-v1' as const, nutrientLimit: settings.nutrientLimit ?? null} : {}),
     physicsRegime: settings.physicsRegime ?? 'legacy-v0'},
     state: {...data, prngState: prng.getState(), lineage: [...lineage]}};
@@ -84,6 +84,12 @@ export function validateGenome(raw: unknown): Genome {
   assert(Array.isArray(g.parts) && g.parts.length >= 1 && g.parts.length <= 7, 'body part count');
   assert(Array.isArray(g.eyes) && Array.isArray(g.mouths)
     && g.eyes.length + g.mouths.length <= MAX_SURFACE_ORGANS, 'organ count');
+  if (g.motorController !== undefined) {
+    const c = g.motorController;
+    assert(c && c.version === 'gated-torque-v1'
+      && ['two-output', 'three-output'].includes(c.architecture)
+      && [0, .06].includes(c.hysteresisWidth) && g.brainVersion === 7, 'experimental motor controller');
+  }
   assert(g.anatomyVersion === undefined || g.anatomyVersion === 1, 'anatomy version');
   assert(new Set(g.eyes.map(e => e.id)).size === g.eyes.length
     && new Set(g.mouths.map(m => m.id)).size === g.mouths.length, 'duplicate organ IDs');
@@ -200,7 +206,9 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     assert(input.length <= 25_000_000, 'file exceeds 25 MB'); return JSON.parse(input);
   })() : structuredClone(input);
   assert(raw && typeof raw === 'object', 'document');
-  assert(['15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
+  assert(['16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
+  const experiment = raw.schemaVersion === '16.0.0';
+  assert(experiment ? raw.settings?.motorExperiment === 'gated-torque-v1' : raw.settings?.motorExperiment === undefined, 'experimental motor schema');
   const legacy = raw.schemaVersion === '3.0.0';
   const data = legacy ? raw : raw.state;
   assert(data && typeof data === 'object', 'state');
@@ -208,14 +216,14 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   // Historical omitted fields retain their original values; new-world defaults
   // must not silently change old snapshot ecology.
   const settings: SimulationSettings = {...DEFAULT_SETTINGS, targetNutrients: 400, maxOrganisms: 100, physicsRegime: 'legacy-v0', ...raw.settings};
-  if (!['15.0.0', '14.0.0', '13.0.0', '12.0.0'].includes(raw.schemaVersion)) settings.physicsRegime = 'legacy-v0';
-  else assert(raw.schemaVersion === '15.0.0' ? raw.settings?.physicsRegime === 'passive-work-v3'
+  if (!['16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0'].includes(raw.schemaVersion)) settings.physicsRegime = 'legacy-v0';
+  else assert(['16.0.0', '15.0.0'].includes(raw.schemaVersion) ? raw.settings?.physicsRegime === 'passive-work-v3'
     : ['legacy-v0', 'surface-work-v1', 'paid-work-v2'].includes(raw.settings?.physicsRegime), 'physics regime');
-  assert(raw.schemaVersion === '15.0.0' ? settings.mouthContactModel === undefined || settings.mouthContactModel === 'capsule-v1'
+  assert(['16.0.0', '15.0.0'].includes(raw.schemaVersion) ? settings.mouthContactModel === undefined || settings.mouthContactModel === 'capsule-v1'
     : raw.schemaVersion === '14.0.0' ? settings.mouthContactModel === 'capsule-v1'
     : settings.mouthContactModel === undefined, 'mouth contact model');
   const closed = raw.schemaVersion === '13.0.0'
-    || (['15.0.0', '14.0.0'].includes(raw.schemaVersion) && settings.ecologyRegime === 'closed-v1');
+    || (['16.0.0', '15.0.0', '14.0.0'].includes(raw.schemaVersion) && settings.ecologyRegime === 'closed-v1');
   assert(closed ? settings.ecologyRegime === 'closed-v1' && data.energyPool?.regime === 'closed-v1'
     : settings.ecologyRegime === undefined && data.energyPool === undefined, 'ecology regime');
   if (closed) {
@@ -238,8 +246,11 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   assert(Array.isArray(data.prngState) && data.prngState.length === 4 && data.prngState.every((n: unknown) => Number.isInteger(n) && Number(n) >= 0 && Number(n) <= 0xffffffff)
     && data.prngState.some((n: number) => n !== 0), 'PRNG state');
   const prng = new XoshiroPRNG(); prng.setState(data.prngState);
+  const checkExperimentalGenome = (g: Genome) => {
+    assert(experiment || g.motorController === undefined, 'experimental genes in historical schema');
+  };
   const organisms: Organism[] = data.organisms.map((o: Organism) => {
-    if (['15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0'].includes(raw.schemaVersion)) {
+    if (['16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0'].includes(raw.schemaVersion)) {
       assert(o.genome.brainVersion === 7, 'current brain version');
     } else {
       if (raw.schemaVersion === '10.0.0') assert(o.genome.brainVersion === 6, 'previous brain version');
@@ -247,6 +258,7 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
       if (raw.schemaVersion === '8.0.0') assert(o.genome.brainVersion === 4, 'previous brain version');
       migrateOrganismBrain(o); // Keep original activations and PRNG; tau=0 preserves earlier dynamics.
     }
+    checkExperimentalGenome(o.genome);
     o.genome = validateGenome(o.genome);
     if (o.motorDiagnostics !== undefined) {
       const d = o.motorDiagnostics;
@@ -258,6 +270,8 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     assert(typeof o.id === 'string' && Array.isArray(o.segments) && o.segments.length === o.genome.parts.length
       && Array.isArray(o.joints) && o.joints.length === o.segments.length - 1, 'organism articulation');
     assert(o.segments.every(p => [p.x, p.y, p.vx, p.vy, p.angle, p.angVel].every(Number.isFinite)), 'physical state');
+    assert(o.joints.every(j => o.genome.motorController
+      ? ['off', 'direct', 'oscillator'].includes(j.gateMode!) : j.gateMode === undefined), 'experimental gate mode state');
     assert(o.joints.every(j => [j.phase, j.targetAngle, j.currentRelAngle, j.currentRelAngVel, j.appliedTorque, j.stiffness].every(Number.isFinite)), 'joint state');
     assert(o.joints.every(j => Number.isFinite(j.amplitude) && j.amplitude! >= 0 && j.amplitude! <= 1.75
       && Number.isFinite(j.engagement) && j.engagement! >= 0 && j.engagement! <= 1), 'motor control state');
@@ -292,7 +306,8 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
         try { edge = JSON.parse(record.edge); } catch { assert(false, 'plastic synapse ID'); }
         assert(Array.isArray(edge) && edge.length === 3
           && edge[0] === 'ho' && typeof edge[1] === 'string' && output.has(edge[1])
-          && (o.genome.plasticMotorScope === 'all' || edge[1].endsWith(':Angle'))
+          && (o.genome.plasticMotorScope === 'all' || edge[1].endsWith(':Angle')
+            || (!!o.genome.motorController && /:(Command|DirectTorque)$/.test(edge[1])))
           && typeof edge[2] === 'string' && hidden.has(edge[2])
           && record.edge === brainEdgeKey('ho', edge[1], edge[2])
           && !inactive.has(record.edge) && allowed.has(record.edge), 'plastic edge identity');
@@ -338,6 +353,7 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   });
   assert(new Set(organisms.map(o => o.id)).size === organisms.length, 'duplicate organism IDs');
   for (const egg of data.eggs) {
+    checkExperimentalGenome(egg.genome);
     egg.genome = validateGenome(egg.genome);
     assert([egg.x, egg.y, egg.vx, egg.vy, egg.fundedReserve, egg.fundedStructural, egg.incubationProgress, egg.totalIncubationTime].every(Number.isFinite)
       && (egg.hatchHeading === undefined || Number.isFinite(egg.hatchHeading))
@@ -372,7 +388,7 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     recentDeaths: data.recentDeaths ?? [],
   };
   delete (state as unknown as Record<string, unknown>).prngState;
-  for (const rec of state.lineage.values()) rec.genome = validateGenome(rec.genome);
+  for (const rec of state.lineage.values()) {checkExperimentalGenome(rec.genome); rec.genome = validateGenome(rec.genome);}
   if (closed) assert(Math.abs(totalAccountedEnergy(state) - state.energyPool!.budget)
     <= Math.max(1e-5, state.energyPool!.budget * 1e-10), 'world energy conservation');
   return {state, settings, metadata: raw.metadata ?? {legacyImport: true}};

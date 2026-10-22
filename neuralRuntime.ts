@@ -69,7 +69,7 @@ export function compiledBrain(g: Genome): CompiledBrain {
       for (let h = 0; h < hidden.length && motor.length < 96; h++)
         for (let o = 0; o < outputs.length && motor.length < 96; o++) addMotor(o, h);
     } else for (let o = 0; o < outputs.length && motor.length < 96; o++) {
-      if (outputs[o].endsWith(':Angle'))
+      if (outputs[o].endsWith(':Angle') || (!!g.motorController && /:(Command|DirectTorque)$/.test(outputs[o])))
         for (let h = 0; h < hidden.length && motor.length < 96; h++) addMotor(o, h);
     }
   }

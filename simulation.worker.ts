@@ -1,5 +1,6 @@
 import {SimulationHost, type WorldSnapshot, type WorldAction} from './simulationHost';
 import type {SimulationSettings} from './simulation';
+import {measureWorkerTrial} from './experiments/workerMetrics';
 import {workerWakeDelay} from './workerPacing';
 
 const host = new SimulationHost();
@@ -28,10 +29,21 @@ port.onmessage = ({data}: MessageEvent) => {
         throw new Error('Physics regime can change only by resetting the world');
       if (data.settings.ecologyRegime !== host.settings.ecologyRegime)
         throw new Error('Ecology regime can change only by resetting the world');
+      if (data.settings.motorExperiment !== host.settings.motorExperiment)
+        throw new Error('Motor experiment can change only by resetting the world');
       if (data.settings.mouthContactModel !== host.settings.mouthContactModel)
         throw new Error('Mouth contact model can change only by resetting the world');
       host.settings = {...data.settings, physicsRegime: host.settings.physicsRegime ?? 'legacy-v0'} as SimulationSettings; host.speed = data.speed;
       host.running = data.running; host.selected = data.selected; return;
+    }
+    if (data.type === 'experiment-step') {
+      if (host.running || host.settings.motorExperiment !== 'gated-torque-v1'
+        || !Number.isInteger(data.ticks) || data.ticks < 1 || data.ticks > 3600)
+        throw new Error('Paused explicit experimental world and 1–3600 ticks required');
+      const metrics = measureWorkerTrial(host, data.ticks);
+      dirty = true;
+      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot()}});
+      return;
     }
     if (data.type === 'action') {
       const value = host.action(data.action as WorldAction);
