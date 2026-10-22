@@ -1,13 +1,22 @@
-/** VIDA's unit-depth lamina model, independent of controller/genome tuning. */
+/** Versioned rigid-body units and prepaid work; no controller/genome tuning. */
 import type {PartDef} from './simulation';
+import {PRISM_REFERENCE, prismProperties} from './prismPhysics';
 
-export type PhysicsRegime = 'legacy-v0' | 'surface-work-v1' | 'paid-work-v2' | 'passive-work-v3';
+export type PhysicsRegime = 'legacy-v0' | 'surface-work-v1' | 'paid-work-v2' | 'passive-work-v3' | 'prism-resistance-v4';
 export const NEW_PHYSICS_REGIME: PhysicsRegime = 'passive-work-v3';
 export function usesPaidActuation(regime?: PhysicsRegime): boolean {
-  return regime === 'surface-work-v1' || regime === 'paid-work-v2' || regime === 'passive-work-v3';
+  return regime === 'surface-work-v1' || regime === 'paid-work-v2' || regime === 'passive-work-v3' || regime === 'prism-resistance-v4';
 }
-// 1 px = 0.001 m; 1 mass unit = 0.175 kg. Hence 1 M px²/s² = 1.75e-7 J.
+// Historical v0–v3 reference: 1 px=.001 m, 1 M=.175 kg; 1 M px²/s²=1.75e-7 J.
 export const MECHANICAL_JOULES = 1.75e-7;
+export function mechanicalJoules(regime?: PhysicsRegime): number {
+  return regime === 'prism-resistance-v4' ? PRISM_REFERENCE.joulesPerMechanicalUnit : MECHANICAL_JOULES;
+}
+export function bodyMass(def: PartDef, density: number, regime?: PhysicsRegime): number {
+  return regime === 'prism-resistance-v4'
+    ? prismProperties(def.width, def.height).massKg / PRISM_REFERENCE.kilogramsPerMass
+    : Math.max(.35, def.dimN * def.dimM * density);
+}
 export const MUSCLE_EFFICIENCY = 0.25;
 // Constitutive model parameter, in simulated force / square pixel.
 export const MUSCLE_STRESS = 300;
@@ -40,11 +49,11 @@ export function muscleParameters(parent: PartDef, child: PartDef, parentInertia:
  * Positive work is paid BEFORE application; braking never regenerates reserves.
  * The impulse is shortened to the available chemical budget, never its bill. */
 export function paidMotorImpulse(torque: number, dt: number, relativeSpeed: number,
-  inverseInertiaSum: number, reserveJ: number) {
+  inverseInertiaSum: number, reserveJ: number, joules = MECHANICAL_JOULES) {
   const requested = torque * dt;
   const direction = Math.sign(requested);
   const speedAlong = direction * relativeSpeed;
-  const availableWork = Math.max(0, reserveJ) * MUSCLE_EFFICIENCY / MECHANICAL_JOULES;
+  const availableWork = Math.max(0, reserveJ) * MUSCLE_EFFICIENCY / joules;
   // Resolve a within-impulse reversal explicitly: braking cannot cancel the
   // positive work used to accelerate in the other direction.
   const reversalImpulse = Math.max(0, -speedAlong / inverseInertiaSum);
@@ -62,8 +71,8 @@ export function paidMotorImpulse(torque: number, dt: number, relativeSpeed: numb
   }
   const impulse = direction * actual;
   const brakingImpulse = Math.min(actual, reversalImpulse);
-  const positiveJ = positiveWork(actual) * MECHANICAL_JOULES;
-  const negativeJ = -(speedAlong * brakingImpulse + .5 * inverseInertiaSum * brakingImpulse ** 2) * MECHANICAL_JOULES;
+  const positiveJ = positiveWork(actual) * joules;
+  const negativeJ = -(speedAlong * brakingImpulse + .5 * inverseInertiaSum * brakingImpulse ** 2) * joules;
   return {impulse, positiveJ, negativeJ,
     costJ: Math.min(Math.max(0, reserveJ), positiveJ / MUSCLE_EFFICIENCY), limited};
 }
@@ -72,7 +81,7 @@ export function paidMotorImpulse(torque: number, dt: number, relativeSpeed: numb
  * All commands read the same initial state. External torque contributes to
  * angular travel but cannot offset positive work on a different joint. */
 export function paidMotorBatch(impulses: ArrayLike<number>, speeds: ArrayLike<number>,
-  externalChanges: ArrayLike<number>, motorChanges: ArrayLike<number>, count: number, reserveJ: number) {
+  externalChanges: ArrayLike<number>, motorChanges: ArrayLike<number>, count: number, reserveJ: number, joules = MECHANICAL_JOULES) {
   let positive = 0, negative = 0, boundA = 0, boundB = 0;
   const measure = (scale: number) => {
     positive = 0; negative = 0;
@@ -91,7 +100,7 @@ export function paidMotorBatch(impulses: ArrayLike<number>, speeds: ArrayLike<nu
   };
   let scale = reserveJ > 0 ? 1 : 0;
   measure(scale);
-  const available = Math.max(0, reserveJ) * MUSCLE_EFFICIENCY / MECHANICAL_JOULES;
+  const available = Math.max(0, reserveJ) * MUSCLE_EFFICIENCY / joules;
   if (positive > available) {
     // A conservative bound avoids assuming the signed per-joint work is
     // monotone as all shared-part impulses are reduced together.
@@ -104,7 +113,7 @@ export function paidMotorBatch(impulses: ArrayLike<number>, speeds: ArrayLike<nu
     scale = Math.min(1, Math.max(0, scale));
     measure(scale);
   }
-  const positiveJ = positive * MECHANICAL_JOULES, negativeJ = negative * MECHANICAL_JOULES;
+  const positiveJ = positive * joules, negativeJ = negative * joules;
   return {scale, positiveJ, negativeJ,
     costJ: Math.min(Math.max(0, reserveJ), positiveJ / MUSCLE_EFFICIENCY), limited: scale < 1};
 }

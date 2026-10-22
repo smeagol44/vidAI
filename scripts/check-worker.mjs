@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {Worker} from 'node:worker_threads';
-import {readdir} from 'node:fs/promises';
+import {builtWorkerAsset} from './built-worker-asset.mjs';
 import {createInitialWorld} from '../world.ts';
 import {DEFAULT_SETTINGS, createSnapshot, restoreSnapshot} from '../persistence.ts';
 import {enableClosedEconomy, setWorldEnergy} from '../energyEconomy.ts';
@@ -10,10 +10,7 @@ import {stepSimulation} from '../simulation.ts';
 
 // Exercise the actual production-built Worker with real cross-thread cloning.
 // Only the browser's message port is adapted to node:worker_threads.
-const asset = (await readdir(new URL('../dist/assets/', import.meta.url)))
-  .find(name => /^simulation\.worker-.*\.js$/.test(name));
-assert.ok(asset, 'Run npm run build first');
-const bundle = new URL(`../dist/assets/${asset}`, import.meta.url).href;
+const bundle = (await builtWorkerAsset()).href;
 const boot = `import {parentPort} from 'node:worker_threads';
 globalThis.self = {postMessage: value => parentPort.postMessage(value)};
 parentPort.on('message', data => self.onmessage({data}));

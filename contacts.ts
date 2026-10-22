@@ -1,3 +1,4 @@
+import {bodyMass, type PhysicsRegime} from './foundationPhysics';
 import {partKineticEnergy, organismKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
 import type {Organism, PartDef, PartPhys} from './simulation';
 
@@ -81,11 +82,11 @@ export function contactImpulse(a: PartPhys, aim: number, aii: number,
 // The resolver consumes each pass before rebuilding the next one. Reuse
 // wrappers while recalculating every moved pose/bound; never retain stale AABBs.
 const bodyPool: Body[] = [];
-function bodies(organisms: Organism[], density: number): Body[] {
+function bodies(organisms: Organism[], density: number, regime?: PhysicsRegime): Body[] {
   const list: Body[] = [];
   for (const org of organisms) for (let index = 0; index < org.segments.length; index++) {
     const p = org.segments[index];
-    const def = org.genome.parts[index], mass = Math.max(.35, def.dimN * def.dimM * density);
+    const def = org.genome.parts[index], mass = bodyMass(def, density, regime);
     const c = Math.cos(p.angle), s = Math.sin(p.angle);
     const rx = (Math.abs(c) * def.width + Math.abs(s) * def.height) / 2;
     const ry = (Math.abs(s) * def.width + Math.abs(c) * def.height) / 2;
@@ -147,23 +148,23 @@ function pairs(list: Body[]): [Body, Body][] {
 
 /** Contacts alternate with hinge projection; position repair never creates separation velocity. */
 export function resolveBodyContacts(organisms: Organism[], density: number,
-  projectJoints: (org: Organism, iterations: number) => void, observe?: MechanicalObserver): Set<Organism> {
+  projectJoints: (org: Organism, iterations: number) => void, observe?: MechanicalObserver, regime?: PhysicsRegime): Set<Organism> {
   const touched = new Set<Organism>();
   const project = (org: Organism, iterations: number) => {
-    const before = observe ? organismKineticEnergy(org, density) : 0;
+    const before = observe ? organismKineticEnergy(org, density, regime) : 0;
     projectJoints(org, iterations);
-    if (observe) observe('position-projection', before, organismKineticEnergy(org, density));
+    if (observe) observe('position-projection', before, organismKineticEnergy(org, density, regime));
   };
   for (let iteration = 0; iteration < 8; iteration++) {
     let contactCount = 0;
-    for (const [a, b] of pairs(bodies(organisms, density))) {
+    for (const [a, b] of pairs(bodies(organisms, density, regime))) {
       // Position repair changes centers, not angles; projections refresh rotations next pass.
       const contact = rotatedContact(a.p, a.def, b.p, b.def, a.c, a.s, b.c, b.s); if (!contact) continue;
       contactCount++; touched.add(a.org); touched.add(b.org);
-      const beforeImpulse = observe ? partKineticEnergy(a.p, a.def, density) + partKineticEnergy(b.p, b.def, density) : 0;
+      const beforeImpulse = observe ? partKineticEnergy(a.p, a.def, density, regime) + partKineticEnergy(b.p, b.def, density, regime) : 0;
       contactImpulse(a.p, a.im, a.ii, b.p, b.im, b.ii, contact);
       if (observe) observe('contact-impulse', beforeImpulse,
-        partKineticEnergy(a.p, a.def, density) + partKineticEnergy(b.p, b.def, density));
+        partKineticEnergy(a.p, a.def, density, regime) + partKineticEnergy(b.p, b.def, density, regime));
       // Split positional correction prevents overlap recovery from acting as propulsion.
       const correction = Math.min(3, Math.max(0, contact.depth - .02) * .6) / (a.im + b.im);
       a.p.x -= contact.nx * correction * a.im; a.p.y -= contact.ny * correction * a.im;

@@ -59,7 +59,7 @@ export function resizeWorld(s: SimulationState, old: SimulationSettings, width: 
 
 export function createSnapshot(s: SimulationState, settings: SimulationSettings, metadata: Record<string, unknown> = {}) {
   const {prng, lineage, ...data} = s;
-  const snapshot = {schemaVersion: settings.physicsRegime === 'passive-work-v3' ? '15.0.0' : settings.mouthContactModel === 'capsule-v1' ? '14.0.0' : s.energyPool ? '13.0.0' : '12.0.0', build: BUILD_VERSION, metadata, settings: {...settings,
+  const snapshot = {schemaVersion: settings.physicsRegime === 'prism-resistance-v4' ? '17.0.0' : settings.physicsRegime === 'passive-work-v3' ? '15.0.0' : settings.mouthContactModel === 'capsule-v1' ? '14.0.0' : s.energyPool ? '13.0.0' : '12.0.0', build: BUILD_VERSION, metadata, settings: {...settings,
     ...(s.energyPool ? {ecologyRegime: 'closed-v1' as const, nutrientLimit: settings.nutrientLimit ?? null} : {}),
     physicsRegime: settings.physicsRegime ?? 'legacy-v0'},
     state: {...data, prngState: prng.getState(), lineage: [...lineage]}};
@@ -200,7 +200,8 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     assert(input.length <= 25_000_000, 'file exceeds 25 MB'); return JSON.parse(input);
   })() : structuredClone(input);
   assert(raw && typeof raw === 'object', 'document');
-  assert(['15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
+  assert(['17.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
+  assert(raw.schemaVersion === '17.0.0' || raw.settings?.physicsRegime !== 'prism-resistance-v4', 'physics regime');
   const legacy = raw.schemaVersion === '3.0.0';
   const data = legacy ? raw : raw.state;
   assert(data && typeof data === 'object', 'state');
@@ -208,14 +209,15 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   // Historical omitted fields retain their original values; new-world defaults
   // must not silently change old snapshot ecology.
   const settings: SimulationSettings = {...DEFAULT_SETTINGS, targetNutrients: 400, maxOrganisms: 100, physicsRegime: 'legacy-v0', ...raw.settings};
-  if (!['15.0.0', '14.0.0', '13.0.0', '12.0.0'].includes(raw.schemaVersion)) settings.physicsRegime = 'legacy-v0';
-  else assert(raw.schemaVersion === '15.0.0' ? raw.settings?.physicsRegime === 'passive-work-v3'
+  if (!['17.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0'].includes(raw.schemaVersion)) settings.physicsRegime = 'legacy-v0';
+  else assert(raw.schemaVersion === '17.0.0' ? raw.settings?.physicsRegime === 'prism-resistance-v4'
+    : raw.schemaVersion === '15.0.0' ? raw.settings?.physicsRegime === 'passive-work-v3'
     : ['legacy-v0', 'surface-work-v1', 'paid-work-v2'].includes(raw.settings?.physicsRegime), 'physics regime');
-  assert(raw.schemaVersion === '15.0.0' ? settings.mouthContactModel === undefined || settings.mouthContactModel === 'capsule-v1'
+  assert(['17.0.0','15.0.0'].includes(raw.schemaVersion) ? settings.mouthContactModel === undefined || settings.mouthContactModel === 'capsule-v1'
     : raw.schemaVersion === '14.0.0' ? settings.mouthContactModel === 'capsule-v1'
     : settings.mouthContactModel === undefined, 'mouth contact model');
   const closed = raw.schemaVersion === '13.0.0'
-    || (['15.0.0', '14.0.0'].includes(raw.schemaVersion) && settings.ecologyRegime === 'closed-v1');
+    || (['17.0.0', '15.0.0', '14.0.0'].includes(raw.schemaVersion) && settings.ecologyRegime === 'closed-v1');
   assert(closed ? settings.ecologyRegime === 'closed-v1' && data.energyPool?.regime === 'closed-v1'
     : settings.ecologyRegime === undefined && data.energyPool === undefined, 'ecology regime');
   if (closed) {
@@ -239,7 +241,7 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     && data.prngState.some((n: number) => n !== 0), 'PRNG state');
   const prng = new XoshiroPRNG(); prng.setState(data.prngState);
   const organisms: Organism[] = data.organisms.map((o: Organism) => {
-    if (['15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0'].includes(raw.schemaVersion)) {
+    if (['17.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0'].includes(raw.schemaVersion)) {
       assert(o.genome.brainVersion === 7, 'current brain version');
     } else {
       if (raw.schemaVersion === '10.0.0') assert(o.genome.brainVersion === 6, 'previous brain version');

@@ -1,3 +1,44 @@
+# Issue #61 prism-fluid v4 — implemented experiment, promotion blocked (2026-10-22)
+
+- Draft #79, `experiment/prism-resistance-v4` → testing d7a6814, independent of
+  unmerged #77/#72. Approved D1/D2 implemented: 1 mm/px, 1 s/s, fixed 7 mm prisms,
+  nominal 1000 kg/m³. Explicit `prism-resistance-v4`, schema 17; defaults unchanged.
+- Fixed provisional eta=.001 Pa s, Cd=1 and shear length=min(w,h,d), with all-six-face
+  viscous traction and leading-face pressure; exact edge force/moment integration.
+  No fitted axial/spin gain. Implicit local drag follows prepaid simultaneous
+  actuation; physical and numerical dissipation are separate observations.
+- Mechanical J conversion 8.575e-10 owns its 204.0816× change only in v4. Existing
+  chemical stocks/upkeep/body/food/egg J remain unchanged and empirical. No #60
+  anatomical strength, force-speed or activation-cost decision is inferred.
+- Corrected actual built Worker: 54 five-second swims, four 60-second ecological
+  rows and four reversed-order performance rows. All 27 v3 swim metric references
+  and both old ecological census/intake/guard references match the archive exactly.
+  Source genomes/heads/reserves unchanged; no training/search or baseline reset.
+- **Promotion blocked:** 25/27 pairs exceed the old two-sided 10% movement tripwire;
+  travel −73.17% to +78.08%, median −19.50%. Some bodies improve, others collapse.
+  Nutrient intake 58992→10488 J (seed17), 97872→46848 J (seed73); eggs 1→0 and 3→2.
+- Isolated guards 4626→3393 (all angular), substep anchor peak .12955→.06500 px.
+  v4 accepted joint solve creates zero measured overspeed crossings here, yet
+  ecological post-contact speeds still reach 29.64 rad/s. Retain #72's earlier
+  constraint redistribution and this contact redistribution as open findings.
+- Motor debit 231.752→.929069 J across isolated swims is dominated by the new work
+  reference, not proof of muscle efficiency. All 133200 candidate joint requests
+  delivered without reserve limiting. Max chemical discrepancy 2.25e-8 J.
+  Additional implicit damping .00117051 J versus .0720373 J endpoint fluid loss.
+- Established real-Worker performance workload is 32.86–37.15% slower. No browser
+  FPS/1000-part claim. Local 288 fast + metadata/build, legacy Worker and new Worker
+  continuation/work/receipt checks pass; remote CI conclusions live in #79/#57.
+- Two development runs are explicitly excluded and retained: missed work-conversion
+  call, then stale Worker selection by old first-hash adapter. Kernel work test and
+  exact built-Worker/host test exposed them; both are corrected. Adapter now resolves
+  the Worker referenced by the application entry. No coefficient retuning occurred.
+- Evidence/profile/limits: `docs/experiments/prism-resistance-v4.md`, valid raw
+  `prism-worker-v4.json`, labelled excluded raw reports. No UI selector or Wiki
+  publication; main v0.37.0 and testing T1.1 unchanged. No merge/deployment.
+- Next bounded diagnostic: held motor commands at fixed neural cadence with
+  physics timestep refinement, separating split error from constitutive gait
+  effects before coefficient or anatomical-cost decisions. No founder rescue sweep.
+
 # Project status — 2026-10-21
 
 ## Coherent fluid drag and anatomical muscle trial — rejected without runtime changes

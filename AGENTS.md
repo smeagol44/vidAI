@@ -1,3 +1,20 @@
+# Testing-only prism fluid experiment (#61, draft #79)
+
+- `prism-resistance-v4` is explicit and unpromoted; never change defaults or import
+  old saves into it automatically. Schema 17 requires v4; historical v0–v3 and
+  schemas 3–15 retain exact continuation. Independent #72/schema16 is not imported.
+- Fixed approved geometry: 1 mm/px, 1 s/s, 7 mm depth, nominal rho=1000 kg/m³.
+  Constitutive profile eta=.001 Pa s, Cd=1, ell=min(w,h,d) is provisional, not fitted.
+  Surface-derived force/moment and implicit fluid solve follow prepaid actuation.
+  New work conversion is 8.575e-10 J/unit; use it consistently for funding and KE.
+  Existing chemical stocks/costs remain unchanged; #60 anatomy/cost is still open.
+- The real-Worker comparison regresses movement and ecology materially; promotion
+  is blocked despite passing checks. Preserve valid and explicitly excluded raw
+  reports in docs/experiments/prism-*. No tuning, baseline refresh or guard removal.
+- Run fast/build and both Worker checks for runtime changes. Resolve the actual
+  Worker from the built app entry, never the first stale hash in dist. No manual
+  browser campaign. Profile, results and next diagnostic are in prism-resistance-v4.md.
+
 # Dual Pages environments — production/main and experimental/testing
 
 - Publish both independent checkouts as one GitHub Pages artifact from main.
