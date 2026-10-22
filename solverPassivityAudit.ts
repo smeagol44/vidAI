@@ -5,6 +5,7 @@ import {DEFAULT_SETTINGS, totalAccountedEnergy} from './persistence';
 import {stepSimulation, calculateOrganismCOM, getCardinalAnchor, getChildAnchorForParentDir,
   type Organism, type SimulationSettings} from './simulation';
 import {mechanicalRecorder} from './mechanicalAudit';
+import type {FoundationTrial} from './foundationPhysics';
 
 export function jointErrors(org: Organism) {
   let anchorPx = 0, limitRad = 0;
@@ -23,7 +24,7 @@ export function jointErrors(org: Organism) {
 }
 
 export function observeSolver(id: string, physicsRegime: 'paid-work-v2' | 'passive-work-v3',
-  seconds = 5, heading = .37, viscosity = .18, unpowered = false) {
+  seconds = 5, heading = .37, viscosity = .18, unpowered = false, foundationTrial?: FoundationTrial) {
   const config: SimulationSettings = {...DEFAULT_SETTINGS, physicsRegime, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0, waterViscosity: viscosity};
   const state = createInitialWorld(config, 711, 'balanced', 'standard', 0);
   const genome = createFounderGenome(id);
@@ -37,7 +38,7 @@ export function observeSolver(id: string, physicsRegime: 'paid-work-v2' | 'passi
     stepSimulation(state, config, 1 / 60, undefined, (phase, before, after) => {
       recorder.observe(phase, before, after);
       if (phase === 'constraint-batch') maxConstraintGainJ = Math.max(maxConstraintGainJ, after - before);
-    });
+    }, foundationTrial);
     guards += org.motorDiagnostics?.numericalGuardEvents ?? 0;
     limitedBatches += org.motorDiagnostics?.constraintLimitedBatches ?? 0;
     const error = jointErrors(org);

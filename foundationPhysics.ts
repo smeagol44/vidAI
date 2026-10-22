@@ -117,3 +117,51 @@ export function passiveConstraintScale(linear: number, quadratic: number): numbe
   if (linear >= 0 || quadratic <= 0) return 0;
   return Math.min(1, -linear / quadratic * (1 - 16 * Number.EPSILON));
 }
+
+/** Read-only development trial, never a persisted setting or runtime regime.
+ * The Worker and application never pass this parameter. */
+export type FoundationTrial = 'coherent-spin' | 'anatomical-muscles' | 'combined';
+
+/** An anisotropic FACE traction model with the same calibrated translational
+ * resistance as passive-v3. Axial face traction is 1/40 of transverse face
+ * traction. Integrating local rotational speed over those SAME faces makes the
+ * angular term mu*(w^3 + axialFraction*h^3)/6. The axial ratio is empirical,
+ * NOT Sims's single-coefficient normal-only fluid law or a measured viscosity.
+ * This is an experimental physical consistency candidate, not a new default. */
+export const REFERENCE_AXIAL_FRACTION = 1 / 40;
+export function anisotropicFaceResistance(width: number, height: number, mu: number) {
+  return {
+    x: 2 * mu * REFERENCE_AXIAL_FRACTION * height,
+    y: 2 * mu * width,
+    angular: mu * (width ** 3 + REFERENCE_AXIAL_FRACTION * height ** 3) / 6,
+  };
+}
+
+/** Fixed reference pair: 14x7 px rectangles, 2x1 structural cells each,
+ * unit depth, base simulation density 0.40. This deliberately matches the
+ * existing passive-v3 max torque and PD stiffness on that PAIR ONLY, instead
+ * of calibrating separately for every starter. Joints across the same
+ * contact section have area proportional to shared width times unit depth;
+ * their torque capacity is proportional to area times characteristic lever.
+ * Doubling every length thus gives 4x torque, rather than inertia's 16x.
+ * Tissue stress is STILL a calibrated simulation value, not biological data. */
+export const MUSCLE_REFERENCE = Object.freeze({
+  widthPx: 14, heightPx: 7, baseDensity: 0.40,
+  cellsAcross: 2, cellsAlong: 1, sectionPx: 7, leverPx: 3.5,
+});
+export function anatomicalMuscleParameters(parent: PartDef, child: PartDef,
+  parentInertia: number, childInertia: number, force: number, stiffness: number, torqueMod: number) {
+  const acrossParent = child.attachmentPoint === 'EAST' || child.attachmentPoint === 'WEST'
+    ? parent.height : parent.width;
+  const acrossChild = child.attachmentPoint === 'EAST' || child.attachmentPoint === 'WEST'
+    ? child.height : child.width;
+  const sectionPx = Math.min(acrossParent, acrossChild);
+  const leverPx = (Math.min(parent.width, parent.height) + Math.min(child.width, child.height)) / 4;
+  const referenceMass = MUSCLE_REFERENCE.cellsAcross * MUSCLE_REFERENCE.cellsAlong * MUSCLE_REFERENCE.baseDensity;
+  const referenceInertia = referenceMass * (MUSCLE_REFERENCE.widthPx ** 2 + MUSCLE_REFERENCE.heightPx ** 2) / 12;
+  const scale = (sectionPx * leverPx) / (MUSCLE_REFERENCE.sectionPx * MUSCLE_REFERENCE.leverPx);
+  const kp = force * referenceInertia * 480 * scale * stiffness;
+  const averageInertia = (parentInertia + childInertia) / 2;
+  const kd = Math.sqrt(kp * averageInertia) * 1.4 * stiffness;
+  return {kp, kd, maxTorque: referenceInertia * 2200 * scale * torqueMod, sectionPx, leverPx};
+}

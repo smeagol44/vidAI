@@ -1,6 +1,6 @@
 import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
 import {partKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
-import {passiveConstraintScale, paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
+import {passiveConstraintScale, paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, anisotropicFaceResistance, anatomicalMuscleParameters, type FoundationTrial, type PhysicsRegime} from './foundationPhysics';
 import {markLineageChanged} from './lineageChanges';
 import {compiledBrain, compiledDeltas, alignPlasticRecords, invalidateCompiledBrain} from './neuralRuntime';
 import {resolveBodyContacts} from './contacts';
@@ -2971,12 +2971,14 @@ export function calculateJointMotorTarget(def: PartDef, phase: number, amplitude
   return clampVal((oscillation + angleCommand * directRange) * def.maxAngle, -def.maxAngle, def.maxAngle);
 }
 
-function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number, observe?: MechanicalObserver): number {
+function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number, observe?: MechanicalObserver, trial?: FoundationTrial): number {
   const g = org.genome, numJoints = org.joints.length;
   const corrected = usesPaidActuation(settings.physicsRegime);
   const surfaceModel = settings.physicsRegime === 'surface-work-v1';
   const passiveSolver = settings.physicsRegime === 'passive-work-v3';
   const simultaneousPaid = settings.physicsRegime === 'paid-work-v2' || passiveSolver;
+  const trialMuscles = passiveSolver && (trial === 'anatomical-muscles' || trial === 'combined');
+  const trialDrag = passiveSolver && (trial === 'coherent-spin' || trial === 'combined');
   const mu = settings.waterViscosity ?? .22, gravity = settings.gravity ?? 0;
   const {worldWidth, worldHeight} = settings;
   const partCount = org.segments.length;
@@ -3038,11 +3040,13 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     const avgInertia = (scratchInertias[parentIdx] + scratchInertias[childIdx]) * 0.5;
     const muscle = surfaceModel ? muscleParameters(g.parts[parentIdx], childDef,
       scratchInertias[parentIdx], scratchInertias[childIdx], g.motorForce, stiffnessDampingMod, peakTorqueMod) : null;
-    const kp = muscle?.kp ?? g.motorForce * avgInertia * 480.0 * stiffnessDampingMod;
-    const kd = muscle?.kd ?? Math.sqrt(kp * avgInertia) * 1.4 * stiffnessDampingMod;
+    const trialMuscle = trialMuscles ? anatomicalMuscleParameters(g.parts[parentIdx], childDef,
+      scratchInertias[parentIdx], scratchInertias[childIdx], g.motorForce, stiffnessDampingMod, peakTorqueMod) : null;
+    const kp = muscle?.kp ?? trialMuscle?.kp ?? g.motorForce * avgInertia * 480.0 * stiffnessDampingMod;
+    const kd = muscle?.kd ?? trialMuscle?.kd ?? Math.sqrt(kp * avgInertia) * 1.4 * stiffnessDampingMod;
 
     let motorTorque = kp * (targetAngle - currentRelAngle) - kd * relAngVel;
-    const maxTorque = muscle?.maxTorque ?? avgInertia * 2200.0 * peakTorqueMod;
+    const maxTorque = muscle?.maxTorque ?? trialMuscle?.maxTorque ?? avgInertia * 2200.0 * peakTorqueMod;
     motorTorque = clampVal(motorTorque, -maxTorque, maxTorque) * joint.engagement;
     if (corrected && !Number.isFinite(motorTorque)) throw new Error('Non-finite muscle torque');
     if (isNaN(motorTorque)) motorTorque = 0;
@@ -3085,12 +3089,14 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     const v = -seg.vx * sinA + seg.vy * cosA;
 
     const resistance = surfaceModel ? surfaceResistance(def.width, def.height, mu) : null;
-    const fLocalX = -(resistance?.x ?? LONGITUDINAL_DRAG * mu * def.height) * u; // Normal forces on the end faces; legacy retains its axial calibration.
-    const fLocalY = surfaceModel ? -resistance!.y * v : -2.0 * mu * def.width * v;  // Normal anisotropic fluid drag
+    const trialResistance = trialDrag ? anisotropicFaceResistance(def.width, def.height, mu) : null;
+    const fLocalX = -(resistance?.x ?? trialResistance?.x ?? LONGITUDINAL_DRAG * mu * def.height) * u; // Normal forces on the end faces; legacy retains its axial calibration.
+    const fLocalY = surfaceModel ? -resistance!.y * v : -(trialResistance?.y ?? 2.0 * mu * def.width) * v;  // Normal anisotropic fluid drag
 
     const fDragWorldX = fLocalX * cosA - fLocalY * sinA;
     const fDragWorldY = fLocalX * sinA + fLocalY * cosA;
     const fDragTorque = surfaceModel ? -resistance!.angular * seg.angVel
+      : trialDrag ? -trialResistance!.angular * seg.angVel
       : -(mu * seg.angVel * (def.width * def.width * def.width + def.height * def.height * def.height)) / 6.0;
 
     scratchFx[i] += fDragWorldX;
@@ -3477,6 +3483,7 @@ export function stepSimulation(
   dt: number,
   onEvent?: (type: 'birth' | 'death' | 'eat' | 'clash' | 'egg_loss') => void,
   observeMechanics?: MechanicalObserver,
+  foundationTrial?: FoundationTrial,
 ): void {
   const mu = settings.waterViscosity ?? 0.22;
   const worldWidth = settings.worldWidth;
@@ -3925,7 +3932,7 @@ export function stepSimulation(
   const work = new Map(active.map(org => [org, 0]));
   const substeps = Math.max(NUM_SUBSTEPS, Math.ceil(dt * 240));
   for (let sub = 0; sub < substeps; sub++) {
-    for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics));
+    for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics, foundationTrial));
     resolveBodyContacts(active, BASE_PART_DENSITY, projectBodyJoints, observeMechanics);
   }
   for (let index = active.length - 1; index >= 0; index--) {
