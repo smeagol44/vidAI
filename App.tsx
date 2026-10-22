@@ -592,6 +592,15 @@ export default function App() {
     } catch (error) {setSaveNotification(`Mouth update failed: ${String(error)}`);}
   };
 
+  const stabilizeJointSolver = async () => {
+    try {
+      const exact = restoreSnapshot(await authoritativeSnapshot());
+      const config = {...exact.settings, physicsRegime: NEW_PHYSICS_REGIME};
+      replaceWorld(exact.state, config); setPhysicsRegime(NEW_PHYSICS_REGIME);
+      setSaveNotification('Passive joint solver enabled. Your ecosystem has been kept.');
+    } catch (error) {setSaveNotification(`Solver update failed: ${String(error)}`);}
+  };
+
   const repairSwimmingInWorld = async () => {
     try {
       const exact = restoreSnapshot(await authoritativeSnapshot());
@@ -2021,7 +2030,8 @@ export default function App() {
               <p data-testid="physics-regime" className="text-[10px] text-slate-400">
                 Physics: {physicsRegime === 'legacy-v0' ? 'Legacy (saved world)'
                   : physicsRegime === 'surface-work-v1' ? 'Surface model (v0.34.0 saved world)'
-                  : 'Restored swimming / paid muscles'}.
+                  : physicsRegime === 'passive-work-v3' ? 'Restored swimming / passive joint solver'
+                  : 'Restored swimming / paid muscles (saved world)' }.
                 {' '}Reset starts a world with current physics.
               </p>
               {physicsRegime === 'surface-work-v1' && <div>
@@ -2031,6 +2041,10 @@ export default function App() {
                 </button>
                 <p className="text-[10px] text-slate-400">Keeps your creatures and ecosystem; applies repaired movement.</p>
               </div>}
+              {(physicsRegime === 'paid-work-v2' || physicsRegime === 'legacy-v0') && <button onClick={() => void stabilizeJointSolver()}
+                className="w-full rounded border border-cyan-400/50 px-2 py-1 text-xs text-cyan-200">
+                Stabilize joint solver in this world
+              </button>}
               <div data-testid="mouth-contact-model" className="text-[10px] text-slate-400">
                 Mouth contact: {mouthContactModel === 'capsule-v1' ? 'Full rounded aperture' : 'Legacy saved geometry'}.
                 {!mouthContactModel && <button onClick={() => void updateMouthContact()}

@@ -1,0 +1,2604 @@
+{
+  "protocol": "passive-joint-batch-v3",
+  "seed": 711,
+  "controls": [
+    {
+      "kind": "anchor",
+      "physicsRegime": "paid-work-v2",
+      "anchorPx": 0.00003235344729546341,
+      "limitRad": 0,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "speed-guards": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 240,
+          "addedJ": 0.0014817600000000004,
+          "removedJ": 0.0014817599963289337,
+          "netJ": 3.6710666885287075e-12
+        }
+      }
+    },
+    {
+      "kind": "anchor",
+      "physicsRegime": "passive-work-v3",
+      "anchorPx": 2.2737367544323206e-13,
+      "limitRad": 0,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "speed-guards": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 24,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "position-projection": {
+          "samples": 24,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "kind": "limit",
+      "physicsRegime": "paid-work-v2",
+      "anchorPx": 0.000006496503639737511,
+      "limitRad": 0.0009444732965738778,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "speed-guards": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 240,
+          "addedJ": 5.363099471926672e-7,
+          "removedJ": 0.0013521878470564904,
+          "netJ": -0.0013516515371092977
+        },
+        "angular-limit": {
+          "samples": 240,
+          "addedJ": 0.0054064359570626976,
+          "removedJ": 0.004054656058724379,
+          "netJ": 0.0013517798983383178
+        }
+      }
+    },
+    {
+      "kind": "limit",
+      "physicsRegime": "passive-work-v3",
+      "anchorPx": 1.9071666922882485e-13,
+      "limitRad": 5.773159728050814e-15,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "speed-guards": {
+          "samples": 48,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 24,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "position-projection": {
+          "samples": 24,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    }
+  ],
+  "swimming": [
+    {
+      "id": "CUR-001",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 190.4994092650809,
+      "reserveSpentJ": 131.04583774935054,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.04876597639139295,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.2737367544323206e-10,
+      "runtimeMs": 116,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 3600,
+          "addedJ": 0.3347882724373197,
+          "removedJ": 0.29543320885722585,
+          "netJ": 0.03935506358009328
+        },
+        "speed-guards": {
+          "samples": 3600,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 24000,
+          "addedJ": 0.0005515308608143655,
+          "removedJ": 0.03475840060541991,
+          "netJ": -0.03420686974460565
+        }
+      }
+    },
+    {
+      "id": "CUR-001",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 190.50394871487816,
+      "reserveSpentJ": 131.04596345603568,
+      "guards": 0,
+      "limitedBatches": 76,
+      "maxAnchorErrorPx": 0.048768568280070305,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 3.469446951953614e-18,
+      "chemicalErrorJ": 2.2373569663614035e-10,
+      "runtimeMs": 97,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 3600,
+          "addedJ": 0.334796653034074,
+          "removedJ": 0.29542742688735035,
+          "netJ": 0.03936922614672317
+        },
+        "speed-guards": {
+          "samples": 3600,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 2.168404344971009e-17,
+          "removedJ": 0.03422093068787213,
+          "netJ": -0.0342209306878721
+        }
+      }
+    },
+    {
+      "id": "CUR-001",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 165.7778508651285,
+      "reserveSpentJ": 130.9724821358359,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.0462975243706648,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.5283952709287405e-10,
+      "runtimeMs": 98,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 3600,
+          "addedJ": 0.33181336327950683,
+          "removedJ": 0.2935407925422699,
+          "netJ": 0.03827257073723716
+        },
+        "speed-guards": {
+          "samples": 3600,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 24000,
+          "addedJ": 0.0005434148777074372,
+          "removedJ": 0.03418554985768492,
+          "netJ": -0.03364213497997752
+        }
+      }
+    },
+    {
+      "id": "CUR-001",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 165.78362994673992,
+      "reserveSpentJ": 130.9726295190867,
+      "guards": 0,
+      "limitedBatches": 79,
+      "maxAnchorErrorPx": 0.04761111284536222,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 3.469446951953614e-18,
+      "chemicalErrorJ": 2.6557245291769505e-10,
+      "runtimeMs": 68,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 3600,
+          "addedJ": 0.33182408091977095,
+          "removedJ": 0.29353716884310294,
+          "netJ": 0.038286912076668865
+        },
+        "speed-guards": {
+          "samples": 3600,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 4.5102810375396984e-17,
+          "removedJ": 0.0336564598359755,
+          "netJ": -0.03365645983597547
+        }
+      }
+    },
+    {
+      "id": "CUR-001",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 220.43155178258462,
+      "reserveSpentJ": 131.14330550422528,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.05019216032581646,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.219167072325945e-10,
+      "runtimeMs": 65,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 3600,
+          "addedJ": 0.337682403287188,
+          "removedJ": 0.2968285692366367,
+          "netJ": 0.040853834050550444
+        },
+        "speed-guards": {
+          "samples": 3600,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 24000,
+          "addedJ": 0.0005559144371011738,
+          "removedJ": 0.03540024039296953,
+          "netJ": -0.03484432595586827
+        }
+      }
+    },
+    {
+      "id": "CUR-001",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 220.43423984311596,
+      "reserveSpentJ": 131.14338619908267,
+      "guards": 0,
+      "limitedBatches": 75,
+      "maxAnchorErrorPx": 0.05169388190928814,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 3.469446951953614e-18,
+      "chemicalErrorJ": 2.3646862246096134e-10,
+      "runtimeMs": 55,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 3600,
+          "addedJ": 0.33768711882015223,
+          "removedJ": 0.2968190750201066,
+          "netJ": 0.04086804380004558
+        },
+        "speed-guards": {
+          "samples": 3600,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 3.122502256758253e-17,
+          "removedJ": 0.03485832327006758,
+          "netJ": -0.034858323270067555
+        }
+      }
+    },
+    {
+      "id": "CUR-002",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 39.04960172765563,
+      "reserveSpentJ": 135.34090869694592,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.02455775690391817,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 1.8735590856522322e-10,
+      "runtimeMs": 77,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 0.254137141236966,
+          "removedJ": 0.21342165390437953,
+          "netJ": 0.04071548733258633
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 36000,
+          "addedJ": 0.0002126598760691234,
+          "removedJ": 0.034514599828881706,
+          "netJ": -0.034301939952812555
+        }
+      }
+    },
+    {
+      "id": "CUR-002",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 39.04960172765563,
+      "reserveSpentJ": 135.34090869694592,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.02455775690391817,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 1.8735590856522322e-10,
+      "runtimeMs": 23,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 0.254137141236966,
+          "removedJ": 0.21342165390437953,
+          "netJ": 0.04071548733258633
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.03430193995281265,
+          "netJ": -0.03430193995281265
+        }
+      }
+    },
+    {
+      "id": "CUR-002",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 33.49332023175998,
+      "reserveSpentJ": 135.3142649811416,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.02445655061212413,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 1.800799509510398e-10,
+      "runtimeMs": 32,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 0.2547684232266343,
+          "removedJ": 0.21416024268675984,
+          "netJ": 0.04060818053987439
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 36000,
+          "addedJ": 0.00021515857937183655,
+          "removedJ": 0.03450872852195282,
+          "netJ": -0.03429356994258094
+        }
+      }
+    },
+    {
+      "id": "CUR-002",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 33.49332023175998,
+      "reserveSpentJ": 135.3142649811416,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.02445655061212413,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 1.800799509510398e-10,
+      "runtimeMs": 30,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 0.2547684232266343,
+          "removedJ": 0.21416024268675984,
+          "netJ": 0.04060818053987439
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.03429356994258109,
+          "netJ": -0.03429356994258109
+        }
+      }
+    },
+    {
+      "id": "CUR-002",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 45.980520511797266,
+      "reserveSpentJ": 135.3770767464248,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.024683850962772067,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 1.4370016288012266e-10,
+      "runtimeMs": 36,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 0.25332863028444363,
+          "removedJ": 0.21245248320628699,
+          "netJ": 0.040876147078156684
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 36000,
+          "addedJ": 0.00020970303314299962,
+          "removedJ": 0.034549845175157204,
+          "netJ": -0.03434014214201433
+        }
+      }
+    },
+    {
+      "id": "CUR-002",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 45.980520511797266,
+      "reserveSpentJ": 135.3770767464248,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.024683850962772067,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 1.4370016288012266e-10,
+      "runtimeMs": 16,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 0.25332863028444363,
+          "removedJ": 0.21245248320628699,
+          "netJ": 0.040876147078156684
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.034340142142014154,
+          "netJ": -0.034340142142014154
+        }
+      }
+    },
+    {
+      "id": "CUR-003",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 40.96657961070125,
+      "reserveSpentJ": 160.40525807453014,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.10925386393704367,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.419255906715989e-10,
+      "runtimeMs": 37,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 2.483249906356807,
+          "removedJ": 1.7723263540721708,
+          "netJ": 0.7109235522846266
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 48000,
+          "addedJ": 0.007584434651198147,
+          "removedJ": 0.6983408636969234,
+          "netJ": -0.6907564290457272
+        }
+      }
+    },
+    {
+      "id": "CUR-003",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 40.96657961070125,
+      "reserveSpentJ": 160.40525807453014,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.10925386393704367,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.419255906715989e-10,
+      "runtimeMs": 33,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 2.483249906356807,
+          "removedJ": 1.7723263540721708,
+          "netJ": 0.7109235522846266
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.6907564290457245,
+          "netJ": -0.6907564290457245
+        }
+      }
+    },
+    {
+      "id": "CUR-003",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 35.99286717206819,
+      "reserveSpentJ": 160.60111100097856,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.11535271912362853,
+      "maxLimitExcessRad": 0.0005288169486785677,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.255546860396862e-10,
+      "runtimeMs": 42,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 2.5735569337033892,
+          "removedJ": 1.8234974884873316,
+          "netJ": 0.7500594452160618
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 48000,
+          "addedJ": 0.00807270901211789,
+          "removedJ": 0.7287252583003169,
+          "netJ": -0.7206525492882007
+        },
+        "angular-limit": {
+          "samples": 90,
+          "addedJ": 4.5328734518072095e-9,
+          "removedJ": 0.008854476248808186,
+          "netJ": -0.008854471715934734
+        }
+      }
+    },
+    {
+      "id": "CUR-003",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 35.99286717206819,
+      "reserveSpentJ": 160.60111100097856,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.11535271912362853,
+      "maxLimitExcessRad": 0.0005288169486785677,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.255546860396862e-10,
+      "runtimeMs": 31,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 2.5735569337033892,
+          "removedJ": 1.8234974884873316,
+          "netJ": 0.7500594452160618
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.7295070210041408,
+          "netJ": -0.7295070210041408
+        }
+      }
+    },
+    {
+      "id": "CUR-003",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 45.95803729092199,
+      "reserveSpentJ": 160.2065629129429,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.10545471537984993,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.346496330574155e-10,
+      "runtimeMs": 45,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 2.38300210615393,
+          "removedJ": 1.7019851044213763,
+          "netJ": 0.6810170017325646
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 48000,
+          "addedJ": 0.006919296564349913,
+          "removedJ": 0.6683276609057641,
+          "netJ": -0.6614083643414155
+        }
+      }
+    },
+    {
+      "id": "CUR-003",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 45.95803729092199,
+      "reserveSpentJ": 160.2065629129429,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.10545471537984993,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.346496330574155e-10,
+      "runtimeMs": 47,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 2.38300210615393,
+          "removedJ": 1.7019851044213763,
+          "netJ": 0.6810170017325646
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.6614083643414176,
+          "netJ": -0.6614083643414176
+        }
+      }
+    },
+    {
+      "id": "CUR-004",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 44.781469500070486,
+      "reserveSpentJ": 106.08954003944928,
+      "guards": 352,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.12574343119819106,
+      "maxLimitExcessRad": 0.015226590717902999,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 3.292370820418e-10,
+      "runtimeMs": 117,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 0.655139073282032,
+          "removedJ": 0.13036528754433646,
+          "netJ": 0.5247737857376958
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0.11881353863903914,
+          "netJ": -0.11881353863903914
+        },
+        "anchor-constraint": {
+          "samples": 48000,
+          "addedJ": 0.0012964181980436537,
+          "removedJ": 0.28146694306361963,
+          "netJ": -0.2801705248655768
+        },
+        "contact-impulse": {
+          "samples": 3951,
+          "addedJ": 0,
+          "removedJ": 0.055520389103416314,
+          "netJ": -0.055520389103416314
+        },
+        "position-projection": {
+          "samples": 2268,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "angular-limit": {
+          "samples": 4050,
+          "addedJ": 0.000029697311349538904,
+          "removedJ": 0.06650541939680658,
+          "netJ": -0.06647572208545702
+        }
+      }
+    },
+    {
+      "id": "CUR-004",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 44.838572767615496,
+      "reserveSpentJ": 106.09148849754274,
+      "guards": 352,
+      "limitedBatches": 12,
+      "maxAnchorErrorPx": 0.12574359194855178,
+      "maxLimitExcessRad": 0.015224080646061067,
+      "maxConstraintGainJ": 4.336808689942018e-19,
+      "chemicalErrorJ": 2.8558133635669947e-10,
+      "runtimeMs": 107,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 0.6555086241105453,
+          "removedJ": 0.13026765748999794,
+          "netJ": 0.5252409666205471
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0.11881353261131403,
+          "netJ": -0.11881353261131403
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 8.673617379884035e-19,
+          "removedJ": 0.3469138994646627,
+          "netJ": -0.3469138994646627
+        },
+        "contact-impulse": {
+          "samples": 3959,
+          "addedJ": 0,
+          "removedJ": 0.05571956818558448,
+          "netJ": -0.05571956818558448
+        },
+        "position-projection": {
+          "samples": 2277,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-004",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 22.26984276424868,
+      "reserveSpentJ": 106.07807193957342,
+      "guards": 352,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.12542356236206828,
+      "maxLimitExcessRad": 0.02541418659724126,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 3.128661774098873e-10,
+      "runtimeMs": 125,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 0.582736280665854,
+          "removedJ": 0.17209723241937,
+          "netJ": 0.41063904824648084
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0.04687150580828959,
+          "netJ": -0.04687150580828959
+        },
+        "anchor-constraint": {
+          "samples": 48000,
+          "addedJ": 0.0010969965350935214,
+          "removedJ": 0.26532238205561637,
+          "netJ": -0.26422538552052194
+        },
+        "contact-impulse": {
+          "samples": 6147,
+          "addedJ": 0,
+          "removedJ": 0.0551765619821053,
+          "netJ": -0.0551765619821053
+        },
+        "position-projection": {
+          "samples": 4158,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "angular-limit": {
+          "samples": 3120,
+          "addedJ": 0.000024506282588155925,
+          "removedJ": 0.037622738948636686,
+          "netJ": -0.03759823266604853
+        }
+      }
+    },
+    {
+      "id": "CUR-004",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 22.27079592019627,
+      "reserveSpentJ": 106.07806072381936,
+      "guards": 352,
+      "limitedBatches": 2,
+      "maxAnchorErrorPx": 0.12542356236206828,
+      "maxLimitExcessRad": 0.02541418659724126,
+      "maxConstraintGainJ": 4.336808689942018e-19,
+      "chemicalErrorJ": 2.9831426218152046e-10,
+      "runtimeMs": 138,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 0.58272032638079,
+          "removedJ": 0.17208805809182348,
+          "netJ": 0.4106322682889656
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0.04687214019455311,
+          "netJ": -0.04687214019455311
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 4.336808689942018e-19,
+          "removedJ": 0.30183677779631135,
+          "netJ": -0.30183677779631135
+        },
+        "contact-impulse": {
+          "samples": 6147,
+          "addedJ": 0,
+          "removedJ": 0.05515598626787261,
+          "netJ": -0.05515598626787261
+        },
+        "position-projection": {
+          "samples": 4158,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-004",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 31.145798950534925,
+      "reserveSpentJ": 105.78254517659661,
+      "guards": 292,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.08135378438797661,
+      "maxLimitExcessRad": 0.004140770924484949,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.9103830456733704e-10,
+      "runtimeMs": 150,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 0.4800195084133758,
+          "removedJ": 0.13997884470474442,
+          "netJ": 0.3400406637086311
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0.0436706663926464,
+          "netJ": -0.0436706663926464
+        },
+        "anchor-constraint": {
+          "samples": 48000,
+          "addedJ": 0.0009281100462133569,
+          "removedJ": 0.2134182193239382,
+          "netJ": -0.2124901092777248
+        },
+        "contact-impulse": {
+          "samples": 6479,
+          "addedJ": 0,
+          "removedJ": 0.06344840592680927,
+          "netJ": -0.06344840592680927
+        },
+        "position-projection": {
+          "samples": 4041,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "angular-limit": {
+          "samples": 1300,
+          "addedJ": 3.340835480145901e-7,
+          "removedJ": 0.014444113786385951,
+          "netJ": -0.014443779702837937
+        }
+      }
+    },
+    {
+      "id": "CUR-004",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 31.145798950534925,
+      "reserveSpentJ": 105.78254517659661,
+      "guards": 292,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.08135378438797661,
+      "maxLimitExcessRad": 0.004140770924484949,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.9103830456733704e-10,
+      "runtimeMs": 176,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 6000,
+          "addedJ": 0.4800195084133758,
+          "removedJ": 0.13997884470474442,
+          "netJ": 0.3400406637086311
+        },
+        "speed-guards": {
+          "samples": 6000,
+          "addedJ": 0,
+          "removedJ": 0.0436706663926464,
+          "netJ": -0.0436706663926464
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.2269338889805635,
+          "netJ": -0.2269338889805635
+        },
+        "contact-impulse": {
+          "samples": 6479,
+          "addedJ": 0,
+          "removedJ": 0.06344840592680927,
+          "netJ": -0.06344840592680927
+        },
+        "position-projection": {
+          "samples": 4041,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-005",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 81.09567467543901,
+      "reserveSpentJ": 196.56934825387907,
+      "guards": 116,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.10887074416959854,
+      "maxLimitExcessRad": 0.0144775599630107,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.801243681460619e-10,
+      "runtimeMs": 113,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 4.540141270184306,
+          "removedJ": 1.558663568319115,
+          "netJ": 2.9814777018651704
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0.0881062714114354,
+          "netJ": -0.0881062714114354
+        },
+        "anchor-constraint": {
+          "samples": 60000,
+          "addedJ": 0.012470390899789177,
+          "removedJ": 2.2696358911324523,
+          "netJ": -2.257165500232654
+        },
+        "angular-limit": {
+          "samples": 9460,
+          "addedJ": 0.000036951671395793256,
+          "removedJ": 0.6220581545827537,
+          "netJ": -0.6220212029113581
+        }
+      }
+    },
+    {
+      "id": "CUR-005",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 81.09567467543901,
+      "reserveSpentJ": 196.56934825387907,
+      "guards": 116,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.10887074416959854,
+      "maxLimitExcessRad": 0.0144775599630107,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.801243681460619e-10,
+      "runtimeMs": 98,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 4.540141270184306,
+          "removedJ": 1.558663568319115,
+          "netJ": 2.9814777018651704
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0.0881062714114354,
+          "netJ": -0.0881062714114354
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 2.8791867031440104,
+          "netJ": -2.8791867031440104
+        }
+      }
+    },
+    {
+      "id": "CUR-005",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 78.048518035964,
+      "reserveSpentJ": 196.76390017546328,
+      "guards": 119,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.09550127109641551,
+      "maxLimitExcessRad": 0.011562602020663504,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 3.128661774098873e-10,
+      "runtimeMs": 68,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 4.627846090005865,
+          "removedJ": 1.5810647849664043,
+          "netJ": 3.046781305039452
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0.0998101962895654,
+          "netJ": -0.0998101962895654
+        },
+        "anchor-constraint": {
+          "samples": 60000,
+          "addedJ": 0.012859459127821627,
+          "removedJ": 2.3137806074060103,
+          "netJ": -2.3009211482781793
+        },
+        "angular-limit": {
+          "samples": 9720,
+          "addedJ": 0.00004467392385962916,
+          "removedJ": 0.6315891184700616,
+          "netJ": -0.6315444445462018
+        }
+      }
+    },
+    {
+      "id": "CUR-005",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 78.048518035964,
+      "reserveSpentJ": 196.76390017546328,
+      "guards": 119,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.09550127109641551,
+      "maxLimitExcessRad": 0.011562602020663504,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 3.128661774098873e-10,
+      "runtimeMs": 68,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 4.627846090005865,
+          "removedJ": 1.5810647849664043,
+          "netJ": 3.046781305039452
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0.0998101962895654,
+          "netJ": -0.0998101962895654
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 2.9324655928243937,
+          "netJ": -2.9324655928243937
+        }
+      }
+    },
+    {
+      "id": "CUR-005",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 83.75336556969619,
+      "reserveSpentJ": 195.69604367002103,
+      "guards": 93,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.11985431053121733,
+      "maxLimitExcessRad": 0.008878793636622362,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.6193447411060333e-10,
+      "runtimeMs": 74,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 4.259170531400236,
+          "removedJ": 1.513025872626414,
+          "netJ": 2.746144658773828
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0.06823669227230608,
+          "netJ": -0.06823669227230608
+        },
+        "anchor-constraint": {
+          "samples": 60000,
+          "addedJ": 0.011503010527985478,
+          "removedJ": 2.1038292259599474,
+          "netJ": -2.092326215431956
+        },
+        "angular-limit": {
+          "samples": 8870,
+          "addedJ": 0.000029001996784196377,
+          "removedJ": 0.5719193333330229,
+          "netJ": -0.571890331336239
+        }
+      }
+    },
+    {
+      "id": "CUR-005",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 83.75336556969619,
+      "reserveSpentJ": 195.69604367002103,
+      "guards": 93,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.11985431053121733,
+      "maxLimitExcessRad": 0.008878793636622362,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.6193447411060333e-10,
+      "runtimeMs": 30,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 4.259170531400236,
+          "removedJ": 1.513025872626414,
+          "netJ": 2.746144658773828
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0.06823669227230608,
+          "netJ": -0.06823669227230608
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 2.664216546768204,
+          "netJ": -2.664216546768204
+        }
+      }
+    },
+    {
+      "id": "CUR-006",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 20.711421809546138,
+      "reserveSpentJ": 225.23471314743801,
+      "guards": 1106,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.09753110952341783,
+      "maxLimitExcessRad": 0.0007856816797799926,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 3.710738383233547e-10,
+      "runtimeMs": 110,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 8400,
+          "addedJ": 5.24821564263114,
+          "removedJ": 1.1373896343020677,
+          "netJ": 4.11082600832906
+        },
+        "speed-guards": {
+          "samples": 8400,
+          "addedJ": 0,
+          "removedJ": 2.484836695266852,
+          "netJ": -2.484836695266852
+        },
+        "anchor-constraint": {
+          "samples": 72000,
+          "addedJ": 0.0031621549787317635,
+          "removedJ": 1.2854021702785927,
+          "netJ": -1.2822400152998656
+        },
+        "contact-impulse": {
+          "samples": 4389,
+          "addedJ": 0,
+          "removedJ": 0.1641856231400361,
+          "netJ": -0.1641856231400361
+        },
+        "position-projection": {
+          "samples": 4792,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "angular-limit": {
+          "samples": 7880,
+          "addedJ": 4.672851419565763e-8,
+          "removedJ": 0.1405380834948726,
+          "netJ": -0.14053803676635843
+        }
+      }
+    },
+    {
+      "id": "CUR-006",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 20.711421809546138,
+      "reserveSpentJ": 225.23471314743801,
+      "guards": 1106,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.09753110952341783,
+      "maxLimitExcessRad": 0.0007856816797799926,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 3.710738383233547e-10,
+      "runtimeMs": 107,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 8400,
+          "addedJ": 5.24821564263114,
+          "removedJ": 1.1373896343020677,
+          "netJ": 4.11082600832906
+        },
+        "speed-guards": {
+          "samples": 8400,
+          "addedJ": 0,
+          "removedJ": 2.484836695266852,
+          "netJ": -2.484836695266852
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 1.4227780520662205,
+          "netJ": -1.4227780520662205
+        },
+        "contact-impulse": {
+          "samples": 4389,
+          "addedJ": 0,
+          "removedJ": 0.1641856231400361,
+          "netJ": -0.1641856231400361
+        },
+        "position-projection": {
+          "samples": 4792,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-006",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 21.008409834455893,
+      "reserveSpentJ": 225.04367169970465,
+      "guards": 1077,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.09757984463949129,
+      "maxLimitExcessRad": 0.0007978171791179767,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 3.4924596548080444e-10,
+      "runtimeMs": 140,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 8400,
+          "addedJ": 5.244129040871653,
+          "removedJ": 1.1646701279787608,
+          "netJ": 4.079458912892889
+        },
+        "speed-guards": {
+          "samples": 8400,
+          "addedJ": 0,
+          "removedJ": 2.4536862193021265,
+          "netJ": -2.4536862193021265
+        },
+        "anchor-constraint": {
+          "samples": 72000,
+          "addedJ": 0.0032903966110556736,
+          "removedJ": 1.285654403381697,
+          "netJ": -1.2823640067706423
+        },
+        "contact-impulse": {
+          "samples": 4434,
+          "addedJ": 8.673617379884035e-19,
+          "removedJ": 0.16896730069243554,
+          "netJ": -0.16896730069243554
+        },
+        "position-projection": {
+          "samples": 4826,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "angular-limit": {
+          "samples": 7270,
+          "addedJ": 8.048339577573175e-8,
+          "removedJ": 0.13455713179708584,
+          "netJ": -0.1345570513136901
+        }
+      }
+    },
+    {
+      "id": "CUR-006",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 21.008409834455893,
+      "reserveSpentJ": 225.04367169970465,
+      "guards": 1077,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.09757984463949129,
+      "maxLimitExcessRad": 0.0007978171791179767,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 3.4924596548080444e-10,
+      "runtimeMs": 109,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 8400,
+          "addedJ": 5.244129040871653,
+          "removedJ": 1.1646701279787608,
+          "netJ": 4.079458912892889
+        },
+        "speed-guards": {
+          "samples": 8400,
+          "addedJ": 0,
+          "removedJ": 2.4536862193021265,
+          "netJ": -2.4536862193021265
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 1.4169210580843428,
+          "netJ": -1.4169210580843428
+        },
+        "contact-impulse": {
+          "samples": 4434,
+          "addedJ": 8.673617379884035e-19,
+          "removedJ": 0.16896730069243554,
+          "netJ": -0.16896730069243554
+        },
+        "position-projection": {
+          "samples": 4826,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-006",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 14.878137168828552,
+      "reserveSpentJ": 226.8515419260275,
+      "guards": 1119,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.09492837582478741,
+      "maxLimitExcessRad": 0.0006994670714329798,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 3.4560798667371273e-10,
+      "runtimeMs": 211,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 8400,
+          "addedJ": 5.560464504689196,
+          "removedJ": 1.1004221289848406,
+          "netJ": 4.460042375704375
+        },
+        "speed-guards": {
+          "samples": 8400,
+          "addedJ": 0,
+          "removedJ": 2.775301696172897,
+          "netJ": -2.775301696172897
+        },
+        "anchor-constraint": {
+          "samples": 72000,
+          "addedJ": 0.0031074043630076316,
+          "removedJ": 1.3278074223350305,
+          "netJ": -1.324700017972023
+        },
+        "contact-impulse": {
+          "samples": 4247,
+          "addedJ": 0,
+          "removedJ": 0.1595147376088695,
+          "netJ": -0.1595147376088695
+        },
+        "position-projection": {
+          "samples": 4635,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "angular-limit": {
+          "samples": 8190,
+          "addedJ": 2.3980341000689326e-8,
+          "removedJ": 0.15456868666304413,
+          "netJ": -0.15456866268270303
+        }
+      }
+    },
+    {
+      "id": "CUR-006",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 14.878137168828552,
+      "reserveSpentJ": 226.8515419260275,
+      "guards": 1119,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.09492837582478741,
+      "maxLimitExcessRad": 0.0006994670714329798,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 3.4560798667371273e-10,
+      "runtimeMs": 165,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 8400,
+          "addedJ": 5.560464504689196,
+          "removedJ": 1.1004221289848406,
+          "netJ": 4.460042375704375
+        },
+        "speed-guards": {
+          "samples": 8400,
+          "addedJ": 0,
+          "removedJ": 2.775301696172897,
+          "netJ": -2.775301696172897
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 1.4792686806547424,
+          "netJ": -1.4792686806547424
+        },
+        "contact-impulse": {
+          "samples": 4247,
+          "addedJ": 0,
+          "removedJ": 0.1595147376088695,
+          "netJ": -0.1595147376088695
+        },
+        "position-projection": {
+          "samples": 4635,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-007",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 29.49322828280543,
+      "reserveSpentJ": 169.50123218756926,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.08193956531759639,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 5.238689482212067e-10,
+      "runtimeMs": 90,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 1.0589992550433591,
+          "removedJ": 0.6082110699247436,
+          "netJ": 0.4507881851186153
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 60000,
+          "addedJ": 0.002215534693716543,
+          "removedJ": 0.3536762936315788,
+          "netJ": -0.351460758937863
+        },
+        "contact-impulse": {
+          "samples": 881,
+          "addedJ": 2.168404344971009e-19,
+          "removedJ": 0.07885350577304769,
+          "netJ": -0.07885350577304769
+        },
+        "position-projection": {
+          "samples": 992,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-007",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 29.49322828280543,
+      "reserveSpentJ": 169.50123218756926,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.08193956531759639,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 5.238689482212067e-10,
+      "runtimeMs": 74,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 1.0589992550433591,
+          "removedJ": 0.6082110699247436,
+          "netJ": 0.4507881851186153
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.3514607589378631,
+          "netJ": -0.3514607589378631
+        },
+        "contact-impulse": {
+          "samples": 881,
+          "addedJ": 2.168404344971009e-19,
+          "removedJ": 0.07885350577304769,
+          "netJ": -0.07885350577304769
+        },
+        "position-projection": {
+          "samples": 992,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-007",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 26.563395900192937,
+      "reserveSpentJ": 169.54852280658088,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.08431739113898555,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 4.94765117764473e-10,
+      "runtimeMs": 114,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 1.086546861216696,
+          "removedJ": 0.6162260375532399,
+          "netJ": 0.47032082366345274
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 60000,
+          "addedJ": 0.0023550762577832294,
+          "removedJ": 0.36409997884579626,
+          "netJ": -0.3617449025880153
+        },
+        "contact-impulse": {
+          "samples": 872,
+          "addedJ": 0,
+          "removedJ": 0.08760443946873056,
+          "netJ": -0.08760443946873056
+        },
+        "position-projection": {
+          "samples": 981,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-007",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 26.563395900192937,
+      "reserveSpentJ": 169.54852280658088,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.08431739113898555,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 4.94765117764473e-10,
+      "runtimeMs": 89,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 1.086546861216696,
+          "removedJ": 0.6162260375532399,
+          "netJ": 0.47032082366345274
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.36174490258801245,
+          "netJ": -0.36174490258801245
+        },
+        "contact-impulse": {
+          "samples": 872,
+          "addedJ": 0,
+          "removedJ": 0.08760443946873056,
+          "netJ": -0.08760443946873056
+        },
+        "position-projection": {
+          "samples": 981,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-007",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 33.68534706464646,
+      "reserveSpentJ": 169.44046873461957,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.08140698074487548,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 5.275069270282984e-10,
+      "runtimeMs": 87,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 1.0240649296256141,
+          "removedJ": 0.6012207462622817,
+          "netJ": 0.4228441833633338
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 60000,
+          "addedJ": 0.0021065440577497496,
+          "removedJ": 0.3409956460249121,
+          "netJ": -0.338889101967163
+        },
+        "contact-impulse": {
+          "samples": 824,
+          "addedJ": 0,
+          "removedJ": 0.06405574112959785,
+          "netJ": -0.06405574112959785
+        },
+        "position-projection": {
+          "samples": 927,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-007",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 33.68534706464646,
+      "reserveSpentJ": 169.44046873461957,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.08140698074487548,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 5.275069270282984e-10,
+      "runtimeMs": 59,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 1.0240649296256141,
+          "removedJ": 0.6012207462622817,
+          "netJ": 0.4228441833633338
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.33888910196716376,
+          "netJ": -0.33888910196716376
+        },
+        "contact-impulse": {
+          "samples": 824,
+          "addedJ": 0,
+          "removedJ": 0.06405574112959785,
+          "netJ": -0.06405574112959785
+        },
+        "position-projection": {
+          "samples": 927,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-008",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 88.99453540708751,
+      "reserveSpentJ": 163.91960821036446,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.06569159979238336,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 4.2928149923682213e-10,
+      "runtimeMs": 70,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 0.8908710325079393,
+          "removedJ": 0.4750862536902706,
+          "netJ": 0.4157847788176686
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 60000,
+          "addedJ": 0.0017846634195579723,
+          "removedJ": 0.22417688381308934,
+          "netJ": -0.22239222039353182
+        },
+        "contact-impulse": {
+          "samples": 4681,
+          "addedJ": 0,
+          "removedJ": 0.18780805117909813,
+          "netJ": -0.18780805117909813
+        },
+        "position-projection": {
+          "samples": 2864,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-008",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 88.99453540708751,
+      "reserveSpentJ": 163.91960821036446,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.06569159979238336,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 4.2928149923682213e-10,
+      "runtimeMs": 59,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 0.8908710325079393,
+          "removedJ": 0.4750862536902706,
+          "netJ": 0.4157847788176686
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.22239222039353063,
+          "netJ": -0.22239222039353063
+        },
+        "contact-impulse": {
+          "samples": 4681,
+          "addedJ": 0,
+          "removedJ": 0.18780805117909813,
+          "netJ": -0.18780805117909813
+        },
+        "position-projection": {
+          "samples": 2864,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-008",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 80.35657158556621,
+      "reserveSpentJ": 163.91661057503916,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.06586839098660784,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 4.256435204297304e-10,
+      "runtimeMs": 65,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 0.9025949826567138,
+          "removedJ": 0.4814695834065055,
+          "netJ": 0.4211253992502094
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 60000,
+          "addedJ": 0.001821982426173338,
+          "removedJ": 0.22833035367075466,
+          "netJ": -0.226508371244581
+        },
+        "contact-impulse": {
+          "samples": 4681,
+          "addedJ": 0,
+          "removedJ": 0.18906703747352877,
+          "netJ": -0.18906703747352877
+        },
+        "position-projection": {
+          "samples": 2862,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-008",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 80.35657158556621,
+      "reserveSpentJ": 163.91661057503916,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.06586839098660784,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 4.256435204297304e-10,
+      "runtimeMs": 34,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 0.9025949826567138,
+          "removedJ": 0.4814695834065055,
+          "netJ": 0.4211253992502094
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.22650837124458037,
+          "netJ": -0.22650837124458037
+        },
+        "contact-impulse": {
+          "samples": 4681,
+          "addedJ": 0,
+          "removedJ": 0.18906703747352877,
+          "netJ": -0.18906703747352877
+        },
+        "position-projection": {
+          "samples": 2862,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-008",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 98.02783207707844,
+      "reserveSpentJ": 163.92436167894266,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.06522546006863819,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 4.3655745685100555e-10,
+      "runtimeMs": 50,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 0.8746493959753636,
+          "removedJ": 0.4658300267785927,
+          "netJ": 0.40881936919677325
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 60000,
+          "addedJ": 0.001739337867577419,
+          "removedJ": 0.21869449365186344,
+          "netJ": -0.2169551557842857
+        },
+        "contact-impulse": {
+          "samples": 4669,
+          "addedJ": 0,
+          "removedJ": 0.18629102771679196,
+          "netJ": -0.18629102771679196
+        },
+        "position-projection": {
+          "samples": 2846,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-008",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 98.02783207707844,
+      "reserveSpentJ": 163.92436167894266,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.06522546006863819,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 4.3655745685100555e-10,
+      "runtimeMs": 39,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 7200,
+          "addedJ": 0.8746493959753636,
+          "removedJ": 0.4658300267785927,
+          "netJ": 0.40881936919677325
+        },
+        "speed-guards": {
+          "samples": 7200,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.21695515578428548,
+          "netJ": -0.21695515578428548
+        },
+        "contact-impulse": {
+          "samples": 4669,
+          "addedJ": 0,
+          "removedJ": 0.18629102771679196,
+          "netJ": -0.18629102771679196
+        },
+        "position-projection": {
+          "samples": 2846,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        }
+      }
+    },
+    {
+      "id": "CUR-009",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 64.69857340259024,
+      "reserveSpentJ": 157.11908380719797,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.07449346405932399,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.7830537874251604e-10,
+      "runtimeMs": 22,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 1.0570728386196682,
+          "removedJ": 0.8165672711925679,
+          "netJ": 0.24050556742709833
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 36000,
+          "addedJ": 0.007109903461541664,
+          "removedJ": 0.23161163679737415,
+          "netJ": -0.22450173333583198
+        }
+      }
+    },
+    {
+      "id": "CUR-009",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.37,
+      "viscosity": 0.18,
+      "displacementPx": 64.69857340259024,
+      "reserveSpentJ": 157.11908380719797,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.07449346405932399,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.7830537874251604e-10,
+      "runtimeMs": 23,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 1.0570728386196682,
+          "removedJ": 0.8165672711925679,
+          "netJ": 0.24050556742709833
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.22450173333583376,
+          "netJ": -0.22450173333583376
+        }
+      }
+    },
+    {
+      "id": "CUR-009",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 63.89245562232487,
+      "reserveSpentJ": 157.13535246877473,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.07666669682942104,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.5283952709287405e-10,
+      "runtimeMs": 41,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 1.0693143624528005,
+          "removedJ": 0.8252612283839195,
+          "netJ": 0.24405313406888302
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 36000,
+          "addedJ": 0.007227461101816968,
+          "removedJ": 0.23477419259107832,
+          "netJ": -0.22754673148926077
+        }
+      }
+    },
+    {
+      "id": "CUR-009",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": 0.8,
+      "viscosity": 0.15,
+      "displacementPx": 63.89245562232487,
+      "reserveSpentJ": 157.13535246877473,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.07666669682942104,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.5283952709287405e-10,
+      "runtimeMs": 48,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 1.0693143624528005,
+          "removedJ": 0.8252612283839195,
+          "netJ": 0.24405313406888302
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.22754673148925925,
+          "netJ": -0.22754673148925925
+        }
+      }
+    },
+    {
+      "id": "CUR-009",
+      "physicsRegime": "paid-work-v2",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 64.90043222741045,
+      "reserveSpentJ": 157.091857618836,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.07169691859385562,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.710294211283326e-10,
+      "runtimeMs": 39,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 1.0395145087747453,
+          "removedJ": 0.8042207406240145,
+          "netJ": 0.2352937681507304
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "anchor-constraint": {
+          "samples": 36000,
+          "addedJ": 0.006928188411491648,
+          "removedJ": 0.2268734567666685,
+          "netJ": -0.2199452683551769
+        }
+      }
+    },
+    {
+      "id": "CUR-009",
+      "physicsRegime": "passive-work-v3",
+      "seconds": 5,
+      "heading": -1,
+      "viscosity": 0.22,
+      "displacementPx": 64.90043222741045,
+      "reserveSpentJ": 157.091857618836,
+      "guards": 0,
+      "limitedBatches": 0,
+      "maxAnchorErrorPx": 0.07169691859385562,
+      "maxLimitExcessRad": 0,
+      "maxConstraintGainJ": 0,
+      "chemicalErrorJ": 2.710294211283326e-10,
+      "runtimeMs": 50,
+      "phases": {
+        "forces-and-motors": {
+          "samples": 4800,
+          "addedJ": 1.0395145087747453,
+          "removedJ": 0.8042207406240145,
+          "netJ": 0.2352937681507304
+        },
+        "speed-guards": {
+          "samples": 4800,
+          "addedJ": 0,
+          "removedJ": 0,
+          "netJ": 0
+        },
+        "constraint-batch": {
+          "samples": 1200,
+          "addedJ": 0,
+          "removedJ": 0.21994526835517686,
+          "netJ": -0.21994526835517686
+        }
+      }
+    }
+  ],
+  "ecology": [
+    {
+      "seed": 17,
+      "physicsRegime": "paid-work-v2",
+      "seconds": 60,
+      "simTime": 60,
+      "livingCount": 9,
+      "eggCount": 0,
+      "maxGeneration": 1,
+      "avgGeneration": 1,
+      "totalBirths": 9,
+      "totalDeaths": 0,
+      "fastestSpeed": 33.1,
+      "nutrientCount": 271,
+      "carrionCount": 0,
+      "targetNutrients": 275,
+      "totalStoredBiomass": 57000,
+      "totalStoredReserves": 124522,
+      "totalEggEnergy": 0,
+      "totalFoodEnergy": 790410,
+      "totalExternalInflow": 972000,
+      "totalMetabolicHeat": 29336,
+      "totalMechanicalHeat": 732,
+      "totalRecordedLosses": 0,
+      "herbivoreCount": 4,
+      "carnivoreCount": 2,
+      "omnivoreCount": 3,
+      "absorbedJ": {
+        "Nutrient": 51672,
+        "Carrion": 0,
+        "Prey": 0,
+        "Egg": 0
+      },
+      "reserveJ": 68.19309743095215,
+      "maxErrorJ": 1.4901161193847656e-8,
+      "guards": 9167,
+      "limitedBatches": 0,
+      "runtimeMs": 5141
+    },
+    {
+      "seed": 17,
+      "physicsRegime": "passive-work-v3",
+      "seconds": 60,
+      "simTime": 60,
+      "livingCount": 10,
+      "eggCount": 0,
+      "maxGeneration": 2,
+      "avgGeneration": 1.1,
+      "totalBirths": 10,
+      "totalDeaths": 0,
+      "fastestSpeed": 59.2,
+      "nutrientCount": 268,
+      "carrionCount": 0,
+      "targetNutrients": 275,
+      "totalStoredBiomass": 61980,
+      "totalStoredReserves": 126601,
+      "totalEggEnergy": 0,
+      "totalFoodEnergy": 781260,
+      "totalExternalInflow": 972000,
+      "totalMetabolicHeat": 31769,
+      "totalMechanicalHeat": 740,
+      "totalRecordedLosses": 0,
+      "herbivoreCount": 5,
+      "carnivoreCount": 2,
+      "omnivoreCount": 3,
+      "absorbedJ": {
+        "Nutrient": 58992,
+        "Carrion": 0,
+        "Prey": 0,
+        "Egg": 0
+      },
+      "reserveJ": 2158.9082430359654,
+      "maxErrorJ": 1.3387762010097504e-8,
+      "guards": 9635,
+      "limitedBatches": 859,
+      "runtimeMs": 4472
+    },
+    {
+      "seed": 73,
+      "physicsRegime": "paid-work-v2",
+      "seconds": 60,
+      "simTime": 60,
+      "livingCount": 11,
+      "eggCount": 0,
+      "maxGeneration": 2,
+      "avgGeneration": 1.2,
+      "totalBirths": 11,
+      "totalDeaths": 0,
+      "fastestSpeed": 50.3,
+      "nutrientCount": 267,
+      "carrionCount": 0,
+      "targetNutrients": 275,
+      "totalStoredBiomass": 67290,
+      "totalStoredReserves": 121496,
+      "totalEggEnergy": 0,
+      "totalFoodEnergy": 782100,
+      "totalExternalInflow": 972000,
+      "totalMetabolicHeat": 33993,
+      "totalMechanicalHeat": 821,
+      "totalRecordedLosses": 0,
+      "herbivoreCount": 6,
+      "carnivoreCount": 2,
+      "omnivoreCount": 3,
+      "absorbedJ": {
+        "Nutrient": 60720,
+        "Carrion": 0,
+        "Prey": 4200,
+        "Egg": 0
+      },
+      "reserveJ": 1113.5148086725599,
+      "maxErrorJ": 1.3387762010097504e-8,
+      "guards": 12351,
+      "limitedBatches": 0,
+      "runtimeMs": 6506
+    },
+    {
+      "seed": 73,
+      "physicsRegime": "passive-work-v3",
+      "seconds": 60,
+      "simTime": 60,
+      "livingCount": 12,
+      "eggCount": 0,
+      "maxGeneration": 3,
+      "avgGeneration": 1.3,
+      "totalBirths": 12,
+      "totalDeaths": 0,
+      "fastestSpeed": 61.9,
+      "nutrientCount": 268,
+      "carrionCount": 0,
+      "targetNutrients": 275,
+      "totalStoredBiomass": 71450,
+      "totalStoredReserves": 156051,
+      "totalEggEnergy": 0,
+      "totalFoodEnergy": 741660,
+      "totalExternalInflow": 972000,
+      "totalMetabolicHeat": 42156,
+      "totalMechanicalHeat": 733,
+      "totalRecordedLosses": 0,
+      "herbivoreCount": 7,
+      "carnivoreCount": 2,
+      "omnivoreCount": 3,
+      "absorbedJ": {
+        "Nutrient": 97872,
+        "Carrion": 0,
+        "Prey": 0,
+        "Egg": 0
+      },
+      "reserveJ": 2839.194179606171,
+      "maxErrorJ": 1.2922100722789764e-8,
+      "guards": 9576,
+      "limitedBatches": 827,
+      "runtimeMs": 4709
+    }
+  ],
+  "rejectedPrototypes": [
+    {
+      "method": "Zero velocity bias, unilateral limit response and unconditional pose projection",
+      "lanternPx": 20.757173984062494,
+      "broadwakePx": 27.31097465923608,
+      "reason": "Lantern -54%, Broadwake +32%; blocked."
+    },
+    {
+      "method": "Limit every individual constraint impulse and project pose on a limited impulse",
+      "lanternPx": 20.33005483747289,
+      "broadwakePx": 29.26830182175761,
+      "reason": "Lantern -55%, Broadwake +41%; blocked."
+    },
+    {
+      "method": "Passive complete batch, but project after every partial limitation",
+      "lanternPx": 43.109146055046295,
+      "lanternGuards": 355,
+      "reason": "Three additional guard events; rejected."
+    }
+  ],
+  "notes": [
+    "The accepted full joint solve is passive; provisional internal iterations are not separately physical steps.",
+    "Retain the historical batch exactly if dissipative. Otherwise scale its aggregate velocity increment using its quadratic work.",
+    "When no non-energizing velocity correction is available (within floating-point zero), repair pose without changing velocity before advancement.",
+    "Drag, muscles, paid motor work, genes and diet are unchanged. Historical regimes keep exact equations and saves.",
+    "This bounds joint-batch kinetic gain, not wall/fluid potential, all contact fidelity, angular momentum error or speed-clamp dependence.",
+    "Short paired ecology and headless timing are observations, not proof of sustainable populations or browser FPS."
+  ]
+}

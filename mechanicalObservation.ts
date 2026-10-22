@@ -2,7 +2,7 @@ import type {Organism, PartDef, PartPhys} from './simulation';
 import {MECHANICAL_JOULES} from './foundationPhysics';
 
 export type MechanicalPhase = 'forces-and-motors' | 'sequential-motor' | 'speed-guards' |
-  'anchor-constraint' | 'angular-limit' | 'contact-impulse' | 'position-projection';
+  'constraint-batch' | 'anchor-constraint' | 'angular-limit' | 'contact-impulse' | 'position-projection';
 /** Opt-in observer only. Never persisted, sent to brains, or used by the solver. */
 export type MechanicalObserver = (phase: MechanicalPhase, beforeJ: number, afterJ: number) => void;
 

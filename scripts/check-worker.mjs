@@ -114,14 +114,14 @@ try {
   send({type: 'control', epoch: 4, id: -78, settings, speed: 1, selected: null, running: false});
   assert.match((await receive(value => value.id === -78)).message, /Ecology regime/);
   let mouthEpoch = 10;
-  for (const physicsRegime of ['legacy-v0', 'surface-work-v1', 'paid-work-v2']) for (const closed of [false, true]) {
+  for (const physicsRegime of ['legacy-v0', 'surface-work-v1', 'paid-work-v2', 'passive-work-v3']) for (const closed of [false, true]) {
     const probe = mouthContactFixture('capsule-v1'); probe.config.physicsRegime = physicsRegime;
     if (closed) {enableClosedEconomy(probe.state); probe.config.ecologyRegime = 'closed-v1'; probe.config.nutrientLimit = null;}
     const source = createSnapshot(probe.state, probe.config), epoch = mouthEpoch++;
     send({type: 'reset', epoch, snapshot: source});
     await receive(value => value.type === 'frame' && value.frame.epoch === epoch);
     const initial = await request('snapshot', {}, epoch);
-    assert.equal(initial.schemaVersion, '14.0.0'); assert.deepEqual(initial, source);
+    assert.equal(initial.schemaVersion, physicsRegime === 'passive-work-v3' ? '15.0.0' : '14.0.0'); assert.deepEqual(initial, source);
     const direct = restoreSnapshot(initial).state;
     send({type: 'ack', epoch});
     send({type: 'control', epoch, settings: probe.config, speed: 1, selected: null, running: true});
@@ -136,5 +136,5 @@ try {
     assert.match((await receive(value => value.id === -100 - epoch)).message, /Mouth contact model/);
     assert.deepEqual((await request('snapshot', {}, epoch)).state, after.state);
   }
-  console.log('Production Worker: open/closed exact exports, funded commands, independent stepping, debt, direct equivalence, all physics regimes, mouth contact in all six physics/ecology combinations, regime-switch and stale-world rejection passed.');
+  console.log('Production Worker: open/closed exact exports, funded commands, independent stepping, debt, direct equivalence, all physics regimes, mouth contact in all eight physics/ecology combinations, regime-switch and stale-world rejection passed.');
 } finally { await worker.terminate(); }

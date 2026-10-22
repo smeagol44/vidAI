@@ -52,15 +52,19 @@ motion, rather than a direct position command, closes the feedback loop.
 
 | Persisted regime | Behavior |
 | --- | --- |
-| `paid-work-v2` (new worlds) | Established drag, inertia-based muscle strengths and simultaneous motor updates, with prepaid work and reserve limits |
+| `passive-work-v3` (new worlds) | Established drag, muscles and prepaid simultaneous actuation; complete joint-velocity solves cannot add kinetic energy beyond roundoff |
+| `paid-work-v2` | Same swimming forces and prepaid work with the historical unconstrained joint-bias solve; preserved for saved worlds |
 | `surface-work-v1` | Unit-depth four-face drag, geometric muscles and sequential paid impulses; kept for exact continuation of stored worlds |
 | `legacy-v0` | Original forces, integration and legacy billing; used by v3–v11 imports |
 
-Save schemas v12 (open economy) and v13 (closed economy) validate the regime. Export, fork, Worker commands and fallback
+Schema v15 stores passive-work-v3 with either economy and mouth model. Historical
+schemas v12/v13/v14 retain their prior regimes and behavior. Export, fork, Worker commands and fallback
 preserve it. Reset creates a current-physics world. A stored surface-model world
 can explicitly select **Repair swimming in this world** in settings, keeping its
 creatures, eggs, food, time, PRNG and personal memory while changing future
-physics. Imports never silently convert regimes.
+physics. Other saved worlds can select **Stabilize joint solver in this world**.
+Both upgrades preserve the exact paused ecosystem and change future physics;
+imports never silently convert regimes.
 
 ### Working drag and muscle forces
 
@@ -129,6 +133,35 @@ impulses. This mode's normal-resistance idea follows Karl Sims's
 its absolute strength normalization and movement performance are unresolved.
 The paper does not establish VIDA's coefficients or validate that normalization.
 
+### Passive joint correction
+
+The ten historical anchor/limit velocity iterations form one provisional batch.
+For its aggregate velocity increment, compute the kinetic change at fraction s:
+
+```text
+deltaK(s) = s * linear + s^2 * quadratic
+linear = sum(m * dot(v, deltaV) + I * omega * deltaOmega)
+quadratic = 0.5 * sum(m * dot(deltaV, deltaV) + I * deltaOmega^2)
+```
+
+Keep the entire batch if dissipative. Otherwise accept the largest fraction in
+[0, 1] with nonpositive kinetic change, using an inward floating-point margin.
+When no non-energizing velocity response is possible, repair the joint pose
+without changing velocities. Partial responses retain the established pose path.
+This bounds the accepted complete batch, not each provisional internal iteration.
+Per-tick `constraintLimitedBatches` records intervention separately from speed guards.
+
+Resting and coasting invalid-joint controls repair without kinetic injection or
+motor charges. Across nine frozen swimmers at three heading/viscosity pairs,
+the largest five-second travel change is 0.13%, with no additional speed guards.
+The largest measured positive batch change is below 4e-18 J (roundoff).
+
+Short ecosystems can diverge despite near-identical isolated swimming. In two
+60-second paired seeds, the corrected model produces one extra offspring each.
+Seed 73 nutrient absorption rises 61%, while prey absorption falls from 4200 J
+to zero. These disclosed observations establish neither improved ecology nor
+reliable hunting. Genes, diet rates, drag and muscle gains are unchanged.
+
 ### Remaining limitations and release checks
 
 The discrete solver uses velocity bias, position projection, limits and contact
@@ -139,7 +172,10 @@ clamps, anchor impulses, angular limits, contact impulses and pose projection.
 Unpowered anchor and angular-limit error controls demonstrate velocity-bias
 energy injection. Bounded inelastic contact dissipates energy; projection changes
 pose without an immediate kinetic change, which does not exclude later effects.
-The solver correction and normal-drag/geometric-muscle replacement remain open.
+The passive batch corrects the demonstrated joint kinetic injection for current
+worlds; historical regimes retain it for continuation. Speed-clamp dependence,
+pose-induced momentum/potential errors, broader contacts and full mechanical
+fidelity remain open, as does normal-drag/geometric-muscle replacement.
 
 A two-sided frozen-genome regression gate compares all nine featured designs
 against their pre-change movement and total energy expenditure. It catches
@@ -187,7 +223,8 @@ rewrite those inherited genes. Equivalent corrected-world benefits are unproven.
 ## Developer entry points
 
 - `npm run audit:foraging`: Twin Oar finite-food controls and three short scattered-food pairs.
-- `npm run audit:foundation`: bounded frozen-genome comparison of all three physics regimes.
+- `npm run audit:foundation`: historical bounded comparison of the three earlier physics regimes.
+- `npm run audit:solver`: passive controls, nine frozen swimmers at three conditions and paired short ecosystems.
 - `npm run audit:mechanics`: stage-resolved kinetic audit with passive controls and nine frozen swimmers.
 - `npm run audit:locomotion`: historical legacy passive drag/spin and scaling checks.
 - `npm run search:locomotion -- --check`: reproduce the committed default selection.

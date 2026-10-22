@@ -1,10 +1,10 @@
 /** VIDA's unit-depth lamina model, independent of controller/genome tuning. */
 import type {PartDef} from './simulation';
 
-export type PhysicsRegime = 'legacy-v0' | 'surface-work-v1' | 'paid-work-v2';
-export const NEW_PHYSICS_REGIME: PhysicsRegime = 'paid-work-v2';
+export type PhysicsRegime = 'legacy-v0' | 'surface-work-v1' | 'paid-work-v2' | 'passive-work-v3';
+export const NEW_PHYSICS_REGIME: PhysicsRegime = 'passive-work-v3';
 export function usesPaidActuation(regime?: PhysicsRegime): boolean {
-  return regime === 'surface-work-v1' || regime === 'paid-work-v2';
+  return regime === 'surface-work-v1' || regime === 'paid-work-v2' || regime === 'passive-work-v3';
 }
 // 1 px = 0.001 m; 1 mass unit = 0.175 kg. Hence 1 M px²/s² = 1.75e-7 J.
 export const MECHANICAL_JOULES = 1.75e-7;
@@ -107,4 +107,13 @@ export function paidMotorBatch(impulses: ArrayLike<number>, speeds: ArrayLike<nu
   const positiveJ = positive * MECHANICAL_JOULES, negativeJ = negative * MECHANICAL_JOULES;
   return {scale, positiveJ, negativeJ,
     costJ: Math.min(Math.max(0, reserveJ), positiveJ / MUSCLE_EFFICIENCY), limited: scale < 1};
+}
+
+/** Delta KE(s*J) = s*linear + s*s*quadratic. Keep the complete historical
+ * constraint batch when dissipative; otherwise use the largest non-energizing fraction.
+ * The tiny inward margin protects the quadratic root from roundoff. */
+export function passiveConstraintScale(linear: number, quadratic: number): number {
+  if (linear + quadratic <= 0) return 1;
+  if (linear >= 0 || quadratic <= 0) return 0;
+  return Math.min(1, -linear / quadratic * (1 - 16 * Number.EPSILON));
 }

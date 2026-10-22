@@ -67,9 +67,11 @@ Bank, export/import and diagnostics. Click a creature for general status;
 **Inspect** opens diagnostics with display pruning reset to 0.5.
 
 The initial UI seed is random and editable; reset reuses the displayed seed.
-Current saves use schema v12 and brain v7, including a validated physics regime.
+Current passive-solver saves use schema v15 and brain v7, including a validated physics regime.
 Older v3–v11 snapshots continue with exact legacy physics/energy rules; new
-worlds use the established swimming forces with prepaid simultaneous muscle work. PRNG, personal memory
+worlds use the established swimming forces with prepaid simultaneous muscle work
+and a complete joint solve bounded against kinetic injection. Earlier v12–v14
+worlds keep their stored physics until an explicit settings upgrade. PRNG, personal memory
 and stored genes remain intact. Stored surface-model worlds can explicitly repair
 swimming in settings without discarding their ecosystem. Reset uses current
 physics. Imports pause for inspection;

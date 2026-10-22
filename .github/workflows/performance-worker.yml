@@ -9,6 +9,8 @@ on:
       - 'mouthContactAudit.ts'
       - 'tests/mouth-contact.test.ts'
       - 'CreaturePreview.tsx'
+      - 'tests/solver-passivity.test.ts'
+      - 'solverPassivityAudit.ts'
       - 'foundationPhysics.ts'
       - 'tests/foundation-physics.test.ts'
       - 'scripts/check-worker.mjs'

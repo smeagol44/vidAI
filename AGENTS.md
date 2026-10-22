@@ -1,3 +1,26 @@
+# Passive complete joint solve (v0.37.0)
+
+- New application worlds use `passive-work-v3`. Keep exact legacy-v0,
+  surface-work-v1 and paid-work-v2 continuation; DEFAULT_SETTINGS remains v2 for
+  historical kernel callers. UI initialization/reset selects NEW_PHYSICS_REGIME.
+- Preserve established motors, forces and ten provisional joint iterations.
+  Bound the aggregate velocity increment by its full quadratic kinetic work;
+  retain dissipative batches exactly. Pose-only repair runs only when the
+  accepted fraction is effectively zero. Do not broaden it without swim checks.
+- Schema v15 requires v3 and allows either ecology and contact model. v12–v14
+  reject v3. Explicit stabilization takes an authoritative snapshot and changes
+  future physics only, retaining its exact paused ecosystem. Controls cannot
+  switch regimes; current reset uses v3. Brain remains v7.
+- `audit:solver` compares unpowered repair controls, all nine frozen swimmers at
+  three heading/viscosity pairs and two short closed ecosystems. Largest travel
+  change 0.13%, no added isolated guard events, batch gain below 4e-18 J.
+  The 60s ecosystems each produce one extra offspring; seed 73 nutrients rise
+  61% while prey intake drops 4200 to 0 J. Disclosed before production; this is
+  not proof of better ecology. Keep the raw results and existing release gates.
+- Batch passivity is not full solver conservation. Contacts, pose-induced
+  momentum/potential effects, existing speed clamps and coherent drag/muscle
+  normalization remain open. No starter, brain, diet or 3D tuning.
+
 # Full mouth aperture (v0.36.0)
 
 - New application worlds use `mouthContactModel: capsule-v1`. Omitted means the

@@ -1,6 +1,6 @@
 import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
 import {partKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
-import {paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
+import {passiveConstraintScale, paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
 import {markLineageChanged} from './lineageChanges';
 import {compiledBrain, compiledDeltas, alignPlasticRecords, invalidateCompiledBrain} from './neuralRuntime';
 import {resolveBodyContacts} from './contacts';
@@ -337,7 +337,7 @@ export interface Organism {
   traceHistory?: Array<{x: number; y: number; time: number}>;
   recentFeedings?: FeedingEvent[];
   mouthFeedback?: Record<string, {contact: number; intake: number}>;
-  motorDiagnostics?: {positiveWorkJ: number; negativeWorkJ: number; energyLimitedImpulses: number; numericalGuardEvents: number};
+  motorDiagnostics?: {positiveWorkJ: number; negativeWorkJ: number; energyLimitedImpulses: number; numericalGuardEvents: number; constraintLimitedBatches?: number};
   biteFeedbackJ?: number; // Actual reserve/tissue energy physically bitten since the last neural tick.
 }
 
@@ -502,6 +502,7 @@ const scratchPrevHidden = new Float64Array(MAX_HIDDEN);
 // A velocity solve changes velocities only. Its geometry, effective masses,
 // positional bias and angle-limit error stay fixed through all ten iterations.
 // Recompute once per substep; never cache across moving poses or world swaps.
+const scratchConstraintStart = new Float64Array(MAX_PARTS * 3);
 const scratchConstraints = Array.from({length: MAX_PARTS - 1}, () => ({
   parentIdx: 0, childIdx: 0, rPx: 0, rPy: 0, rCx: 0, rCy: 0,
   biasX: 0, biasY: 0, wP: 0, wC: 0, iP: 0, iC: 0,
@@ -2974,7 +2975,8 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
   const g = org.genome, numJoints = org.joints.length;
   const corrected = usesPaidActuation(settings.physicsRegime);
   const surfaceModel = settings.physicsRegime === 'surface-work-v1';
-  const simultaneousPaid = settings.physicsRegime === 'paid-work-v2';
+  const passiveSolver = settings.physicsRegime === 'passive-work-v3';
+  const simultaneousPaid = settings.physicsRegime === 'paid-work-v2' || passiveSolver;
   const mu = settings.waterViscosity ?? .22, gravity = settings.gravity ?? 0;
   const {worldWidth, worldHeight} = settings;
   const partCount = org.segments.length;
@@ -3177,6 +3179,15 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     if (observe) observe('speed-guards', beforeGuards, partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY));
   }
 
+  // A complete joint solve is one provisional impulse batch. Preserve its
+  // established response, but never let the accepted batch increase kinetic energy.
+  let beforeConstraints = 0;
+  if (passiveSolver) for (let i = 0; i < partCount; i++) {
+    const p = org.segments[i], k = i * 3;
+    scratchConstraintStart[k] = p.vx; scratchConstraintStart[k + 1] = p.vy; scratchConstraintStart[k + 2] = p.angVel;
+    if (observe) beforeConstraints += partKineticEnergy(p, g.parts[i], BASE_PART_DENSITY);
+  }
+
   // Prepare geometry once; positions/angles do not change during the velocity solve.
   for (let j = 0; j < numJoints; j++) {
     const childIdx = j + 1, childDef = g.parts[childIdx];
@@ -3213,7 +3224,8 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     }
   }
 
-  // Keep every original impulse, iteration and arithmetic order.
+  let repairPose = false;
+  // Historical regimes retain every original impulse and arithmetic order.
   for (let iter = 0; iter < 10; iter++) {
     for (let j = 0; j < numJoints; j++) {
       const {parentIdx, childIdx, rPx, rPy, rCx, rCy, biasX, biasY,
@@ -3224,7 +3236,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       const vAnchorCx = childPhys.vx - childPhys.angVel * rCy;
       const vAnchorCy = childPhys.vy + childPhys.angVel * rCx;
       const vRelX = vAnchorCx - vAnchorPx, vRelY = vAnchorCy - vAnchorPy;
-      const pairEnergy = observe ? () => partKineticEnergy(parentPhys, g.parts[parentIdx], BASE_PART_DENSITY)
+      const pairEnergy = observe && !passiveSolver ? () => partKineticEnergy(parentPhys, g.parts[parentIdx], BASE_PART_DENSITY)
         + partKineticEnergy(childPhys, g.parts[childIdx], BASE_PART_DENSITY) : undefined;
       if (det > 1e-7) {
         const beforeAnchor = pairEnergy?.() ?? 0;
@@ -3235,16 +3247,49 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
         childPhys.angVel += (rCx * impulseY - rCy * impulseX) * iC;
         parentPhys.vx -= impulseX * wP; parentPhys.vy -= impulseY * wP;
         parentPhys.angVel -= (rPx * impulseY - rPy * impulseX) * iP;
-        if (observe) observe('anchor-constraint', beforeAnchor, pairEnergy!());
+        if (observe && !passiveSolver) observe('anchor-constraint', beforeAnchor, pairEnergy!());
       }
       if (limited) {
         const beforeLimit = pairEnergy?.() ?? 0;
         const relAngVel = childPhys.angVel - parentPhys.angVel;
         const angImpulse = -(relAngVel + angularBias) / (iP + iC);
         childPhys.angVel += angImpulse * iC; parentPhys.angVel -= angImpulse * iP;
-        if (observe) observe('angular-limit', beforeLimit, pairEnergy!());
+        if (observe && !passiveSolver) observe('angular-limit', beforeLimit, pairEnergy!());
       }
     }
+  }
+
+  if (passiveSolver) {
+    let linear = 0, quadratic = 0;
+    for (let i = 0; i < partCount; i++) {
+      const p = org.segments[i], k = i * 3;
+      const dx = p.vx - scratchConstraintStart[k], dy = p.vy - scratchConstraintStart[k + 1];
+      const dw = p.angVel - scratchConstraintStart[k + 2];
+      linear += scratchMasses[i] * (scratchConstraintStart[k] * dx + scratchConstraintStart[k + 1] * dy)
+        + scratchInertias[i] * scratchConstraintStart[k + 2] * dw;
+      quadratic += .5 * (scratchMasses[i] * (dx * dx + dy * dy) + scratchInertias[i] * dw * dw);
+    }
+    const scale = passiveConstraintScale(linear, quadratic);
+    if (scale < 1) {
+      org.motorDiagnostics!.constraintLimitedBatches!++;
+      // A partial impulse still supplies the established positional response.
+      // Repair pose separately only when no non-energizing impulse is possible.
+      repairPose = scale <= 64 * Number.EPSILON;
+      for (let i = 0; i < partCount; i++) {
+        const p = org.segments[i], k = i * 3;
+        p.vx = scratchConstraintStart[k] + scale * (p.vx - scratchConstraintStart[k]);
+        p.vy = scratchConstraintStart[k + 1] + scale * (p.vy - scratchConstraintStart[k + 1]);
+        p.angVel = scratchConstraintStart[k + 2] + scale * (p.angVel - scratchConstraintStart[k + 2]);
+      }
+    }
+    if (observe) observe('constraint-batch', beforeConstraints,
+      org.segments.reduce((sum, p, i) => sum + partKineticEnergy(p, g.parts[i], BASE_PART_DENSITY), 0));
+  }
+
+  if (passiveSolver && repairPose) {
+    const beforeProjection = observe ? org.segments.reduce((sum, p, i) => sum + partKineticEnergy(p, g.parts[i], BASE_PART_DENSITY), 0) : 0;
+    projectBodyJoints(org, 12);
+    if (observe) observe('position-projection', beforeProjection, org.segments.reduce((sum, p, i) => sum + partKineticEnergy(p, g.parts[i], BASE_PART_DENSITY), 0));
   }
 
   for (let i = 0; i < partCount; i++) {
@@ -3875,7 +3920,8 @@ export function stepSimulation(
   const active = organisms.filter(org => !org.dissolving);
   const corrected = usesPaidActuation(settings.physicsRegime);
   if (corrected) for (const org of active) org.motorDiagnostics = {
-    positiveWorkJ: 0, negativeWorkJ: 0, energyLimitedImpulses: 0, numericalGuardEvents: 0};
+    positiveWorkJ: 0, negativeWorkJ: 0, energyLimitedImpulses: 0, numericalGuardEvents: 0,
+    ...(settings.physicsRegime === 'passive-work-v3' ? {constraintLimitedBatches: 0} : {})};
   const work = new Map(active.map(org => [org, 0]));
   const substeps = Math.max(NUM_SUBSTEPS, Math.ceil(dt * 240));
   for (let sub = 0; sub < substeps; sub++) {

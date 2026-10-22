@@ -1,5 +1,36 @@
 # Project status — 2026-10-21
 
+## Passive joint-velocity batch — v0.37.0
+
+- New application worlds use passive-work-v3, retaining working drag, inertia-
+  scaled muscles, simultaneous commands and prepaid work. Ten provisional joint
+  iterations retain their historical arithmetic. The accepted aggregate increment
+  is bounded by its quadratic kinetic work; dissipative batches stay unchanged.
+  When no non-energizing fraction exists, pose repair changes no velocities.
+- Schema v15 persists v3 independently of contact/economy. Historical v12–v14
+  modes continue exactly; explicit settings stabilization preserves authoritative
+  paused state. Reset selects v3; control packets cannot switch regimes.
+- `docs/experiments/solver-passivity-v3.json` retains rejected candidates and
+  accepted comparisons. Resting/coasting invalid joints repair without motor
+  charges or kinetic injection. In 27 frozen five-second swim pairs, largest
+  travel change is +0.1276%; no additional isolated speed guards. Maximum measured
+  positive accepted-batch change is 3.47e-18 J. Hinge error stays below 0.126 px
+  and measured angular excess below 0.0255 rad. Known guards remain unresolved.
+- Two closed 60s ecosystem pairs produce one additional offspring each (living
+  9→10 and 11→12). Seed 17 nutrient absorption 51672→58992 J; seed 73
+  60720→97872 J (+61.2%), prey 4200→0 J. All four have zero deaths. Larger final
+  populations can change aggregate guard counts; isolated per-design guard gates
+  remain unchanged. Closed-ledger error stays below 1.5e-8 J. These material effects
+  were disclosed before production. Short divergent trajectories establish no
+  sustained ecology, carnivore improvement or browser performance claim.
+- Local validation: 279 fast tests, build and production real-thread Worker pass,
+  including all eight physics/economy combinations with capsule contact. Browser
+  upgrade/reset checks and publication are required before declaring release live.
+- Corrected: demonstrated kinetic injection by complete joint-velocity batches.
+  Open: speed-clamp dependence, broader contacts, pose-induced momentum/potential
+  artifacts, coherent fluid/muscle normalization and long-term ecological benefit.
+  Starter/body/brain/diet genes, 3D and sleep work are untouched.
+
 ## Full mouth contact geometry — v0.36.0
 
 - New application worlds opt into capsule-v1: prey rectangles now contact the

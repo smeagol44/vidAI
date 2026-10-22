@@ -67,8 +67,10 @@ errors. No starter/body/brain/diet retuning or 3D/sleep work accompanies this ch
   It exposes anchor velocity-bias and angular-limit energy injection in unpowered
   isolated controls. Contact impulses dissipate in the bounded collision case;
   pose projection has no immediate kinetic change, but can affect later bias.
-  The solver correction itself remains open. Preserve saved regimes and compare
-  all nine frozen swimmers before proposing any replacement for production.
+  Current passive-work-v3 bounds each accepted complete joint batch against kinetic
+  injection; old saves keep their exact solve until explicit stabilization.
+  All nine frozen swimmers pass at three tested conditions. Speed-clamp dependence,
+  pose-induced momentum/potential effects and broader contact fidelity remain open.
 - Full rounded mouth aperture is implemented for new worlds and explicit saved-
   world upgrades. Display and prey detection now use the inherited span with the
   same contact radius as nutrients/eggs. Endpoint, rotated and collision-contact
@@ -95,7 +97,7 @@ no guarantee that every genotype or seed survives is intended.
 
 | Work | Current gap |
 | --- | --- |
-| Solver mechanical energy | Actuator work is prepaid and acceleration-aware in paid-work worlds. Constraint bias/projection, contact and joint-limit energy remain unproven; chemical closure does not bound their error. |
+| Solver mechanical energy | Current joint-velocity batches are kinetic-passive and actuator work is prepaid. Existing speed guards, pose-induced momentum/potential effects and broader contacts still require bounded investigation; this is not full mechanical conservation. |
 | Fluid and tissue fidelity | The default retains calibrated anisotropic drag and inertia-scaled strength. A coherent surface/geometric replacement with justified absolute normalization and useful motion remains open; the surface mode is preserved only for stored-world continuation. |
 | Closed ecological energy budget | Core pool, transfers, debt, controls, egg slots/uptake/expiry and explicit save conversion are implemented. Longer ecological evaluation and capacity increases remain open. |
 | Contact fidelity | Discrete collision substeps, flexible directly hinged-neighbor intersections, and simplified food/egg response remain. |
