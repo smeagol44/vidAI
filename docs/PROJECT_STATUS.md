@@ -1,5 +1,25 @@
 # Project status — 2026-10-21
 
+## Bounded speed-guard cause control — diagnostic only, v0.37.0 unchanged
+
+- A read-only five-second motor-off control was run for the three frozen passive-v3
+  featured swimmers with known guards, preserving all anatomy, control, contact
+  and simulation code. Powered Lantern/Forktail/Broadwake recorded 352/116/1106
+  guard events and lost 0.119/0.088/2.485 J to hard speed caps. Unpowered
+  copies recorded zero clamps and zero travel. Forktail had no contact impulses
+  even while powered; Lantern stationary/unpowered retained contact observations
+  without clamp loss. Thus powered actuation is necessary in these samples,
+  and contacts are not a necessary source across all three designs.
+- This causal control does not prove motor scaling is wrong, remove possible
+  contact/pose contributions during active swimming, or identify angular
+  versus translational overspeed. It revealed no specific demonstrated
+  movement-preserving solver correction. Leave clamps, physics, save regimes,
+  Worker and starter/body/brain/diet tuning unchanged. Revisit drag/muscle
+  normalization separately against justified physical units and swimming gates.
+- Record: `docs/experiments/guard-causality-v1.json`, reproducible
+  `tests/guard-causality.test.ts`. This is a bounded conclusion, not a new
+  physics release or proof of ecological performance.
+
 ## Passive joint-velocity batch — v0.37.0
 
 - New application worlds use passive-work-v3, retaining working drag, inertia-
