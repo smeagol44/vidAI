@@ -162,6 +162,29 @@ Seed 73 nutrient absorption rises 61%, while prey absorption falls from 4200 J
 to zero. These disclosed observations establish neither improved ecology nor
 reliable hunting. Genes, diet rates, drag and muscle gains are unchanged.
 
+### Measured speed-guard dependence
+
+A bounded motor-off control of the unchanged Lantern, Forktail and Broadwake
+anatomies (five seconds, heading 0.37 rad, viscosity 0.18) isolates the
+**necessity of actuation**, not the independent effects of muscle scaling,
+contacts or posture feedback. Normal runs hit 352, 116 and 1,106 guard events,
+removing 0.119 J, 0.088 J and 2.485 J of kinetic energy respectively. The
+identical controls with motorForce set to zero for offline measurement hit
+**zero guards**, without changing any production genes or physics. Forktail
+has no contact impulses even in its powered run; Lantern still has 9,600
+contact-impulse samples when stationary and unpowered, with no resulting
+clamp energy loss. Contact impulses are thus not necessary for every guard
+event, and contacts alone do not explain Lantern's guards.
+
+This observation does **not** prove that strong actuators are physically
+incorrect, nor exclude contact, velocity feedback or pose effects during
+powered swimming. Guard classification (linear versus angular) and a coherent
+absolute muscle/drag normalization remain unresolved. No demonstrated,
+movement-preserving solver replacement followed from this bounded check, so
+the existing caps remain protective approximations. Raw controls are retained
+in `docs/experiments/guard-causality-v1.json`; the fast suite reproduces
+them without altering the live simulation.
+
 ### Remaining limitations and release checks
 
 The discrete solver uses velocity bias, position projection, limits and contact
