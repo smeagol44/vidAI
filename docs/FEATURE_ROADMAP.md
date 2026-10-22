@@ -5,6 +5,15 @@ features and the original phase status. [Project status](PROJECT_STATUS.md)
 records experiments and release history. This file tracks remaining work;
 listed extensions are not implementation promises.
 
+## Active work tracking
+
+The [issue-backed roadmap and handoff index](https://github.com/smeagol44/vidAI/issues/57)
+is authoritative for proposed tasks, decisions, blockers, branches and PRs.
+The [GitHub Projects board setup issue](https://github.com/smeagol44/vidAI/issues/68)
+tracks creating a personal board and importing existing issues; no Projects
+board is claimed until verified. The GitHub Wiki remains limited to current
+implemented features. No speculative refactor is marked as shipped.
+
 ## Parallel testing environment (publication infrastructure)
 
 One GitHub Pages artifact is assembled from independently checked-out `main`

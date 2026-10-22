@@ -1,3 +1,19 @@
+# VIDA 2D issue-backed development and handoffs
+
+- Read [issue #57](https://github.com/smeagol44/vidAI/issues/57) for the
+  verified roadmap, blocker references, decisions and handoff entry point.
+  It is the issue index until a real GitHub Projects board is created and linked;
+  [issue #68](https://github.com/smeagol44/vidAI/issues/68) tracks board setup.
+  Never invent or claim a Projects board URL before verification.
+- Select one unblocked, bounded task, read its linked discussion and record
+  whether each proposal is decided, rejected or unapproved. Link work branches,
+  PRs, validation, significant performance/ecology changes and deployment in
+  its issue. A checked task means verified work, not expected progress.
+- The Wiki documents only implemented behavior, not plans or historic
+  changelogs. This issue index and the PRs hold decisions and experimental
+  results. Preserve WORKER authority, physical correctness, saves and the
+  main/testing isolation. Never modify VIDA 3D.
+
 # Dual Pages environments — production/main and experimental/testing
 
 - Publish both independent checkouts as one GitHub Pages artifact from main.
