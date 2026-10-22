@@ -120,6 +120,9 @@ import {BUILD_VERSION, CREDITS, createSnapshot, restoreSnapshot, validateGenome,
   clearFreeNutrients, resizeWorld, diagnosticReport} from './persistence';
 export * from './simulation';
 
+// TESTING-ONLY: injected by the dual Pages assembly from pinned Git history.
+const TESTING_RELEASE = import.meta.env.VITE_TESTING_RELEASE || 'TESTING · local development (unversioned)';
+
 // Bound floating windows to the visible tank area, including after resizing.
 function useDraggableModal(initialX: number, initialY: number) {
   const [pos, setPos] = useState({x: initialX, y: initialY});
@@ -3033,7 +3036,7 @@ export default function App() {
             <span>Feed All</span>
           </button>
         </div>
-        <span data-testid="build-version" className="ml-auto shrink-0 text-[10px] font-mono text-slate-400" title="Current VIDA version">v{BUILD_VERSION}</span>
+        <span data-testid="build-version" className="ml-auto min-w-0 truncate text-[10px] font-mono font-bold text-amber-300" title={TESTING_RELEASE}>{TESTING_RELEASE}</span>
       </footer>
 
       {/* --- OVERLAYS --- */}
