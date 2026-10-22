@@ -8,7 +8,15 @@ behavior. Survival and reproduction depend on finite energy.
 foraging, predator pursuit and self-sustaining multigeneration ecosystems remain
 unproven. This reference covers VIDA 2D; the separate 3D project is independent.
 
-[Play VIDA](https://smeagol44.github.io/vidAI/) · [Source](https://github.com/smeagol44/vidAI)
+[Play VIDA — production](https://smeagol44.github.io/vidAI/) · [Open experimental testing](https://smeagol44.github.io/vidAI/testing/) · [Source](https://github.com/smeagol44/vidAI)
+
+The independent `testing` branch publishes to `/vidAI/testing/` without
+replacing production. Its distinct release label identifies the pinned main
+version and commit, cycle and iteration (currently `T1.1` from
+`main v0.37.0 @ b2a05e5`). Each testing commit advances its iteration;
+resetting to an explicitly chosen newer main baseline begins the next cycle.
+Production retains its normal `v0.37.0` label, save format and simulation
+behavior. The testing-only version code must never be merged to main.
 
 ## Simulation overview
 
