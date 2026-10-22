@@ -2,7 +2,7 @@ name: Validate and deploy VIDA
 
 on:
   push:
-    branches: [main]
+    branches: [main, testing]
   pull_request:
   workflow_dispatch:
     inputs:
@@ -14,12 +14,14 @@ on:
 permissions:
   contents: read
 
+# One Pages artifact owns both production and testing. Never let parallel
+# branch publications overwrite one another with incomplete site contents.
 concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.event_name == 'pull_request' && format('pages-check-{0}', github.event.pull_request.number) || 'vida-dual-pages' }}
+  cancel-in-progress: false
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -27,6 +29,17 @@ jobs:
         with:
           node-version: '24'
           cache: npm
+      - name: Prevent test-only versioning from reaching production
+        if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && github.base_ref == 'main')
+        run: |
+          if [ -f testing-baseline.json ] || grep -q 'VITE_TESTING_RELEASE' App.tsx; then
+            echo "::error::Testing-only version code is forbidden on main. Cherry-pick production features instead of merging testing wholesale."
+            exit 1
+          fi
+          if [ "${{ github.event_name }}" = pull_request ] && [ "${{ github.head_ref }}" = testing ]; then
+            echo "::error::The testing branch must never be merged wholesale into main."
+            exit 1
+          fi
       - run: npm ci
       - run: npm run test:fast
       - run: npm test
@@ -36,14 +49,80 @@ jobs:
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
       - run: npm run test:e2e
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
-      - uses: actions/upload-pages-artifact@v3
-        if: github.event_name != 'pull_request'
+
+  assemble-pages:
+    if: github.event_name != 'pull_request'
+    needs: validate
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      # Both branches are checked out afresh. Never deploy the trigger's
+      # built files as main; a testing push cannot replace production.
+      - name: Checkout production at main
+        uses: actions/checkout@v4
         with:
-          path: dist
+          ref: main
+          path: production
+      - name: Checkout independent testing branch
+        uses: actions/checkout@v4
+        with:
+          ref: testing
+          path: experimental
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Reject any testing-only files in production
+        run: |
+          test ! -f production/testing-baseline.json
+          ! grep -q 'VITE_TESTING_RELEASE' production/App.tsx
+      - name: Build production unchanged
+        working-directory: production
+        run: npm ci && npm run build
+      - name: Detect initialized testing branch
+        id: test-ready
+        run: |
+          if [ -f experimental/testing-baseline.json ] && [ -f experimental/scripts/testing-build-info.mjs ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Testing branch is not initialized yet; publishing only production."
+          fi
+      - name: Install testing dependencies
+        if: steps.test-ready.outputs.ready == 'true'
+        working-directory: experimental
+        run: npm ci
+      - name: Resolve testing version from its pinned main baseline
+        if: steps.test-ready.outputs.ready == 'true'
+        id: testing-version
+        working-directory: experimental
+        run: node scripts/testing-build-info.mjs
+      - name: Build the independent testing application
+        if: steps.test-ready.outputs.ready == 'true'
+        working-directory: experimental
+        env:
+          VITE_TESTING_RELEASE: ${{ steps.testing-version.outputs.label }}
+        run: npm run build -- --base=/vidAI/testing/
+      - name: Assemble one complete Pages site
+        run: |
+          mkdir -p published
+          cp -a production/dist/. published/
+          if [ "${{ steps.test-ready.outputs.ready }}" = true ]; then
+            mkdir -p published/testing
+            cp -a experimental/dist/. published/testing/
+            grep -q '/vidAI/testing/assets/' published/testing/index.html
+            grep -q '/vidAI/assets/' published/index.html
+            test -s published/testing/index.html
+          fi
+          test -s published/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: published
 
   deploy:
     if: github.event_name != 'pull_request'
-    needs: build
+    needs: assemble-pages
     runs-on: ubuntu-24.04
     permissions:
       pages: write

@@ -5,6 +5,17 @@ features and the original phase status. [Project status](PROJECT_STATUS.md)
 records experiments and release history. This file tracks remaining work;
 listed extensions are not implementation promises.
 
+## Parallel testing environment (publication infrastructure)
+
+One GitHub Pages artifact is assembled from independently checked-out `main`
+and `testing` branches, with `/vidAI/` always built from `main` and
+`/vidAI/testing/` from `testing`. Both pushes trigger the complete publication
+pipeline, so testing cannot replace production. The testing-only baseline,
+iteration counter and version label are owned by the `testing` branch.
+A deliberate reset to a new main commit starts the iteration count again.
+Never merge the entire testing branch to main; use clean, reviewed feature
+branches and retain production's normal semantic versioning.
+
 ## Current position
 
 Original Phases 1–4 have their core implementation: variable neural architecture,

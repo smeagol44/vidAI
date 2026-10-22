@@ -1,3 +1,19 @@
+# Dual Pages environments — production/main and experimental/testing
+
+- Publish both independent checkouts as one GitHub Pages artifact from main or
+  testing pushes. Root /vidAI/ must always be built from main; /vidAI/testing/
+  must always be built from testing with its own Vite base.
+- `testing-baseline.json` and testing build label code belong ONLY to the
+  testing branch. CI rejects their presence in PRs targeting main and the
+  Pages assembly rejects them on main. Never merge testing wholesale into main.
+- Testing release label pins main version and SHA plus a cycle and deterministic
+  commit iteration since the pinned baseline. To reset iterations, deliberately
+  recut the testing branch from the latest main and recreate its testing-only
+  overlay; do not reset on ordinary production updates. Preserve test work
+  on a feature branch first.
+- Test deployments must not alter production BUILD_VERSION, simulation
+  physics or save schemas.
+
 # Passive complete joint solve (v0.37.0)
 
 - New application worlds use `passive-work-v3`. Keep exact legacy-v0,
