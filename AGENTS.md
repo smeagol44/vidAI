@@ -2,9 +2,11 @@
 
 - Read [issue #57](https://github.com/smeagol44/vidAI/issues/57) for the
   verified roadmap, blocker references, decisions and handoff entry point.
-  It is the issue index until a real GitHub Projects board is created and linked;
-  [issue #68](https://github.com/smeagol44/vidAI/issues/68) tracks board setup.
-  Never invent or claim a Projects board URL before verification.
+  The [VIDA 2D Development board](https://github.com/users/smeagol44/projects/1/views/1) is the
+  intended visual dashboard. [Issue #68](https://github.com/smeagol44/vidAI/issues/68)
+  tracks remaining board setup (backfill, fields, workflows), not creation.
+  Keep source issues and PRs authoritative until board automation is verified.
+  GitHub Projects v2 item fields cannot be mutated by the current GitHub connector.
 - Select one unblocked, bounded task, read its linked discussion and record
   whether each proposal is decided, rejected or unapproved. Link work branches,
   PRs, validation, significant performance/ecology changes and deployment in

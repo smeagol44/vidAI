@@ -9,9 +9,13 @@ listed extensions are not implementation promises.
 
 The [issue-backed roadmap and handoff index](https://github.com/smeagol44/vidAI/issues/57)
 is authoritative for proposed tasks, decisions, blockers, branches and PRs.
-The [GitHub Projects board setup issue](https://github.com/smeagol44/vidAI/issues/68)
-tracks creating a personal board and importing existing issues; no Projects
-board is claimed until verified. The GitHub Wiki remains limited to current
+The [VIDA 2D — Development project](https://github.com/users/smeagol44/projects/1/views/1)
+was created by the owner (personal GitHub Project #1). The
+[board setup issue](https://github.com/smeagol44/vidAI/issues/68)
+tracks importing existing issues and enabling GitHub Projects' built-in
+workflows; these operations are **not yet verified**. When configured, repo
+issues/PRs should populate the board automatically, avoiding chat-by-chat
+manual board updates. Until then, the issue index is the source of truth. The GitHub Wiki remains limited to current
 implemented features. No speculative refactor is marked as shipped.
 
 ## Parallel testing environment (publication infrastructure)
