@@ -50,8 +50,23 @@ jobs:
       - run: npm run test:e2e
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
 
+  # A testing push cannot deploy to GitHub Pages because only main is allowed
+  # to deploy in the protected github-pages environment. GitHub Actions
+  # workflow_dispatch is explicitly allowed from GITHUB_TOKEN.
+  request-main-publication:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/testing'
+    needs: validate
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: write
+    steps:
+      - name: Request main to publish both latest branch builds
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --repo "${{ github.repository }}" --ref main
+
   assemble-pages:
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: validate
     runs-on: ubuntu-24.04
     permissions:
@@ -121,7 +136,7 @@ jobs:
           path: published
 
   deploy:
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: assemble-pages
     runs-on: ubuntu-24.04
     permissions:

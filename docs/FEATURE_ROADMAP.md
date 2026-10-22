@@ -9,8 +9,9 @@ listed extensions are not implementation promises.
 
 One GitHub Pages artifact is assembled from independently checked-out `main`
 and `testing` branches, with `/vidAI/` always built from `main` and
-`/vidAI/testing/` from `testing`. Both pushes trigger the complete publication
-pipeline, so testing cannot replace production. The testing-only baseline,
+`/vidAI/testing/` from `testing`. Production pushes publish directly; validated testing pushes dispatch the
+main workflow to publish both. Only main has Pages deployment permission,
+so testing cannot replace production. The testing-only baseline,
 iteration counter and version label are owned by the `testing` branch.
 A deliberate reset to a new main commit starts the iteration count again.
 Never merge the entire testing branch to main; use clean, reviewed feature

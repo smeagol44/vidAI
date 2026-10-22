@@ -1,7 +1,7 @@
 # Dual Pages environments — production/main and experimental/testing
 
-- Publish both independent checkouts as one GitHub Pages artifact from main or
-  testing pushes. Root /vidAI/ must always be built from main; /vidAI/testing/
+- Publish both independent checkouts as one GitHub Pages artifact from main.
+  Validated testing pushes dispatch a fresh main workflow to publish both. Root /vidAI/ must always be built from main; /vidAI/testing/
   must always be built from testing with its own Vite base.
 - `testing-baseline.json` and testing build label code belong ONLY to the
   testing branch. CI rejects their presence in PRs targeting main and the
