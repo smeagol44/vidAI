@@ -12,10 +12,13 @@ is authoritative for proposed tasks, decisions, blockers, branches and PRs.
 The [VIDA 2D — Development project](https://github.com/users/smeagol44/projects/1/views/1)
 was created by the owner (personal GitHub Project #1). The
 [board setup issue](https://github.com/smeagol44/vidAI/issues/68)
-tracks importing existing issues and enabling GitHub Projects' built-in
-workflows; these operations are **not yet verified**. When configured, repo
-issues/PRs should populate the board automatically, avoiding chat-by-chat
-manual board updates. Until then, the issue index is the source of truth. The GitHub Wiki remains limited to current
+documents the **verified** issue/PR import, intake, closure and reopening
+workflows (including verification #71). Substantive discussion starts
+**In progress** even before coding. The Project has separate Backlog, Needs
+decision, Ready (queued), In progress, In review, Testing and Done (verified)
+statuses. Intermediate Project Status/field updates require Projects UI/API;
+repository issue text and comments do not automatically transition a card
+to In progress. #57 tracks any needed synchronization. The GitHub Wiki remains limited to current
 implemented features. No speculative refactor is marked as shipped.
 
 ## Parallel testing environment (publication infrastructure)
