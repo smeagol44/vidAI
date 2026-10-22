@@ -1,0 +1,39 @@
+name: VIDA Project Status
+
+# Owner-only status commands on issues or PRs: /vida status in-progress
+# Runs only from main, never from contributor PR code.
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+
+jobs:
+  update-project-status:
+    if: >-
+      github.repository == 'smeagol44/vidAI' &&
+      github.event.comment.user.login == 'smeagol44' &&
+      startsWith(github.event.comment.body, '/vida status ')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    concurrency:
+      group: vida-project-${{ github.event.issue.number }}
+      cancel-in-progress: false
+    env:
+      VIDA_PROJECT_TOKEN: ${{ secrets.VIDA_PROJECT_TOKEN }}
+      VIDA_COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
+      VIDA_COMMENT_BODY: ${{ github.event.comment.body }}
+      VIDA_CONTENT_ID: ${{ github.event.issue.node_id }}
+      VIDA_CONTENT_STATE: ${{ github.event.issue.state }}
+    steps:
+      - name: Checkout trusted default-branch status script
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Configure Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Update GitHub Project Status
+        run: node scripts/project-status-bridge.mjs
