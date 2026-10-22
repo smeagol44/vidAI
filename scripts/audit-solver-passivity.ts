@@ -16,7 +16,7 @@ for (const kind of ['anchor', 'limit']) for (const physicsRegime of ['paid-work-
   for (let i = 0; i < 6; i++) stepSimulation(f.state, f.config, 1 / 60, undefined, recorder.observe);
   controls.push({kind, physicsRegime, ...jointErrors(f.org), phases: recorder.phases});
 }
-const swimming = [];
+const swimming: ReturnType<typeof observeSolver>[] = [];
 for (const design of FEATURED_BLUEPRINTS) for (const [heading, viscosity] of [[.37, .18], [.8, .15], [-1, .22]]) {
   for (const physicsRegime of ['paid-work-v2', 'passive-work-v3'] as const) {
     const row = observeSolver(design.id, physicsRegime, 5, heading, viscosity);
