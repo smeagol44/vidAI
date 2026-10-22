@@ -284,3 +284,9 @@ remain in [audit #77](https://github.com/smeagol44/vidAI/pull/77):
 [NASA area/Cd conventions](https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-coefficient/),
 [NIST viscosity](https://www.nist.gov/system/files/documents/srd/jpcrd382009101p.pdf).
 They motivate distinctions and approximations; none supplies VIDA's final profile.
+
+## Subsequent bounded numerical diagnostic
+
+See [integration resolution and splitting checkpoint](prism-integration-v1.md).
+All nine three-body/method combinations failed the capped convergence gates;
+no correction, promotion or replacement of the original evidence was selected.

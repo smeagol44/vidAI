@@ -1,3 +1,4 @@
+import {runIntegrationExperiment} from './integrationExperiment';
 import {measurePhysicsTrial} from './physicsWorkerExperiment';
 import {SimulationHost, type WorldSnapshot, type WorldAction} from './simulationHost';
 import type {SimulationSettings} from './simulation';
@@ -34,7 +35,10 @@ port.onmessage = ({data}: MessageEvent) => {
       host.settings = {...data.settings, physicsRegime: host.settings.physicsRegime ?? 'legacy-v0'} as SimulationSettings; host.speed = data.speed;
       host.running = data.running; host.selected = data.selected; return;
     }
-    if (data.type === 'physics-experiment-step') {
+    if (data.type === 'integration-experiment') {
+      const value=runIntegrationExperiment(host,data.request);
+      dirty=true;sendFrame();port.postMessage({type:'result',id:data.id,epoch:host.epoch,value});
+    } else if (data.type === 'physics-experiment-step') {
       if(host.running || !['passive-work-v3','prism-resistance-v4'].includes(host.settings.physicsRegime ?? ''))
         throw new Error('Physics experiment requires a paused v3/v4 world');
       if(!Number.isInteger(data.ticks)||data.ticks<1||data.ticks>3600 || (data.audit!==undefined&&typeof data.audit!=='boolean'))

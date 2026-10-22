@@ -1,3 +1,21 @@
+# Testing-only numerical diagnostic checkpoint (#61 / draft #79)
+
+- `integration-experiment` is explicit, paused and v4-only; never saved as a new
+  default integrator or silently continued without its external command tape.
+  Native capture/replay must equal full ordinary snapshots/PRNG exactly. Keep
+  60 Hz neural cadence and bounded 240 Hz held torques when refining only physics.
+- Prepaid work uses each actual shorter impulse path; do not hold a tick bill
+  fixed, regenerate braking energy or alter chemical/mechanical conversion.
+- All nine three-body/method finest-pair gates fail at capped 3840 Hz. Smaller
+  anchor/BE losses do not resolve velocity redistribution: refined Broadwake can
+  exceed 56 rad/s after contacts. No correction or alternative ordering is approved.
+- Preserve `docs/experiments/prism-integration-*` raw data/inputs and original v4
+  reports/hashes. Main-study timings are excluded for concurrent-load inference;
+  separate reversed timing rounds are instrumented, not production FPS.
+- Exact scope/results/next short constraint/contact event audit are in
+  `docs/experiments/prism-integration-v1.md`. Stop uncapped refinement/tuning.
+  No new ecology/search or browser campaign is justified by this checkpoint.
+
 # Testing-only prism fluid experiment (#61, draft #79)
 
 - `prism-resistance-v4` is explicit and unpromoted; never change defaults or import

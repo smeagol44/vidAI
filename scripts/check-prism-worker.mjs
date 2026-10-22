@@ -21,6 +21,24 @@ try {
     if(regime==='prism-resistance-v4') {
       assert.ok(observed.receipts.fluidSamples>0);assert.ok(observed.receipts.fluidBalanceErrorJ<1e-12);
       assert.equal(end.schemaVersion,'17.0.0');
+      // Exercise the explicit integration protocol through the actual built port.
+      await worker.reset(source);
+      const capture=await worker.request('integration-experiment',{request:{ticks:12,substeps:4,splitting:'motor-drag'}});
+      const capturedEnd=await worker.request('snapshot');
+      await worker.trial(source,12);assert.deepEqual(await worker.request('snapshot'),capturedEnd);
+      await worker.reset(source);
+      await worker.request('integration-experiment',{request:{ticks:12,substeps:4,splitting:'motor-drag',tape:capture.tape}});
+      assert.deepEqual(await worker.request('snapshot'),capturedEnd);
+      await worker.reset(source);
+      const invalid=structuredClone(capture.tape);invalid.frames[11][0].torques[3][0]=NaN;
+      await assert.rejects(worker.request('integration-experiment',{request:{ticks:12,substeps:16,splitting:'half-motor-half',tape:invalid}}),/Invalid/);
+      assert.deepEqual(await worker.request('snapshot'),source,'late invalid input rejected before stepping');
+      await worker.request('integration-experiment',{request:{ticks:5,substeps:16,splitting:'half-motor-half',tape:capture.tape}});
+      const midway=await worker.request('snapshot');await worker.reset(midway);
+      await worker.request('integration-experiment',{request:{ticks:7,substeps:16,splitting:'half-motor-half',tape:capture.tape,offset:5}});
+      const refinedEnd=await worker.request('snapshot');await worker.reset(source);
+      await worker.request('integration-experiment',{request:{ticks:12,substeps:16,splitting:'half-motor-half',tape:capture.tape}});
+      assert.deepEqual(await worker.request('snapshot'),refinedEnd);
       // Continue a real Worker export exactly through reset/fork.
       await worker.trial(end,12,{audit:false});const continued=await worker.request('snapshot');
       const fork=new SimulationHost();fork.reset(end,1);for(let i=0;i<12;i++)fork.tick();assert.deepEqual(continued,fork.snapshot());
@@ -32,5 +50,5 @@ try {
     const other=regime==='passive-work-v3'?'prism-resistance-v4':'passive-work-v3';
     await assert.rejects(worker.request('control',{settings:{...source.settings,physicsRegime:other},running:false,speed:1,selected:null}),/resetting/);
   }
-  console.log('Prism built Worker: exact host/observed/unobserved/fork continuation, work/drag receipts, strict request and regime gates passed.');
+  console.log('Prism built Worker: exact host/observed/unobserved/fork continuation, work/drag receipts, strict request/regime gates and integration tape replay/fork/rejection passed.');
 }finally{await worker.close();}

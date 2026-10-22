@@ -1,5 +1,5 @@
 import {prismProperties, integratePrismDrag, PRISM_REFERENCE} from './prismPhysics';
-import type {PhysicsObserver} from './physicsObservation';
+import type {PhysicsObserver, IntegrationDiagnostic} from './physicsObservation';
 import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
 import {partKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
 import {bodyMass, mechanicalJoules, passiveConstraintScale, paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
@@ -2973,8 +2973,25 @@ export function calculateJointMotorTarget(def: PartDef, phase: number, amplitude
   return clampVal((oscillation + angleCommand * directRange) * def.maxAngle, -def.maxAngle, def.maxAngle);
 }
 
+/** Same native BE arithmetic; splitting only selects when and how long it runs. */
+function applyPrismDrag(org:Organism,i:number,settings:SimulationSettings,dt:number,observe?:MechanicalObserver,physicsObserve?:PhysicsObserver) {
+  const seg=org.segments[i],g=org.genome;
+  const beforeFluid=observe||physicsObserve?partKineticEnergy(seg,g.parts[i],BASE_PART_DENSITY,settings.physicsRegime):0;
+  const c=Math.cos(seg.angle),sn=Math.sin(seg.angle),L=PRISM_REFERENCE.metresPerPixel;
+  const fluid=integratePrismDrag(prismProperties(g.parts[i].width,g.parts[i].height),
+    (seg.vx*c+seg.vy*sn)*L,(-seg.vx*sn+seg.vy*c)*L,seg.angVel,dt);
+  seg.vx=(fluid.u*c-fluid.v*sn)/L;seg.vy=(fluid.u*sn+fluid.v*c)/L;seg.angVel=fluid.omega;
+  if(observe || physicsObserve) {
+    const afterJ=partKineticEnergy(seg,g.parts[i],BASE_PART_DENSITY,settings.physicsRegime);
+    observe?.('fluid-resistance',beforeFluid,afterJ);
+    physicsObserve?.(Object.freeze({stage:'fluid',id:org.id,part:i,beforeJ:beforeFluid,afterJ,
+      physicalDissipationJ:fluid.physicalDissipationJ,numericalDissipationJ:fluid.numericalDissipationJ,
+      iterations:fluid.iterations,residual:fluid.residual}));
+  }
+}
+
 const scratchAuditCeiling = new Float64Array(MAX_PARTS), scratchAuditRequest = new Float64Array(MAX_PARTS);
-function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number, observe?: MechanicalObserver, physicsObserve?: PhysicsObserver): number {
+function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number, observe?: MechanicalObserver, physicsObserve?: PhysicsObserver, diagnostic?: IntegrationDiagnostic, substep = 0): number {
   const g = org.genome, numJoints = org.joints.length;
   const corrected = usesPaidActuation(settings.physicsRegime);
   const surfaceModel = settings.physicsRegime === 'surface-work-v1';
@@ -2994,6 +3011,11 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     scratchInvInertias[i] = 1 / inertia;
   }
 
+  const motorOutputs = diagnostic?.outputs?.get(org.id) ?? org.neuralOutputs;
+  const heldTorque = diagnostic?.torqueAt?.(org.id, substep);
+  if (diagnostic?.splitting === 'half-motor-half') for(let i=0;i<partCount;i++)
+    applyPrismDrag(org,i,settings,dt_sub/2,observe,physicsObserve);
+
   let frameMechanicalWork = 0;
   scratchFx.fill(0);
   scratchFy.fill(0);
@@ -3010,15 +3032,15 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     const childPhys = org.segments[childIdx];
 
     const outBase = j * OUTPUTS_PER_JOINT;
-    const angleCommand = org.neuralOutputs[outBase] || 0;
-    const motorFreqDrive = 1.0 + (org.neuralOutputs[outBase + 1] || 0) * 0.35;
-    const peakTorqueMod = clampVal(1.0 + (org.neuralOutputs[outBase + 2] || 0) * 0.4, 0.5, 1.6);
-    const stiffnessDampingMod = clampVal(1.0 + (org.neuralOutputs[outBase + 3] || 0) * 0.4, 0.4, 1.8);
+    const angleCommand = motorOutputs[outBase] || 0;
+    const motorFreqDrive = 1.0 + (motorOutputs[outBase + 1] || 0) * 0.35;
+    const peakTorqueMod = clampVal(1.0 + (motorOutputs[outBase + 2] || 0) * 0.4, 0.5, 1.6);
+    const stiffnessDampingMod = clampVal(1.0 + (motorOutputs[outBase + 3] || 0) * 0.4, 0.4, 1.8);
     joint.stiffness = stiffnessDampingMod;
     // Zero on new channels preserves the inherited gait. Negative commands can
     // reach exactly zero; positive amplitude commands permit stronger strokes.
-    const amplitudeTarget = clampVal(1 + (org.neuralOutputs[outBase + 4] || 0) * 1.5, 0, 1.75);
-    const engagementTarget = clampVal(1 + (org.neuralOutputs[outBase + 5] || 0) * 1.5, 0, 1);
+    const amplitudeTarget = clampVal(1 + (motorOutputs[outBase + 4] || 0) * 1.5, 0, 1.75);
+    const engagementTarget = clampVal(1 + (motorOutputs[outBase + 5] || 0) * 1.5, 0, 1);
     const response = 1 - Math.exp(-dt_sub / MOTOR_RESPONSE_SECONDS);
     joint.amplitude = (joint.amplitude ?? 1) + (amplitudeTarget - (joint.amplitude ?? 1)) * response;
     joint.engagement = (joint.engagement ?? 1) + (engagementTarget - (joint.engagement ?? 1)) * response;
@@ -3049,6 +3071,11 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     const maxTorque = muscle?.maxTorque ?? avgInertia * 2200.0 * peakTorqueMod;
     if (physicsObserve) scratchAuditCeiling[j] = maxTorque;
     motorTorque = clampVal(motorTorque, -maxTorque, maxTorque) * joint.engagement;
+    if (heldTorque) {
+      motorTorque = heldTorque[j];
+      if (!Number.isFinite(motorTorque) || Math.abs(motorTorque) > maxTorque * (1 + 1e-12))
+        throw new Error('Invalid held torque or capacity violation');
+    }
     if (corrected && !Number.isFinite(motorTorque)) throw new Error('Non-finite muscle torque');
     if (isNaN(motorTorque)) motorTorque = 0;
     if(physicsObserve)scratchAuditRequest[j]=motorTorque;
@@ -3162,7 +3189,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     }
     if (physicsObserve) {
       physicsObserve(Object.freeze({stage:'budget',id:org.id,scale:paid.scale,positiveJ:paid.positiveJ,negativeJ:paid.negativeJ,costJ:paid.costJ}));
-      for(let j=0;j<numJoints;j++) physicsObserve(Object.freeze({stage:'motor',id:org.id,joint:j,
+      for(let j=0;j<numJoints;j++) physicsObserve(Object.freeze({stage:'motor',id:org.id,joint:j,dt:dt_sub,
         requested:scratchAuditRequest[j],applied:org.joints[j].appliedTorque,ceiling:scratchAuditCeiling[j]}));
     }
     org.energy = Math.max(0, org.energy - paid.costJ);
@@ -3183,16 +3210,10 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     const beforeFluid = observe || physicsObserve ? partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY, settings.physicsRegime) : 0;
     observe?.('forces-and-motors', beforeForces, beforeFluid);
     if(prismModel) {
-      const c=Math.cos(seg.angle),sn=Math.sin(seg.angle),L=PRISM_REFERENCE.metresPerPixel;
-      const fluid=integratePrismDrag(prismProperties(g.parts[i].width,g.parts[i].height),
-        (seg.vx*c+seg.vy*sn)*L,(-seg.vx*sn+seg.vy*c)*L,seg.angVel,dt_sub);
-      seg.vx=(fluid.u*c-fluid.v*sn)/L;seg.vy=(fluid.u*sn+fluid.v*c)/L;seg.angVel=fluid.omega;
-      if(observe || physicsObserve) {
-        const afterJ=partKineticEnergy(seg,g.parts[i],BASE_PART_DENSITY,settings.physicsRegime);
-        observe?.('fluid-resistance',beforeFluid,afterJ);
-        physicsObserve?.(Object.freeze({stage:'fluid',id:org.id,part:i,beforeJ:beforeFluid,afterJ,
-          physicalDissipationJ:fluid.physicalDissipationJ,numericalDissipationJ:fluid.numericalDissipationJ,
-          iterations:fluid.iterations,residual:fluid.residual}));
+      if (!diagnostic || diagnostic.splitting === 'motor-drag') applyPrismDrag(org,i,settings,dt_sub,observe,physicsObserve);
+      else {
+        applyPrismDrag(org,i,settings,dt_sub/2,observe,physicsObserve);
+        if (diagnostic.splitting === 'motor-half-half') applyPrismDrag(org,i,settings,dt_sub/2,observe,physicsObserve);
       }
     }
     const beforeGuards = observe || physicsObserve ? partKineticEnergy(seg,g.parts[i],BASE_PART_DENSITY,settings.physicsRegime) : 0;
@@ -3205,7 +3226,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     }
     seg.angVel = clampVal(seg.angVel, -20.0, 20.0);
     if (observe) observe('speed-guards', beforeGuards, partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY, settings.physicsRegime));
-    if(physicsObserve && (spd>400 || Math.abs(auditOmega)>20)) physicsObserve(Object.freeze({stage:'guard',id:org.id,part:i,
+    if(physicsObserve && (spd>400 || Math.abs(auditOmega)>20)) physicsObserve(Object.freeze({stage:'guard',id:org.id,part:i,dt:dt_sub,
       incomingOmega,forceOmega,omega:auditOmega,speed:spd,lossJ:beforeGuards-partKineticEnergy(seg,g.parts[i],BASE_PART_DENSITY,settings.physicsRegime)}));
   }
 
@@ -3300,6 +3321,13 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       quadratic += .5 * (scratchMasses[i] * (dx * dx + dy * dy) + scratchInertias[i] * dw * dw);
     }
     const scale = passiveConstraintScale(linear, quadratic);
+    if(physicsObserve) {
+      let maxBias=0,maxAngularBias=0;
+      for(let j=0;j<numJoints;j++) {const c=scratchConstraints[j];maxBias=Math.max(maxBias,Math.hypot(c.biasX,c.biasY));
+        if(c.limited)maxAngularBias=Math.max(maxAngularBias,Math.abs(c.angularBias));}
+      physicsObserve(Object.freeze({stage:'joint-batch',id:org.id,dt:dt_sub,scale,
+        repairPose:scale<1&&scale<=64*Number.EPSILON,maxBias,maxAngularBias}));
+    }
     if (scale < 1) {
       org.motorDiagnostics!.constraintLimitedBatches!++;
       // A partial impulse still supplies the established positional response.
@@ -3313,7 +3341,8 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       }
     }
     if(physicsObserve) for(let i=0;i<partCount;i++) physicsObserve(Object.freeze({stage:'constraint',id:org.id,part:i,
-      beforeOmega:scratchConstraintStart[i*3+2],afterOmega:org.segments[i].angVel}));
+      dt:dt_sub,deltaV:Math.hypot(org.segments[i].vx-scratchConstraintStart[i*3],org.segments[i].vy-scratchConstraintStart[i*3+1]),
+      deltaOmega:org.segments[i].angVel-scratchConstraintStart[i*3+2],beforeOmega:scratchConstraintStart[i*3+2],afterOmega:org.segments[i].angVel}));
     if (observe) observe('constraint-batch', beforeConstraints,
       org.segments.reduce((sum, p, i) => sum + partKineticEnergy(p, g.parts[i], BASE_PART_DENSITY, settings.physicsRegime), 0));
   }
@@ -3510,7 +3539,12 @@ export function stepSimulation(
   onEvent?: (type: 'birth' | 'death' | 'eat' | 'clash' | 'egg_loss') => void,
   observeMechanics?: MechanicalObserver,
   physicsObserve?: PhysicsObserver,
+  diagnostic?: IntegrationDiagnostic,
 ): void {
+  if (diagnostic && (settings.physicsRegime !== 'prism-resistance-v4' || dt !== 1/60 ||
+      ![4,8,16,32,64].includes(diagnostic.substeps) ||
+      !['motor-drag','motor-half-half','half-motor-half'].includes(diagnostic.splitting)))
+    throw new Error('Invalid integration diagnostic');
   const mu = settings.waterViscosity ?? 0.22;
   const worldWidth = settings.worldWidth;
   const worldHeight = settings.worldHeight;
@@ -3956,15 +3990,16 @@ export function stepSimulation(
     positiveWorkJ: 0, negativeWorkJ: 0, energyLimitedImpulses: 0, numericalGuardEvents: 0,
     ...(['passive-work-v3','prism-resistance-v4'].includes(settings.physicsRegime ?? '') ? {constraintLimitedBatches: 0} : {})};
   const work = new Map(active.map(org => [org, 0]));
-  const substeps = Math.max(NUM_SUBSTEPS, Math.ceil(dt * 240));
+  if(diagnostic?.captureOutputs) for(const org of active) diagnostic.captureOutputs(org.id,org.neuralOutputs);
+  const substeps = diagnostic?.substeps ?? Math.max(NUM_SUBSTEPS, Math.ceil(dt * 240));
   for (let sub = 0; sub < substeps; sub++) {
-    for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics, physicsObserve));
+    for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics, physicsObserve, diagnostic, sub));
     resolveBodyContacts(active, BASE_PART_DENSITY,
       settings.physicsRegime === 'prism-resistance-v4' ? (o,n)=>projectBodyJoints(o,n,settings.physicsRegime) : projectBodyJoints,
       observeMechanics, settings.physicsRegime);
     if(physicsObserve) for(const org of active) {
-      let anchorPx=0,limitRad=0,maxOmega=0;
-      for(const part of org.segments) maxOmega=Math.max(maxOmega,Math.abs(part.angVel));
+      let anchorPx=0,limitRad=0,maxOmega=0,overspeedParts=0;
+      for(const part of org.segments) {maxOmega=Math.max(maxOmega,Math.abs(part.angVel));overspeedParts+=Number(Math.abs(part.angVel)>20);}
       for(let i=1;i<org.segments.length;i++) {
         const def=org.genome.parts[i],pd=org.genome.parts[def.parentIndex];
         const a=org.segments[def.parentIndex],b=org.segments[i];
@@ -3974,7 +4009,7 @@ export function stepSimulation(
         const relative=b.angle-a.angle-def.baseAngleOffset;
         limitRad=Math.max(limitRad,Math.abs(Math.atan2(Math.sin(relative),Math.cos(relative)))-def.maxAngle);
       }
-      physicsObserve(Object.freeze({stage:'substep',id:org.id,anchorPx,limitRad,maxOmega}));
+      physicsObserve(Object.freeze({stage:'substep',id:org.id,dt:dt/substeps,parts:org.segments.length,overspeedParts,anchorPx,limitRad,maxOmega}));
     }
   }
   for (let index = active.length - 1; index >= 0; index--) {

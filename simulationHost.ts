@@ -1,5 +1,5 @@
 import type {MechanicalObserver} from './mechanicalObservation';
-import type {PhysicsObserver} from './physicsObservation';
+import type {PhysicsObserver, IntegrationDiagnostic} from './physicsObservation';
 import {watchLineage} from './lineageChanges';
 import {occupiedPopulation, setWorldEnergy} from './energyEconomy';
 import {stepSimulation, addNutrients, nutrientSpawnSlots, createArchetypeGenome,
@@ -45,8 +45,8 @@ export class SimulationHost {
     this.genomeIds = new WeakMap(); this.nextGenome = 0;
     this.lineageChanges = watchLineage(this.state.lineage);
   }
-  tick(observe?: MechanicalObserver, physicsObserve?: PhysicsObserver): void {
-    stepSimulation(this.state, this.settings, 1 / 60, event => this.events.add(event), observe, physicsObserve);
+  tick(observe?: MechanicalObserver, physicsObserve?: PhysicsObserver, diagnostic?: IntegrationDiagnostic): void {
+    stepSimulation(this.state, this.settings, 1 / 60, event => this.events.add(event), observe, physicsObserve, diagnostic);
     this.steps++;
   }
   snapshot(metadata: Record<string, unknown> = {}): WorldSnapshot {

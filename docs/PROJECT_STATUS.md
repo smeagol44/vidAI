@@ -1,3 +1,35 @@
+# Issue #61 numerical integration checkpoint (2026-10-22)
+
+- Incremental draft #79, same `experiment/prism-resistance-v4` → testing d7a6814.
+  Physics, capacity, genomes/weights, work rules and old baselines unchanged.
+- Implemented explicit paused-Worker 60 Hz neural / 240 Hz held bounded-torque
+  capture/replay; physical substeps and BE placement vary only offline. Native
+  complete snapshots/PRNG equal ordinary Worker and old selected results exactly.
+  Refined replay/reset continuation is exact when the external tape is resupplied.
+- Three representative bodies, three numerical methods; all nine fail predeclared
+  finest-pair trajectory/work criteria at capped 3840 Hz. Native travel 240→3840:
+  CUR-008 26.30→20.68, CUR-007 47.31→39.49, CUR-006 25.52→41.45 px. No converged gait.
+- Smaller steps reduce BE damping and hinge errors, but Broadwake post-contact
+  peak reaches 56.39 rad/s in a refined alternate row. Guard/constraint/contact
+  redistribution remains unresolved; no justified solver correction selected.
+- Matched half-drag ordering changes paths with coefficients and commands fixed;
+  free-prism analytic spin controls converge first order. Relative numerical vs
+  constitutive contribution to the historical regression is still unquantified.
+- All 1,708,800 replay requests delivered; max chemical error 6.08e-10 J. Paid positive
+  work, signed braking and ledger reconcile without changing billing. Two-round
+  instrumented 1920 Hz costs 5.14–5.49× native240; alternate halves 6.68–7.83×.
+- 292 fast + one metadata, build/typecheck, legacy/v4 actual Workers and new tape
+  protocol/rejection/fork checks pass locally. CI status is in #79/#57. Prior
+  cancelled browser/partial Firefox result remains incomplete, not passed.
+- Evidence, raw snapshots/tapes/trajectories, criteria, exclusions and limits:
+  `docs/experiments/prism-integration-v1.md`. Old ecology regressions and promotion
+  block unchanged. Main v0.37.0/testing T1.1 unchanged; no merge/deploy/Wiki update.
+- Stop at bounded checkpoint. Next: localize the first later CUR-006 contact/
+  constraint overspeed/divergence in a short saved-state window, before proposing
+  a versioned numerical correction. No further Hz/coefficient/controller sweep.
+  #60 remains open; #72/#77 independent; #78 accepted subjective contextual
+  reinforcement semantics preserved and not implemented here.
+
 # Issue #61 prism-fluid v4 — implemented experiment, promotion blocked (2026-10-22)
 
 - Draft #79, `experiment/prism-resistance-v4` → testing d7a6814, independent of
