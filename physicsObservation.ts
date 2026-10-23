@@ -14,6 +14,7 @@ export type PhysicsObserver = (receipt:Readonly<PhysicsReceipt>)=>void;
  * Held outputs supply capacity modulation without overwriting the live brain. */
 export interface IntegrationDiagnostic {
   trace?: SolverTrace;
+  jointLimits?: 'unilateral-stop-v1';
   substeps: number;
   splitting: 'motor-drag' | 'motor-half-half' | 'half-motor-half';
   outputs?: ReadonlyMap<string, readonly number[]>;

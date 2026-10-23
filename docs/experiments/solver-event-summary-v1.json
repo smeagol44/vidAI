@@ -591,6 +591,8 @@
       "maxContactCorrectionEnergyChangeJ": 0
     }
   ],
-  "conclusion": "No specific invalid mass/Jacobian/constraint/contact impulse calculation demonstrated in inspected windows. First significant separation localizes at self-contact and changed contact/hinge cadence; first post-guard overspeed is dissipative joint redistribution. Pose stabilization has measured angular-momentum drift. No correction justified; stop numerical investigation at this bounded checkpoint.",
-  "archivePrefixExact": true
+  "conclusion": "Superseded: algebraic identities passed but did not test one-sided stop admissibility. The subsequent physical check proves net outward upper-stop reactions; see solver-stop-v1.md and the versioned diagnostic correction.",
+  "archivePrefixExact": true,
+  "preliminaryConclusion": "No specific invalid mass/Jacobian/constraint/contact impulse calculation demonstrated in inspected windows. First significant separation localizes at self-contact and changed contact/hinge cadence; first post-guard overspeed is dissipative joint redistribution. Pose stabilization has measured angular-momentum drift. No correction justified; stop numerical investigation at this bounded checkpoint.",
+  "supersededBy": "solver-stop-v1.md"
 }

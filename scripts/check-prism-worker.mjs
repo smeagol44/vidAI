@@ -52,6 +52,18 @@ try {
       await assert.rejects(worker.request('integration-experiment',{request:{ticks:12,substeps:32,splitting:'motor-drag',tape:capture.tape,
         solverTrace:{mode:'window',startTime:0,endTime:1}}}),/Invalid/);
       assert.deepEqual(await worker.request('snapshot'),source);
+      // Versioned stop correction is explicit external replay state, never a
+      // silent change to v4 snapshots/defaults.
+      await worker.reset(source);
+      await worker.request('integration-experiment',{request:{ticks:12,substeps:32,splitting:'motor-drag',tape:capture.tape,jointLimits:'unilateral-stop-v1'}});
+      const stopEnd=await worker.request('snapshot');await worker.reset(source);
+      await worker.request('integration-experiment',{request:{ticks:5,substeps:32,splitting:'motor-drag',tape:capture.tape,jointLimits:'unilateral-stop-v1'}});
+      const stopMid=await worker.request('snapshot');await worker.reset(stopMid);
+      await worker.request('integration-experiment',{request:{ticks:7,offset:5,substeps:32,splitting:'motor-drag',tape:capture.tape,jointLimits:'unilateral-stop-v1'}});
+      assert.deepEqual(await worker.request('snapshot'),stopEnd);
+      await worker.reset(source);
+      await assert.rejects(worker.request('integration-experiment',{request:{ticks:12,substeps:32,splitting:'motor-drag',tape:capture.tape,jointLimits:'unknown'}}),/Invalid/);
+      assert.deepEqual(await worker.request('snapshot'),source);
       // Continue a real Worker export exactly through reset/fork.
       await worker.trial(end,12,{audit:false});const continued=await worker.request('snapshot');
       const fork=new SimulationHost();fork.reset(end,1);for(let i=0;i<12;i++)fork.tick();assert.deepEqual(continued,fork.snapshot());
@@ -63,5 +75,5 @@ try {
     const other=regime==='passive-work-v3'?'prism-resistance-v4':'passive-work-v3';
     await assert.rejects(worker.request('control',{settings:{...source.settings,physicsRegime:other},running:false,speed:1,selected:null}),/resetting/);
   }
-  console.log('Prism built Worker: exact host/observed/unobserved/fork continuation, work/drag receipts, strict request/regime gates and integration tape replay/fork/rejection and solver tracing passed.');
+  console.log('Prism built Worker: exact host/observed/unobserved/fork continuation, work/drag receipts, strict request/regime gates and integration tape replay/fork/rejection and solver tracing/versioned unilateral-stop continuation passed.');
 }finally{await worker.close();}

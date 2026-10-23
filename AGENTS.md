@@ -1,22 +1,19 @@
-# Stopped first-event numerical audit (#61 / draft #79, 2026-10-23)
+# Angular-stop admissibility checkpoint (#61 / draft #79, 2026-10-23)
 
-- `docs/experiments/solver-event-v1.md` is the latest bounded checkpoint. Replayed
-  only CUR-006 first-second prefixes at existing 1920/3840 Hz and two short windows.
-  First major speed separation is P0–P6 contact at .12552s; first post-guard joint
-  overspeed .40443/.41094s is dissipative velocity redistribution.
-- No invalid effective mass, Jacobian, impulse sign/update or work calculation
-  demonstrated. No physics correction selected. Pose projection's angular-momentum
-  artifact is explicit; do not claim complete physical conservation from energy.
-- STOP numerical investigation. No further automatic bug-hunting, Hz refinement,
-  old swim/ecology/search rerun, coefficient tuning or speculative solver redesign.
-  A different coupling/guard contract requires a separately authorized scope.
-- New solver packets are copied/frozen, read-only, paused v4 diagnostics, never
-  saved or used by solver decisions. Keep exact observed/unobserved snapshots,
-  prepaid positive work, separate braking, PRNG/legacy continuation and all guards.
-  Inactive angular-bias scratch values are emitted as zero, not applied to physics.
-- Preserve new raw receipts/snapshots/checks and excluded coordinate-bias checker;
-  existing prism inputs/results/baselines unchanged. #79 remains draft/unmerged/
-  undeployed. Do not alter #59/#72, #60 or #78 from this numerical checkpoint.
+- Latest: `docs/experiments/solver-stop-v1.md`. The earlier no-defect conclusion at
+  53ecc5b was incomplete: equality/work identities missed one-sided stop signs.
+  All44 inspected old upper-stop batches pull outward while returning inward.
+- One correction only: explicit external `jointLimits: 'unilateral-stop-v1'` in
+  paused v4 held-tape diagnostics. Clamp accumulated stop impulse, not each delta.
+  No default/save-schema/regime change; candidate continuation requires resupplying
+  version+tape. Old/native windows and all historical paths remain exact.
+- Wrong-sign reactions are removed in focused same-state windows. Overspeed remains
+  and worsens slightly; first-contact control is identical. No locomotion/ecology/
+  convergence claim. Keep all guards, work prepayment, signed braking and learning.
+- STOP after this bounded correction. No further numerical study, higher Hz, old
+  swim/ecology/search rerun, tuning or speculative coupled-solver redesign.
+- Preserve preliminary/raw/excluded evidence and the original prism baselines.
+  #79 stays draft/unmerged/undeployed; no #59/#72, #60, #78, Wiki or3D changes.
 
 # Testing-only numerical diagnostic checkpoint (#61 / draft #79)
 

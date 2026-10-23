@@ -1,3 +1,4 @@
+import {unilateralLimitStep} from './jointLimitImpulse';
 import {solverPart,solverParts,solverPeak,solverEmit} from './solverTrace';
 import {prismProperties, integratePrismDrag, PRISM_REFERENCE} from './prismPhysics';
 import type {PhysicsObserver, IntegrationDiagnostic} from './physicsObservation';
@@ -2991,10 +2992,13 @@ function applyPrismDrag(org:Organism,i:number,settings:SimulationSettings,dt:num
   }
 }
 
+const scratchLimitImpulses = new Float64Array(MAX_PARTS);
 const scratchAuditCeiling = new Float64Array(MAX_PARTS), scratchAuditRequest = new Float64Array(MAX_PARTS);
 function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number, observe?: MechanicalObserver, physicsObserve?: PhysicsObserver, diagnostic?: IntegrationDiagnostic, substep = 0): number {
   const g = org.genome, numJoints = org.joints.length;
   const trace=diagnostic?.trace;
+  const unilateral=diagnostic?.jointLimits==='unilateral-stop-v1';
+  if(unilateral)scratchLimitImpulses.fill(0);
   const corrected = usesPaidActuation(settings.physicsRegime);
   const surfaceModel = settings.physicsRegime === 'surface-work-v1';
   const prismModel = settings.physicsRegime === 'prism-resistance-v4';
@@ -3321,11 +3325,15 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
         const traceBefore=trace?.detailed?[solverPart(parentPhys),solverPart(childPhys)]:undefined;
         const beforeLimit = pairEnergy?.() ?? 0;
         const relAngVel = childPhys.angVel - parentPhys.angVel;
-        const angImpulse = -(relAngVel + angularBias) / (iP + iC);
+        let angImpulse = -(relAngVel + angularBias) / (iP + iC);
+        if(unilateral) {
+          const stop=unilateralLimitStep(relAngVel,angularBias,iP+iC,scratchLimitImpulses[j],angularBias>=0);
+          angImpulse=stop.impulse;scratchLimitImpulses[j]=stop.total;
+        }
         childPhys.angVel += angImpulse * iC; parentPhys.angVel -= angImpulse * iP;
         if(trace?.detailed)solverEmit(trace,{stage:'joint-limit',id:org.id,iteration:iter,joint:j,parent:parentIdx,child:childIdx,
           before:traceBefore,after:[solverPart(parentPhys),solverPart(childPhys)],relative:relAngVel,bias:angularBias,impulse:angImpulse,
-          effectiveInverse:iP+iC,inverseInertia:[iP,iC]});
+          effectiveInverse:iP+iC,inverseInertia:[iP,iC],...(unilateral?{limitMode:'unilateral-stop-v1',upper:angularBias>=0,totalImpulse:scratchLimitImpulses[j]}:{})});
         if (observe && !passiveSolver) observe('angular-limit', beforeLimit, pairEnergy!());
       }
     }
@@ -3363,6 +3371,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       }
     }
     if(trace)solverEmit(trace,{stage:'joint-accept',id:org.id,maxOmega:solverPeak(org),scale,repairPose,linear,quadratic,
+      ...(unilateral?{limitMode:'unilateral-stop-v1',limitTotals:Array.from(scratchLimitImpulses.slice(0,numJoints),x=>x*scale)}:{}),
       ...(trace.detailed?{before:batchStart,provisional,after:solverParts(org)}:{})});
     if(physicsObserve) for(let i=0;i<partCount;i++) physicsObserve(Object.freeze({stage:'constraint',id:org.id,part:i,
       dt:dt_sub,deltaV:Math.hypot(org.segments[i].vx-scratchConstraintStart[i*3],org.segments[i].vy-scratchConstraintStart[i*3+1]),

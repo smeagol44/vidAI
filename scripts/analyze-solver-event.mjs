@@ -8,7 +8,7 @@ const q=p=>[p.vx,p.vy,p.omega];
 const flat=ps=>ps.flatMap(q);
 const cross=(x,y,u,v)=>x*v-y*u;
 const wrap=x=>Math.atan2(Math.sin(x),Math.cos(x));
-const records=JSON.parse(gunzipSync(readFileSync('docs/experiments/solver-event-windows-v1.json.gz')));
+const records=JSON.parse(gunzipSync(readFileSync(process.argv[2]??'docs/experiments/solver-event-windows-v1.json.gz')));
 const input=JSON.parse(readFileSync('docs/experiments/prism-integration-v1-CUR-006.json'));
 const defs=input.snapshot.state.organisms[0].genome.parts;
 const report={protocol:'solver-event-independent-checks-v1',source:records.source,tolerances:{algebraRelative:1e-10,workResidualJ:1e-14,anchorBias:'4*EPSILON*sum(abs(world-coordinate terms))*.35*Hz plus algebra roundoff'},windows:[]};
@@ -18,7 +18,7 @@ for(const window of records.windows) {
   maxContactCorrectionAngularMomentumChangeJs:0,maxContactCorrectionEnergyChangeJ:0,maxProjectionComShiftPx:0,maxProjectionAngularMomentumChangeJs:0,maxContactLinearMomentumErrorKgMS:0,maxContactAngularMomentumErrorJs:0,
   contactWorkJ:0,jointNetWorkJ:0,projectionSamples:0,guardLossJ:0,contacts:[],firstOverspeed:null};
  const mass=reference.map(r=>r.mass),inertia=reference.map(r=>r.inertia);
- const fail=[];
+ const fail=[],limitSums=new Map(),limitSides=new Map();
  function check(label,actual,expected,tol=1e-10,absoluteBound=0) {
   if(Array.isArray(actual)){actual.forEach((x,i)=>check(label,x,expected[i],tol,Array.isArray(absoluteBound)?absoluteBound[i]:absoluteBound));return;}
   const relative=Math.abs(actual-expected)/Math.max(1,Math.abs(actual),Math.abs(expected));
@@ -63,7 +63,15 @@ for(const window of records.windows) {
    check('anchorBias',e.bias,biasExpected,0,biasBound);
   }else if(e.stage==='joint-limit') {
    const g=generalized(e,[e.parent,e.child],[[0,0,-1,0,0,1]],[e.impulse]);
-   check('limitEffectiveInverse',e.effectiveInverse,g.k[0][0]);check('limitImpulseResidual',e.impulse*g.k[0][0],-g.relative[0]-e.bias);
+   check('limitEffectiveInverse',e.effectiveInverse,g.k[0][0]);if(e.limitMode==='unilateral-stop-v1') {
+    const sign=e.upper?1:-1,previous=e.totalImpulse-e.impulse;
+    if(e.totalImpulse*sign>1e-9)fail.push({label:'outwardLimit',e});
+    const vAfter=g.relative[0]+g.k[0][0]*e.impulse+e.bias;
+    if(Math.abs(e.totalImpulse)>1e-9)check('limitActiveResidual',vAfter,0);
+    else if(sign*vAfter>1e-10)fail.push({label:'limitReleaseVelocity',vAfter});
+    check('limitAccumulatedUpdate',e.totalImpulse,sign>0?Math.min(0,previous-(g.relative[0]+e.bias)/g.k[0][0]):Math.max(0,previous-(g.relative[0]+e.bias)/g.k[0][0]));
+   }else check('limitImpulseResidual',e.impulse*g.k[0][0],-g.relative[0]-e.bias);
+   const key=e.tick+':'+e.substep+':'+e.joint;limitSums.set(key,(limitSums.get(key)??0)+e.impulse);limitSides.set(key,Math.sign(e.bias));
    const rel=wrap(e.before[1].angle-e.before[0].angle-defs[e.child].baseAngleOffset),excess=Math.sign(rel)*(Math.abs(rel)-defs[e.child].maxAngle);
    check('limitBias',e.bias,.2*e.hz*excess);
   }else if(e.stage==='contact-impulse') {
@@ -114,12 +122,14 @@ for(const window of records.windows) {
    workCheck(e.beforeJ-e.afterJ,e.physicalDissipationJ+e.numericalDissipationJ);
   }
  }
- report.windows.push({name:window.name,hz:window.measured.hz,startTime:window.startTime,endTime:window.endTime,reference,checks:stat,failures:fail,
+ const outwardBatches=[...limitSums].filter(([key,total])=>total*limitSides.get(key)>1e-9).map(([key,total])=>({key,total,side:limitSides.get(key)}));
+ report.windows.push({outwardLimitBatches:outwardBatches,limitBatches:limitSums.size,name:window.name,hz:window.measured.hz,startTime:window.startTime,endTime:window.endTime,reference,checks:stat,failures:fail,
   energy:{motorJ:window.measured.motorJ,positiveJ:window.measured.positiveJ,brakingJ:window.measured.brakingJ,maxChemicalErrorJ:window.measured.maxChemicalErrorJ,
    requestMismatch:window.measured.mismatches,energyLimited:window.measured.energyLimited,observedUnobservedExact:window.observedUnobservedExact}});
 }
 report.passed=report.windows.every(w=>w.failures.length===0);
-writeFileSync('docs/experiments/solver-event-checks-v1.json',JSON.stringify(report,null,2)+'\n');
+report.unilateralAdmissible=report.windows.every(w=>w.outwardLimitBatches.length===0);
+writeFileSync(process.argv[3]??'docs/experiments/solver-event-checks-v1.json',JSON.stringify(report,null,2)+'\n');
 for(const w of report.windows)console.log(JSON.stringify({name:w.name,hz:w.hz,failures:w.failures.slice(0,8),maxRelative:w.checks.maxRelativeError,
  maxWorkResidualJ:w.checks.maxWorkResidualJ,maxContactGainJ:w.checks.maxContactGainJ,maxJointGainJ:w.checks.maxJointGainJ,
  projectionAngularMomentumJs:w.checks.maxProjectionAngularMomentumChangeJs,firstOverspeed:w.checks.firstOverspeed,firstContact:w.checks.contacts[0]}));

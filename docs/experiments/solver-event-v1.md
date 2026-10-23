@@ -1,3 +1,10 @@
+> **Superseded physical conclusion:** the preliminary algebra-only no-defect
+> conclusion below missed unilateral angular-stop admissibility. All44 old active
+> stop batches in the inspected overspeed window apply net outward reactions.
+> See [the final defect/correction checkpoint](solver-stop-v1.md). Original raw
+> localization and algebraic measurements remain valid and retained; no baseline
+> was reset. `unilateral-stop-v1` is an explicitly selected diagnostic correction.
+
 # CUR-006 first articulated event — #61 / draft #79 (2026-10-23)
 
 **Conclusion: no specific invalid constraint/contact calculation was demonstrated

@@ -17,6 +17,7 @@ export interface CommandTape {
 export interface IntegrationRequest {
   ticks:number;substeps:number;splitting:IntegrationDiagnostic['splitting'];
   tape?:CommandTape;offset?:number;probe?:boolean;
+  jointLimits?:'unilateral-stop-v1';
   solverTrace?:{mode:'scan'}|{mode:'window';startTime:number;endTime:number};
 }
 const methods=['motor-drag','motor-half-half','half-motor-half'];
@@ -26,6 +27,8 @@ function validate(host:SimulationHost,r:IntegrationRequest) {
     host.state.organisms[0].joints.length<1||host.state.eggs.length>0||host.running||host.settings.physicsRegime!=='prism-resistance-v4'||!Number.isInteger(r.ticks)||r.ticks<1||r.ticks>300||
     ![4,8,16,32,64].includes(r.substeps)||!methods.includes(r.splitting)||
     (r.probe!==undefined&&typeof r.probe!=='boolean')||(r.probe&&r.ticks>60))bad();
+  if(r.jointLimits!==undefined&&(r.jointLimits!=='unilateral-stop-v1'||!r.tape||r.ticks>60||
+    ![32,64].includes(r.substeps)||r.splitting!=='motor-drag'))bad();
   if(r.solverTrace) {
     const trace=r.solverTrace,begin=(r.tape?.startTime??0)+(r.offset??0)/60,finish=begin+r.ticks/60;
     if(!r.tape||r.ticks>60||![32,64].includes(r.substeps)||r.splitting!=='motor-drag'||!['scan','window'].includes(trace.mode))bad();
@@ -149,7 +152,7 @@ export function runIntegrationExperiment(host:SimulationHost,request:Integration
     tickLimited=0;tickRepairs=0;tickMinScale=1;tickMaxBias=0;tickMaxAngularBias=0;
     if(request.tape)current=tape.frames[offset+tick];
     else {current=[];tape.frames.push(current);}
-    const diagnostic:IntegrationDiagnostic={substeps,splitting,...(request.solverTrace?{trace}:{}),
+    const diagnostic:IntegrationDiagnostic={substeps,splitting,...(request.jointLimits?{jointLimits:request.jointLimits}:{}),...(request.solverTrace?{trace}:{}),
       ...(request.tape?{outputs:new Map(current.map(f=>[f.id,f.outputs])),torqueAt:(id:string,sub:number)=>{
         const f=current.find(f=>f.id===id);if(!f)throw new Error('Tape population changed');
         return f.torques[Math.floor(sub*4/substeps)];
@@ -170,7 +173,7 @@ export function runIntegrationExperiment(host:SimulationHost,request:Integration
   let pathPx=0;
   for(let i=0;i<trajectory.length;i++)for(let j=0;j<trajectory[i].length;j++)
     pathPx+=Math.hypot(trajectory[i][j].x-(trajectory[i-1]?.[j].x??0),trajectory[i][j].y-(trajectory[i-1]?.[j].y??0));
-  return {substeps,hz:substeps*60,splitting,ticks,offset,runtimeMs,trajectory,pathPx,finite,
+  return {substeps,hz:substeps*60,splitting,...(request.jointLimits?{jointLimits:request.jointLimits}:{}),ticks,offset,runtimeMs,trajectory,pathPx,finite,
     displacementPx:Math.hypot(trajectory.at(-1)![0].x,trajectory.at(-1)![0].y),
     reserveSpentJ:initial.reduce((s,a)=>s+a.energy-host.state.organisms.find(o=>o.id===a.id)!.energy,0),
     positiveJ,brakingJ,motorJ,ledgerMotorJ:host.state.ledger.mechanicalWorkHeat-initialMotor,fluidPhysicalJ,fluidNumericalJ,fluidBalanceErrorJ,

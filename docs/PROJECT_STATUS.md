@@ -1,4 +1,28 @@
-# Issue #61 first articulated event — stopped diagnostic (2026-10-23)
+# Issue #61 angular-stop defect — bounded correction (2026-10-23)
+
+- Supersedes the preliminary no-defect interpretation at53ecc5b. Algebraic equality/
+  work identities passed but did not check physical one-sided stop admissibility.
+  All44 inspected old active upper-stop batches have net outward impulses while
+  returning inward. Effective mass/contact calculations were not the defect.
+- Implemented explicit external diagnostic `unilateral-stop-v1`: clamp accumulated
+  angular-stop impulse to the permitted sign. No default, schema, fluid, torque,
+  gene, learning, energy-rule or guard change. Old snapshots continue exactly.
+- Same-state containing-tick Worker controls at1920/3840Hz remove wrong-sign stop
+  reactions; first-contact negative controls are full-snapshot identical. Candidate
+  version+tape snapshot/fork continuation is exact. No previous campaign rerun.
+- Correction does not fix overspeed: peak20.2081→20.2112 coarse,20.3868→20.4692 fine;
+  guards11→11/62→64, positive work+1.334%/+2.563%. Mixed hinge-error changes reported.
+  No locomotion, convergence or ecology recovery claim; promotion remains blocked.
+- Independent work/velocity/stop checks pass; max candidate energy residual2.13e-15J
+  and chemical error8.37e-11J, no energy limiting. Local297 fast+metadata, build and
+  both real Worker checks pass; final CI/head are in #57/#61/#79.
+- Evidence and scope: `docs/experiments/solver-stop-v1.md`. Original localization,
+  preliminary/excluded checks, raw inputs and frozen baselines retained. Stop now;
+  no further automatic numerical investigation or speculative redesign justified.
+- Main v0.37.0/testingT1.1 unchanged; #79 draft/unmerged/undeployed. No related
+  issue, Wiki,3D or reinforcement-semantics changes.
+
+# Preliminary algebra-only event checkpoint — superseded by stop-sign defect
 
 - Incremental draft #79, `experiment/prism-resistance-v4` → testing d7a6814,
   parent d2826d7. Read-only solver telemetry, no physics correction implemented.
