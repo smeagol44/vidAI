@@ -10,7 +10,7 @@ export interface CompiledBrain {
 }
 type Entry = {inputs: Genome['inputKeys']; outputs: Genome['outputKeys']; hidden: Genome['hiddenIds'];
   disabled: Genome['disabledConnections']; disabledCount: number; scope: Genome['plasticMotorScope'];
-  motorEnabled: boolean; sensoryEnabled: boolean; compiled: CompiledBrain};
+  selector: string; motorEnabled: boolean; sensoryEnabled: boolean; compiled: CompiledBrain};
 const brains = new WeakMap<Genome, Entry>();
 
 /** Dense rows use a straight loop; only rows containing disabled edges need
@@ -36,12 +36,13 @@ function enabledRows(mask: Uint8Array, targets: number, sources: number): Array<
 export function invalidateCompiledBrain(g: Genome): void { brains.delete(g); }
 export function compiledBrain(g: Genome): CompiledBrain {
   const prior = brains.get(g), motorEnabled = (g.plasticityRate ?? 0) > 0;
+  const selector=g.motorController?.version==='retained-head-v1'?JSON.stringify(g.motorController.signedJoints):'';
   const sensoryEnabled = (g.sensoryPlasticityRate ?? 0) > 0;
   if (prior && prior.inputs === g.inputKeys && prior.outputs === g.outputKeys
     && prior.hidden === g.hiddenIds && prior.disabled === g.disabledConnections
     && prior.disabledCount === (g.disabledConnections?.length ?? 0)
     && prior.scope === g.plasticMotorScope && prior.motorEnabled === motorEnabled
-    && prior.sensoryEnabled === sensoryEnabled) return prior.compiled;
+    && prior.sensoryEnabled === sensoryEnabled && prior.selector===selector) return prior.compiled;
   const inputs = g.inputKeys!, outputs = g.outputKeys!, hidden = g.hiddenIds!;
   const ih = new Uint8Array(hidden.length * inputs.length);
   const hh = new Uint8Array(hidden.length * hidden.length);
@@ -60,6 +61,10 @@ export function compiledBrain(g: Genome): CompiledBrain {
   }
   const motor: CompiledBrain['motor'] = [], sensory: CompiledBrain['sensory'] = [];
   const addMotor = (o: number, h: number) => {
+    if(g.motorController?.version==='retained-head-v1') {
+      const joint=Math.floor(o/9),signed=g.motorController.signedJoints.includes(g.parts[joint+1].id);
+      if((o%9>=6)!==signed)return; // Dormant head does not displace the active learner's 96-edge budget.
+    }
     const slot = o * hidden.length + h;
     if (!ho[slot] && motor.length < 96)
       motor.push({edge: JSON.stringify(['ho', outputs[o], hidden[h]]), slot, output: o, hidden: h});
@@ -88,7 +93,7 @@ export function compiledBrain(g: Genome): CompiledBrain {
     sensorySlots: new Map(sensory.map(e => [e.edge, e.slot]))};
   brains.set(g, {inputs, outputs, hidden, disabled: g.disabledConnections,
     disabledCount: g.disabledConnections?.length ?? 0, scope: g.plasticMotorScope,
-    motorEnabled, sensoryEnabled, compiled});
+    selector, motorEnabled, sensoryEnabled, compiled});
   return compiled;
 }
 

@@ -1,3 +1,24 @@
+# Retained motor-head checkpoint (#59 / draft #72)
+
+- Owner retains passive-work-v3. Fluid stack #79/#81/#82/#83 and #61/#80 are
+  closed; do not resume them. #84 is a separately deferred stop-correction candidate.
+- Current experiment: docs/experiments/retained-head-v1.md. Explicit schema18 /
+  retained-head-v1 world/genotype preserves six legacy output meanings and adds
+  three separate signed outputs; stable per-joint inherited selector starts legacy.
+  No automatic save/living-brain conversion or copying old rows into torque roles.
+- Retained policies/learning/PRNG/energy exact in frozen24-hidden specimens;
+  switching a joint to its fresh head still regresses movement/guards materially.
+  All-signed endpoints exactly reproduce archived three-output/hysteresis results.
+  Do not call this torque-policy transfer, recovered swimming or a selected design.
+- Same v3 physics, existing capacity formulas, positive/braking prepayment, chemical
+  costs, safeguards and old schema3–16 paths. No starter, gain, physical unit,
+  muscle, #78 learning-valence, Wiki/3D or deployment changes. Extra head uses the
+  existing edge budget/upkeep rules; exact energy continuity not proven for all
+  hidden counts/masks. Active-head-only learning is a new-version design trade-off.
+- Local304fast+1metadata/build and production/gated/retained real-Worker checks
+  pass. Preserve old reports/hashes; no new broad search/ecology/browser campaign.
+  Final branch/head/CI in #59/#57/#72. Stop for review, no merge or deployment.
+
 # Project status — 2026-10-21
 
 ## Causal torque-demand audit — draft #72, unmerged

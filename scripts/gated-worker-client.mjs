@@ -1,9 +1,12 @@
 import {Worker} from 'node:worker_threads';
-import {readdir} from 'node:fs/promises';
+import {readFile} from 'node:fs/promises';
 
 /** Drives the actual Vite-built browser Worker. Only its message port is adapted. */
 export async function startGatedWorker() {
-  const asset = (await readdir(new URL('../dist/assets/', import.meta.url))).find(n => /^simulation\.worker-.*\.js$/.test(n));
+  const html=await readFile(new URL('../dist/index.html',import.meta.url),'utf8');
+  const entry=html.match(/src="[^"]*\/assets\/(index-[^"]+\.js)"/);
+  const app=entry?await readFile(new URL('../dist/assets/'+entry[1],import.meta.url),'utf8'):'';
+  const asset=app.match(/simulation\.worker-[A-Za-z0-9_-]+\.js/)?.[0];
   if (!asset) throw new Error('Run npm run build first');
   const bundle = new URL(`../dist/assets/${asset}`, import.meta.url).href;
   const boot = `import {parentPort} from 'node:worker_threads';
@@ -29,6 +32,7 @@ export async function startGatedWorker() {
     pending.set(id, {resolve, reject, timer}); worker.postMessage({type, epoch, id, ...extra});
   });
   return {
+    bundle,
     request,
     async reset(snapshot) {
       epoch++; worker.postMessage({type: 'reset', epoch, snapshot});

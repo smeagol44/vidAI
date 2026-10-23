@@ -59,7 +59,7 @@ export function resizeWorld(s: SimulationState, old: SimulationSettings, width: 
 
 export function createSnapshot(s: SimulationState, settings: SimulationSettings, metadata: Record<string, unknown> = {}) {
   const {prng, lineage, ...data} = s;
-  const snapshot = {schemaVersion: settings.motorExperiment ? '16.0.0' : settings.physicsRegime === 'passive-work-v3' ? '15.0.0' : settings.mouthContactModel === 'capsule-v1' ? '14.0.0' : s.energyPool ? '13.0.0' : '12.0.0', build: BUILD_VERSION, metadata, settings: {...settings,
+  const snapshot = {schemaVersion: settings.motorExperiment === 'retained-head-v1' ? '18.0.0' : settings.motorExperiment ? '16.0.0' : settings.physicsRegime === 'passive-work-v3' ? '15.0.0' : settings.mouthContactModel === 'capsule-v1' ? '14.0.0' : s.energyPool ? '13.0.0' : '12.0.0', build: BUILD_VERSION, metadata, settings: {...settings,
     ...(s.energyPool ? {ecologyRegime: 'closed-v1' as const, nutrientLimit: settings.nutrientLimit ?? null} : {}),
     physicsRegime: settings.physicsRegime ?? 'legacy-v0'},
     state: {...data, prngState: prng.getState(), lineage: [...lineage]}};
@@ -86,9 +86,13 @@ export function validateGenome(raw: unknown): Genome {
     && g.eyes.length + g.mouths.length <= MAX_SURFACE_ORGANS, 'organ count');
   if (g.motorController !== undefined) {
     const c = g.motorController;
-    assert(c && c.version === 'gated-torque-v1'
+    assert(c && ['gated-torque-v1','retained-head-v1'].includes(c.version)
       && ['two-output', 'three-output'].includes(c.architecture)
       && [0, .06].includes(c.hysteresisWidth) && g.brainVersion === 7, 'experimental motor controller');
+    if(c.version==='retained-head-v1') assert(c.architecture==='three-output' && Array.isArray(c.signedJoints)
+      && new Set(c.signedJoints).size===c.signedJoints.length
+      && c.signedJoints.every(id=>typeof id==='string' && g.parts.slice(1).some(p=>p.id===id)), 'retained joint selectors');
+    else assert(!('signedJoints' in c), 'retained selectors in old controller');
   }
   assert(g.anatomyVersion === undefined || g.anatomyVersion === 1, 'anatomy version');
   assert(new Set(g.eyes.map(e => e.id)).size === g.eyes.length
@@ -131,7 +135,7 @@ export function validateGenome(raw: unknown): Genome {
       Array.isArray(row) && row.length <= MAX_NEURAL_INPUTS && row.every(Number.isFinite)), 'neural weights');
   }
   assert(Array.isArray(g.biasesH) && g.biasesH.every(Number.isFinite)
-    && Array.isArray(g.biasesO) && g.biasesO.length <= MAX_OUTPUTS && g.biasesO.every(Number.isFinite), 'neural biases');
+    && Array.isArray(g.biasesO) && g.biasesO.length <= (g.motorController?.version==='retained-head-v1'?(g.parts.length-1)*9:MAX_OUTPUTS) && g.biasesO.every(Number.isFinite), 'neural biases');
   const hiddenCount = g.biasesH.length;
   assert(hiddenCount >= 1 && hiddenCount <= MAX_HIDDEN && g.weightsIH.length === hiddenCount
     && g.weightsHH.length === hiddenCount && g.weightsHH.every(row => row.length === hiddenCount), 'hidden layer');
@@ -206,9 +210,9 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     assert(input.length <= 25_000_000, 'file exceeds 25 MB'); return JSON.parse(input);
   })() : structuredClone(input);
   assert(raw && typeof raw === 'object', 'document');
-  assert(['16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
-  const experiment = raw.schemaVersion === '16.0.0';
-  assert(experiment ? raw.settings?.motorExperiment === 'gated-torque-v1' : raw.settings?.motorExperiment === undefined, 'experimental motor schema');
+  assert(['18.0.0', '16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
+  const experiment = ['18.0.0','16.0.0'].includes(raw.schemaVersion);
+  assert(experiment ? raw.settings?.motorExperiment === (raw.schemaVersion==='18.0.0'?'retained-head-v1':'gated-torque-v1') : raw.settings?.motorExperiment === undefined, 'experimental motor schema');
   const legacy = raw.schemaVersion === '3.0.0';
   const data = legacy ? raw : raw.state;
   assert(data && typeof data === 'object', 'state');
@@ -216,14 +220,14 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   // Historical omitted fields retain their original values; new-world defaults
   // must not silently change old snapshot ecology.
   const settings: SimulationSettings = {...DEFAULT_SETTINGS, targetNutrients: 400, maxOrganisms: 100, physicsRegime: 'legacy-v0', ...raw.settings};
-  if (!['16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0'].includes(raw.schemaVersion)) settings.physicsRegime = 'legacy-v0';
-  else assert(['16.0.0', '15.0.0'].includes(raw.schemaVersion) ? raw.settings?.physicsRegime === 'passive-work-v3'
+  if (!['18.0.0', '16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0'].includes(raw.schemaVersion)) settings.physicsRegime = 'legacy-v0';
+  else assert(['18.0.0', '16.0.0', '15.0.0'].includes(raw.schemaVersion) ? raw.settings?.physicsRegime === 'passive-work-v3'
     : ['legacy-v0', 'surface-work-v1', 'paid-work-v2'].includes(raw.settings?.physicsRegime), 'physics regime');
-  assert(['16.0.0', '15.0.0'].includes(raw.schemaVersion) ? settings.mouthContactModel === undefined || settings.mouthContactModel === 'capsule-v1'
+  assert(['18.0.0', '16.0.0', '15.0.0'].includes(raw.schemaVersion) ? settings.mouthContactModel === undefined || settings.mouthContactModel === 'capsule-v1'
     : raw.schemaVersion === '14.0.0' ? settings.mouthContactModel === 'capsule-v1'
     : settings.mouthContactModel === undefined, 'mouth contact model');
   const closed = raw.schemaVersion === '13.0.0'
-    || (['16.0.0', '15.0.0', '14.0.0'].includes(raw.schemaVersion) && settings.ecologyRegime === 'closed-v1');
+    || (['18.0.0', '16.0.0', '15.0.0', '14.0.0'].includes(raw.schemaVersion) && settings.ecologyRegime === 'closed-v1');
   assert(closed ? settings.ecologyRegime === 'closed-v1' && data.energyPool?.regime === 'closed-v1'
     : settings.ecologyRegime === undefined && data.energyPool === undefined, 'ecology regime');
   if (closed) {
@@ -248,9 +252,10 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   const prng = new XoshiroPRNG(); prng.setState(data.prngState);
   const checkExperimentalGenome = (g: Genome) => {
     assert(experiment || g.motorController === undefined, 'experimental genes in historical schema');
+    assert(!g.motorController || g.motorController.version===settings.motorExperiment, 'controller version/schema mismatch');
   };
   const organisms: Organism[] = data.organisms.map((o: Organism) => {
-    if (['16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0'].includes(raw.schemaVersion)) {
+    if (['18.0.0', '16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0'].includes(raw.schemaVersion)) {
       assert(o.genome.brainVersion === 7, 'current brain version');
     } else {
       if (raw.schemaVersion === '10.0.0') assert(o.genome.brainVersion === 6, 'previous brain version');
@@ -289,7 +294,7 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
       && Number.isFinite(o.age) && Number.isFinite(o.maxLifespan) && typeof o.dissolving === 'boolean', 'organism state');
     assert(Array.isArray(o.neuralInputs) && o.neuralInputs.length <= MAX_NEURAL_INPUTS && o.neuralInputs.every(Number.isFinite)
       && Array.isArray(o.neuralHidden) && o.neuralHidden.length === o.genome.hiddenIds!.length && o.neuralHidden.every(Number.isFinite)
-      && Array.isArray(o.neuralOutputs) && o.neuralOutputs.length <= MAX_OUTPUTS && o.neuralOutputs.every(Number.isFinite), 'activations');
+      && Array.isArray(o.neuralOutputs) && (o.genome.motorController?.version==='retained-head-v1'?o.neuralOutputs.length===o.genome.outputKeys!.length:o.neuralOutputs.length<=MAX_OUTPUTS) && o.neuralOutputs.every(Number.isFinite), 'activations');
     if (o.learnedMotorWeights !== undefined) {
       assert((o.genome.plasticityRate ?? 0) > 0 && Array.isArray(o.learnedMotorWeights)
         && o.learnedMotorWeights.length <= MAX_PLASTIC_MOTOR_SYNAPSES,

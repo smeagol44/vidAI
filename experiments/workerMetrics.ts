@@ -5,7 +5,7 @@ import type {SimulationHost} from '../simulationHost';
 import {calculateOrganismCOM, getCardinalAnchor, getChildAnchorForParentDir} from '../simulation';
 import {totalAccountedEnergy} from '../persistence';
 
-export function measureWorkerTrial(host: SimulationHost, ticks: number, actuation?: ActuationObserver) {
+export function measureWorkerTrial(host: SimulationHost, ticks: number, actuation?: ActuationObserver, afterTick?: (tick:number)=>void) {
   const initial = host.state.organisms.map(o => ({id: o.id, com: calculateOrganismCOM(o), energy: o.energy}));
   const lateStarts = new Map(initial.map(a => [a.id, a.com]));
   let boundaryTicks = 0;
@@ -19,6 +19,7 @@ export function measureWorkerTrial(host: SimulationHost, ticks: number, actuatio
     host.tick((phase, before, after) => {
       if (phase === 'constraint-batch') maxConstraintGainJ = Math.max(maxConstraintGainJ, after - before);
     }, actuation);
+    afterTick?.(tick);
     const s = host.state;
     if (tick === Math.floor(ticks * 2 / 3)) for (const o of s.organisms) lateStarts.set(o.id, calculateOrganismCOM(o));
     if (s.organisms.some(o => o.segments.some(p => p.x < 100 || p.y < 100

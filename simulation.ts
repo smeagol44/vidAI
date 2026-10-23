@@ -217,7 +217,8 @@ export interface PartDef {
 export type ArchetypeId = 'eel' | 'flapper' | 'tadpole' | 'glider' | 'predator' | 'nematode' | 'random';
 
 export interface Genome {
-  motorController?: {version: 'gated-torque-v1'; architecture: GateArchitecture; hysteresisWidth: number};
+  motorController?: {version: 'gated-torque-v1'; architecture: GateArchitecture; hysteresisWidth: number}
+    | {version: 'retained-head-v1'; architecture: 'three-output'; hysteresisWidth: number; signedJoints: string[]};
   anatomyVersion?: 1; // Absent in legacy saves; new anatomy uses exclusive physical/organ faces.
   id: string;
   name?: string;
@@ -449,7 +450,7 @@ export interface SimulationLedger {
 }
 
 export interface SimulationSettings {
-  motorExperiment?: 'gated-torque-v1'; // Explicit testing-only world; never inferred from genes.
+  motorExperiment?: 'gated-torque-v1' | 'retained-head-v1'; // Explicit testing-only world; never inferred from genes.
   /** Omitted retains exact historical prey-contact geometry. */
   mouthContactModel?: 'capsule-v1';
   ecologyRegime?: 'closed-v1';
@@ -1164,6 +1165,13 @@ export function createXavierRecurrentNetwork(customPrng: XoshiroPRNG = rng, inpu
   return {weightsIH, weightsHH, biasesH, weightsHO, biasesO};
 }
 
+/** Retained-head channels preserve old identities/meanings; the extra head is separate. */
+export function motorOutputChannels(g: Pick<Genome, 'motorController'>): string[] {
+  const c=g.motorController;
+  if(c?.version==='retained-head-v1') return [...OUTPUT_LABELS,'Mode','DirectTorque','OscillatorStrength'];
+  return c ? c.architecture==='two-output'?['Mode','Command']:['Mode','DirectTorque','OscillatorStrength'] : OUTPUT_LABELS;
+}
+
 export function getBrainLayout(g: Pick<Genome, 'eyes' | 'parts'> & Partial<Pick<Genome, 'mouths' | 'motorController'>>, internalSenses = true, injurySense = true) {
   const inputs: string[] = [];
   const labels: string[] = [];
@@ -1191,8 +1199,7 @@ export function getBrainLayout(g: Pick<Genome, 'eyes' | 'parts'> & Partial<Pick<
     inputs.push('body:feeding', 'body:depth'); labels.push('Currently feeding', 'Depth / pressure');
     if (injurySense) {inputs.push('body:injury'); labels.push('Recently bitten (real energy loss)');}
   }
-  const channels = g.motorController ? (g.motorController.architecture === 'two-output'
-    ? ['Mode', 'Command'] : ['Mode', 'DirectTorque', 'OscillatorStrength']) : OUTPUT_LABELS;
+  const channels = motorOutputChannels(g);
   const outputs = g.parts.slice(1).flatMap(p => channels.map(channel => `joint:${p.id}:${channel}`));
   return {inputs, labels, outputs};
 }
@@ -2130,8 +2137,7 @@ export function mutateBrainTopology(g: Genome, operation: BrainTopologyOperation
       count >= MAX_HIDDEN || enabledBrainEdgeCount(g) + g.parts.length > MAX_ENABLED_BRAIN_EDGES) return false;
     if (!mutateBrainTopology(g, 'add-neuron', customPrng)) return false;
     const h = g.hiddenIds!.length - 1, nodeId = g.hiddenIds![h];
-    const channels = g.motorController ? (g.motorController.architecture === 'two-output'
-      ? ['Mode', 'Command'] : ['Mode', 'DirectTorque', 'OscillatorStrength']) : ['Angle', 'Drive', 'Torque', 'Stiff', 'Amp', 'Engage'];
+    const channels = motorOutputChannels(g);
     const selected = channels[customPrng.rangeInt(0, channels.length - 1)];
     const selectedOutputs = g.outputKeys!.map((key, i) => key.endsWith(':' + selected) ? i : -1).filter(i => i >= 0);
     const enabled = new Set(g.disabledConnections!);
@@ -2499,7 +2505,7 @@ export function mutateGenome(parent: Genome, severity = 0.25, customPrng: Xoshir
   }
 
   const child: Genome = {
-    ...(parent.motorController ? {motorController: {...parent.motorController}} : {}),
+    ...(parent.motorController ? {motorController: structuredClone(parent.motorController)} : {}),
     anatomyVersion: 1,
     id: `GEN-${customPrng.nextUint32().toString(36).substring(0, 5).toUpperCase()}`,
     name: parent.name,
@@ -2644,6 +2650,15 @@ export function mutateGenome(parent: Genome, severity = 0.25, customPrng: Xoshir
     && customPrng.nextFloat() < mutChance * .12) {
     child.memoryConsolidationRate = clampVal((child.memoryConsolidationRate ?? 0)
       + customPrng.range(-.3, .65) * mutScale, 0, 2);
+  }
+  if(child.motorController?.version==='retained-head-v1') {
+    const c=child.motorController;
+    c.signedJoints=c.signedJoints.filter(id=>child.parts.slice(1).some(p=>p.id===id));
+    // Explicit new genotype only: one inherited selector per physical joint.
+    // Existing genome/controller PRNG paths receive no extra draws.
+    for(const part of child.parts.slice(1)) if(customPrng.nextFloat()<mutChance*.12) {
+      c.signedJoints=c.signedJoints.includes(part.id)?c.signedJoints.filter(id=>id!==part.id):[...c.signedJoints,part.id];
+    }
   }
   return child;
 }
@@ -3019,9 +3034,11 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     let motorTorque: number;
     let auditRaw = 0, auditCeiling = 0, auditCommand = 0, auditModeSignal = 0;
     let auditWave = 0, auditStrength = 0, auditProportional = 0, auditDamping = 0;
-    if (g.motorController) {
-      const c = g.motorController, count = c.architecture === 'two-output' ? 2 : 3;
-      const offset = j * count;
+    const retained=g.motorController?.version==='retained-head-v1';
+    const useGate=!!g.motorController && (!retained || g.motorController.version==='retained-head-v1' && g.motorController.signedJoints.includes(childDef.id));
+    if (useGate) {
+      const c = g.motorController!, count = retained ? 9 : c.architecture === 'two-output' ? 2 : 3;
+      const offset = j * count + (retained?6:0);
       // Existing inertia-based ceiling is a provisional CONTROLLED assumption,
       // not an anatomical muscle law (#60) or coherent fluid/unit model (#61).
       const maxTorque = (scratchInertias[parentIdx] + scratchInertias[childIdx]) * .5 * 2200;
@@ -3045,7 +3062,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
         auditRaw = result.mode === 'oscillator' ? rawWave * result.oscillatorStrength * maxTorque : result.torque;
       }
     } else {
-      const outBase = j * OUTPUTS_PER_JOINT;
+      const outBase = j * (retained ? 9 : OUTPUTS_PER_JOINT);
       const angleCommand = org.neuralOutputs[outBase] || 0;
       const motorFreqDrive = 1.0 + (org.neuralOutputs[outBase + 1] || 0) * 0.35;
       const peakTorqueMod = clampVal(1.0 + (org.neuralOutputs[outBase + 2] || 0) * 0.4, 0.5, 1.6);
@@ -3093,7 +3110,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     if (corrected && !Number.isFinite(motorTorque)) throw new Error('Non-finite muscle torque');
     if (isNaN(motorTorque)) motorTorque = 0;
     if (observeActuation) observeActuation(Object.freeze({kind: 'demand', time: auditTime, organism: org.id, joint: j,
-      mode: g.motorController ? joint.gateMode! : 'servo', neuralCommand: auditCommand, modeSignal: auditModeSignal,
+      mode: useGate ? joint.gateMode! : 'servo', neuralCommand: auditCommand, modeSignal: auditModeSignal,
       rawWave: auditWave, strength: auditStrength, rawTorque: auditRaw, requestedTorque: motorTorque,
       ceiling: auditCeiling, baseCeiling: (scratchInertias[parentIdx] + scratchInertias[childIdx]) * .5 * 2200,
       proportionalTorque: auditProportional, dampingTorque: auditDamping, engagement: joint.engagement ?? 1,
@@ -3560,8 +3577,10 @@ export function stepSimulation(
   const mutationSeverity = settings.mutationSeverity ?? 0.25;
   const gravity = settings.gravity ?? 0;
 
-  if (settings.motorExperiment !== undefined && (settings.motorExperiment !== 'gated-torque-v1'
+  if (settings.motorExperiment !== undefined && (!['gated-torque-v1','retained-head-v1'].includes(settings.motorExperiment)
     || settings.physicsRegime !== 'passive-work-v3')) throw new Error('Invalid experimental motor world');
+  if(settings.motorExperiment && [...state.organisms,...state.eggs].some(o=>o.genome.motorController && o.genome.motorController.version!==settings.motorExperiment))
+    throw new Error('Motor controller requires its matching explicit experimental world');
   if (settings.motorExperiment === undefined && (state.organisms.some(o => o.genome.motorController) || state.eggs.some(o => o.genome.motorController)))
     throw new Error('Gated controllers require an explicit experimental world');
   state.simTime += dt;

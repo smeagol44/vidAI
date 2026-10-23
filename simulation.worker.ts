@@ -1,6 +1,6 @@
 import {createTorqueRecorder} from './experiments/torqueRecorder';
 import {SimulationHost, type WorldSnapshot, type WorldAction} from './simulationHost';
-import type {SimulationSettings} from './simulation';
+import {calculateOrganismCOM,type SimulationSettings} from './simulation';
 import {measureWorkerTrial} from './experiments/workerMetrics';
 import {workerWakeDelay} from './workerPacing';
 
@@ -38,15 +38,21 @@ port.onmessage = ({data}: MessageEvent) => {
       host.running = data.running; host.selected = data.selected; return;
     }
     if (data.type === 'experiment-step') {
-      if (host.running || host.settings.motorExperiment !== 'gated-torque-v1'
+      if (host.running || !['gated-torque-v1','retained-head-v1'].includes(host.settings.motorExperiment!)
         || !Number.isInteger(data.ticks) || data.ticks < 1 || data.ticks > 3600)
         throw new Error('Paused explicit experimental world and 1–3600 ticks required');
       if (data.auditTorque !== undefined && (typeof data.auditTorque !== 'boolean' || host.settings.physicsRegime !== 'passive-work-v3'))
         throw new Error('Torque audit requires passive-work-v3 and a boolean selector');
+      if(data.traceJoints!==undefined&&typeof data.traceJoints!=='boolean')throw new Error('Invalid joint trace selector');
+      const trajectory:unknown[]=[];
+      const trace=data.traceJoints?(tick:number)=>{if(tick%10===9)trajectory.push({tick:tick+1,organisms:host.state.organisms.map(o=>({
+        id:o.id,com:calculateOrganismCOM(o),joints:o.joints.map((j,i)=>({mode:j.gateMode,torque:j.appliedTorque,
+          angle:Math.atan2(Math.sin(o.segments[i+1].angle-o.segments[o.genome.parts[i+1].parentIndex].angle-o.genome.parts[i+1].baseAngleOffset),
+            Math.cos(o.segments[i+1].angle-o.segments[o.genome.parts[i+1].parentIndex].angle-o.genome.parts[i+1].baseAngleOffset))}))}))});}:undefined;
       const recorder = data.auditTorque ? createTorqueRecorder() : undefined;
-      const metrics = measureWorkerTrial(host, data.ticks, recorder?.observe);
+      const metrics = measureWorkerTrial(host, data.ticks, recorder?.observe,trace);
       dirty = true;
-      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot(), ...(recorder ? {torqueAudit: recorder.report()} : {})}});
+      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot(), ...(recorder ? {torqueAudit: recorder.report()} : {}),...(trace?{trajectory}:{})}});
       return;
     }
     if (data.type === 'action') {
