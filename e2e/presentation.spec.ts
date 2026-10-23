@@ -1,6 +1,7 @@
 import {test, expect} from '@playwright/test';
+import {expectedBuildLabel} from './buildIdentity';
 import * as sim from '../simulation';
-import {BUILD_VERSION, DEFAULT_SETTINGS, createSnapshot} from '../persistence';
+import {DEFAULT_SETTINGS, createSnapshot} from '../persistence';
 
 test.setTimeout(90000);
 function emptyWorld(seed: number): sim.SimulationState {
@@ -22,7 +23,7 @@ for (const viewport of [{width: 1920, height: 900}, {width: 520, height: 900}, {
       buffer: Buffer.from(JSON.stringify(createSnapshot(emptyWorld(11), quiet)))});
     await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
     await page.getByTitle('Close settings (✕)').click();
-    await expect(page.getByTestId('build-version')).toHaveText(`v${BUILD_VERSION}`);
+    await expect(page.getByTestId('build-version')).toHaveText(expectedBuildLabel);
     for (const name of ['Eel', 'Predator', 'Flapper', 'Tadpole', 'Glider', 'Random'])
       await expect(page.getByRole('button', {name, exact: true})).toHaveCount(0);
     const area = page.getByTestId('tank-viewport'), canvas = page.getByLabel('Aquatic simulation');

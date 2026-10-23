@@ -25,6 +25,7 @@ on:
       - 'simulationHost.ts'
       - 'simulationClient.ts'
       - 'e2e/performance-worker.spec.ts'
+      - 'e2e/buildIdentity.ts'
       - '.github/workflows/performance-worker.yml'
   workflow_dispatch:
 permissions:
@@ -35,12 +36,24 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # exact testing iteration needs its pinned baseline history
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium firefox
+      - name: Resolve exact testing identity for build and assertions
+        if: hashFiles('testing-baseline.json') != ''
+        run: |
+          node --input-type=module <<'NODE'
+          import {execFileSync} from 'node:child_process';
+          import {appendFileSync} from 'node:fs';
+          const release = JSON.parse(execFileSync(process.execPath,
+            ['scripts/testing-build-info.mjs'], {encoding: 'utf8'}));
+          appendFileSync(process.env.GITHUB_ENV, 'VITE_TESTING_RELEASE=' + release.label + '\n');
+          NODE
       - run: npm run build
       - run: npm run test:worker
       - run: npx playwright test e2e/performance-worker.spec.ts --workers=1

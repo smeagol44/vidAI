@@ -1,4 +1,70 @@
+# Retained motor-head checkpoint (#59 / draft #72)
+
+- Owner retains passive-work-v3. Fluid stack #79/#81/#82/#83 and #61/#80 are
+  closed; do not resume them. #84 is a separately deferred stop-correction candidate.
+- Current experiment: docs/experiments/retained-head-v1.md. Explicit schema18 /
+  retained-head-v1 world/genotype preserves six legacy output meanings and adds
+  three separate signed outputs; stable per-joint inherited selector starts legacy.
+  No automatic save/living-brain conversion or copying old rows into torque roles.
+- Retained policies/learning/PRNG/energy exact in frozen24-hidden specimens;
+  switching a joint to its fresh head still regresses movement/guards materially.
+  All-signed endpoints exactly reproduce archived three-output/hysteresis results.
+  Do not call this torque-policy transfer, recovered swimming or a selected design.
+- Same v3 physics, existing capacity formulas, positive/braking prepayment, chemical
+  costs, safeguards and old schema3–16 paths. No starter, gain, physical unit,
+  muscle, #78 learning-valence, Wiki/3D or deployment changes. Extra head uses the
+  existing edge budget/upkeep rules; exact energy continuity not proven for all
+  hidden counts/masks. Active-head-only learning is a new-version design trade-off.
+- Local304fast+1metadata/build and production/gated/retained real-Worker checks
+  pass. Preserve old reports/hashes; no new broad search/ecology/browser campaign.
+  Final branch/head/CI in #59/#57/#72. Stop for review, no merge or deployment.
+
 # Project status — 2026-10-21
+
+## Causal torque-demand audit — draft #72, unmerged
+
+Read-only substep receipts and 54 bounded built-Worker trials are implemented.
+All 45 existing representative metric rows match the completed controller report
+exactly; the earlier raw report, physics, saves, genes and baselines are preserved.
+[Methods/findings](experiments/torque-demand-audit.md) and
+[raw receipts](experiments/torque-demand-v1.json) distinguish causal controls,
+one-step algebraic attribution and unresolved whole-run interpretations.
+
+No gated request is capacity-clipped or energy-limited; requested and paid torque
+match across 115,200 samples. Original reference torques fit the new envelope.
+Fresh-head legacy controls alone lose 75.75–94.10% travel (median 91.05%), making
+initialization a demonstrated confound. Gated demand is greater for Darter/Twin
+Oar but often lower for Branchstalker, so no universal scalar recovery is justified.
+Of 8,915 angular guards, 7,844 require the current motor increment at the fixed
+incoming state. Accepted passive constraint batches also create per-part overspeed
+(peak 25.63 rad/s); this does not contradict aggregate kinetic passivity.
+Substep tracking exposes an anchor peak 0.568 px versus tick-sampled 0.433 px.
+
+No architecture, gain, muscle law or release is approved. #61 needs an explicit
+length/mass/depth/fluid reference before #60 anatomical capacity/activation cost.
+Initialization, feedback and solver effects are not assigned whole-run percentage
+causes; earlier ecological failures remain unresolved. No search rerun, starter
+optimization, safeguard relaxation, merge or deployment occurs.
+
+## Gated torque experiment — draft #72, testing-only and unmerged
+
+The explicit gated-controller genotype, schema v16 opt-in snapshots, saved mode
+state and authoritative built-Worker comparison are implemented on
+`experiment/gated-controller-comparison-t1`, targeting `testing`. Legacy saves,
+production v0.37.0, testing T1.1 and all starter genes remain unchanged.
+[Detailed results](experiments/gated-controller-comparison.md) and
+[raw evidence](experiments/gated-worker-v1.json) distinguish valid outcomes,
+failed stability screens and the excluded/corrected first ecology harness pass.
+
+135 matched five-second swims show ~79–80% median paired travel loss, higher
+mechanical cost/guard dependence and mixed hysteresis effects despite ~21% fewer
+mode changes. The 468-evaluation search plus 72 held-out trials finds small valid
+Darter motion but no valid Twin Oar/Branchstalker candidates in its fixed budget.
+Ten closed 60s ecosystem runs produce zero candidate offspring versus legacy
+1/3 in seeds 17/73. Funding/chemical closure/passive batches and immediate
+physical-bite response pass; that does not qualify these policies for promotion.
+#59 remains In progress. #60/#61 strength, activation cost and units remain open;
+no final architecture, release, merge or deployment is approved by these results.
 
 ## Coherent fluid drag and anatomical muscle trial — rejected without runtime changes
 
