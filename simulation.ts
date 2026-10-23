@@ -4,7 +4,7 @@ import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
 import {partKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
 import {passiveConstraintScale, paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
 import {markLineageChanged} from './lineageChanges';
-import {compiledBrain, compiledDeltas, alignPlasticRecords, invalidateCompiledBrain} from './neuralRuntime';
+import {isPrimaryMotorOutput, compiledBrain, compiledDeltas, alignPlasticRecords, invalidateCompiledBrain} from './neuralRuntime';
 import {resolveBodyContacts} from './contacts';
 import {NutrientSightGrid} from './sightBroadphase';
 import {OrderedSpatialIndex, type SpatialBounds} from './spatialIndex';
@@ -218,6 +218,7 @@ export type ArchetypeId = 'eel' | 'flapper' | 'tadpole' | 'glider' | 'predator' 
 
 export interface Genome {
   motorController?: {version: 'gated-torque-v1'; architecture: GateArchitecture; hysteresisWidth: number}
+    | {version: 'neural-motor-v1'; architecture: 'oscillator-only' | 'direct-only' | 'two-output'; hysteresisWidth: .06}
     | {version: 'retained-head-v1'; architecture: 'three-output'; hysteresisWidth: number; signedJoints: string[]};
   anatomyVersion?: 1; // Absent in legacy saves; new anatomy uses exclusive physical/organ faces.
   id: string;
@@ -450,7 +451,7 @@ export interface SimulationLedger {
 }
 
 export interface SimulationSettings {
-  motorExperiment?: 'gated-torque-v1' | 'retained-head-v1'; // Explicit testing-only world; never inferred from genes.
+  motorExperiment?: 'gated-torque-v1' | 'retained-head-v1' | 'neural-motor-v1'; // Explicit testing-only world; never inferred from genes.
   /** Omitted retains exact historical prey-contact geometry. */
   mouthContactModel?: 'capsule-v1';
   ecologyRegime?: 'closed-v1';
@@ -1168,6 +1169,7 @@ export function createXavierRecurrentNetwork(customPrng: XoshiroPRNG = rng, inpu
 /** Retained-head channels preserve old identities/meanings; the extra head is separate. */
 export function motorOutputChannels(g: Pick<Genome, 'motorController'>): string[] {
   const c=g.motorController;
+  if(c?.version==='neural-motor-v1' && c.architecture!=='two-output') return [c.architecture==='direct-only'?'DirectTorque':'OscillatorStrength'];
   if(c?.version==='retained-head-v1') return [...OUTPUT_LABELS,'Mode','DirectTorque','OscillatorStrength'];
   return c ? c.architecture==='two-output'?['Mode','Command']:['Mode','DirectTorque','OscillatorStrength'] : OUTPUT_LABELS;
 }
@@ -2193,7 +2195,7 @@ export function mutateBrainTopology(g: Genome, operation: BrainTopologyOperation
     for (let o = 0; o < g.outputKeys!.length; o++) {
       const outputKey = g.outputKeys![o];
       const edge = brainEdgeKey('ho', outputKey, nodeId);
-      const turnJoint = outputKey.endsWith(':Angle') || (!!g.motorController && /:(Command|DirectTorque)$/.test(outputKey));
+      const turnJoint = isPrimaryMotorOutput(g, outputKey);
       g.weightsHO[o][h] = turnJoint ? motorGain : 0;
       if (turnJoint) enabled.delete(edge); else enabled.add(edge);
     }
@@ -3037,7 +3039,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     const retained=g.motorController?.version==='retained-head-v1';
     const useGate=!!g.motorController && (!retained || g.motorController.version==='retained-head-v1' && g.motorController.signedJoints.includes(childDef.id));
     if (useGate) {
-      const c = g.motorController!, count = retained ? 9 : c.architecture === 'two-output' ? 2 : 3;
+      const c = g.motorController!, count = motorOutputChannels(g).length;
       const offset = j * count + (retained?6:0);
       // Existing inertia-based ceiling is a provisional CONTROLLED assumption,
       // not an anatomical muscle law (#60) or coherent fluid/unit model (#61).
@@ -3045,7 +3047,11 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       joint.phase = (joint.phase + 2 * Math.PI * g.motorFrequency * childDef.cpgFreqMult * dt_sub) % (2 * Math.PI);
       const rawWave = evaluateMotorWave(joint.phase, childDef.waveHarmonics) * childDef.cpgAmp;
       const wave = clampVal(rawWave, -1, 1);
-      const result = gatedTorque(c.architecture === 'two-output'
+      const result = gatedTorque(c.architecture === 'oscillator-only'
+        ? {architecture: 'three-output', mode: 1, direct: 0, strength: org.neuralOutputs[offset]}
+        : c.architecture === 'direct-only'
+        ? {architecture: 'three-output', mode: 0, direct: org.neuralOutputs[offset], strength: -1}
+        : c.architecture === 'two-output'
         ? {architecture: c.architecture, mode: org.neuralOutputs[offset], command: org.neuralOutputs[offset + 1]}
         : {architecture: c.architecture, mode: org.neuralOutputs[offset], direct: org.neuralOutputs[offset + 1], strength: org.neuralOutputs[offset + 2]},
         joint.gateMode!, wave, maxTorque, c.hysteresisWidth);
@@ -3057,8 +3063,8 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       joint.currentRelAngVel = childPhys.angVel - parentPhys.angVel;
       motorTorque = result.torque;
       if (observeActuation) {
-        auditCeiling = maxTorque; auditModeSignal = org.neuralOutputs[offset];
-        auditCommand = org.neuralOutputs[offset + (result.mode === 'oscillator' && c.architecture === 'three-output' ? 2 : 1)]; auditWave = rawWave; auditStrength = result.oscillatorStrength;
+        auditCeiling = maxTorque; auditModeSignal = c.architecture==='oscillator-only'?1:c.architecture==='direct-only'?0:org.neuralOutputs[offset];
+        auditCommand = org.neuralOutputs[offset + (c.architecture==='oscillator-only'||c.architecture==='direct-only'?0:result.mode === 'oscillator' && c.architecture === 'three-output' ? 2 : 1)]; auditWave = rawWave; auditStrength = result.oscillatorStrength;
         auditRaw = result.mode === 'oscillator' ? rawWave * result.oscillatorStrength * maxTorque : result.torque;
       }
     } else {
@@ -3526,7 +3532,7 @@ function evaluateOrganismBrain(org: Organism, dt: number): void {
     } else for (let h = 0; h < hiddenCount; h++) sum += org.neuralHidden[h] * (hoRow?.[h] || 0);
     // Acquired synapse offsets alter the neural motor command, not genome
     // weights, and cannot activate a disabled connection.
-    if (learnedMotor && (g.plasticMotorScope === 'all' || (g.outputKeys![o].endsWith(':Angle') || (!!g.motorController && /:(Command|DirectTorque)$/.test(g.outputKeys![o]))))) {
+    if (learnedMotor && (g.plasticMotorScope === 'all' || isPrimaryMotorOutput(g, g.outputKeys![o]))) {
       if (enabledOutputs) {
         for (let k = 0; k < enabledOutputs.length; k++) {
           const h = enabledOutputs[k], slot = o * hiddenCount + h;
@@ -3577,7 +3583,7 @@ export function stepSimulation(
   const mutationSeverity = settings.mutationSeverity ?? 0.25;
   const gravity = settings.gravity ?? 0;
 
-  if (settings.motorExperiment !== undefined && (!['gated-torque-v1','retained-head-v1'].includes(settings.motorExperiment)
+  if (settings.motorExperiment !== undefined && (!['gated-torque-v1','retained-head-v1','neural-motor-v1'].includes(settings.motorExperiment)
     || settings.physicsRegime !== 'passive-work-v3')) throw new Error('Invalid experimental motor world');
   if(settings.motorExperiment && [...state.organisms,...state.eggs].some(o=>o.genome.motorController && o.genome.motorController.version!==settings.motorExperiment))
     throw new Error('Motor controller requires its matching explicit experimental world');
