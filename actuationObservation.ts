@@ -2,7 +2,7 @@
  * the solver. Torque is in simulation units; J uses the existing conversion. */
 export type ActuationSample = Readonly<
   | {kind: 'demand'; time: number; organism: string; joint: number; mode: 'servo'|'off'|'direct'|'oscillator';
-      neuralCommand: number; modeSignal: number; rawWave: number; strength: number;
+      modeBand?: 0|1|2|3; neuralCommand: number; modeSignal: number; rawWave: number; strength: number;
       rawTorque: number; requestedTorque: number; ceiling: number; baseCeiling: number;
       proportionalTorque: number; dampingTorque: number; engagement: number;
       relativeAngle: number; relativeSpeed: number; maxAngle: number; dt: number;

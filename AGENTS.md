@@ -1,3 +1,37 @@
+# Revised hybrid thresholds checkpoint (#89 / draft #90)
+
+- Owner-approved five-seed experiment COMPLETE, ONLY revised neural hybrid:
+  seeds17/71/1901/4099/8191,15x15x12s EACH,1125 offspring +5 founders +30
+  held-outs. No new legacy selection/held-out campaign; compare #87 archive.
+- docs/experiments/hybrid-threshold-intake-v1.md, manifest/83 immutable gzip
+  archives/summary/curves/verification authoritative. Branch
+  experiment/hybrid-threshold-intake-89 on #88 b64481eb02a4c253637cae3d91375a5051405fd1.
+- neural-motor-v2/schema20 EXPLICIT new controller: nominal OFF x<-.9,
+  DIRECT[-.9,0],OSC(0,.9],OFF>.9; .06 hysteresis at all3 boundaries with
+  persisted FOUR-band somatic latch. Both OFF sides passive; one-call decisive
+  transitions, no timer/smoothing/genetic selector. Old controller/saves exact.
+- All fresh neurons/weights/biases use #88 initializer; same neural8scalar
+  sigma.15 mutation, body/CPG/motor/energy/learning/v3/habitat/nonlethal fixture.
+- Final valid J:17 NO CHAMPION,71=0,1901=0,4099=432,8191=1152.198/1125
+  valid,83 valid feeders;619 raw feeders include536 INVALID, never selected.
+  Four valid finals median216J; failed17 is NOT imputed0. Historical legacy
+  ONE run final16704J; cannot establish architecture-wide superiority.
+- Two feeding champions DIRECT-only;75 valid switching/OSC proposals show
+  no intake advantage. Only3 valid proposals switch after1s; none selected.
+  Valid champion held-outs4/12 (3 feed); failed17's3 fallback slots separate.
+  No OFF discovered. Large raw guard/limit/overspeed regressions preserved.
+- Integrity: all83 primary hashes/1125 genotypes/75 elitism choices exact;
+  five final specimens (4champions+failed17) and reset forks exact. Auxiliary
+  original console log is INCOMPLETE (4/81 lines), cause unestablished;
+  preserve original, never claim intact stdout. Derived75-generation index
+  explicitly reconstruction from complete primary archives; ZERO training
+  repeats/replacement measurements. Prior #72/#85/#86/#87 evidence unchanged.
+- Local326fast+metadata/build,7 focused gate/save/torque tests and five Worker
+  sets pass; remote final CI/status/head in #89/#57. Old #88 hybrid snapshot
+  exact. No chemical/physics/capacity/starter/baseline/#78/Wiki/3D changes.
+- STOP for owner review. No adoption/merge/deployment, solver study, automatic
+  threshold/strength/mutation search, extra benchmark or unrelated feature.
+
 # Nutrient-intake selection checkpoint (#87 / draft #88)
 
 - Fixed experiment COMPLETE: legacy six-output vs neural Mode+Command hybrid
