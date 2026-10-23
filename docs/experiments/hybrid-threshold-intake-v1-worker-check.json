@@ -1,0 +1,23 @@
+{
+  "results": [
+    {
+      "hostQuietReceiptsExact": true
+    },
+    {
+      "bothOffRegionsZeroAndPersisted": true,
+      "decisiveIndependentTransitionOneTick": true
+    },
+    {
+      "normalPhysicalFeedingJ": 144
+    },
+    {
+      "zeroReserveNoFreeWork": true
+    },
+    {
+      "resetForkExact": true
+    },
+    {
+      "prior88HybridFullSnapshotExact": true
+    }
+  ]
+}

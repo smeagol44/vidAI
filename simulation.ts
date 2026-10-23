@@ -1,5 +1,6 @@
 import type {ActuationObserver} from './actuationObservation';
 import {gatedTorque, type GateArchitecture, type GateMode} from './experiments/gatedMotor';
+import {revisedHybridTorque,type HybridBand} from './experiments/revisedHybridGate';
 import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
 import {partKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
 import {passiveConstraintScale, paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
@@ -218,6 +219,7 @@ export type ArchetypeId = 'eel' | 'flapper' | 'tadpole' | 'glider' | 'predator' 
 
 export interface Genome {
   motorController?: {version: 'gated-torque-v1'; architecture: GateArchitecture; hysteresisWidth: number}
+    | {version: 'neural-motor-v2'; architecture: 'two-output'; hysteresisWidth: .06}
     | {version: 'neural-motor-v1'; architecture: 'oscillator-only' | 'direct-only' | 'two-output'; hysteresisWidth: .06}
     | {version: 'retained-head-v1'; architecture: 'three-output'; hysteresisWidth: number; signedJoints: string[]};
   anatomyVersion?: 1; // Absent in legacy saves; new anatomy uses exclusive physical/organ faces.
@@ -278,6 +280,7 @@ export interface PartPhys {
 }
 
 export interface JointState {
+  gateBand?: HybridBand; // v2 only: negative OFF / DIRECT / OSCILLATOR / positive OFF.
   gateMode?: GateMode; // Experimental somatic state, persisted; newborns start DIRECT.
   phase: number;
   targetAngle: number;
@@ -451,7 +454,7 @@ export interface SimulationLedger {
 }
 
 export interface SimulationSettings {
-  motorExperiment?: 'gated-torque-v1' | 'retained-head-v1' | 'neural-motor-v1'; // Explicit testing-only world; never inferred from genes.
+  motorExperiment?: 'gated-torque-v1' | 'retained-head-v1' | 'neural-motor-v1' | 'neural-motor-v2'; // Explicit testing-only world; never inferred from genes.
   /** Omitted retains exact historical prey-contact geometry. */
   mouthContactModel?: 'capsule-v1';
   ecologyRegime?: 'closed-v1';
@@ -2721,6 +2724,7 @@ export function spawnOrganism(
     joints.push({
       phase: pDef.cpgPhaseOffset || 0,
       ...(genome.motorController ? {gateMode: 'direct' as const} : {}),
+      ...(genome.motorController?.version==='neural-motor-v2'?{gateBand:1 as const}:{}),
       targetAngle: 0,
       currentRelAngle: 0,
       currentRelAngVel: 0,
@@ -3047,7 +3051,9 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       joint.phase = (joint.phase + 2 * Math.PI * g.motorFrequency * childDef.cpgFreqMult * dt_sub) % (2 * Math.PI);
       const rawWave = evaluateMotorWave(joint.phase, childDef.waveHarmonics) * childDef.cpgAmp;
       const wave = clampVal(rawWave, -1, 1);
-      const result = gatedTorque(c.architecture === 'oscillator-only'
+      const result = c.version==='neural-motor-v2'
+        ? revisedHybridTorque(org.neuralOutputs[offset],org.neuralOutputs[offset+1],joint.gateBand!,wave,maxTorque,c.hysteresisWidth)
+        : gatedTorque(c.architecture === 'oscillator-only'
         ? {architecture: 'three-output', mode: 1, direct: 0, strength: org.neuralOutputs[offset]}
         : c.architecture === 'direct-only'
         ? {architecture: 'three-output', mode: 0, direct: org.neuralOutputs[offset], strength: -1}
@@ -3055,6 +3061,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
         ? {architecture: c.architecture, mode: org.neuralOutputs[offset], command: org.neuralOutputs[offset + 1]}
         : {architecture: c.architecture, mode: org.neuralOutputs[offset], direct: org.neuralOutputs[offset + 1], strength: org.neuralOutputs[offset + 2]},
         joint.gateMode!, wave, maxTorque, c.hysteresisWidth);
+      if(c.version==='neural-motor-v2')joint.gateBand=(result as ReturnType<typeof revisedHybridTorque>).band;
       joint.gateMode = result.mode;
       joint.targetAngle = 0; joint.stiffness = 0;
       joint.amplitude = result.oscillatorStrength; joint.engagement = result.mode === 'off' ? 0 : 1;
@@ -3116,6 +3123,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     if (corrected && !Number.isFinite(motorTorque)) throw new Error('Non-finite muscle torque');
     if (isNaN(motorTorque)) motorTorque = 0;
     if (observeActuation) observeActuation(Object.freeze({kind: 'demand', time: auditTime, organism: org.id, joint: j,
+      ...(g.motorController?.version==='neural-motor-v2'?{modeBand:joint.gateBand}:{}),
       mode: useGate ? joint.gateMode! : 'servo', neuralCommand: auditCommand, modeSignal: auditModeSignal,
       rawWave: auditWave, strength: auditStrength, rawTorque: auditRaw, requestedTorque: motorTorque,
       ceiling: auditCeiling, baseCeiling: (scratchInertias[parentIdx] + scratchInertias[childIdx]) * .5 * 2200,
@@ -3590,7 +3598,7 @@ export function stepSimulation(
   const mutationSeverity = settings.mutationSeverity ?? 0.25;
   const gravity = settings.gravity ?? 0;
 
-  if (settings.motorExperiment !== undefined && (!['gated-torque-v1','retained-head-v1','neural-motor-v1'].includes(settings.motorExperiment)
+  if (settings.motorExperiment !== undefined && (!['gated-torque-v1','retained-head-v1','neural-motor-v1','neural-motor-v2'].includes(settings.motorExperiment)
     || settings.physicsRegime !== 'passive-work-v3')) throw new Error('Invalid experimental motor world');
   if(settings.motorExperiment && [...state.organisms,...state.eggs].some(o=>o.genome.motorController && o.genome.motorController.version!==settings.motorExperiment))
     throw new Error('Motor controller requires its matching explicit experimental world');

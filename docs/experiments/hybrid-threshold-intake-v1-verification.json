@@ -1,0 +1,68 @@
+{
+  "version": "hybrid-threshold-intake-v1",
+  "offspringReconstructed": 1125,
+  "primaryGenerationArchivesExact": 75,
+  "auxiliaryLog": {
+    "sha256": "37d8943c13fb0efd431f259ab41eb8f98b6f5119a00932d141a9e79e50f3f02d",
+    "lines": 4,
+    "expectedLines": 81,
+    "complete": false,
+    "originalGenerationLogRowsVerified": 0,
+    "missingGenerationRows": 75,
+    "cause": "Unestablished; original incomplete file preserved, never substituted for complete primary archives"
+  },
+  "protectedEvidenceExact": true,
+  "legacyReexecuted": false,
+  "results": [
+    {
+      "seed": 17,
+      "genotypesAndDecisionsExact": 225,
+      "championAvailable": false,
+      "initialJ": 2400,
+      "initialValid": false,
+      "finalJ": null,
+      "selectedAt": null,
+      "replayAndForkExact": true
+    },
+    {
+      "seed": 71,
+      "genotypesAndDecisionsExact": 225,
+      "championAvailable": true,
+      "initialJ": 2640,
+      "initialValid": false,
+      "finalJ": 0,
+      "selectedAt": "g3/o8",
+      "replayAndForkExact": true
+    },
+    {
+      "seed": 1901,
+      "genotypesAndDecisionsExact": 225,
+      "championAvailable": true,
+      "initialJ": 6240,
+      "initialValid": false,
+      "finalJ": 0,
+      "selectedAt": "g7/o8",
+      "replayAndForkExact": true
+    },
+    {
+      "seed": 4099,
+      "genotypesAndDecisionsExact": 225,
+      "championAvailable": true,
+      "initialJ": 240,
+      "initialValid": true,
+      "finalJ": 432,
+      "selectedAt": "g15/o9",
+      "replayAndForkExact": true
+    },
+    {
+      "seed": 8191,
+      "genotypesAndDecisionsExact": 225,
+      "championAvailable": true,
+      "initialJ": 0,
+      "initialValid": false,
+      "finalJ": 1152,
+      "selectedAt": "g10/o6",
+      "replayAndForkExact": true
+    }
+  ]
+}

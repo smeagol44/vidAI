@@ -51,11 +51,11 @@ jobs:
       - run: npm run test:gated-worker
       - run: npm run test:retained-worker
       - run: npm run test:neural-selection-worker
-      - run: npm run test:neural-food-worker
-      # Frozen #85/#86 evidence is hash-checked by the intake audit; the old
-      # #86 verifier remains pinned to its original Worker, never rewritten.
-      - run: npm run test:intake-worker
-      - run: npm run audit:intake
+      # #89: preserve old raw archives and validate original hybrid continuation;
+      # do not repeat historical legacy champion or selection/held-out trials.
+      # Existing old Worker scripts remain independently preserved on #88.
+      - run: npm run test:hybrid-threshold-worker
+      - run: npm run audit:hybrid-threshold
       - run: npx playwright install --with-deps chromium
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
       - run: npm run test:e2e
