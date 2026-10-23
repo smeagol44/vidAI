@@ -1,3 +1,16 @@
+# #80 brain-free scissor — completed bounded benchmark, draft #81
+
+See [current report](experiments/brain-free-scissor-v2.md) and its raw Worker data.
+Branch `experiment/brain-free-scissor-80` is stacked against #79 at21c5a54,
+not promoted into testing/main. Four funded16s cycles, private1x7px corner hinge,
+no neural evaluation, unchanged physical/energy rules. Native movement2.688px(v3)
+versus1.897px(v4), passive/dry COM0. v4 held-command480→960Hz local criterion
+passes; v3 fails and has material rotated-control discrepancy. Stroke incomplete,
+contact/constraint artifacts disclosed. No validated swimming/drag/ecology claim.
+299fast+1metadata/build and three built-Worker checks pass locally; final CI/head
+in #80/#57. No manual browser, solver investigation, merge, deployment or Wiki/3D
+change. Stop for review; next listed morphology is the three-part serpent.
+
 # Issue #61 angular-stop defect — bounded correction (2026-10-23)
 
 - Supersedes the preliminary no-defect interpretation at53ecc5b. Algebraic equality/

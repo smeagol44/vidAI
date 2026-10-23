@@ -1,3 +1,20 @@
+# Brain-free scissor checkpoint (#80 / draft #81)
+
+- Latest `docs/experiments/brain-free-scissor-v2.md`. Separate branch based on
+  #79 head21c5a54; #79 stays untouched, draft/unmerged/undeployed. No solver study.
+- Exact1x7px anatomy is PRIVATE/offline: public saves require7px grid. No schema
+  relaxation or live inherited geometry. Corner anchors and neighbor contacts are
+  explicit diagnostic fixtures; normal joints, contact exclusion and saves stay exact.
+- No neural evaluation/learning; held240Hz funded torques, actual prepaid work.
+  Coefficients/capacity/genes/guard thresholds unchanged. Never require swimming.
+- Four-cycle native/passive/reverse/symmetric/rotated/dry controls and240/480/960Hz
+  fixed-tape comparisons complete. v4 finest pair passes locally; v3 fails and has
+  orientation sensitivity. Closing targets are NOT fully achieved. No physical
+  validation, drag-only causal conclusion or promotion. Keep excluded v1 data.
+- Stop here for review; the next #80 morphology is the already proposed three-part
+  serpent, only as a separately bounded continuation. Do not retune or investigate
+  #79 solvers, rerun old campaigns, alter #60/#78, deploy, merge or edit3D/Wiki.
+
 # Angular-stop admissibility checkpoint (#61 / draft #79, 2026-10-23)
 
 - Latest: `docs/experiments/solver-stop-v1.md`. The earlier no-defect conclusion at

@@ -118,7 +118,7 @@ let contactStamp = 0, contactCells = 0;
 /** Stable first-common-cell ownership removes the per-pass pair Set without
  * changing pair order. Buckets reuse storage; every body bound is still rebuilt.
  * Bound retained cell storage across world changes and very long runs. */
-function pairs(list: Body[]): [Body, Body][] {
+function pairs(list: Body[], includeHingedPairs = false): [Body, Body][] {
   contactStamp = (contactStamp + 1) >>> 0;
   if (!contactStamp || contactCells > 4096) {
     contactColumns.clear(); contactCells = 0; contactStamp = 1;
@@ -136,7 +136,7 @@ function pairs(list: Body[]): [Body, Body][] {
         for (const j of cell.indices) {
           const b = list[j];
           if (x !== Math.max(a.cellLeft, b.cellLeft) || y !== Math.max(a.cellTop, b.cellTop)) continue;
-          if (a.org === b.org && (a.def.parentIndex === b.index || b.def.parentIndex === a.index)) continue;
+          if (!includeHingedPairs && a.org === b.org && (a.def.parentIndex === b.index || b.def.parentIndex === a.index)) continue;
           if (a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom) continue;
           result.push([b, a]);
         }
@@ -149,7 +149,7 @@ function pairs(list: Body[]): [Body, Body][] {
 
 /** Contacts alternate with hinge projection; position repair never creates separation velocity. */
 export function resolveBodyContacts(organisms: Organism[], density: number,
-  projectJoints: (org: Organism, iterations: number) => void, observe?: MechanicalObserver, regime?: PhysicsRegime,trace?:SolverTrace): Set<Organism> {
+  projectJoints: (org: Organism, iterations: number) => void, observe?: MechanicalObserver, regime?: PhysicsRegime,trace?:SolverTrace,includeHingedPairs = false): Set<Organism> {
   const touched = new Set<Organism>();
   const project = (org: Organism, iterations: number) => {
     const before = observe ? organismKineticEnergy(org, density, regime) : 0;
@@ -161,7 +161,7 @@ export function resolveBodyContacts(organisms: Organism[], density: number,
   };
   for (let iteration = 0; iteration < 8; iteration++) {
     let contactCount = 0;
-    for (const [a, b] of pairs(bodies(organisms, density, regime))) {
+    for (const [a, b] of pairs(bodies(organisms, density, regime),includeHingedPairs)) {
       // Position repair changes centers, not angles; projections refresh rotations next pass.
       const contact = rotatedContact(a.p, a.def, b.p, b.def, a.c, a.s, b.c, b.s); if (!contact) continue;
       contactCount++; touched.add(a.org); touched.add(b.org);

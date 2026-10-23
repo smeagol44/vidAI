@@ -1,3 +1,5 @@
+**Initial protocol placeholder, superseded by [completed v2 benchmark](brain-free-scissor-v2.md).**
+
 # Brain-free scissor benchmark (#80)
 
 Approved bounded offline benchmark. Two 1×7 px rectangles joined at narrow ends;

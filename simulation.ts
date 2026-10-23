@@ -2901,7 +2901,7 @@ export function hslToRgb(h: number, s: number, l: number): [number, number, numb
 const scratchProjection = Array.from({length: MAX_PARTS - 1}, () => ({
   aim: 0, bim: 0, aii: 0, bii: 0, paX: 0, paY: 0, pbX: 0, pbY: 0,
 }));
-function projectBodyJoints(org: Organism, iterations: number, regime?: PhysicsRegime): void {
+function projectBodyJoints(org: Organism, iterations: number, regime?: PhysicsRegime, diagnostic?: IntegrationDiagnostic): void {
   const parts = org.genome.parts;
   // Local geometry/masses stay constant while projection changes poses.
   for (let index = 1; index < parts.length; index++) {
@@ -2911,8 +2911,8 @@ function projectBodyJoints(org: Organism, iterations: number, regime?: PhysicsRe
     entry.aim = 1 / am; entry.bim = 1 / bm;
     entry.aii = 12 / (am * (pd.width ** 2 + pd.height ** 2));
     entry.bii = 12 / (bm * (def.width ** 2 + def.height ** 2));
-    const pa = getCardinalAnchor(def.attachmentPoint, pd.width, pd.height);
-    const pb = getChildAnchorForParentDir(def.attachmentPoint, def.width, def.height);
+    const pa = diagnostic?.scissor ? {x: .5, y: 3.5} : getCardinalAnchor(def.attachmentPoint, pd.width, pd.height);
+    const pb = diagnostic?.scissor ? {x: .5, y: -3.5} : getChildAnchorForParentDir(def.attachmentPoint, def.width, def.height);
     entry.paX = pa.x; entry.paY = pa.y; entry.pbX = pb.x; entry.pbY = pb.y;
   }
   for (let iteration = 0; iteration < iterations; iteration++) {
@@ -3004,7 +3004,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
   const prismModel = settings.physicsRegime === 'prism-resistance-v4';
   const passiveSolver = settings.physicsRegime === 'passive-work-v3' || prismModel;
   const simultaneousPaid = settings.physicsRegime === 'paid-work-v2' || passiveSolver;
-  const mu = settings.waterViscosity ?? .22, gravity = settings.gravity ?? 0;
+  const mu = diagnostic?.scissor?.fluidOff ? 0 : settings.waterViscosity ?? .22, gravity = settings.gravity ?? 0;
   const {worldWidth, worldHeight} = settings;
   const partCount = org.segments.length;
   for (let i = 0; i < partCount; i++) {
@@ -3220,7 +3220,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       fx:scratchFx[i],fy:scratchFy[i],torque:scratchTorque[i],motorTorque:scratchMotorTorque[i],inverseMass:scratchInvMasses[i],inverseInertia:scratchInvInertias[i]});
     const beforeFluid = observe || physicsObserve ? partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY, settings.physicsRegime) : 0;
     observe?.('forces-and-motors', beforeForces, beforeFluid);
-    if(prismModel) {
+    if(prismModel && !diagnostic?.scissor?.fluidOff) {
       if (!diagnostic || diagnostic.splitting === 'motor-drag') applyPrismDrag(org,i,settings,dt_sub,observe,physicsObserve);
       else {
         applyPrismDrag(org,i,settings,dt_sub/2,observe,physicsObserve);
@@ -3261,8 +3261,8 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     const parentPhys = org.segments[parentIdx], childPhys = org.segments[childIdx];
     const parentDef = g.parts[parentIdx], c = scratchConstraints[j];
     c.parentIdx = parentIdx; c.childIdx = childIdx;
-    const parentAnchorLocal = getCardinalAnchor(childDef.attachmentPoint, parentDef.width, parentDef.height);
-    const childAnchorLocal = getChildAnchorForParentDir(childDef.attachmentPoint, childDef.width, childDef.height);
+    const parentAnchorLocal = diagnostic?.scissor ? {x: .5, y: 3.5} : getCardinalAnchor(childDef.attachmentPoint, parentDef.width, parentDef.height);
+    const childAnchorLocal = diagnostic?.scissor ? {x: .5, y: -3.5} : getChildAnchorForParentDir(childDef.attachmentPoint, childDef.width, childDef.height);
     const cosP = Math.cos(parentPhys.angle), sinP = Math.sin(parentPhys.angle);
     const cosC = Math.cos(childPhys.angle), sinC = Math.sin(childPhys.angle);
     const rPx = c.rPx = cosP * parentAnchorLocal.x - sinP * parentAnchorLocal.y;
@@ -3383,7 +3383,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
   if (passiveSolver && repairPose) {
     const beforeProjection = observe ? org.segments.reduce((sum, p, i) => sum + partKineticEnergy(p, g.parts[i], BASE_PART_DENSITY, settings.physicsRegime), 0) : 0;
     const traceBefore=trace?.detailed?solverParts(org):undefined;
-    projectBodyJoints(org, 12, settings.physicsRegime);
+    projectBodyJoints(org, 12, settings.physicsRegime, diagnostic);
     if(trace)solverEmit(trace,{stage:'joint-pose',id:org.id,iterations:12,maxOmega:solverPeak(org),
       ...(trace.detailed?{before:traceBefore,after:solverParts(org)}:{})});
     if (observe) observe('position-projection', beforeProjection, org.segments.reduce((sum, p, i) => sum + partKineticEnergy(p, g.parts[i], BASE_PART_DENSITY, settings.physicsRegime), 0));
@@ -3577,7 +3577,18 @@ export function stepSimulation(
   physicsObserve?: PhysicsObserver,
   diagnostic?: IntegrationDiagnostic,
 ): void {
-  if (diagnostic && (settings.physicsRegime !== 'prism-resistance-v4' || dt !== 1/60 ||
+  if (diagnostic?.scissor && (diagnostic.scissor.version !== 'corner-scissor-v2' ||
+      typeof diagnostic.scissor.fluidOff !== 'boolean' || diagnostic.splitting !== 'motor-drag' ||
+      ![4,8,16].includes(diagnostic.substeps) || state.organisms.length !== 1 ||
+      state.organisms[0].genome.parts.length !== 2 || state.organisms[0].genome.eyes.length ||
+      state.organisms[0].genome.mouths.length || state.eggs.length || state.nutrients.length ||
+      state.organisms[0].genome.parts.some(p=>p.width!==1||p.height!==7) ||
+      state.organisms[0].genome.parts[1].attachmentPoint !== 'SOUTH' ||
+      state.organisms[0].genome.parts[1].baseAngleOffset !== -Math.PI/2 ||
+      state.organisms[0].genome.parts[1].maxAngle !== Math.PI/2 || diagnostic.jointLimits))
+    throw new Error('Invalid private scissor fixture');
+  if (diagnostic && (!(settings.physicsRegime === 'prism-resistance-v4' ||
+      (diagnostic.scissor && settings.physicsRegime === 'passive-work-v3')) || dt !== 1/60 ||
       ![4,8,16,32,64].includes(diagnostic.substeps) ||
       !['motor-drag','motor-half-half','half-motor-half'].includes(diagnostic.splitting)))
     throw new Error('Invalid integration diagnostic');
@@ -3997,16 +4008,16 @@ export function stepSimulation(
 
     // B. RECURRENT NEURAL EVALUATION. The original dense 24-node loop retains its
     // arithmetic order; explicit disabled keys opt individual edges out.
-    evaluateOrganismBrain(org, dt);
+    if (!diagnostic?.scissor) evaluateOrganismBrain(org, dt);
     // Reward is from legitimate physical contact on the PREVIOUS tick.
     // Mutations in a living animal's learned offsets change subsequent
     // motor commands only, with their own debited metabolic cost.
-    if ((g.plasticityRate ?? 0) > 0) {
+    if (!diagnostic?.scissor && (g.plasticityRate ?? 0) > 0) {
       const motorLearningCost = applyWakingPlasticity(org, dt, ledger);
       org.plasticityEnergyRate = motorLearningCost / dt;
       returnedEnergy += motorLearningCost;
     }
-    if ((g.sensoryPlasticityRate ?? 0) > 0) {
+    if (!diagnostic?.scissor && (g.sensoryPlasticityRate ?? 0) > 0) {
       const sensoryCostJ = applySensoryAssociations(org, dt, ledger);
       returnedEnergy += sensoryCostJ;
       const sensoryCost = sensoryCostJ / dt;
@@ -4033,8 +4044,8 @@ export function stepSimulation(
     if(diagnostic?.trace?.detailed)for(const org of active)solverEmit(diagnostic.trace,{stage:'substep-start',id:org.id,parts:solverParts(org)});
     for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics, physicsObserve, diagnostic, sub));
     resolveBodyContacts(active, BASE_PART_DENSITY,
-      settings.physicsRegime === 'prism-resistance-v4' ? (o,n)=>projectBodyJoints(o,n,settings.physicsRegime) : projectBodyJoints,
-      observeMechanics, settings.physicsRegime,diagnostic?.trace);
+      settings.physicsRegime === 'prism-resistance-v4' || diagnostic?.scissor ? (o,n)=>projectBodyJoints(o,n,settings.physicsRegime,diagnostic) : projectBodyJoints,
+      observeMechanics, settings.physicsRegime,diagnostic?.trace,!!diagnostic?.scissor);
     if(diagnostic?.trace)for(const org of active)solverEmit(diagnostic.trace,{stage:'substep-end',id:org.id,parts:solverParts(org),com:calculateOrganismCOM(org,settings.physicsRegime)});
     if(physicsObserve) for(const org of active) {
       let anchorPx=0,limitRad=0,maxOmega=0,overspeedParts=0;
@@ -4042,7 +4053,8 @@ export function stepSimulation(
       for(let i=1;i<org.segments.length;i++) {
         const def=org.genome.parts[i],pd=org.genome.parts[def.parentIndex];
         const a=org.segments[def.parentIndex],b=org.segments[i];
-        const pa=getCardinalAnchor(def.attachmentPoint,pd.width,pd.height),pb=getChildAnchorForParentDir(def.attachmentPoint,def.width,def.height);
+        const pa=diagnostic?.scissor?{x:.5,y:3.5}:getCardinalAnchor(def.attachmentPoint,pd.width,pd.height),
+          pb=diagnostic?.scissor?{x:.5,y:-3.5}:getChildAnchorForParentDir(def.attachmentPoint,def.width,def.height);
         anchorPx=Math.max(anchorPx,Math.hypot(b.x+Math.cos(b.angle)*pb.x-Math.sin(b.angle)*pb.y-a.x-Math.cos(a.angle)*pa.x+Math.sin(a.angle)*pa.y,
           b.y+Math.sin(b.angle)*pb.x+Math.cos(b.angle)*pb.y-a.y-Math.sin(a.angle)*pa.x-Math.cos(a.angle)*pa.y));
         const relative=b.angle-a.angle-def.baseAngleOffset;

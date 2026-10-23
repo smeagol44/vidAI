@@ -1,3 +1,4 @@
+import {runScissorBenchmark} from './scissorBenchmark';
 import {runIntegrationExperiment} from './integrationExperiment';
 import {measurePhysicsTrial} from './physicsWorkerExperiment';
 import {SimulationHost, type WorldSnapshot, type WorldAction} from './simulationHost';
@@ -35,7 +36,11 @@ port.onmessage = ({data}: MessageEvent) => {
       host.settings = {...data.settings, physicsRegime: host.settings.physicsRegime ?? 'legacy-v0'} as SimulationSettings; host.speed = data.speed;
       host.running = data.running; host.selected = data.selected; return;
     }
-    if (data.type === 'integration-experiment') {
+    if (data.type === 'scissor-benchmark') {
+      if(host.running)throw new Error('Scissor benchmark requires a paused host');
+      const value=runScissorBenchmark(data.request);
+      port.postMessage({type:'result',id:data.id,epoch:host.epoch,value});
+    } else if (data.type === 'integration-experiment') {
       const value=runIntegrationExperiment(host,data.request);
       dirty=true;sendFrame();port.postMessage({type:'result',id:data.id,epoch:host.epoch,value});
     } else if (data.type === 'physics-experiment-step') {

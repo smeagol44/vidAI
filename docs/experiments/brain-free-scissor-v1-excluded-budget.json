@@ -1,0 +1,16 @@
+{
+  "protocol": "corner-scissor-v1",
+  "excluded": true,
+  "reason": "Initial100Jdevelopmentbudget exhausted under unchanged12.133333333333J/s metabolism before16s; aborted Worker request, no complete multi-cycle motion data and no model inference. Replaced only initial funding by standard10000J founder reserve, fully included in external inflow. No ongoing energy topup, physiology or motor change.",
+  "oneCycleDiagnostic": {
+    "reserveSpentJ": 48.53339537486226,
+    "metabolicJ": 48.533333333333545,
+    "motorJ": 6.2041529438639e-05
+  },
+  "twoCycleDiagnostic": {
+    "reserveSpentJ": 97.0667928384859,
+    "metabolicJ": 97.06666666666648,
+    "motorJ": 0.00012617181947647448
+  },
+  "threeCycleDiagnostic": "Scissor fixture population changed"
+}

@@ -13,6 +13,8 @@ export type PhysicsObserver = (receipt:Readonly<PhysicsReceipt>)=>void;
 /** Ephemeral, offline-only physical integration experiment. Never serialized in saves.
  * Held outputs supply capacity modulation without overwriting the live brain. */
 export interface IntegrationDiagnostic {
+  /** Private #80 fixture only; not a world setting or save field. */
+  scissor?: {version: 'corner-scissor-v2'; fluidOff: boolean};
   trace?: SolverTrace;
   jointLimits?: 'unilateral-stop-v1';
   substeps: number;
