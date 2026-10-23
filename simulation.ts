@@ -1,3 +1,4 @@
+import {matchedWrench,matchedImplicit} from './matchedDrag';
 import {unilateralLimitStep} from './jointLimitImpulse';
 import {solverPart,solverParts,solverPeak,solverEmit} from './solverTrace';
 import {prismProperties, integratePrismDrag, PRISM_REFERENCE} from './prismPhysics';
@@ -2911,8 +2912,8 @@ function projectBodyJoints(org: Organism, iterations: number, regime?: PhysicsRe
     entry.aim = 1 / am; entry.bim = 1 / bm;
     entry.aii = 12 / (am * (pd.width ** 2 + pd.height ** 2));
     entry.bii = 12 / (bm * (def.width ** 2 + def.height ** 2));
-    const pa = diagnostic?.scissor || diagnostic?.serpent ? {x: .5, y: 3.5} : getCardinalAnchor(def.attachmentPoint, pd.width, pd.height);
-    const pb = diagnostic?.scissor ? {x: .5, y: -3.5} : diagnostic?.serpent ? {x: -.5, y: -3.5} : getChildAnchorForParentDir(def.attachmentPoint, def.width, def.height);
+    const pa = diagnostic?.matched?.anchors[index-1]?.parent ?? (diagnostic?.scissor || diagnostic?.serpent ? {x: .5, y: 3.5} : getCardinalAnchor(def.attachmentPoint, pd.width, pd.height));
+    const pb = diagnostic?.matched?.anchors[index-1]?.child ?? (diagnostic?.scissor ? {x: .5, y: -3.5} : diagnostic?.serpent ? {x: -.5, y: -3.5} : getChildAnchorForParentDir(def.attachmentPoint, def.width, def.height));
     entry.paX = pa.x; entry.paY = pa.y; entry.pbX = pb.x; entry.pbY = pb.y;
   }
   for (let iteration = 0; iteration < iterations; iteration++) {
@@ -3007,6 +3008,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
   const mu = diagnostic?.scissor?.fluidOff || diagnostic?.serpent?.fluidOff ? 0 : settings.waterViscosity ?? .22, gravity = settings.gravity ?? 0;
   const {worldWidth, worldHeight} = settings;
   const partCount = org.segments.length;
+  const matchedForces: Array<ReturnType<typeof matchedWrench>> | undefined = diagnostic?.matched ? [] : undefined;
   for (let i = 0; i < partCount; i++) {
     const pDef = g.parts[i];
     const mass = bodyMass(pDef, BASE_PART_DENSITY, settings.physicsRegime);
@@ -3129,11 +3131,18 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     const fLocalX = prismModel ? 0 : -(resistance?.x ?? LONGITUDINAL_DRAG * mu * def.height) * u; // Normal forces on the end faces; legacy retains its axial calibration.
     const fLocalY = prismModel ? 0 : surfaceModel ? -resistance!.y * v : -2.0 * mu * def.width * v;  // Normal anisotropic fluid drag
 
-    const fDragWorldX = fLocalX * cosA - fLocalY * sinA;
-    const fDragWorldY = fLocalX * sinA + fLocalY * cosA;
-    const fDragTorque = prismModel ? 0 : surfaceModel ? -resistance!.angular * seg.angVel
+    let fDragWorldX = fLocalX * cosA - fLocalY * sinA;
+    let fDragWorldY = fLocalX * sinA + fLocalY * cosA;
+    let fDragTorque = prismModel ? 0 : surfaceModel ? -resistance!.angular * seg.angVel
       : -(mu * seg.angVel * (def.width * def.width * def.width + def.height * def.height * def.height)) / 6.0;
 
+    if(diagnostic?.matched){
+      const m=diagnostic.matched,w=m.fluidOff||m.integration==='implicit'?{fx:0,fy:0,torque:0,powerJPerS:0}:
+        m.law==='v3'?{fx:fDragWorldX,fy:fDragWorldY,torque:fDragTorque,
+          powerJPerS:(fDragWorldX*seg.vx+fDragWorldY*seg.vy+fDragTorque*seg.angVel)*mechanicalJoules(settings.physicsRegime)}:
+        matchedWrench(def,seg.vx,seg.vy,seg.angVel,seg.angle,m.law,mu);
+      matchedForces![i]=w;fDragWorldX=w.fx;fDragWorldY=w.fy;fDragTorque=w.torque;
+    }
     scratchFx[i] += fDragWorldX;
     scratchFy[i] += fDragWorldY + gravity * scratchMasses[i];
     scratchTorque[i] += fDragTorque;
@@ -3209,17 +3218,30 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
   for (let i = 0; i < partCount; i++) {
     const seg = org.segments[i];
     const incomingOmega = seg.angVel;
+    const matchedStart=diagnostic?.matched ? [seg.vx,seg.vy,seg.angVel] : undefined;
     const forceStart=trace?.detailed?solverPart(seg):undefined;
     const beforeForces = observe ? partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY, settings.physicsRegime) : 0;
     seg.vx += scratchFx[i] * scratchInvMasses[i] * dt_sub;
     seg.vy += scratchFy[i] * scratchInvMasses[i] * dt_sub;
     seg.angVel += scratchTorque[i] * scratchInvInertias[i] * dt_sub;
 
+    if(physicsObserve && matchedStart){const w=matchedForces![i];
+      physicsObserve(Object.freeze({stage:'matched-drag',part:i,instantPowerJPerS:w.powerJPerS,
+        workJ:dt_sub*mechanicalJoules(settings.physicsRegime)*(w.fx*(matchedStart[0]+seg.vx)/2+
+          w.fy*(matchedStart[1]+seg.vy)/2+w.torque*(matchedStart[2]+seg.angVel)/2)}));}
     const forceOmega = seg.angVel;
     if(trace?.detailed)solverEmit(trace,{stage:'force-impulse',id:org.id,part:i,dt:dt_sub,before:forceStart,after:solverPart(seg),
       fx:scratchFx[i],fy:scratchFy[i],torque:scratchTorque[i],motorTorque:scratchMotorTorque[i],inverseMass:scratchInvMasses[i],inverseInertia:scratchInvInertias[i]});
     const beforeFluid = observe || physicsObserve ? partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY, settings.physicsRegime) : 0;
     observe?.('forces-and-motors', beforeForces, beforeFluid);
+    if(diagnostic?.matched?.integration==='implicit' && !diagnostic.matched.fluidOff){
+      const d=matchedImplicit(g.parts[i],scratchMasses[i],scratchInertias[i],seg.vx,seg.vy,seg.angVel,seg.angle,dt_sub,diagnostic.matched.law,mu);
+      seg.vx=d.vx;seg.vy=d.vy;seg.angVel=d.omega;
+      const afterJ=partKineticEnergy(seg,g.parts[i],BASE_PART_DENSITY,settings.physicsRegime);
+      observe?.('fluid-resistance',beforeFluid,afterJ);
+      physicsObserve?.(Object.freeze({stage:'fluid',id:org.id,part:i,beforeJ:beforeFluid,afterJ,
+        physicalDissipationJ:d.physicalJ,numericalDissipationJ:d.numericalJ,iterations:d.iterations,residual:d.residual}));
+    }
     if(prismModel && !diagnostic?.scissor?.fluidOff && !diagnostic?.serpent?.fluidOff) {
       if (!diagnostic || diagnostic.splitting === 'motor-drag') applyPrismDrag(org,i,settings,dt_sub,observe,physicsObserve);
       else {
@@ -3261,8 +3283,8 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     const parentPhys = org.segments[parentIdx], childPhys = org.segments[childIdx];
     const parentDef = g.parts[parentIdx], c = scratchConstraints[j];
     c.parentIdx = parentIdx; c.childIdx = childIdx;
-    const parentAnchorLocal = diagnostic?.scissor || diagnostic?.serpent ? {x: .5, y: 3.5} : getCardinalAnchor(childDef.attachmentPoint, parentDef.width, parentDef.height);
-    const childAnchorLocal = diagnostic?.scissor ? {x: .5, y: -3.5} : diagnostic?.serpent ? {x: -.5, y: -3.5} : getChildAnchorForParentDir(childDef.attachmentPoint, childDef.width, childDef.height);
+    const parentAnchorLocal = diagnostic?.matched?.anchors[j]?.parent ?? (diagnostic?.scissor || diagnostic?.serpent ? {x: .5, y: 3.5} : getCardinalAnchor(childDef.attachmentPoint, parentDef.width, parentDef.height));
+    const childAnchorLocal = diagnostic?.matched?.anchors[j]?.child ?? (diagnostic?.scissor ? {x: .5, y: -3.5} : diagnostic?.serpent ? {x: -.5, y: -3.5} : getChildAnchorForParentDir(childDef.attachmentPoint, childDef.width, childDef.height));
     const cosP = Math.cos(parentPhys.angle), sinP = Math.sin(parentPhys.angle);
     const cosC = Math.cos(childPhys.angle), sinC = Math.sin(childPhys.angle);
     const rPx = c.rPx = cosP * parentAnchorLocal.x - sinP * parentAnchorLocal.y;
@@ -3577,6 +3599,14 @@ export function stepSimulation(
   physicsObserve?: PhysicsObserver,
   diagnostic?: IntegrationDiagnostic,
 ): void {
+  if(diagnostic?.matched && (diagnostic.matched.version!=='matched-drag-v1'||settings.physicsRegime!=='passive-work-v3'||
+    diagnostic.scissor||diagnostic.serpent||diagnostic.jointLimits||diagnostic.splitting!=='motor-drag'||
+    ![4,8,16].includes(diagnostic.substeps)||!['v3','v4'].includes(diagnostic.matched.law)||
+    !['explicit','implicit'].includes(diagnostic.matched.integration)||typeof diagnostic.matched.fluidOff!=='boolean'||
+    state.organisms.length!==1||state.organisms[0].genome.parts.length>3||state.eggs.length||state.nutrients.length||
+    diagnostic.matched.anchors.length!==state.organisms[0].joints.length||
+    !diagnostic.matched.anchors.every(a=>[a.parent.x,a.parent.y,a.child.x,a.child.y].every(Number.isFinite))))
+    throw new Error('Invalid private matched-drag fixture');
   if (diagnostic?.serpent && (diagnostic.serpent.version !== 'corner-serpent-v1' ||
       typeof diagnostic.serpent.fluidOff !== 'boolean' || diagnostic.scissor || diagnostic.jointLimits ||
       diagnostic.splitting !== 'motor-drag' || ![4,8,16].includes(diagnostic.substeps) ||
@@ -3597,7 +3627,7 @@ export function stepSimulation(
       state.organisms[0].genome.parts[1].maxAngle !== Math.PI/2 || diagnostic.jointLimits))
     throw new Error('Invalid private scissor fixture');
   if (diagnostic && (!(settings.physicsRegime === 'prism-resistance-v4' ||
-      ((diagnostic.scissor || diagnostic.serpent) && settings.physicsRegime === 'passive-work-v3')) || dt !== 1/60 ||
+      ((diagnostic.scissor || diagnostic.serpent || diagnostic.matched) && settings.physicsRegime === 'passive-work-v3')) || dt !== 1/60 ||
       ![4,8,16,32,64].includes(diagnostic.substeps) ||
       !['motor-drag','motor-half-half','half-motor-half'].includes(diagnostic.splitting)))
     throw new Error('Invalid integration diagnostic');
@@ -4017,16 +4047,16 @@ export function stepSimulation(
 
     // B. RECURRENT NEURAL EVALUATION. The original dense 24-node loop retains its
     // arithmetic order; explicit disabled keys opt individual edges out.
-    if (!diagnostic?.scissor && !diagnostic?.serpent) evaluateOrganismBrain(org, dt);
+    if (!diagnostic?.scissor && !diagnostic?.serpent && !diagnostic?.matched) evaluateOrganismBrain(org, dt);
     // Reward is from legitimate physical contact on the PREVIOUS tick.
     // Mutations in a living animal's learned offsets change subsequent
     // motor commands only, with their own debited metabolic cost.
-    if (!diagnostic?.scissor && !diagnostic?.serpent && (g.plasticityRate ?? 0) > 0) {
+    if (!diagnostic?.scissor && !diagnostic?.serpent && !diagnostic?.matched && (g.plasticityRate ?? 0) > 0) {
       const motorLearningCost = applyWakingPlasticity(org, dt, ledger);
       org.plasticityEnergyRate = motorLearningCost / dt;
       returnedEnergy += motorLearningCost;
     }
-    if (!diagnostic?.scissor && !diagnostic?.serpent && (g.sensoryPlasticityRate ?? 0) > 0) {
+    if (!diagnostic?.scissor && !diagnostic?.serpent && !diagnostic?.matched && (g.sensoryPlasticityRate ?? 0) > 0) {
       const sensoryCostJ = applySensoryAssociations(org, dt, ledger);
       returnedEnergy += sensoryCostJ;
       const sensoryCost = sensoryCostJ / dt;
@@ -4053,8 +4083,8 @@ export function stepSimulation(
     if(diagnostic?.trace?.detailed)for(const org of active)solverEmit(diagnostic.trace,{stage:'substep-start',id:org.id,parts:solverParts(org)});
     for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics, physicsObserve, diagnostic, sub));
     resolveBodyContacts(active, BASE_PART_DENSITY,
-      settings.physicsRegime === 'prism-resistance-v4' || diagnostic?.scissor || diagnostic?.serpent ? (o,n)=>projectBodyJoints(o,n,settings.physicsRegime,diagnostic) : projectBodyJoints,
-      observeMechanics, settings.physicsRegime,diagnostic?.trace,!!(diagnostic?.scissor || diagnostic?.serpent));
+      settings.physicsRegime === 'prism-resistance-v4' || diagnostic?.scissor || diagnostic?.serpent || diagnostic?.matched ? (o,n)=>projectBodyJoints(o,n,settings.physicsRegime,diagnostic) : projectBodyJoints,
+      observeMechanics, settings.physicsRegime,diagnostic?.trace,!!(diagnostic?.scissor || diagnostic?.serpent || diagnostic?.matched));
     if(diagnostic?.trace)for(const org of active)solverEmit(diagnostic.trace,{stage:'substep-end',id:org.id,parts:solverParts(org),com:calculateOrganismCOM(org,settings.physicsRegime)});
     if(physicsObserve) for(const org of active) {
       let anchorPx=0,limitRad=0,maxOmega=0,overspeedParts=0;
@@ -4062,8 +4092,8 @@ export function stepSimulation(
       for(let i=1;i<org.segments.length;i++) {
         const def=org.genome.parts[i],pd=org.genome.parts[def.parentIndex];
         const a=org.segments[def.parentIndex],b=org.segments[i];
-        const pa=diagnostic?.scissor||diagnostic?.serpent?{x:.5,y:3.5}:getCardinalAnchor(def.attachmentPoint,pd.width,pd.height),
-          pb=diagnostic?.scissor?{x:.5,y:-3.5}:diagnostic?.serpent?{x:-.5,y:-3.5}:getChildAnchorForParentDir(def.attachmentPoint,def.width,def.height);
+        const pa=diagnostic?.matched?.anchors[i-1]?.parent ?? (diagnostic?.scissor||diagnostic?.serpent?{x:.5,y:3.5}:getCardinalAnchor(def.attachmentPoint,pd.width,pd.height)),
+          pb=diagnostic?.matched?.anchors[i-1]?.child ?? (diagnostic?.scissor?{x:.5,y:-3.5}:diagnostic?.serpent?{x:-.5,y:-3.5}:getChildAnchorForParentDir(def.attachmentPoint,def.width,def.height));
         anchorPx=Math.max(anchorPx,Math.hypot(b.x+Math.cos(b.angle)*pb.x-Math.sin(b.angle)*pb.y-a.x-Math.cos(a.angle)*pa.x+Math.sin(a.angle)*pa.y,
           b.y+Math.sin(b.angle)*pb.x+Math.cos(b.angle)*pb.y-a.y-Math.sin(a.angle)*pa.x-Math.cos(a.angle)*pa.y));
         const relative=b.angle-a.angle-def.baseAngleOffset;
@@ -4086,12 +4116,12 @@ export function stepSimulation(
 
     // Area-Normalized Basal & Sensory Metabolism
     const sizeRatio = calculateTotalBodyArea(g.parts) / BASE_FOUNDER_AREA;
-    const basalRate = BASAL_METABOLIC_RATE * sizeRatio * g.metabolicEfficiency;
+    const basalRate = diagnostic?.matched ? 0 : BASAL_METABOLIC_RATE * sizeRatio * g.metabolicEfficiency;
     // Reference-normalized synapse upkeep: every original 24-node dense
     // controller costs exactly what it did in v0.8, for any anatomy. Added
     // enabled synapses cost energy; disabled/pruned edges save it.
     const referenceEdges = NUM_HIDDEN * (g.inputKeys!.length + NUM_HIDDEN + g.outputKeys!.length);
-    const sensoryRate = Math.max(0,
+    const sensoryRate = diagnostic?.matched ? 0 : Math.max(0,
       SENSORY_NEURAL_METABOLIC_RATE * (eyeSensoryUpkeep(g.eyes) + g.hiddenIds!.length + g.mouths.length * 2)
       + NEURAL_EDGE_METABOLIC_RATE * (enabledBrainEdgeCount(g) - referenceEdges)
       + memoryUpkeep(g));

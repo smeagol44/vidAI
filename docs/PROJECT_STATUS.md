@@ -1,3 +1,23 @@
+# Matched drag comparison completed (#80 / draft #83)
+
+- Owner goal is affordable, stable, believable artificial-life water, not exact
+  real-water/SI biology. Current report: [comparison](experiments/matched-drag-v1.md).
+- Same v3 effective mass/inertia/geometry/torque tape/work units for both formulas;
+  private actual-Worker adapter only. Explicit both-law primary, implicit control,
+  three bodies at240/480/960Hz plus passive/dry; no default/save/brain changes.
+- Recommend KEEP V3 unchanged. Serpent/paddles pass focused refinement; scissor v3
+  still fails. Current v4 has weaker damping, stop/contact artifacts, failed joint
+  convergence and1.72–1.89x warmed headless cost. No coefficient change justified.
+- Biological overhead disabled only in private benchmark; funded actual mechanical
+  work and all safeguards preserved. No guards/energy limiting in these fixtures;
+  #79 guard issues remain open. Neither model is certified exploit-proof.
+- All three #80 bodies complete. Older unmatched distances are preserved, excluded
+  for ranking drag laws (1250x mass/inertia mismatch). Seven baseline hashes and
+  four prior native full states remain exact. Do not repeat studies or tune to swim.
+- Local304fast+1metadata/build/fiveWorker checks pass. Final head/CI in#57/#80/#83.
+  Independent#79/#81/#82 stay draft/unmerged. Stop for review, no merge/deploy/Wiki,
+  solver study, evolutionary campaign, #59/#60/#78 changes or3D modifications.
+
 # #80 brain-free two-joint serpent — bounded outcome, draft #82
 
 [Current report](experiments/brain-free-serpent-v1.md), raw Worker trajectories and

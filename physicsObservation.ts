@@ -1,6 +1,8 @@
+import type {MatchedMethod} from './matchedDrag';
 import type {SolverTrace} from './solverTrace';
 /** Frozen scalar experiment receipts. No observer result affects simulation. */
 export type PhysicsReceipt =
+  | {stage:'matched-drag';part:number;workJ:number;instantPowerJPerS:number}
   | {stage:'joint-batch';id:string;dt:number;scale:number;repairPose:boolean;maxBias:number;maxAngularBias:number}
   | {stage:'guard';id:string;part:number;dt:number;incomingOmega:number;forceOmega:number;omega:number;speed:number;lossJ:number}
   | {stage:'constraint';id:string;part:number;dt:number;deltaV:number;deltaOmega:number;beforeOmega:number;afterOmega:number}
@@ -16,6 +18,7 @@ export interface IntegrationDiagnostic {
   /** Private #80 fixture only; not a world setting or save field. */
   scissor?: {version: 'corner-scissor-v2'; fluidOff: boolean};
   serpent?: {version: 'corner-serpent-v1'; fluidOff: boolean};
+  matched?: MatchedMethod;
   trace?: SolverTrace;
   jointLimits?: 'unilateral-stop-v1';
   substeps: number;

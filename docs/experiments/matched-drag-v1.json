@@ -1,0 +1,485 @@
+{
+  "version": "matched-drag-v1",
+  "base": "0b772cdbd582375ef42bbc0d968e88e4e1f93191",
+  "units": {
+    "metresPerPixel": 0.001,
+    "kgPerMass": 0.175,
+    "joulesPerUnit": 1.75e-7,
+    "newtonsPerForce": 0.000175,
+    "newtonMetresPerTorque": 1.75e-7
+  },
+  "goal": "Gameplay: affordable stable believable passive fluid resistance and discoverable locomotion; no biological/SI accuracy release requirement.",
+  "criteria": {
+    "vectorAbsolutePx": 0.01,
+    "vectorRelative": 0.01,
+    "jointRmsDeg": 1,
+    "positiveWorkRelative": 0.05,
+    "anchorPx": 0.001,
+    "overlapPx": 0.001,
+    "guards": 0,
+    "dryCOMPx": 1e-7,
+    "chemicalJ": 1e-8
+  },
+  "protectedHashes": {
+    "prism-worker-v4.json": "585c4e9ba5f32bc100ab4485190272481d00552254243ed0476baff7dc219cc8",
+    "prism-integration-v1.json": "9e508c394d60045170785f1b79032481c23f6ee2751e69954de0e27078522169",
+    "solver-stop-checks-v1.json": "f451d8ee2affd67fa1346f2cd6ab9975fa4edc79af16fb016fc5b0889699b6a6",
+    "brain-free-scissor-v2.json.gz": "b1ca9e6f1ca9296099d43ed827bc891dfb855ca314deda928e90fee79e41c76a",
+    "brain-free-scissor-v2-summary.json": "0d5843d858150148c77738f69046c5e517ac56e318772b4e6a681986b16840be",
+    "brain-free-serpent-v1.json.gz": "a91c4fe5ba89ad963fd7eb3e87b6453761ec8f48a1e86b6761714988618cb1d0",
+    "brain-free-serpent-v1-summary.json": "1c7ea06fb3d4039f921e42e3d4ed635296d8a31a2754ae74c0df8c44afa715b0"
+  },
+  "bodies": [
+    {
+      "body": "scissor",
+      "archive": "matched-drag-v1-scissor.json.gz",
+      "sha256": "97f0872b250ae569509ef7754d9bc36608b9221f6f8e46a07c86df571f183d64",
+      "tapeSha256": "4184388415d00001491d98d2cab446d953a5888cc86bf1153c0020b5ab25f362",
+      "reference": {
+        "parts": [
+          {
+            "width": 1,
+            "height": 7,
+            "parent": -1,
+            "mass": 0.35,
+            "inertia": 1.4583333333333333,
+            "baseAngle": 0,
+            "maxAngle": 1.5707963267948966
+          },
+          {
+            "width": 1,
+            "height": 7,
+            "parent": 0,
+            "mass": 0.35,
+            "inertia": 1.4583333333333333,
+            "baseAngle": -1.5707963267948966,
+            "maxAngle": 1.5707963267948966
+          }
+        ],
+        "anchors": [
+          {
+            "parent": {
+              "x": 0.5,
+              "y": 3.5
+            },
+            "child": {
+              "x": 0.5,
+              "y": -3.5
+            }
+          }
+        ],
+        "ceiling": [
+          3208.333333333333
+        ],
+        "joulesPerUnit": 1.75e-7,
+        "chemicalReserve": 10000,
+        "biologicalUpkeep": false
+      },
+      "checks": {
+        "archivedV3MotionExact": true,
+        "telemetryQuietExact": true,
+        "telemetryQuietV4Exact": true,
+        "dragOffLawStatesExact": true
+      }
+    },
+    {
+      "body": "serpent",
+      "archive": "matched-drag-v1-serpent.json.gz",
+      "sha256": "9278831734bfc6abe2b2f1b7089c9aed10b073c9221c5832545eca5d8b56d2ea",
+      "tapeSha256": "ad919ba243bab6a49a9696b402f27267ad8b2ed569831f3a3af9d4d6c45edf78",
+      "reference": {
+        "parts": [
+          {
+            "width": 1,
+            "height": 7,
+            "parent": -1,
+            "mass": 0.35,
+            "inertia": 1.4583333333333333,
+            "baseAngle": 0,
+            "maxAngle": 1.5707963267948966
+          },
+          {
+            "width": 1,
+            "height": 7,
+            "parent": 0,
+            "mass": 0.35,
+            "inertia": 1.4583333333333333,
+            "baseAngle": 0,
+            "maxAngle": 1.5707963267948966
+          },
+          {
+            "width": 1,
+            "height": 7,
+            "parent": 1,
+            "mass": 0.35,
+            "inertia": 1.4583333333333333,
+            "baseAngle": 0,
+            "maxAngle": 1.5707963267948966
+          }
+        ],
+        "anchors": [
+          {
+            "parent": {
+              "x": 0.5,
+              "y": 3.5
+            },
+            "child": {
+              "x": -0.5,
+              "y": -3.5
+            }
+          },
+          {
+            "parent": {
+              "x": 0.5,
+              "y": 3.5
+            },
+            "child": {
+              "x": -0.5,
+              "y": -3.5
+            }
+          }
+        ],
+        "ceiling": [
+          3208.333333333333,
+          3208.333333333333
+        ],
+        "joulesPerUnit": 1.75e-7,
+        "chemicalReserve": 10000,
+        "biologicalUpkeep": false
+      },
+      "checks": {
+        "archivedV3MotionExact": true,
+        "telemetryQuietExact": true,
+        "telemetryQuietV4Exact": true,
+        "dragOffLawStatesExact": true
+      }
+    },
+    {
+      "body": "paddles",
+      "archive": "matched-drag-v1-paddles.json.gz",
+      "sha256": "fa808f515d2c4edafd0a60c921e04cbed74dcc89a4882f3b50733bcd10dabad1",
+      "tapeSha256": "838cc678f444ff01678efe1fcbcfef067fdc09f9fbf95a7f7256dc73a07cb6ee",
+      "reference": {
+        "parts": [
+          {
+            "width": 7,
+            "height": 7,
+            "parent": -1,
+            "mass": 0.4,
+            "inertia": 3.266666666666667,
+            "baseAngle": 0,
+            "maxAngle": 1.5707963267948966
+          },
+          {
+            "width": 1,
+            "height": 7,
+            "parent": 0,
+            "mass": 0.35,
+            "inertia": 1.4583333333333333,
+            "baseAngle": 0,
+            "maxAngle": 1.5707963267948966
+          },
+          {
+            "width": 1,
+            "height": 7,
+            "parent": 0,
+            "mass": 0.35,
+            "inertia": 1.4583333333333333,
+            "baseAngle": 0,
+            "maxAngle": 1.5707963267948966
+          }
+        ],
+        "anchors": [
+          {
+            "parent": {
+              "x": -3.5,
+              "y": 3.5
+            },
+            "child": {
+              "x": 0.5,
+              "y": -3.5
+            }
+          },
+          {
+            "parent": {
+              "x": 3.5,
+              "y": 3.5
+            },
+            "child": {
+              "x": -0.5,
+              "y": -3.5
+            }
+          }
+        ],
+        "ceiling": [
+          5197.500000000001,
+          5197.500000000001
+        ],
+        "joulesPerUnit": 1.75e-7,
+        "chemicalReserve": 10000,
+        "biologicalUpkeep": false
+      },
+      "checks": {
+        "telemetryQuietExact": true,
+        "telemetryQuietV4Exact": true,
+        "dragOffLawStatesExact": true
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "body": "scissor",
+      "law": "v3",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.4589109697178467,
+      "jointRmsDeg": 22.996494044074552,
+      "workRelative": 0.0702698389618871,
+      "pass": false
+    },
+    {
+      "body": "scissor",
+      "law": "v3",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.21603516243912568,
+      "jointRmsDeg": 12.974310913393001,
+      "workRelative": 0.030740792635255795,
+      "pass": false
+    },
+    {
+      "body": "scissor",
+      "law": "v4",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.001050528264667334,
+      "jointRmsDeg": 0.31430084481536286,
+      "workRelative": 0.003946476178809144,
+      "pass": true
+    },
+    {
+      "body": "scissor",
+      "law": "v4",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.0005957399102387688,
+      "jointRmsDeg": 0.49740091421084875,
+      "workRelative": 0.0014840156087324121,
+      "pass": true
+    },
+    {
+      "body": "serpent",
+      "law": "v3",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.0005010538539656857,
+      "jointRmsDeg": 0.057459158758033674,
+      "workRelative": 0.001694120024726083,
+      "pass": true
+    },
+    {
+      "body": "serpent",
+      "law": "v3",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.00025023508346389554,
+      "jointRmsDeg": 0.02871395663428324,
+      "workRelative": 0.0008482836706116316,
+      "pass": true
+    },
+    {
+      "body": "serpent",
+      "law": "v4",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.001686769942657463,
+      "jointRmsDeg": 27.03782369420374,
+      "workRelative": 0.003446296335925382,
+      "pass": false
+    },
+    {
+      "body": "serpent",
+      "law": "v4",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.0009066271350262277,
+      "jointRmsDeg": 9.88607384397855,
+      "workRelative": 0.04456591979140395,
+      "pass": false
+    },
+    {
+      "body": "paddles",
+      "law": "v3",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.00396384939624597,
+      "jointRmsDeg": 0.05420162964983696,
+      "workRelative": 0.0040633011107904255,
+      "pass": true
+    },
+    {
+      "body": "paddles",
+      "law": "v3",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.0019794737076027635,
+      "jointRmsDeg": 0.02708614485359469,
+      "workRelative": 0.0020323126765335172,
+      "pass": true
+    },
+    {
+      "body": "paddles",
+      "law": "v4",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.01571259071035836,
+      "jointRmsDeg": 29.767029135263986,
+      "workRelative": 0.023868843210160962,
+      "pass": false
+    },
+    {
+      "body": "paddles",
+      "law": "v4",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.02192394645071912,
+      "jointRmsDeg": 51.916704042073306,
+      "workRelative": 0.19177538485261228,
+      "pass": false
+    }
+  ],
+  "timings": [
+    {
+      "body": "scissor",
+      "law": "v3",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 13.338356000000203
+    },
+    {
+      "body": "scissor",
+      "law": "v4",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 17.524062000000413
+    },
+    {
+      "body": "scissor",
+      "law": "v4",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 20.203262999999424
+    },
+    {
+      "body": "scissor",
+      "law": "v3",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 11.700394000000415
+    },
+    {
+      "body": "scissor",
+      "law": "v3",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 11.523678000000473
+    },
+    {
+      "body": "scissor",
+      "law": "v4",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 20.24872199999936
+    },
+    {
+      "body": "serpent",
+      "law": "v3",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 15.260395999999673
+    },
+    {
+      "body": "serpent",
+      "law": "v4",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 28.092477000000144
+    },
+    {
+      "body": "serpent",
+      "law": "v4",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 27.74016500000016
+    },
+    {
+      "body": "serpent",
+      "law": "v3",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 18.40541099999973
+    },
+    {
+      "body": "serpent",
+      "law": "v3",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 16.0825760000007
+    },
+    {
+      "body": "serpent",
+      "law": "v4",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 24.403971000001548
+    },
+    {
+      "body": "paddles",
+      "law": "v3",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 15.922755000001416
+    },
+    {
+      "body": "paddles",
+      "law": "v4",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 29.20184100000006
+    },
+    {
+      "body": "paddles",
+      "law": "v4",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 30.826482999998916
+    },
+    {
+      "body": "paddles",
+      "law": "v3",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 14.913501999999426
+    },
+    {
+      "body": "paddles",
+      "law": "v3",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 15.41231499999958
+    },
+    {
+      "body": "paddles",
+      "law": "v4",
+      "hz": 240,
+      "method": "explicit",
+      "runtimeMs": 24.26901800000087
+    }
+  ],
+  "checks": {
+    "hostUnchanged": true,
+    "fourPriorNativeFullStatesExact": true
+  },
+  "completed": true,
+  "workerAsset": "simulation.worker-yu-Ol023.js"
+}

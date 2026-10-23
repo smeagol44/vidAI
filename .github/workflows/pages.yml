@@ -51,6 +51,7 @@ jobs:
       - run: npm run test:prism-worker
       - run: npm run test:scissor-worker
       - run: npm run test:serpent-worker
+      - run: npm run test:matched-worker
       - run: npx playwright install --with-deps chromium
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
       - run: npm run test:e2e

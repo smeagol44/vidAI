@@ -1,0 +1,2842 @@
+{
+  "version": "matched-drag-v1",
+  "recommendation": "Keep existing v3 for VIDA gameplay; do not promote v4 or tune coefficients in this experiment.",
+  "basis": "Matched mechanics shows stable serpent/paddle response with v3, less constraint/contact dependence and cheaper explicit drag. Current v4 constants are weak in the common game reference, have poor tracking and more contact sensitivity, and cost more. Scissor v3 still fails its trajectory gate. Neither is certified exploit-proof, and these v3-origin torque tapes do not rank optimally evolved controllers.",
+  "goal": "Gameplay: affordable stable believable passive fluid resistance and discoverable locomotion; no biological/SI accuracy release requirement.",
+  "criteria": {
+    "vectorAbsolutePx": 0.01,
+    "vectorRelative": 0.01,
+    "jointRmsDeg": 1,
+    "positiveWorkRelative": 0.05,
+    "anchorPx": 0.001,
+    "overlapPx": 0.001,
+    "guards": 0,
+    "dryCOMPx": 1e-7,
+    "chemicalJ": 1e-8
+  },
+  "forceExamples": [
+    {
+      "width": 1,
+      "height": 7,
+      "angle": 0,
+      "vx": 1,
+      "vy": 0,
+      "omega": 0,
+      "law": "v3",
+      "fx": -0.063,
+      "fy": 0,
+      "torque": 0,
+      "powerJPerS": -1.1025e-8,
+      "forceN": [
+        -0.000011025,
+        0
+      ],
+      "torqueNm": 0
+    },
+    {
+      "width": 1,
+      "height": 7,
+      "angle": 0,
+      "vx": 1,
+      "vy": 0,
+      "omega": 0,
+      "law": "v4",
+      "fx": -0.0008599999999999999,
+      "fy": 0,
+      "torque": 0,
+      "powerJPerS": -1.5049999999999997e-10,
+      "forceN": [
+        -1.5049999999999998e-7,
+        0
+      ],
+      "torqueNm": 0
+    },
+    {
+      "width": 1,
+      "height": 7,
+      "angle": 0,
+      "vx": 0,
+      "vy": 1,
+      "omega": 0,
+      "law": "v3",
+      "fx": 0,
+      "fy": -0.36,
+      "torque": 0,
+      "powerJPerS": -6.3e-8,
+      "forceN": [
+        0,
+        -0.000063
+      ],
+      "torqueNm": 0
+    },
+    {
+      "width": 1,
+      "height": 7,
+      "angle": 0,
+      "vx": 0,
+      "vy": 1,
+      "omega": 0,
+      "law": "v4",
+      "fx": 0,
+      "fy": -0.00074,
+      "torque": 0,
+      "powerJPerS": -1.295e-10,
+      "forceN": [
+        0,
+        -1.295e-7
+      ],
+      "torqueNm": 0
+    },
+    {
+      "width": 1,
+      "height": 7,
+      "angle": 0,
+      "vx": 20,
+      "vy": 0,
+      "omega": 0,
+      "law": "v3",
+      "fx": -1.26,
+      "fy": 0,
+      "torque": 0,
+      "powerJPerS": -0.000004409999999999999,
+      "forceN": [
+        -0.0002205,
+        0
+      ],
+      "torqueNm": 0
+    },
+    {
+      "width": 1,
+      "height": 7,
+      "angle": 0,
+      "vx": 20,
+      "vy": 0,
+      "omega": 0,
+      "law": "v4",
+      "fx": -0.0704,
+      "fy": 0,
+      "torque": 0,
+      "powerJPerS": -2.4640000000000004e-7,
+      "forceN": [
+        -0.00001232,
+        0
+      ],
+      "torqueNm": 0
+    },
+    {
+      "width": 1,
+      "height": 7,
+      "angle": 0,
+      "vx": 0,
+      "vy": 20,
+      "omega": 0,
+      "law": "v3",
+      "fx": 0,
+      "fy": -7.199999999999999,
+      "torque": 0,
+      "powerJPerS": -0.0000252,
+      "forceN": [
+        0,
+        -0.0012599999999999998
+      ],
+      "torqueNm": 0
+    },
+    {
+      "width": 1,
+      "height": 7,
+      "angle": 0,
+      "vx": 0,
+      "vy": 20,
+      "omega": 0,
+      "law": "v4",
+      "fx": 0,
+      "fy": -0.0224,
+      "torque": 0,
+      "powerJPerS": -7.84e-8,
+      "forceN": [
+        0,
+        -0.00000392
+      ],
+      "torqueNm": 0
+    },
+    {
+      "width": 1,
+      "height": 7,
+      "angle": 0,
+      "vx": 0,
+      "vy": 0,
+      "omega": 1,
+      "law": "v3",
+      "fx": 0,
+      "fy": 0,
+      "torque": -10.319999999999999,
+      "powerJPerS": -0.0000018059999999999997,
+      "forceN": [
+        0,
+        0
+      ],
+      "torqueNm": -0.0000018059999999999997
+    },
+    {
+      "width": 1,
+      "height": 7,
+      "angle": 0,
+      "vx": 0,
+      "vy": 0,
+      "omega": 1,
+      "law": "v4",
+      "fx": 0,
+      "fy": 0,
+      "torque": -0.005247916666666668,
+      "powerJPerS": -9.183854166666669e-10,
+      "forceN": [
+        0,
+        0
+      ],
+      "torqueNm": -9.183854166666669e-10
+    }
+  ],
+  "forceGridRows": 168,
+  "maxGridPower": 0,
+  "comparisons": [
+    {
+      "body": "scissor",
+      "law": "v3",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.4589109697178467,
+      "jointRmsDeg": 22.996494044074552,
+      "workRelative": 0.0702698389618871,
+      "pass": false
+    },
+    {
+      "body": "scissor",
+      "law": "v3",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.21603516243912568,
+      "jointRmsDeg": 12.974310913393001,
+      "workRelative": 0.030740792635255795,
+      "pass": false
+    },
+    {
+      "body": "scissor",
+      "law": "v4",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.001050528264667334,
+      "jointRmsDeg": 0.31430084481536286,
+      "workRelative": 0.003946476178809144,
+      "pass": true
+    },
+    {
+      "body": "scissor",
+      "law": "v4",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.0005957399102387688,
+      "jointRmsDeg": 0.49740091421084875,
+      "workRelative": 0.0014840156087324121,
+      "pass": true
+    },
+    {
+      "body": "serpent",
+      "law": "v3",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.0005010538539656857,
+      "jointRmsDeg": 0.057459158758033674,
+      "workRelative": 0.001694120024726083,
+      "pass": true
+    },
+    {
+      "body": "serpent",
+      "law": "v3",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.00025023508346389554,
+      "jointRmsDeg": 0.02871395663428324,
+      "workRelative": 0.0008482836706116316,
+      "pass": true
+    },
+    {
+      "body": "serpent",
+      "law": "v4",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.001686769942657463,
+      "jointRmsDeg": 27.03782369420374,
+      "workRelative": 0.003446296335925382,
+      "pass": false
+    },
+    {
+      "body": "serpent",
+      "law": "v4",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.0009066271350262277,
+      "jointRmsDeg": 9.88607384397855,
+      "workRelative": 0.04456591979140395,
+      "pass": false
+    },
+    {
+      "body": "paddles",
+      "law": "v3",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.00396384939624597,
+      "jointRmsDeg": 0.05420162964983696,
+      "workRelative": 0.0040633011107904255,
+      "pass": true
+    },
+    {
+      "body": "paddles",
+      "law": "v3",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.0019794737076027635,
+      "jointRmsDeg": 0.02708614485359469,
+      "workRelative": 0.0020323126765335172,
+      "pass": true
+    },
+    {
+      "body": "paddles",
+      "law": "v4",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.01571259071035836,
+      "jointRmsDeg": 29.767029135263986,
+      "workRelative": 0.023868843210160962,
+      "pass": false
+    },
+    {
+      "body": "paddles",
+      "law": "v4",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.02192394645071912,
+      "jointRmsDeg": 51.916704042073306,
+      "workRelative": 0.19177538485261228,
+      "pass": false
+    }
+  ],
+  "cost": [
+    {
+      "body": "scissor",
+      "v3": [
+        13.338356000000203,
+        11.700394000000415,
+        11.523678000000473
+      ],
+      "v4": [
+        17.524062000000413,
+        20.203262999999424,
+        20.24872199999936
+      ],
+      "medianV3": 11.700394000000415,
+      "medianV4": 20.203262999999424,
+      "ratio": 1.7267164678384939
+    },
+    {
+      "body": "serpent",
+      "v3": [
+        15.260395999999673,
+        18.40541099999973,
+        16.0825760000007
+      ],
+      "v4": [
+        28.092477000000144,
+        27.74016500000016,
+        24.403971000001548
+      ],
+      "medianV3": 16.0825760000007,
+      "medianV4": 27.74016500000016,
+      "ratio": 1.724858318717036
+    },
+    {
+      "body": "paddles",
+      "v3": [
+        15.922755000001416,
+        14.913501999999426,
+        15.41231499999958
+      ],
+      "v4": [
+        29.20184100000006,
+        30.826482999998916,
+        24.26901800000087
+      ],
+      "medianV3": 15.41231499999958,
+      "medianV4": 29.20184100000006,
+      "ratio": 1.8947082900914531
+    }
+  ],
+  "rows": [
+    {
+      "body": "scissor",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 240,
+      "displacementPx": 2.687559040462697,
+      "dx": -0.1172295814278641,
+      "dy": 2.6850010840241794,
+      "rotationRad": -1.1946113542826708e-7,
+      "positiveJ": 0.00006305382831842579,
+      "brakingJ": 1.527137182448005e-7,
+      "motorJ": 0.00025221531327370317,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -0.00006062547534315132,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 2.9021671868061447,
+      "maxAnchorPx": 0.0013140483999561465,
+      "maxLimitRad": 0.0000017263003231349217,
+      "maxOverlapPx": 0.00001988883294357091,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 615,
+      "poseRepairs": 12,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 7.457856554538012e-11,
+      "mechanicalResidualJ": -9.211483301390516e-21,
+      "maxSolverMomentumChange": 4.449557262054371e-16,
+      "maxSolverCOMShiftPx": 5.102499191974714e-13,
+      "finalStateSha256": "d7017bf0143233be8a34169364bb098bf373356fb41237bbc02aa81378eec65b",
+      "initialStateSha256": "dadff99810db7c9d697d3281adc65a1418cfae5eed0e78df8a6288e72d4afa8e",
+      "angleRangesDeg": [
+        [
+          -90.00009890972268,
+          81.37089531370614
+        ]
+      ],
+      "trackingRmsDeg": [
+        27.410669570675655
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.1172295814278641,
+        "y": 2.6850010840241794,
+        "dx": -0.02522223678579394,
+        "dy": 0.5776894488301423,
+        "q": [
+          -1.5662508117209142
+        ],
+        "positiveJ": 0.000015859552029112538,
+        "shapeAreaRad2": null
+      },
+      "constraintLossJ": 6.262212923549071e-7,
+      "contactLossJ": 0.0000011844673026176035,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "scissor",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 480,
+      "displacementPx": 3.1464700101804453,
+      "dx": -0.1372473045703373,
+      "dy": 3.1434752587467756,
+      "rotationRad": -0.0000013285897908499322,
+      "positiveJ": 0.00006781949318286233,
+      "brakingJ": 5.648923589974652e-7,
+      "motorJ": 0.0002712779727314493,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -0.00006579416117482513,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 3.013227922815144,
+      "maxAnchorPx": 0.0004740779852481352,
+      "maxLimitRad": 0.0000021817734738860395,
+      "maxOverlapPx": 0.0000251363729824039,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 1820,
+      "poseRepairs": 14,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 4.729372449219227e-11,
+      "mechanicalResidualJ": 1.7893571010747095e-20,
+      "maxSolverMomentumChange": 4.47545209131181e-16,
+      "maxSolverCOMShiftPx": 5.358604128613037e-13,
+      "finalStateSha256": "c927a3635b0c67608e616f406c4467842f179e0364110d5c150c2d2781234a90",
+      "initialStateSha256": "dadff99810db7c9d697d3281adc65a1418cfae5eed0e78df8a6288e72d4afa8e",
+      "angleRangesDeg": [
+        [
+          -90.00012500641192,
+          90.00000000000152
+        ]
+      ],
+      "trackingRmsDeg": [
+        29.468705023337904
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.1372473045703373,
+        "y": 3.1434752587467756,
+        "dx": -0.03070247946266136,
+        "dy": 0.7032097032378033,
+        "q": [
+          -1.4652430742084648
+        ],
+        "positiveJ": 0.0000173225341378719,
+        "shapeAreaRad2": null
+      },
+      "constraintLossJ": 4.674414292676082e-7,
+      "contactLossJ": 5.616878115670908e-7,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "scissor",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 960,
+      "displacementPx": 3.362505172619566,
+      "dx": -0.14667059343696565,
+      "dy": 3.3593048050026937,
+      "rotationRad": -4.4230263629430056e-7,
+      "positiveJ": 0.0000699704399685326,
+      "brakingJ": 5.773233393196918e-7,
+      "motorJ": 0.0002798817598741304,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -0.00006796114561847104,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 3.0087749774935917,
+      "maxAnchorPx": 0.00013722812593751252,
+      "maxLimitRad": 0.0000026882952322004883,
+      "maxOverlapPx": 0.00003097204784752172,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 966,
+      "poseRepairs": 13,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 9.094947017729282e-11,
+      "mechanicalResidualJ": 1.6305384234645282e-20,
+      "maxSolverMomentumChange": 4.494775313252277e-16,
+      "maxSolverCOMShiftPx": 5.407370072198535e-13,
+      "finalStateSha256": "d3c18b0c8ae469a59f45db177165564b3fbac3658d6ca332ae77a517abd01fb8",
+      "initialStateSha256": "dadff99810db7c9d697d3281adc65a1418cfae5eed0e78df8a6288e72d4afa8e",
+      "angleRangesDeg": [
+        [
+          -90.0001540279709,
+          90.00000000000153
+        ]
+      ],
+      "trackingRmsDeg": [
+        35.75882123161631
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.14667059343696565,
+        "y": 3.3593048050026937,
+        "dx": -0.03317199684033767,
+        "dy": 0.759767781284836,
+        "q": [
+          -1.468427442438398
+        ],
+        "positiveJ": 0.000017969942129671942,
+        "shapeAreaRad2": null
+      },
+      "constraintLossJ": 4.1905584669655893e-7,
+      "contactLossJ": 5.784300462459165e-7,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "scissor",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 240,
+      "displacementPx": 0.05541356939856783,
+      "dx": -0.002216293615674658,
+      "dy": 0.05536923077033862,
+      "rotationRad": -0.015567925839632846,
+      "positiveJ": 0.00010432725795924402,
+      "brakingJ": 1.824855169013648e-9,
+      "motorJ": 0.0004173090318369761,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -3.75590848854845e-7,
+      "dragPositiveWorkJ": 2.0016419867777506e-14,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 5.2286782671925875,
+      "maxAnchorPx": 0.0071422561389341615,
+      "maxLimitRad": 0.004713043123869554,
+      "maxOverlapPx": 0.00013253571361071526,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 305,
+      "poseRepairs": 10,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 3.092281986027956e-11,
+      "mechanicalResidualJ": 1.094166726186442e-20,
+      "maxSolverMomentumChange": 8.886119947416683e-16,
+      "maxSolverCOMShiftPx": 4.845406308946393e-13,
+      "finalStateSha256": "a91974b7049a845a80464ad4361af4a971809ef63d4073d406d7de452c723189",
+      "initialStateSha256": "dadff99810db7c9d697d3281adc65a1418cfae5eed0e78df8a6288e72d4afa8e",
+      "angleRangesDeg": [
+        [
+          -90.00065911694801,
+          90.27003747966087
+        ]
+      ],
+      "trackingRmsDeg": [
+        57.70678188854846
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.002216293615674658,
+        "y": 0.05536923077033862,
+        "dx": -0.0011798814923622558,
+        "dy": 0.030347576545182164,
+        "q": [
+          -1.5707962146296328
+        ],
+        "positiveJ": 0.000026720054863276792,
+        "shapeAreaRad2": null
+      },
+      "constraintLossJ": 0.000025543162295931928,
+      "contactLossJ": 0.00007840666437124241,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "scissor",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 480,
+      "displacementPx": 0.056451255790506576,
+      "dx": -0.0024229381776876835,
+      "dy": 0.056399234488708316,
+      "rotationRad": -0.005408808678020405,
+      "positiveJ": 0.00010391715139668729,
+      "brakingJ": 1.5557176821970712e-28,
+      "motorJ": 0.00041566860558674916,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -3.7587276958531933e-7,
+      "dragPositiveWorkJ": 9.181853555932375e-17,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 5.229683905224588,
+      "maxAnchorPx": 0.0034455060691276555,
+      "maxLimitRad": 0.000009473398340453798,
+      "maxOverlapPx": 0.00010914374386938874,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 701,
+      "poseRepairs": 10,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 7.457856554538012e-11,
+      "mechanicalResidualJ": -5.225169745486227e-19,
+      "maxSolverMomentumChange": 8.989550626504553e-16,
+      "maxSolverCOMShiftPx": 5.456835631674794e-13,
+      "finalStateSha256": "c97a531d38d90839ab70c081d2d1cfbc6811a490d250a53b63cbe93ffd9db290",
+      "initialStateSha256": "dadff99810db7c9d697d3281adc65a1418cfae5eed0e78df8a6288e72d4afa8e",
+      "angleRangesDeg": [
+        [
+          -90.00054278574255,
+          90.00000000000193
+        ]
+      ],
+      "trackingRmsDeg": [
+        57.63465571822297
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.0024229381776876835,
+        "y": 0.056399234488708316,
+        "dx": -0.0013128036350735783,
+        "dy": 0.030871198875956907,
+        "q": [
+          -1.5707962889465352
+        ],
+        "positiveJ": 0.000026734999294196943,
+        "shapeAreaRad2": null
+      },
+      "constraintLossJ": 0.00002312372872716582,
+      "contactLossJ": 0.00008041753880623993,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "scissor",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 960,
+      "displacementPx": 0.05704228317672823,
+      "dx": -0.0025234087979697506,
+      "dy": 0.056986441177286906,
+      "rotationRad": 0.0023206058753071357,
+      "positiveJ": 0.00010376316523985986,
+      "brakingJ": 3.4363336291212813e-10,
+      "motorJ": 0.0004150526609594394,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -3.757904084001017e-7,
+      "dragPositiveWorkJ": 1.0541514679374152e-16,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 5.23006335503599,
+      "maxAnchorPx": 0.0017292379337618784,
+      "maxLimitRad": 0.00042463325207675595,
+      "maxOverlapPx": 0.00009000442295936661,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 1389,
+      "poseRepairs": 14,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 8.185452315956354e-11,
+      "mechanicalResidualJ": 2.87879128786984e-19,
+      "maxSolverMomentumChange": 8.886119947416683e-16,
+      "maxSolverCOMShiftPx": 5.66483989818615e-13,
+      "finalStateSha256": "e53690ed89bea38516cfe8e26a821127e9ab9f8c23afbd085ecf2451ce5160b0",
+      "initialStateSha256": "dadff99810db7c9d697d3281adc65a1418cfae5eed0e78df8a6288e72d4afa8e",
+      "angleRangesDeg": [
+        [
+          -90.00044760348413,
+          90.02432969318491
+        ]
+      ],
+      "trackingRmsDeg": [
+        57.563108847870055
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.0025234087979697506,
+        "y": 0.056986441177286906,
+        "dx": -0.0013870538973606017,
+        "dy": 0.031173327395208617,
+        "q": [
+          -1.5707963171643446
+        ],
+        "positiveJ": 0.000026843801720754455,
+        "shapeAreaRad2": null
+      },
+      "constraintLossJ": 0.00002325236276487089,
+      "contactLossJ": 0.00008013465794301741,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "scissor",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "passive",
+      "hz": 240,
+      "displacementPx": 0,
+      "dx": 0,
+      "dy": 0,
+      "rotationRad": 0,
+      "positiveJ": 0,
+      "brakingJ": 0,
+      "motorJ": 0,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 0,
+      "maxAnchorPx": 0,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 9.281464485866309e-14,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 0,
+      "mechanicalResidualJ": 0,
+      "maxSolverMomentumChange": 0,
+      "maxSolverCOMShiftPx": 0,
+      "finalStateSha256": "6d5f51663a87879be34574d9bc2cca6093fe4a3400feed9c5fa00164a1a93aae",
+      "initialStateSha256": "dadff99810db7c9d697d3281adc65a1418cfae5eed0e78df8a6288e72d4afa8e",
+      "angleRangesDeg": [
+        [
+          -85,
+          -85
+        ]
+      ],
+      "trackingRmsDeg": [
+        97.37973351781145
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0,
+        "y": 0,
+        "dx": 0,
+        "dy": 0,
+        "q": [
+          -1.4835298641951802
+        ],
+        "positiveJ": 0,
+        "shapeAreaRad2": null
+      },
+      "constraintLossJ": 0,
+      "contactLossJ": 0,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "scissor",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "dry",
+      "hz": 240,
+      "displacementPx": 0,
+      "dx": 0,
+      "dy": 0,
+      "rotationRad": -0.012455558492971086,
+      "positiveJ": 0.00009381795465311649,
+      "brakingJ": 2.1822908652810373e-29,
+      "motorJ": 0.00037527181861246595,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 5.239233907793385,
+      "maxAnchorPx": 0.00714220503902358,
+      "maxLimitRad": 0.000011389979967191266,
+      "maxOverlapPx": 0.0001312248344587097,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 566,
+      "poseRepairs": 10,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 3.092281986027956e-11,
+      "mechanicalResidualJ": 9.487184861376428e-20,
+      "maxSolverMomentumChange": 0,
+      "maxSolverCOMShiftPx": 0,
+      "finalStateSha256": "2d53d8807dca53eee76a4bdc6c6e108740b3d4acee2096e107bf1ea50b2da258",
+      "initialStateSha256": "dadff99810db7c9d697d3281adc65a1418cfae5eed0e78df8a6288e72d4afa8e",
+      "angleRangesDeg": [
+        [
+          -90.00065259778086,
+          90.00000000000213
+        ]
+      ],
+      "trackingRmsDeg": [
+        59.92500726206447
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0,
+        "y": 0,
+        "dx": 0,
+        "dy": 0,
+        "q": [
+          -1.570796193026161
+        ],
+        "positiveJ": 0.000026972837683724427,
+        "shapeAreaRad2": null
+      },
+      "constraintLossJ": 0.00002444048858760378,
+      "contactLossJ": 0.00006937745923338794,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true,
+        "dryCOM": true
+      }
+    },
+    {
+      "body": "scissor",
+      "law": "v3",
+      "integration": "implicit",
+      "label": "implicit-control",
+      "hz": 240,
+      "displacementPx": 2.6102839254642407,
+      "dx": -0.11385417420819977,
+      "dy": 2.607799723627636,
+      "rotationRad": -0.00001816694952938569,
+      "positiveJ": 0.00006233163343583827,
+      "brakingJ": 4.068872534779995e-7,
+      "motorJ": 0.0002493265337433531,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0.0000582123477172027,
+      "fluidNumericalJ": 8.096871792203997e-7,
+      "maxOmega": 2.9991346755103128,
+      "maxAnchorPx": 0.0014478479087086447,
+      "maxLimitRad": 0.00000776460006068902,
+      "maxOverlapPx": 0.00008945654408210046,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 342,
+      "poseRepairs": 10,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 2.1827872842550278e-11,
+      "mechanicalResidualJ": 2.6346529690426484e-19,
+      "maxSolverMomentumChange": 4.47545209131181e-16,
+      "maxSolverCOMShiftPx": 5.263891782840733e-13,
+      "finalStateSha256": "4e7821a86ee2560e9acb1498ea0dc6036cc73dd5ea3c0fe6fe7ddd2b3e04bd7e",
+      "initialStateSha256": "dadff99810db7c9d697d3281adc65a1418cfae5eed0e78df8a6288e72d4afa8e",
+      "angleRangesDeg": [
+        [
+          -90.00044487881308,
+          90.0000000000015
+        ]
+      ],
+      "trackingRmsDeg": [
+        35.31616094944093
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.11385417420819977,
+        "y": 2.607799723627636,
+        "dx": -0.012043447447695144,
+        "dy": 0.2758419708080737,
+        "q": [
+          -1.5707963267939804
+        ],
+        "positiveJ": 0.00001307671311194926,
+        "shapeAreaRad2": null
+      },
+      "constraintLossJ": 7.338385959095077e-7,
+      "contactLossJ": 0.0000021644548801876504,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "scissor",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "passive",
+      "hz": 240,
+      "displacementPx": 0,
+      "dx": 0,
+      "dy": 0,
+      "rotationRad": 0,
+      "positiveJ": 0,
+      "brakingJ": 0,
+      "motorJ": 0,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 0,
+      "maxAnchorPx": 0,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 9.281464485866309e-14,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 0,
+      "mechanicalResidualJ": 0,
+      "maxSolverMomentumChange": 0,
+      "maxSolverCOMShiftPx": 0,
+      "finalStateSha256": "6d5f51663a87879be34574d9bc2cca6093fe4a3400feed9c5fa00164a1a93aae",
+      "initialStateSha256": "dadff99810db7c9d697d3281adc65a1418cfae5eed0e78df8a6288e72d4afa8e",
+      "angleRangesDeg": [
+        [
+          -85,
+          -85
+        ]
+      ],
+      "trackingRmsDeg": [
+        97.37973351781145
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0,
+        "y": 0,
+        "dx": 0,
+        "dy": 0,
+        "q": [
+          -1.4835298641951802
+        ],
+        "positiveJ": 0,
+        "shapeAreaRad2": null
+      },
+      "constraintLossJ": 0,
+      "contactLossJ": 0,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "scissor",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "dry",
+      "hz": 240,
+      "displacementPx": 0,
+      "dx": 0,
+      "dy": 0,
+      "rotationRad": -0.012455558492971086,
+      "positiveJ": 0.00009381795465311649,
+      "brakingJ": 2.1822908652810373e-29,
+      "motorJ": 0.00037527181861246595,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 5.239233907793385,
+      "maxAnchorPx": 0.00714220503902358,
+      "maxLimitRad": 0.000011389979967191266,
+      "maxOverlapPx": 0.0001312248344587097,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 566,
+      "poseRepairs": 10,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 3.092281986027956e-11,
+      "mechanicalResidualJ": 9.487184861376428e-20,
+      "maxSolverMomentumChange": 0,
+      "maxSolverCOMShiftPx": 0,
+      "finalStateSha256": "2d53d8807dca53eee76a4bdc6c6e108740b3d4acee2096e107bf1ea50b2da258",
+      "initialStateSha256": "dadff99810db7c9d697d3281adc65a1418cfae5eed0e78df8a6288e72d4afa8e",
+      "angleRangesDeg": [
+        [
+          -90.00065259778086,
+          90.00000000000213
+        ]
+      ],
+      "trackingRmsDeg": [
+        59.92500726206447
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0,
+        "y": 0,
+        "dx": 0,
+        "dy": 0,
+        "q": [
+          -1.570796193026161
+        ],
+        "positiveJ": 0.000026972837683724427,
+        "shapeAreaRad2": null
+      },
+      "constraintLossJ": 0.00002444048858760378,
+      "contactLossJ": 0.00006937745923338794,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true,
+        "dryCOM": true
+      }
+    },
+    {
+      "body": "scissor",
+      "law": "v4",
+      "integration": "implicit",
+      "label": "implicit-control",
+      "hz": 240,
+      "displacementPx": 0.059094224805042846,
+      "dx": -0.0025456196360664762,
+      "dy": 0.059039370135337776,
+      "rotationRad": -0.0037901351031981445,
+      "positiveJ": 0.00010342106316644373,
+      "brakingJ": 2.28313375618967e-9,
+      "motorJ": 0.0004136842526657749,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 3.832927848196149e-7,
+      "fluidNumericalJ": 7.407927819492441e-12,
+      "maxOmega": 5.227633245488205,
+      "maxAnchorPx": 0.0071425140116332655,
+      "maxLimitRad": 0.004559838002466954,
+      "maxOverlapPx": 0.00011578684940882766,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 305,
+      "poseRepairs": 9,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 2.9103830456733704e-11,
+      "mechanicalResidualJ": -7.969069007328379e-20,
+      "maxSolverMomentumChange": 8.886119947416683e-16,
+      "maxSolverCOMShiftPx": 4.696053692052783e-13,
+      "finalStateSha256": "35825657eaf0005c85e5e914266589ce94f9b2a9d514300cb703da1f6866b139",
+      "initialStateSha256": "dadff99810db7c9d697d3281adc65a1418cfae5eed0e78df8a6288e72d4afa8e",
+      "angleRangesDeg": [
+        [
+          -90.00057582274314,
+          90.26125947280471
+        ]
+      ],
+      "trackingRmsDeg": [
+        57.966667432965195
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.0025456196360664762,
+        "y": 0.059039370135337776,
+        "dx": -0.001374989971282048,
+        "dy": 0.03206926446216585,
+        "q": [
+          -1.5707963026945433
+        ],
+        "positiveJ": 0.000026776381290820615,
+        "shapeAreaRad2": null
+      },
+      "constraintLossJ": 0.00002554274826649584,
+      "contactLossJ": 0.00007749271929817561,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "serpent",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 240,
+      "displacementPx": 1.1183119684569112,
+      "dx": -0.45738007560385086,
+      "dy": 1.0205023886471736,
+      "rotationRad": -0.028050671567579177,
+      "positiveJ": 0.000010747756358895914,
+      "brakingJ": 3.7920625484550584e-7,
+      "motorJ": 0.000042991025435583655,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -0.00001030404313230195,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 0.6487626587032307,
+      "maxAnchorPx": 0.00003826242886910758,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 4.440892098500626e-14,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 4.729372449219227e-11,
+      "mechanicalResidualJ": 8.271806125530277e-22,
+      "maxSolverMomentumChange": 4.449557262054371e-16,
+      "maxSolverCOMShiftPx": 5.288391308550571e-13,
+      "finalStateSha256": "80470b00c9a5a225292e83ab3c4c8a8c21fa06ff98374ea6b7c4e1c296bd1f1e",
+      "initialStateSha256": "4c590eb0bc801ff58ee1e4177599f523671fe2f582962a30f19bb9d201b2bc56",
+      "angleRangesDeg": [
+        [
+          -27.434920537168434,
+          27.41070607946959
+        ],
+        [
+          -29.79391085017133,
+          29.79190047698516
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.284670039996125,
+        7.327242099788918
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.45738007560385086,
+        "y": 1.0205023886471736,
+        "dx": -0.19203925389820142,
+        "dy": 0.3349760478974986,
+        "q": [
+          -0.18152520667790917,
+          -0.48260125497095085
+        ],
+        "positiveJ": 0.0000032291986960813066,
+        "shapeAreaRad2": 0.7816353216548991
+      },
+      "constraintLossJ": 1.6047922114454587e-8,
+      "contactLossJ": 3.3239624910179304e-30,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "serpent",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 480,
+      "displacementPx": 1.117823211968907,
+      "dx": -0.45728083178778434,
+      "dy": 1.0200112617495734,
+      "rotationRad": -0.027884621445349922,
+      "positiveJ": 0.000010729579163977336,
+      "brakingJ": 3.822643285312049e-7,
+      "motorJ": 0.000042918316655909344,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -0.000010290994739871484,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 0.6483561039184743,
+      "maxAnchorPx": 0.000009555804288021704,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 5.773159728050814e-14,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 7.639755494892597e-11,
+      "mechanicalResidualJ": 4.235164736271502e-22,
+      "maxSolverMomentumChange": 4.443059973708341e-16,
+      "maxSolverCOMShiftPx": 5.802588185934643e-13,
+      "finalStateSha256": "5ad4729df7b1f6c8dad80e309e79e590372616627ce91de89c6069acf356a97a",
+      "initialStateSha256": "4c590eb0bc801ff58ee1e4177599f523671fe2f582962a30f19bb9d201b2bc56",
+      "angleRangesDeg": [
+        [
+          -27.424686961775027,
+          27.403784576138413
+        ],
+        [
+          -29.77739312736916,
+          29.77460767245353
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.3356036198964585,
+        7.386432875809648
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.45728083178778434,
+        "y": 1.0200112617495734,
+        "dx": -0.1919905051497608,
+        "dy": 0.33485544224629393,
+        "q": [
+          -0.18269853529724323,
+          -0.48174119871309906
+        ],
+        "positiveJ": 0.0000032240113201515896,
+        "shapeAreaRad2": 0.7809258490378358
+      },
+      "constraintLossJ": 8.016941710317187e-9,
+      "contactLossJ": 1.3759767969075719e-28,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "serpent",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 960,
+      "displacementPx": 1.1175792210775832,
+      "dx": -0.4572317047443448,
+      "dy": 1.0197658964492575,
+      "rotationRad": -0.027801672388935012,
+      "positiveJ": 0.000010720485151482299,
+      "brakingJ": 3.838027703460841e-7,
+      "motorJ": 0.000042881940605929196,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -0.000010284450019343183,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 0.6481529459627267,
+      "maxAnchorPx": 0.0000023876428389211813,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 7.527312106958561e-14,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 1.4551915228366852e-10,
+      "mechanicalResidualJ": 4.499862532288471e-22,
+      "maxSolverMomentumChange": 5.003707553108401e-16,
+      "maxSolverCOMShiftPx": 5.698799342384625e-13,
+      "finalStateSha256": "54c35fee1d77625c50633d489342e24d79a6149a5fd35bf8d82ca9b0bd832169",
+      "initialStateSha256": "4c590eb0bc801ff58ee1e4177599f523671fe2f582962a30f19bb9d201b2bc56",
+      "angleRangesDeg": [
+        [
+          -27.419562972719653,
+          27.400325958248395
+        ],
+        [
+          -29.76935623489152,
+          29.76630338675962
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.361047918342038,
+        7.416017938511357
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.4572317047443448,
+        "y": 1.0197658964492575,
+        "dx": -0.19196629048428804,
+        "dy": 0.3347952185077929,
+        "q": [
+          -0.18328449646701445,
+          -0.4813098623389254
+        ],
+        "positiveJ": 0.0000032214156599278013,
+        "shapeAreaRad2": 0.7805726498974791
+      },
+      "constraintLossJ": 4.006746850935784e-9,
+      "contactLossJ": 3.280279375567362e-27,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "serpent",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 240,
+      "displacementPx": 0.021465745694382532,
+      "dx": 0.005321364791825545,
+      "dy": -0.0207957042431417,
+      "rotationRad": 0.030905365984725746,
+      "positiveJ": 0.00002447622484700775,
+      "brakingJ": 0.0000033793966944800143,
+      "motorJ": 0.000097904899388031,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -1.4645167022603772e-7,
+      "dragPositiveWorkJ": 6.095525894192895e-17,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 3.632831616821692,
+      "maxAnchorPx": 0.003173201186270354,
+      "maxLimitRad": 0.00012036685793859192,
+      "maxOverlapPx": 0.0003536891791120489,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 620,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 3.456079866737127e-11,
+      "mechanicalResidualJ": 2.1631103890506695e-19,
+      "maxSolverMomentumChange": 1.3426356273935429e-15,
+      "maxSolverCOMShiftPx": 5.966389043657554e-13,
+      "finalStateSha256": "71084b5f68a3cc9594183c1cc9a79a792f8d24f69b89d0cfe92da4a670d89cd2",
+      "initialStateSha256": "4c590eb0bc801ff58ee1e4177599f523671fe2f582962a30f19bb9d201b2bc56",
+      "angleRangesDeg": [
+        [
+          -90.00689651295313,
+          90.00201600934129
+        ],
+        [
+          -90.00450843417157,
+          90.00028695742068
+        ]
+      ],
+      "trackingRmsDeg": [
+        41.30299253563634,
+        56.116653421480486
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.005321364791825545,
+        "y": -0.0207957042431417,
+        "dx": 0.004730278097440532,
+        "dy": -0.008609397324903512,
+        "q": [
+          -1.2340992246288374,
+          -1.5707963267955038
+        ],
+        "positiveJ": 0.000006084812566272018,
+        "shapeAreaRad2": 6.230124423451434
+      },
+      "constraintLossJ": 0.00002044279250992712,
+      "contactLossJ": 3.44305409857143e-7,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "serpent",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 480,
+      "displacementPx": 0.020549146909969836,
+      "dx": 0.006423986099434842,
+      "dy": -0.019519217231277253,
+      "rotationRad": -0.13467528197965947,
+      "positiveJ": 0.00002439216222769714,
+      "brakingJ": 0.000003502898303396908,
+      "motorJ": 0.00009756864891078856,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -1.4004126738632894e-7,
+      "dragPositiveWorkJ": 4.64206589633136e-19,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 3.6312526353610073,
+      "maxAnchorPx": 0.0013545569048444756,
+      "maxLimitRad": 0.000055839041591010385,
+      "maxOverlapPx": 0.00016407699246334673,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 1076,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 7.09405867382884e-11,
+      "mechanicalResidualJ": -9.634999775017666e-20,
+      "maxSolverMomentumChange": 1.5543122344752192e-15,
+      "maxSolverCOMShiftPx": 5.140469506309466e-13,
+      "finalStateSha256": "b539a804269fa30f66f409639611442024713891602d17b4cbfce05b03bf27a6",
+      "initialStateSha256": "4c590eb0bc801ff58ee1e4177599f523671fe2f582962a30f19bb9d201b2bc56",
+      "angleRangesDeg": [
+        [
+          -90.00319934141523,
+          90.00071072447558
+        ],
+        [
+          -90.00209154653781,
+          90.00038827197488
+        ]
+      ],
+      "trackingRmsDeg": [
+        44.646143979556896,
+        55.67854094765212
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.006423986099434842,
+        "y": -0.019519217231277253,
+        "dx": 0.0053324680222885945,
+        "dy": -0.007696575267686967,
+        "q": [
+          0.44023564789876085,
+          -1.10215386218352
+        ],
+        "positiveJ": 0.000006234253539813772,
+        "shapeAreaRad2": 3.3783662689649483
+      },
+      "constraintLossJ": 0.000018779672105498078,
+      "contactLossJ": 3.0313178461628434e-7,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "serpent",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 960,
+      "displacementPx": 0.021013889834052567,
+      "dx": 0.0073122815331316815,
+      "dy": -0.01970061178587912,
+      "rotationRad": -0.09063680158987053,
+      "positiveJ": 0.00002335148195584264,
+      "brakingJ": 0.000003643473658800363,
+      "motorJ": 0.00009340592782337056,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -1.3933720507970765e-7,
+      "dragPositiveWorkJ": 2.3434641465867587e-18,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 3.6332190630465897,
+      "maxAnchorPx": 0.0006323225618726209,
+      "maxLimitRad": 0.000011730795669961935,
+      "maxOverlapPx": 0.00003446938355811113,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 1861,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 1.5825207810848951e-10,
+      "mechanicalResidualJ": 5.124549330888517e-20,
+      "maxSolverMomentumChange": 1.3732700395566711e-15,
+      "maxSolverCOMShiftPx": 5.961173304925478e-13,
+      "finalStateSha256": "63675e0894dfce58c110d76fc4fd61bf3909b3c96a41d10825d118f4eb8eddea",
+      "initialStateSha256": "4c590eb0bc801ff58ee1e4177599f523671fe2f582962a30f19bb9d201b2bc56",
+      "angleRangesDeg": [
+        [
+          -90.00067212508222,
+          90.00037860082625
+        ],
+        [
+          -90.00043940798209,
+          90.00018274792667
+        ]
+      ],
+      "trackingRmsDeg": [
+        50.42963121263283,
+        55.13067851811135
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.0073122815331316815,
+        "y": -0.01970061178587912,
+        "dx": 0.006621866919203967,
+        "dy": -0.007710565729439622,
+        "q": [
+          0.8433264651223746,
+          -0.892140255484317
+        ],
+        "positiveJ": 0.000005187920081165546,
+        "shapeAreaRad2": 1.398486635945782
+      },
+      "constraintLossJ": 0.000018114549523987824,
+      "contactLossJ": 3.026784743442032e-7,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "serpent",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "passive",
+      "hz": 240,
+      "displacementPx": 0,
+      "dx": 0,
+      "dy": 0,
+      "rotationRad": 0,
+      "positiveJ": 0,
+      "brakingJ": 0,
+      "motorJ": 0,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 0,
+      "maxAnchorPx": 0,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 0,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 0,
+      "mechanicalResidualJ": 0,
+      "maxSolverMomentumChange": 0,
+      "maxSolverCOMShiftPx": 0,
+      "finalStateSha256": "4aa8d8e68a89eadc50c9f2f63713bddec0ab75b2e6ea8a9eae3e50a6f510b5d0",
+      "initialStateSha256": "4c590eb0bc801ff58ee1e4177599f523671fe2f582962a30f19bb9d201b2bc56",
+      "angleRangesDeg": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "trackingRmsDeg": [
+        19.485571585149863,
+        19.488578385813565
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0,
+        "y": 0,
+        "dx": 0,
+        "dy": 0,
+        "q": [
+          0,
+          0
+        ],
+        "positiveJ": 0,
+        "shapeAreaRad2": 0
+      },
+      "constraintLossJ": 0,
+      "contactLossJ": 0,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "serpent",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "dry",
+      "hz": 240,
+      "displacementPx": 1.6553053431563328e-12,
+      "dx": -1.5916157281026244e-12,
+      "dy": -4.547473508864641e-13,
+      "rotationRad": -0.04173456132631026,
+      "positiveJ": 0.000024972871806276883,
+      "brakingJ": 0.0000032954576741371702,
+      "motorJ": 0.00009989148722510753,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 3.6404595825616393,
+      "maxAnchorPx": 0.003184548949105527,
+      "maxLimitRad": 0.000022524025812042936,
+      "maxOverlapPx": 0.00006615641380003368,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 504,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 4.18367562815547e-11,
+      "mechanicalResidualJ": 8.328716151673925e-20,
+      "maxSolverMomentumChange": 1.5553031891404221e-15,
+      "maxSolverCOMShiftPx": 4.687425197289403e-13,
+      "finalStateSha256": "5593735271c22453eabefa785e105df5a8de1ffb7e52d0602064cc5cbb6ecb9f",
+      "initialStateSha256": "4c590eb0bc801ff58ee1e4177599f523671fe2f582962a30f19bb9d201b2bc56",
+      "angleRangesDeg": [
+        [
+          -90.00129053161668,
+          90.00090708611813
+        ],
+        [
+          -90.00100843425625,
+          90.00038606502866
+        ]
+      ],
+      "trackingRmsDeg": [
+        40.85718814701922,
+        56.08942053780689
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -1.5916157281026244e-12,
+        "y": -4.547473508864641e-13,
+        "dx": 2.2737367544323206e-13,
+        "dy": -5.684341886080801e-13,
+        "q": [
+          -0.5140199891952659,
+          -1.5707963269216576
+        ],
+        "positiveJ": 0.0000066616887881135605,
+        "shapeAreaRad2": 5.530402401918766
+      },
+      "constraintLossJ": 0.000021249257449328457,
+      "contactLossJ": 3.968481167625061e-7,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true,
+        "dryCOM": true
+      }
+    },
+    {
+      "body": "serpent",
+      "law": "v3",
+      "integration": "implicit",
+      "label": "implicit-control",
+      "hz": 240,
+      "displacementPx": 1.1017637531905178,
+      "dx": -0.44965673330716527,
+      "dy": 1.0058291057808901,
+      "rotationRad": -0.027742030477718987,
+      "positiveJ": 0.000010828030463549435,
+      "brakingJ": 3.9579641260768366e-7,
+      "motorJ": 0.00004331212185419774,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0.000010222476145889645,
+      "fluidNumericalJ": 1.470814036304223e-7,
+      "maxOmega": 0.6466985386303158,
+      "maxAnchorPx": 0.000038077207001430335,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 0,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 3.2741809263825417e-11,
+      "mechanicalResidualJ": 2.7469013781660943e-20,
+      "maxSolverMomentumChange": 3.8882579728510553e-16,
+      "maxSolverCOMShiftPx": 5.161021840168022e-13,
+      "finalStateSha256": "ac8042d92170ccb2ee9749abd90ed5a9d2fc3a630f9643aa2d29bcdc4270e0c6",
+      "initialStateSha256": "4c590eb0bc801ff58ee1e4177599f523671fe2f582962a30f19bb9d201b2bc56",
+      "angleRangesDeg": [
+        [
+          -27.274737244202537,
+          27.24758826106604
+        ],
+        [
+          -29.75848457545805,
+          29.718058827061537
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.391775754429465,
+        7.506131086012416
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.44965673330716527,
+        "y": 1.0058291057808901,
+        "dx": -0.18885891543709477,
+        "dy": 0.330344589367769,
+        "q": [
+          -0.18327933131657442,
+          -0.4803900802234677
+        ],
+        "positiveJ": 0.000003254034216644733,
+        "shapeAreaRad2": 0.7755956802986016
+      },
+      "constraintLossJ": 1.571924594701709e-8,
+      "contactLossJ": 0,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "serpent",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "passive",
+      "hz": 240,
+      "displacementPx": 0,
+      "dx": 0,
+      "dy": 0,
+      "rotationRad": 0,
+      "positiveJ": 0,
+      "brakingJ": 0,
+      "motorJ": 0,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 0,
+      "maxAnchorPx": 0,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 0,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 0,
+      "mechanicalResidualJ": 0,
+      "maxSolverMomentumChange": 0,
+      "maxSolverCOMShiftPx": 0,
+      "finalStateSha256": "4aa8d8e68a89eadc50c9f2f63713bddec0ab75b2e6ea8a9eae3e50a6f510b5d0",
+      "initialStateSha256": "4c590eb0bc801ff58ee1e4177599f523671fe2f582962a30f19bb9d201b2bc56",
+      "angleRangesDeg": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "trackingRmsDeg": [
+        19.485571585149863,
+        19.488578385813565
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0,
+        "y": 0,
+        "dx": 0,
+        "dy": 0,
+        "q": [
+          0,
+          0
+        ],
+        "positiveJ": 0,
+        "shapeAreaRad2": 0
+      },
+      "constraintLossJ": 0,
+      "contactLossJ": 0,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "serpent",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "dry",
+      "hz": 240,
+      "displacementPx": 1.6553053431563328e-12,
+      "dx": -1.5916157281026244e-12,
+      "dy": -4.547473508864641e-13,
+      "rotationRad": -0.04173456132631026,
+      "positiveJ": 0.000024972871806276883,
+      "brakingJ": 0.0000032954576741371702,
+      "motorJ": 0.00009989148722510753,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 3.6404595825616393,
+      "maxAnchorPx": 0.003184548949105527,
+      "maxLimitRad": 0.000022524025812042936,
+      "maxOverlapPx": 0.00006615641380003368,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 504,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 4.18367562815547e-11,
+      "mechanicalResidualJ": 8.328716151673925e-20,
+      "maxSolverMomentumChange": 1.5553031891404221e-15,
+      "maxSolverCOMShiftPx": 4.687425197289403e-13,
+      "finalStateSha256": "5593735271c22453eabefa785e105df5a8de1ffb7e52d0602064cc5cbb6ecb9f",
+      "initialStateSha256": "4c590eb0bc801ff58ee1e4177599f523671fe2f582962a30f19bb9d201b2bc56",
+      "angleRangesDeg": [
+        [
+          -90.00129053161668,
+          90.00090708611813
+        ],
+        [
+          -90.00100843425625,
+          90.00038606502866
+        ]
+      ],
+      "trackingRmsDeg": [
+        40.85718814701922,
+        56.08942053780689
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -1.5916157281026244e-12,
+        "y": -4.547473508864641e-13,
+        "dx": 2.2737367544323206e-13,
+        "dy": -5.684341886080801e-13,
+        "q": [
+          -0.5140199891952659,
+          -1.5707963269216576
+        ],
+        "positiveJ": 0.0000066616887881135605,
+        "shapeAreaRad2": 5.530402401918766
+      },
+      "constraintLossJ": 0.000021249257449328457,
+      "contactLossJ": 3.968481167625061e-7,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true,
+        "dryCOM": true
+      }
+    },
+    {
+      "body": "serpent",
+      "law": "v4",
+      "integration": "implicit",
+      "label": "implicit-control",
+      "hz": 240,
+      "displacementPx": 0.021644784707890604,
+      "dx": 0.005395538222501273,
+      "dy": -0.02096150930492513,
+      "rotationRad": 0.010614387327594269,
+      "positiveJ": 0.00002473966884932089,
+      "brakingJ": 0.0000033471764071020607,
+      "motorJ": 0.00009895867539728356,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 1.460490980217448e-7,
+      "fluidNumericalJ": 1.4949626556667131e-12,
+      "maxOmega": 3.6327618786101685,
+      "maxAnchorPx": 0.0031529659328526864,
+      "maxLimitRad": 0.00011948268156869446,
+      "maxOverlapPx": 0.00035109102981190077,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 544,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 2.9103830456733704e-11,
+      "mechanicalResidualJ": -5.538139637165031e-20,
+      "maxSolverMomentumChange": 1.3506446028928517e-15,
+      "maxSolverCOMShiftPx": 5.342321080336371e-13,
+      "finalStateSha256": "e8d6fd34e9d7043f4be7572abdb644a2fb860b3991ff82f5c370a8c0a78bde0b",
+      "initialStateSha256": "4c590eb0bc801ff58ee1e4177599f523671fe2f582962a30f19bb9d201b2bc56",
+      "angleRangesDeg": [
+        [
+          -90.00684585337878,
+          90.00200525125896
+        ],
+        [
+          -90.0044753194441,
+          90.0005376363382
+        ]
+      ],
+      "trackingRmsDeg": [
+        41.208752243448885,
+        56.15761562117823
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.005395538222501273,
+        "y": -0.02096150930492513,
+        "dx": 0.004817889725927671,
+        "dy": -0.008694457012666135,
+        "q": [
+          -1.0288388416471002,
+          -1.5707963270754655
+        ],
+        "positiveJ": 0.00000641273918808533,
+        "shapeAreaRad2": 6.103349460485833
+      },
+      "constraintLossJ": 0.000020876027208563498,
+      "contactLossJ": 3.4439733108281006e-7,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "paddles",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 240,
+      "displacementPx": 3.0882970222775707,
+      "dx": 3.0882480195123208,
+      "dy": -0.01739734999182474,
+      "rotationRad": -0.10179248173099585,
+      "positiveJ": 0.000013957373980783726,
+      "brakingJ": 7.17042766180706e-7,
+      "motorJ": 0.000055829495923134905,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -0.00001284415701480187,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 0.6975823798026771,
+      "maxAnchorPx": 0.00004333960336315486,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 0,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 3.092281986027956e-11,
+      "mechanicalResidualJ": -1.5881867761018131e-22,
+      "maxSolverMomentumChange": 5.566705740848049e-16,
+      "maxSolverCOMShiftPx": 4.936408197197897e-13,
+      "finalStateSha256": "9b65080644e4d12e7d9c7a3725f06a96d7bf488ea8b013d757c2ccacef933bfc",
+      "initialStateSha256": "e19533e891f0e07b585729a093a4121ab8b2de83703fcaa670f6600341a33e52",
+      "angleRangesDeg": [
+        [
+          -29.794028892548706,
+          29.684431818793925
+        ],
+        [
+          -28.124811129015967,
+          28.537920370723587
+        ]
+      ],
+      "trackingRmsDeg": [
+        6.795396366790273,
+        7.308869876946899
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 3.0882480195123208,
+        "y": -0.01739734999182474,
+        "dx": 1.244919669645924,
+        "dy": -0.0025139427590374908,
+        "q": [
+          -0.18061982695443846,
+          -0.45631347367382935
+        ],
+        "positiveJ": 0.00000406035320990569,
+        "shapeAreaRad2": 0.8053229597063706
+      },
+      "constraintLossJ": 8.166805364988249e-8,
+      "contactLossJ": 7.457200744667377e-31,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "paddles",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 480,
+      "displacementPx": 3.0846537086723536,
+      "dx": 3.084613160332765,
+      "dy": -0.0158162425378805,
+      "rotationRad": -0.10200997196370494,
+      "positiveJ": 0.000013900890477067283,
+      "brakingJ": 7.2725141962228e-7,
+      "motorJ": 0.00005560356190826913,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -0.000012818695588775623,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 0.6968818710801226,
+      "maxAnchorPx": 0.000010814742683313413,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 0,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 6.184563972055912e-11,
+      "mechanicalResidualJ": -3.3351922298138076e-21,
+      "maxSolverMomentumChange": 6.667118051786499e-16,
+      "maxSolverCOMShiftPx": 5.177768889420617e-13,
+      "finalStateSha256": "7411bc8a8e70700444c9f4d16f2a9d11102f8204bfd7167a0b5fba512fd9825f",
+      "initialStateSha256": "e19533e891f0e07b585729a093a4121ab8b2de83703fcaa670f6600341a33e52",
+      "angleRangesDeg": [
+        [
+          -29.769357001436468,
+          29.663733109186534
+        ],
+        [
+          -28.12415656108111,
+          28.520809036762166
+        ]
+      ],
+      "trackingRmsDeg": [
+        6.848315816083944,
+        7.3567946757481515
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 3.084613160332765,
+        "y": -0.0158162425378805,
+        "dx": 1.2435789253509029,
+        "dy": -0.0020352948158688378,
+        "q": [
+          -0.1819126319787041,
+          -0.4558421381777538
+        ],
+        "positiveJ": 0.000004044622410058538,
+        "shapeAreaRad2": 0.8043694478417007
+      },
+      "constraintLossJ": 4.079212620329453e-8,
+      "contactLossJ": 4.2401273655629385e-30,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "paddles",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 960,
+      "displacementPx": 3.0828350776877707,
+      "dx": 3.0827984606216887,
+      "dy": -0.015025558582237863,
+      "rotationRad": -0.10211824381338781,
+      "positiveJ": 0.000013872696819463381,
+      "brakingJ": 7.324164941341102e-7,
+      "motorJ": 0.000055490787277853524,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -0.000012805920484239393,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 0.6965324551704891,
+      "maxAnchorPx": 0.0000027010536813640326,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 3.197442310920451e-14,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 1.7644197214394808e-10,
+      "mechanicalResidualJ": -2.6469779601696886e-21,
+      "maxSolverMomentumChange": 5.613217783960923e-16,
+      "maxSolverCOMShiftPx": 5.407568564448053e-13,
+      "finalStateSha256": "2efb3a1923b99bf670772ec6ff001510171d724846d15b9bcb97e10da946b63f",
+      "initialStateSha256": "e19533e891f0e07b585729a093a4121ab8b2de83703fcaa670f6600341a33e52",
+      "angleRangesDeg": [
+        [
+          -29.757049226247613,
+          29.65342274241089
+        ],
+        [
+          -28.123867612725284,
+          28.51250264128501
+        ]
+      ],
+      "trackingRmsDeg": [
+        6.874765736757204,
+        7.380747392557468
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 3.0827984606216887,
+        "y": -0.015025558582237863,
+        "dx": 1.2429095316772418,
+        "dy": -0.0017964093310638418,
+        "q": [
+          -0.18255849454984227,
+          -0.45560613769771763
+        ],
+        "positiveJ": 0.000004036769671931422,
+        "shapeAreaRad2": 0.8038941734374763
+      },
+      "constraintLossJ": 2.038570648633127e-8,
+      "contactLossJ": 1.7402623490916887e-19,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "paddles",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 240,
+      "displacementPx": 0.02562980346434616,
+      "dx": 0.0019835591795072105,
+      "dy": 0.02555293170269124,
+      "rotationRad": 0.06639737572176596,
+      "positiveJ": 0.000021875882479401206,
+      "brakingJ": 0.0000028137460943502684,
+      "motorJ": 0.00008750352991760482,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -1.4100508513726563e-7,
+      "dragPositiveWorkJ": 3.902962281706679e-16,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 3.2183704996855913,
+      "maxAnchorPx": 0.0013830534580437114,
+      "maxLimitRad": 0.000036217139913308216,
+      "maxOverlapPx": 0.020004490770650474,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 108,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 4.001776687800884e-11,
+      "mechanicalResidualJ": -1.1011428314305904e-20,
+      "maxSolverMomentumChange": 1.367582760222063e-15,
+      "maxSolverCOMShiftPx": 1.0072989883333794e-12,
+      "finalStateSha256": "2c1edb345ffbde5c35a4b772733de36784c260ba3a14c644ec619da614c7ede0",
+      "initialStateSha256": "e19533e891f0e07b585729a093a4121ab8b2de83703fcaa670f6600341a33e52",
+      "angleRangesDeg": [
+        [
+          -30.08097253419623,
+          90.00207508926306
+        ],
+        [
+          -90.00003566959631,
+          52.4967590470895
+        ]
+      ],
+      "trackingRmsDeg": [
+        52.931042299077674,
+        47.52502357955604
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.0019835591795072105,
+        "y": 0.02555293170269124,
+        "dx": 0.002054725502148358,
+        "dy": 0.009385892637510551,
+        "q": [
+          -0.2253282754862132,
+          -1.5707963273130705
+        ],
+        "positiveJ": 0.000008712182379435045,
+        "shapeAreaRad2": 3.372842160879433
+      },
+      "constraintLossJ": 0.000008516964400300508,
+      "contactLossJ": 0.000008410997180325676,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": false,
+        "chemical": true
+      }
+    },
+    {
+      "body": "paddles",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 480,
+      "displacementPx": 0.030222159887393445,
+      "dx": 0.017662412824847706,
+      "dy": 0.024523827626694583,
+      "rotationRad": 0.29141483948798985,
+      "positiveJ": 0.000021365903088537413,
+      "brakingJ": 0.0000037563619721958165,
+      "motorJ": 0.00008546361235414965,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -1.2376783105829167e-7,
+      "dragPositiveWorkJ": 6.321880967755518e-17,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 2.9684616886934534,
+      "maxAnchorPx": 0.0006899876558515402,
+      "maxLimitRad": 7.285641245857732e-7,
+      "maxOverlapPx": 0.020429037259525273,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 399,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 2.546585164964199e-11,
+      "mechanicalResidualJ": -9.867933835512599e-20,
+      "maxSolverMomentumChange": 1.4043333874306805e-15,
+      "maxSolverCOMShiftPx": 1.0760483222536334e-12,
+      "finalStateSha256": "b8bfdea54a489228bef74e48fbec18e4abd4a702f9124371a7f94865fd2d6197",
+      "initialStateSha256": "e19533e891f0e07b585729a093a4121ab8b2de83703fcaa670f6600341a33e52",
+      "angleRangesDeg": [
+        [
+          -45.32712771257747,
+          90.00004174364943
+        ],
+        [
+          -90.00000327863717,
+          87.40001208007072
+        ]
+      ],
+      "trackingRmsDeg": [
+        53.45777727283611,
+        49.62276121409358
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.017662412824847706,
+        "y": 0.024523827626694583,
+        "dx": 0.007568171785123923,
+        "dy": 0.00903750012207638,
+        "q": [
+          -0.11043970063312358,
+          -1.1573630569878792
+        ],
+        "positiveJ": 0.000008845428983549683,
+        "shapeAreaRad2": 3.769717181342834
+      },
+      "constraintLossJ": 0.000008472981852306213,
+      "contactLossJ": 0.000006148685841628435,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": false,
+        "chemical": true
+      }
+    },
+    {
+      "body": "paddles",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "primary",
+      "hz": 960,
+      "displacementPx": 0.03354832292939001,
+      "dx": -0.002355205530193416,
+      "dy": 0.033465549125708094,
+      "rotationRad": 0.24749477014247812,
+      "positiveJ": 0.000026435600559679972,
+      "brakingJ": 0.0000029371976715250327,
+      "motorJ": 0.00010574240223871989,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": -1.7751301538980346e-7,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 3.0403582663301165,
+      "maxAnchorPx": 0.00025551334077303394,
+      "maxLimitRad": 0.0000040209971428062374,
+      "maxOverlapPx": 0.02000015590171067,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 994,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 7.639755494892597e-11,
+      "mechanicalResidualJ": -2.515687853345272e-19,
+      "maxSolverMomentumChange": 1.790180836524724e-15,
+      "maxSolverCOMShiftPx": 8.992292490317154e-13,
+      "finalStateSha256": "2fb662f7ce8c69577fd7d2533b37b846898bf435d90aa608332345eae08e4384",
+      "initialStateSha256": "e19533e891f0e07b585729a093a4121ab8b2de83703fcaa670f6600341a33e52",
+      "angleRangesDeg": [
+        [
+          -90.00023038616573,
+          90.00006463954945
+        ],
+        [
+          -90.00001817789261,
+          63.28307351328981
+        ]
+      ],
+      "trackingRmsDeg": [
+        38.575968287599814,
+        43.019069343114545
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.002355205530193416,
+        "y": 0.033465549125708094,
+        "dx": 0.00503569544525817,
+        "dy": 0.014435268284842095,
+        "q": [
+          -0.2131194923860642,
+          -1.3710539854095547
+        ],
+        "positiveJ": 0.000009078534192714992,
+        "shapeAreaRad2": 4.029831385103433
+      },
+      "constraintLossJ": 0.000010522788004732658,
+      "contactLossJ": 0.000009799263678038624,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": false,
+        "chemical": true
+      }
+    },
+    {
+      "body": "paddles",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "passive",
+      "hz": 240,
+      "displacementPx": 0,
+      "dx": 0,
+      "dy": 0,
+      "rotationRad": 0,
+      "positiveJ": 0,
+      "brakingJ": 0,
+      "motorJ": 0,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 0,
+      "maxAnchorPx": 0,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 0,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 0,
+      "mechanicalResidualJ": 0,
+      "maxSolverMomentumChange": 0,
+      "maxSolverCOMShiftPx": 0,
+      "finalStateSha256": "ade5c61bef27a32330d46f90c845983c86b26a13fc3b83ed26bb2ce68a467a9a",
+      "initialStateSha256": "e19533e891f0e07b585729a093a4121ab8b2de83703fcaa670f6600341a33e52",
+      "angleRangesDeg": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "trackingRmsDeg": [
+        19.485571585149863,
+        19.488578385813565
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0,
+        "y": 0,
+        "dx": 0,
+        "dy": 0,
+        "q": [
+          0,
+          0
+        ],
+        "positiveJ": 0,
+        "shapeAreaRad2": 0
+      },
+      "constraintLossJ": 0,
+      "contactLossJ": 0,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "paddles",
+      "law": "v3",
+      "integration": "explicit",
+      "label": "dry",
+      "hz": 240,
+      "displacementPx": 4.638924511505858e-12,
+      "dx": 2.7284841053187847e-12,
+      "dy": -3.751665644813329e-12,
+      "rotationRad": 0.07141464206871513,
+      "positiveJ": 0.00002185083864870268,
+      "brakingJ": 0.000002844694359235385,
+      "motorJ": 0.00008740335459481073,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 3.2001207755454875,
+      "maxAnchorPx": 0.001503299091034189,
+      "maxLimitRad": 0.00003662011758676087,
+      "maxOverlapPx": 0.020004122069273045,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 144,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 1.6370904631912708e-11,
+      "mechanicalResidualJ": -5.590417451878382e-20,
+      "maxSolverMomentumChange": 1.3506446028928517e-15,
+      "maxSolverCOMShiftPx": 9.374985765271965e-13,
+      "finalStateSha256": "bd71fdc6768b97f045fddf75d56a10b5cc83a95b0055e75e6421abf921eaf98a",
+      "initialStateSha256": "e19533e891f0e07b585729a093a4121ab8b2de83703fcaa670f6600341a33e52",
+      "angleRangesDeg": [
+        [
+          -32.95860854441776,
+          90.002098178183
+        ],
+        [
+          -90.00004608139307,
+          52.60312990302453
+        ]
+      ],
+      "trackingRmsDeg": [
+        52.81990104478117,
+        47.798141755977426
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 2.7284841053187847e-12,
+        "y": -3.751665644813329e-12,
+        "dx": -3.410605131648481e-12,
+        "dy": -1.7053025658242404e-12,
+        "q": [
+          -0.22036681254435142,
+          -1.5707963271041472
+        ],
+        "positiveJ": 0.00000869898776247299,
+        "shapeAreaRad2": 3.29433498096002
+      },
+      "constraintLossJ": 0.000008750549391997132,
+      "contactLossJ": 0.00000825176046210466,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": false,
+        "chemical": true,
+        "dryCOM": true
+      }
+    },
+    {
+      "body": "paddles",
+      "law": "v3",
+      "integration": "implicit",
+      "label": "implicit-control",
+      "hz": 240,
+      "displacementPx": 3.023975021452533,
+      "dx": 3.023925499501047,
+      "dy": -0.01730617913324295,
+      "rotationRad": -0.10270501584306474,
+      "positiveJ": 0.000013944029186614697,
+      "brakingJ": 7.511641712039239e-7,
+      "motorJ": 0.00005577611674645879,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0.000012633571470432203,
+      "fluidNumericalJ": 1.7134719864179685e-7,
+      "maxOmega": 0.6899917309578241,
+      "maxAnchorPx": 0.00004243840138302222,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 2.4868995751603507e-14,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 5.275069270282984e-11,
+      "mechanicalResidualJ": 1.105907391758896e-19,
+      "maxSolverMomentumChange": 5.613217783960923e-16,
+      "maxSolverCOMShiftPx": 4.793100662950138e-13,
+      "finalStateSha256": "1d3618760d1c38dff62a560f1cc15ff15f85d6422c5538ce7dbd9765b16c5b94",
+      "initialStateSha256": "e19533e891f0e07b585729a093a4121ab8b2de83703fcaa670f6600341a33e52",
+      "angleRangesDeg": [
+        [
+          -29.800906229920297,
+          29.501456815175786
+        ],
+        [
+          -27.820681415478454,
+          28.233664052856064
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.043252724319901,
+        7.426485983824327
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 3.023925499501047,
+        "y": -0.01730617913324295,
+        "dx": 1.2216402171475238,
+        "dy": -0.002253012640267116,
+        "q": [
+          -0.19146858181564586,
+          -0.44965932210392195
+        ],
+        "positiveJ": 0.000004056963837211211,
+        "shapeAreaRad2": 0.7918661019259117
+      },
+      "constraintLossJ": 7.945437276579893e-8,
+      "contactLossJ": 2.1420192841474837e-30,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "paddles",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "passive",
+      "hz": 240,
+      "displacementPx": 0,
+      "dx": 0,
+      "dy": 0,
+      "rotationRad": 0,
+      "positiveJ": 0,
+      "brakingJ": 0,
+      "motorJ": 0,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 0,
+      "maxAnchorPx": 0,
+      "maxLimitRad": 0,
+      "maxOverlapPx": 0,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 0,
+      "mechanicalResidualJ": 0,
+      "maxSolverMomentumChange": 0,
+      "maxSolverCOMShiftPx": 0,
+      "finalStateSha256": "ade5c61bef27a32330d46f90c845983c86b26a13fc3b83ed26bb2ce68a467a9a",
+      "initialStateSha256": "e19533e891f0e07b585729a093a4121ab8b2de83703fcaa670f6600341a33e52",
+      "angleRangesDeg": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "trackingRmsDeg": [
+        19.485571585149863,
+        19.488578385813565
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0,
+        "y": 0,
+        "dx": 0,
+        "dy": 0,
+        "q": [
+          0,
+          0
+        ],
+        "positiveJ": 0,
+        "shapeAreaRad2": 0
+      },
+      "constraintLossJ": 0,
+      "contactLossJ": 0,
+      "flags": {
+        "guard": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true
+      }
+    },
+    {
+      "body": "paddles",
+      "law": "v4",
+      "integration": "explicit",
+      "label": "dry",
+      "hz": 240,
+      "displacementPx": 4.638924511505858e-12,
+      "dx": 2.7284841053187847e-12,
+      "dy": -3.751665644813329e-12,
+      "rotationRad": 0.07141464206871513,
+      "positiveJ": 0.00002185083864870268,
+      "brakingJ": 0.000002844694359235385,
+      "motorJ": 0.00008740335459481073,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "maxOmega": 3.2001207755454875,
+      "maxAnchorPx": 0.001503299091034189,
+      "maxLimitRad": 0.00003662011758676087,
+      "maxOverlapPx": 0.020004122069273045,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 144,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 1.6370904631912708e-11,
+      "mechanicalResidualJ": -5.590417451878382e-20,
+      "maxSolverMomentumChange": 1.3506446028928517e-15,
+      "maxSolverCOMShiftPx": 9.374985765271965e-13,
+      "finalStateSha256": "bd71fdc6768b97f045fddf75d56a10b5cc83a95b0055e75e6421abf921eaf98a",
+      "initialStateSha256": "e19533e891f0e07b585729a093a4121ab8b2de83703fcaa670f6600341a33e52",
+      "angleRangesDeg": [
+        [
+          -32.95860854441776,
+          90.002098178183
+        ],
+        [
+          -90.00004608139307,
+          52.60312990302453
+        ]
+      ],
+      "trackingRmsDeg": [
+        52.81990104478117,
+        47.798141755977426
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 2.7284841053187847e-12,
+        "y": -3.751665644813329e-12,
+        "dx": -3.410605131648481e-12,
+        "dy": -1.7053025658242404e-12,
+        "q": [
+          -0.22036681254435142,
+          -1.5707963271041472
+        ],
+        "positiveJ": 0.00000869898776247299,
+        "shapeAreaRad2": 3.29433498096002
+      },
+      "constraintLossJ": 0.000008750549391997132,
+      "contactLossJ": 0.00000825176046210466,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": false,
+        "chemical": true,
+        "dryCOM": true
+      }
+    },
+    {
+      "body": "paddles",
+      "law": "v4",
+      "integration": "implicit",
+      "label": "implicit-control",
+      "hz": 240,
+      "displacementPx": 0.02987951099315971,
+      "dx": 0.010566900900357723,
+      "dy": 0.0279486275611589,
+      "rotationRad": 0.5101412828288167,
+      "positiveJ": 0.000026685148612933255,
+      "brakingJ": 0.0000030450113044312003,
+      "motorJ": 0.00010674059445173302,
+      "metabolicJ": 0,
+      "explicitDragWorkJ": 0,
+      "dragPositiveWorkJ": 0,
+      "fluidPhysicalJ": 1.513065033485272e-7,
+      "fluidNumericalJ": 1.6675470377688634e-12,
+      "maxOmega": 3.9353332773759093,
+      "maxAnchorPx": 0.0015139345131525352,
+      "maxLimitRad": 0.00004052764771089734,
+      "maxOverlapPx": 0.030472658817465526,
+      "guardEvents": 0,
+      "overspeedSteps": 0,
+      "limitedBatches": 174,
+      "poseRepairs": 0,
+      "energyLimited": 0,
+      "torqueMismatch": 0,
+      "maxChemicalErrorJ": 4.3655745685100555e-11,
+      "mechanicalResidualJ": 4.489274620447792e-20,
+      "maxSolverMomentumChange": 1.3329316085091458e-15,
+      "maxSolverCOMShiftPx": 1.1340373774316919e-12,
+      "finalStateSha256": "62557344dd0cc0a2277a93d55f736d10a9b0bf48d8a30c742382da51f03d9217",
+      "initialStateSha256": "e19533e891f0e07b585729a093a4121ab8b2de83703fcaa670f6600341a33e52",
+      "angleRangesDeg": [
+        [
+          -60.82887831158285,
+          90.00232206316743
+        ],
+        [
+          -90.0000244754618,
+          90.00041560054616
+        ]
+      ],
+      "trackingRmsDeg": [
+        53.128272360320764,
+        45.29626963557193
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.010566900900357723,
+        "y": 0.0279486275611589,
+        "dx": 0.007564404218555865,
+        "dy": 0.009647316210248391,
+        "q": [
+          -0.09447390569356195,
+          -1.1837815585389944
+        ],
+        "positiveJ": 0.000008857040913616069,
+        "shapeAreaRad2": 3.7183044244965027
+      },
+      "constraintLossJ": 0.00001325685566384097,
+      "contactLossJ": 0.000007272403534002214,
+      "flags": {
+        "guard": true,
+        "anchor": false,
+        "overlap": false,
+        "chemical": true
+      }
+    }
+  ],
+  "checks": {
+    "hostUnchanged": true,
+    "fourPriorNativeFullStatesExact": true
+  },
+  "protectedHashes": {
+    "prism-worker-v4.json": "585c4e9ba5f32bc100ab4485190272481d00552254243ed0476baff7dc219cc8",
+    "prism-integration-v1.json": "9e508c394d60045170785f1b79032481c23f6ee2751e69954de0e27078522169",
+    "solver-stop-checks-v1.json": "f451d8ee2affd67fa1346f2cd6ab9975fa4edc79af16fb016fc5b0889699b6a6",
+    "brain-free-scissor-v2.json.gz": "b1ca9e6f1ca9296099d43ed827bc891dfb855ca314deda928e90fee79e41c76a",
+    "brain-free-scissor-v2-summary.json": "0d5843d858150148c77738f69046c5e517ac56e318772b4e6a681986b16840be",
+    "brain-free-serpent-v1.json.gz": "a91c4fe5ba89ad963fd7eb3e87b6453761ec8f48a1e86b6761714988618cb1d0",
+    "brain-free-serpent-v1-summary.json": "1c7ea06fb3d4039f921e42e3d4ed635296d8a31a2754ae74c0df8c44afa715b0"
+  }
+}
