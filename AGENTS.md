@@ -1,3 +1,28 @@
+# Equal-budget neural selection checkpoint (#63 / draft #85)
+
+- Owner-approved 12 generations x 16 offspring x 3 seeds x 5 seconds for EACH
+  legacy, signed and retained-head hybrid architecture is COMPLETE. Do not rerun,
+  extend or tune it. 1,809 total trials including initial/held-out/controls.
+- Branch experiment/locomotion-selection-63, stacked on draft #72 at
+  2ac6477298eff792c2c93f255cfb99285f64231a; #72 stays independent/unmerged.
+- docs/experiments/neural-selection-v1.md and its manifest/summary/nine raw
+  archives/champions are authoritative. All 1,728 proposal genotypes and elite
+  decisions reconstruct exactly; nine final Worker replays and three reset forks
+  exact. Prior #72 report hashes and runtime Worker asset unchanged.
+- Median final 5s travel: legacy242.10 / signed15.48 / hybrid250.93px. Valid
+  offspring576/236/534 of576. All hybrid champions remain all legacy; 72 pure
+  selector flips:30 valid,42 invalid,zero beneficial/selected. No torque-head
+  accessibility success or architecture superiority claim from this result.
+- Legacy/hybrid held-outs9/9 valid each; legacy17 returns/turns at15s. Signed7/9
+  valid; signed17/1901 mostly transient stop-pressing, signed71 fails two longer
+  tests. No neural/muscle/physics/learning/mortality/safeguard tuning.
+- Recommendation: stop for owner review; if approved, ONE equal-budget all-three
+  sigma0.15->0.30 sensitivity experiment. Do not launch it automatically.
+- V3 remains accepted; closed fluid stack stays closed. #60/#78/#84 untouched.
+  No production bank, Wiki, save reinterpretation, merge, promotion or deployment.
+- Local308fast+1metadata/typecheck/build and new actual-Worker checks pass. Final
+  heads, CI, statuses and precise next action are recorded in #63/#59/#57/#85.
+
 # Retained motor-head checkpoint (#59 / draft #72)
 
 - Owner retains passive-work-v3. Fluid stack #79/#81/#82/#83 and #61/#80 are
