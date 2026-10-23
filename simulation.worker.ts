@@ -1,3 +1,4 @@
+import {runSerpentBenchmark} from './serpentBenchmark';
 import {runScissorBenchmark} from './scissorBenchmark';
 import {runIntegrationExperiment} from './integrationExperiment';
 import {measurePhysicsTrial} from './physicsWorkerExperiment';
@@ -36,7 +37,11 @@ port.onmessage = ({data}: MessageEvent) => {
       host.settings = {...data.settings, physicsRegime: host.settings.physicsRegime ?? 'legacy-v0'} as SimulationSettings; host.speed = data.speed;
       host.running = data.running; host.selected = data.selected; return;
     }
-    if (data.type === 'scissor-benchmark') {
+    if (data.type === 'serpent-benchmark') {
+      if(host.running)throw new Error('Serpent benchmark requires a paused host');
+      const value=runSerpentBenchmark(data.request);
+      port.postMessage({type:'result',id:data.id,epoch:host.epoch,value});
+    } else if (data.type === 'scissor-benchmark') {
       if(host.running)throw new Error('Scissor benchmark requires a paused host');
       const value=runScissorBenchmark(data.request);
       port.postMessage({type:'result',id:data.id,epoch:host.epoch,value});

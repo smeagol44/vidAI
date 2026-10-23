@@ -1,3 +1,21 @@
+# Brain-free serpent checkpoint (#80 / draft #82)
+
+- Current `docs/experiments/brain-free-serpent-v1.md`, separate branch stacked on
+  #81 at8a2119a. #79/#81 code/reports and all earlier findings remain unchanged.
+- Private three1x7px serial parts, opposing end corners; independently funded
+  two-joint30degree/4s/90degree-delay traveling request,240Hz held torques.
+  Existing gains/capacity/physical coefficients/contacts/work/guards unchanged.
+  No neural evaluation, learned changes, artificial translation or save relaxation.
+- Four-cycle Worker matrix complete: both240/480/960 fixed-tape checks pass,
+  passive/dry COM effectively0, reverse wave reverses travel. Native1.118px(v3)
+  versus .218px(v4), opposite axial directions,1250x physical mass/capacity mismatch.
+  Actual shape loops measured; no drag-only, perfect tracking or physical validation.
+- Preserve scissor valid/excluded data and old baseline hashes. Two native full
+  scissor-state checks match archive exactly after shared-hook extension.
+- Stop for review. No more solver investigation, refinement ceiling increase,
+  tuning, old campaigns, merge/deploy/Wiki/3D or #60/#78 changes. Remaining paddle
+  benchmark is unstarted and requires its own bounded continuation.
+
 # Brain-free scissor checkpoint (#80 / draft #81)
 
 - Latest `docs/experiments/brain-free-scissor-v2.md`. Separate branch based on

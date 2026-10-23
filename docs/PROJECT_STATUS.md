@@ -1,3 +1,18 @@
+# #80 brain-free two-joint serpent — bounded outcome, draft #82
+
+[Current report](experiments/brain-free-serpent-v1.md), raw Worker trajectories and
+read-only summary preserve the scissor and all previous result bytes.
+`experiment/brain-free-serpent-80` is stacked against #81 at8a2119a; nothing promoted.
+Four4s cycles (16s total) of independent phased torques produce1.118312px(v3) and
+.218357px(v4) in opposite axial directions. Both declared local refinement gates
+pass; passive/dry COM0 to numerical precision, reversed wave reverses axial travel,
+late in-phase control nearly stationary. Actual loops/phase errors and unchanged
+1250x mass/capacity mismatch preclude drag-only or biological fitness claims.
+Headless cost2.39x(v4/v3 at240Hz),3.87x(960Hz), noisy two reversed-order pairs only.
+301fast+1metadata/build and four built-Worker checks pass locally; final head/CI in
+#80/#57/#82. No solver study, tuning, deployment/merge, production Wiki or3D changes.
+Stop for review; the remaining two-paddle benchmark is unstarted.
+
 # #80 brain-free scissor — completed bounded benchmark, draft #81
 
 See [current report](experiments/brain-free-scissor-v2.md) and its raw Worker data.

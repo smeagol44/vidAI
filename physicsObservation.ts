@@ -15,6 +15,7 @@ export type PhysicsObserver = (receipt:Readonly<PhysicsReceipt>)=>void;
 export interface IntegrationDiagnostic {
   /** Private #80 fixture only; not a world setting or save field. */
   scissor?: {version: 'corner-scissor-v2'; fluidOff: boolean};
+  serpent?: {version: 'corner-serpent-v1'; fluidOff: boolean};
   trace?: SolverTrace;
   jointLimits?: 'unilateral-stop-v1';
   substeps: number;

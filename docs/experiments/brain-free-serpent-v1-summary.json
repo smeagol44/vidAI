@@ -1,0 +1,2029 @@
+{
+  "protocol": "corner-serpent-v1",
+  "rawSha256": "a91c4fe5ba89ad963fd7eb3e87b6453761ec8f48a1e86b6761714988618cb1d0",
+  "criteria": {
+    "fixedTapeFinestPair": {
+      "vectorAbsolutePx": 0.01,
+      "vectorRelative": 0.01,
+      "apertureRmsDeg": 1,
+      "positiveWorkRelative": 0.05
+    },
+    "interpretability": {
+      "guards": 0,
+      "overlapPx": 0.001,
+      "anchorPx": 0.001,
+      "dryDriftPx": 1e-7,
+      "chemicalErrorJ": 1e-8
+    },
+    "note": "Declared before evaluation. Passing is numerical evidence only; net propulsion is not required. No adaptive refinement/tuning."
+  },
+  "checks": {
+    "passive-work-v3": {
+      "observedUnobservedTapeExact": true
+    },
+    "prism-resistance-v4": {
+      "observedUnobservedTapeExact": true
+    },
+    "hostUnchanged": true,
+    "invalidRejected": true,
+    "priorScissorNativeFullStatesExact": true
+  },
+  "comparisons": [
+    {
+      "regime": "passive-work-v3",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.0005010538539656857,
+      "apertureRmsDeg": 0.057459158758033674,
+      "positiveWorkRelative": 0.001694120024726083,
+      "pass": true
+    },
+    {
+      "regime": "passive-work-v3",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.00025023508346389554,
+      "apertureRmsDeg": 0.02871395663428324,
+      "positiveWorkRelative": 0.0008482836706116316,
+      "pass": true
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "coarseHz": 240,
+      "fineHz": 480,
+      "vectorErrorPx": 0.0021392660917297604,
+      "apertureRmsDeg": 0.020490836126552846,
+      "positiveWorkRelative": 0.005591504409607528,
+      "pass": true
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "coarseHz": 480,
+      "fineHz": 960,
+      "vectorErrorPx": 0.0010878813593733169,
+      "apertureRmsDeg": 0.01028897418376832,
+      "positiveWorkRelative": 0.0028039261598189133,
+      "pass": true
+    }
+  ],
+  "rotationCovariance": [
+    {
+      "regime": "passive-work-v3",
+      "rotatedVectorErrorPx": 1.1368683772161603e-12,
+      "rotatedJointRmsDeg": 7.484332072355273e-12
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "rotatedVectorErrorPx": 3.639754730461873e-12,
+      "rotatedJointRmsDeg": 2.4997101203042397e-11
+    }
+  ],
+  "timings": [
+    {
+      "hz": 240,
+      "passive-work-v3": [
+        78.73834400000123,
+        50.684769999999844
+      ],
+      "prism-resistance-v4": [
+        135.93127500000082,
+        172.75852900000064
+      ],
+      "ratio": 2.3851211306814863
+    },
+    {
+      "hz": 960,
+      "passive-work-v3": [
+        68.59689099999923,
+        63.174716999998054
+      ],
+      "prism-resistance-v4": [
+        300.5075190000007,
+        209.7662040000032
+      ],
+      "ratio": 3.872410231193463
+    }
+  ],
+  "rows": [
+    {
+      "regime": "passive-work-v3",
+      "label": "native-feedback",
+      "hz": 240,
+      "dx": -0.45738007560385086,
+      "dy": 1.0205023886471736,
+      "displacementPx": 1.1183119684569112,
+      "rotationRad": -0.028050671567579177,
+      "positiveJ": 0.000010747756358895914,
+      "brakingJ": 3.7920625484550584e-7,
+      "motorJ": 0.000042991025435583655,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 0.6487626587032307,
+      "maxAnchorPx": 0.00003826242886910758,
+      "maxOverlapPx": 4.440892098500626e-14,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 6.912159733474255e-11,
+      "maxSolverMomentumChange": 3.5497037427302993e-16,
+      "maxSolverCOMShiftPx": 5.288391308550571e-13,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 180.04607600000008,
+      "rootAngleDeg": 14.543572084443694,
+      "angleRangesDeg": [
+        [
+          -27.434920537168434,
+          27.41070607946959
+        ],
+        [
+          -29.79391085017133,
+          29.79190047698516
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.284670039996125,
+        7.327242099788918
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.45738007560385086,
+        "y": 1.0205023886471736,
+        "dx": -0.19203925389820142,
+        "dy": 0.3349760478974986,
+        "positiveJ": 0.0000032291986960813066,
+        "q": [
+          -0.18152520667790917,
+          -0.48260125497095085
+        ],
+        "minQ": [
+          -0.4788251067896401,
+          -0.5199559200084654
+        ],
+        "maxQ": [
+          0.47840707138317085,
+          0.5199249518109258
+        ],
+        "shapeAreaRad2": 0.7816353216548991,
+        "shapeClosureRad": 0.0000032724959420681437,
+        "minQDeg": [
+          -27.434657743947316,
+          -29.791279749326897
+        ],
+        "maxQDeg": [
+          27.41070607946959,
+          29.78950540230876
+        ],
+        "shapeClosureDeg": 0.000187500205954193,
+        "trackingRmsDeg": [
+          8.036371992525453,
+          7.968385428336304
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 23,
+      "contactLossJ": 3.3239624910179304e-30,
+      "constraintNetLossJ": 1.6047922114454587e-8,
+      "v3SignedFluidWorkJ": -0.000010304043132301983
+    },
+    {
+      "regime": "passive-work-v3",
+      "label": "held-native-tape",
+      "hz": 480,
+      "dx": -0.45728083178778434,
+      "dy": 1.0200112617495734,
+      "displacementPx": 1.117823211968907,
+      "rotationRad": -0.027884621445349922,
+      "positiveJ": 0.000010729579163977336,
+      "brakingJ": 3.822643285312049e-7,
+      "motorJ": 0.000042918316655909344,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 0.6483561039184743,
+      "maxAnchorPx": 0.000009555804288021704,
+      "maxOverlapPx": 5.773159728050814e-14,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 4.729372449219227e-11,
+      "maxSolverMomentumChange": 4.2349997174859567e-16,
+      "maxSolverCOMShiftPx": 5.802588185934643e-13,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 234.84508300000005,
+      "rootAngleDeg": 14.581478042975322,
+      "angleRangesDeg": [
+        [
+          -27.424686961775027,
+          27.403784576138413
+        ],
+        [
+          -29.77739312736916,
+          29.77460767245353
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.3356036198964585,
+        7.386432875809648
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.45728083178778434,
+        "y": 1.0200112617495734,
+        "dx": -0.1919905051497608,
+        "dy": 0.33485544224629393,
+        "positiveJ": 0.0000032240113201515896,
+        "q": [
+          -0.18269853529724323,
+          -0.48174119871309906
+        ],
+        "minQ": [
+          -0.47860881879275297,
+          -0.5196922110801212
+        ],
+        "maxQ": [
+          0.478286268360854,
+          0.5196310275923712
+        ],
+        "shapeAreaRad2": 0.7809258490378358,
+        "shapeClosureRad": 0.000024606228755067082,
+        "minQDeg": [
+          -27.422265354566346,
+          -29.776170340712863
+        ],
+        "maxQDeg": [
+          27.403784576138413,
+          29.7726647850889
+        ],
+        "shapeClosureDeg": 0.0014098330573987898,
+        "trackingRmsDeg": [
+          8.093578614797623,
+          8.032791022036706
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 31,
+      "contactLossJ": 1.3759767969075719e-28,
+      "constraintNetLossJ": 8.016941710317187e-9,
+      "v3SignedFluidWorkJ": -0.000010290994739871552
+    },
+    {
+      "regime": "passive-work-v3",
+      "label": "held-native-tape",
+      "hz": 960,
+      "dx": -0.4572317047443448,
+      "dy": 1.0197658964492575,
+      "displacementPx": 1.1175792210775832,
+      "rotationRad": -0.027801672388935012,
+      "positiveJ": 0.000010720485151482299,
+      "brakingJ": 3.838027703460841e-7,
+      "motorJ": 0.000042881940605929196,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 0.6481529459627267,
+      "maxAnchorPx": 0.0000023876428389211813,
+      "maxOverlapPx": 7.527312106958561e-14,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 1.7462298274040222e-10,
+      "maxSolverMomentumChange": 4.657336792487875e-16,
+      "maxSolverCOMShiftPx": 5.698799342384625e-13,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 214.4809170000001,
+      "rootAngleDeg": 14.60037482388324,
+      "angleRangesDeg": [
+        [
+          -27.419562972719653,
+          27.400325958248395
+        ],
+        [
+          -29.76935623489152,
+          29.76630338675962
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.361047918342038,
+        7.416017938511357
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.4572317047443448,
+        "y": 1.0197658964492575,
+        "dx": -0.19196629048428804,
+        "dy": 0.3347952185077929,
+        "positiveJ": 0.0000032214156599278013,
+        "q": [
+          -0.18328449646701445,
+          -0.4813098623389254
+        ],
+        "minQ": [
+          -0.47849971400982527,
+          -0.519558758911913
+        ],
+        "maxQ": [
+          0.4782243703086294,
+          0.5194860170490043
+        ],
+        "shapeAreaRad2": 0.7805726498974791,
+        "shapeClosureRad": 0.00003608181005235875,
+        "minQDeg": [
+          -27.416014110979898,
+          -29.768524094707665
+        ],
+        "maxQDeg": [
+          27.400238078985865,
+          29.764356292969076
+        ],
+        "shapeClosureDeg": 0.0020673354331928644,
+        "trackingRmsDeg": [
+          8.122161019586475,
+          8.064984483383604
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 69,
+      "contactLossJ": 3.280279375567362e-27,
+      "constraintNetLossJ": 4.006746850935784e-9,
+      "v3SignedFluidWorkJ": -0.000010284450019343144
+    },
+    {
+      "regime": "passive-work-v3",
+      "label": "refined-feedback",
+      "hz": 960,
+      "dx": -0.4587033006846468,
+      "dy": 1.023597426209335,
+      "displacementPx": 1.1216774977690178,
+      "rotationRad": -0.027963403077903643,
+      "positiveJ": 0.00001076419788446325,
+      "brakingJ": 3.8572941349615256e-7,
+      "motorJ": 0.000043056791537853,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 0.6494555840966327,
+      "maxAnchorPx": 0.0000023969761012853147,
+      "maxOverlapPx": 7.949196856316121e-14,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 4.547473508864641e-11,
+      "maxSolverMomentumChange": 4.2764364286368205e-16,
+      "maxSolverCOMShiftPx": 5.973659774991635e-13,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 446.4062080000001,
+      "rootAngleDeg": 14.574023952315791,
+      "angleRangesDeg": [
+        [
+          -27.461388120259794,
+          27.43709264276475
+        ],
+        [
+          -29.827308956352603,
+          29.82522333997368
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.2938955363501075,
+        7.334798772277204
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.4587033006846468,
+        "y": 1.023597426209335,
+        "dx": -0.192550106968838,
+        "dy": 0.3359947024310941,
+        "positiveJ": 0.000003233742509183308,
+        "q": [
+          -0.18194163462674331,
+          -0.4831010496775071
+        ],
+        "minQ": [
+          -0.47928638205255514,
+          -0.5205398660481511
+        ],
+        "maxQ": [
+          0.4788674001318397,
+          0.5205052119201515
+        ],
+        "shapeAreaRad2": 0.7832546813962263,
+        "shapeClosureRad": 0.000003288739518097358,
+        "minQDeg": [
+          -27.461086869706136,
+          -29.824737392864268
+        ],
+        "maxQDeg": [
+          27.43708097395686,
+          29.82275185758719
+        ],
+        "shapeClosureDeg": 0.00018843089430486682,
+        "trackingRmsDeg": [
+          8.046434311606372,
+          7.976355886401416
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 58,
+      "contactLossJ": 1.1388905776890944e-28,
+      "constraintNetLossJ": 4.025768028942882e-9,
+      "v3SignedFluidWorkJ": -0.000010325715608330634
+    },
+    {
+      "regime": "passive-work-v3",
+      "label": "passive",
+      "hz": 240,
+      "dx": 0,
+      "dy": 0,
+      "displacementPx": 0,
+      "rotationRad": 0,
+      "positiveJ": 0,
+      "brakingJ": 0,
+      "motorJ": 0,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 0,
+      "maxAnchorPx": 0,
+      "maxOverlapPx": 0,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 2.9103830456733704e-11,
+      "maxSolverMomentumChange": 0,
+      "maxSolverCOMShiftPx": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 89.74715500000002,
+      "rootAngleDeg": 0,
+      "angleRangesDeg": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "trackingRmsDeg": [
+        0,
+        0
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0,
+        "y": 0,
+        "dx": 0,
+        "dy": 0,
+        "positiveJ": 0,
+        "q": [
+          0,
+          0
+        ],
+        "minQ": [
+          0,
+          0
+        ],
+        "maxQ": [
+          0,
+          0
+        ],
+        "shapeAreaRad2": 0,
+        "shapeClosureRad": 0,
+        "minQDeg": [
+          0,
+          0
+        ],
+        "maxQDeg": [
+          0,
+          0
+        ],
+        "shapeClosureDeg": 0,
+        "trackingRmsDeg": [
+          0,
+          0
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 0,
+      "contactLossJ": 0,
+      "constraintNetLossJ": 0,
+      "v3SignedFluidWorkJ": 0
+    },
+    {
+      "regime": "passive-work-v3",
+      "label": "passive-refined",
+      "hz": 960,
+      "dx": 0,
+      "dy": 0,
+      "displacementPx": 0,
+      "rotationRad": 0,
+      "positiveJ": 0,
+      "brakingJ": 0,
+      "motorJ": 0,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 0,
+      "maxAnchorPx": 0,
+      "maxOverlapPx": 0,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 2.9103830456733704e-11,
+      "maxSolverMomentumChange": 0,
+      "maxSolverCOMShiftPx": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 163.78906400000005,
+      "rootAngleDeg": 0,
+      "angleRangesDeg": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "trackingRmsDeg": [
+        0,
+        0
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0,
+        "y": 0,
+        "dx": 0,
+        "dy": 0,
+        "positiveJ": 0,
+        "q": [
+          0,
+          0
+        ],
+        "minQ": [
+          0,
+          0
+        ],
+        "maxQ": [
+          0,
+          0
+        ],
+        "shapeAreaRad2": 0,
+        "shapeClosureRad": 0,
+        "minQDeg": [
+          0,
+          0
+        ],
+        "maxQDeg": [
+          0,
+          0
+        ],
+        "shapeClosureDeg": 0,
+        "trackingRmsDeg": [
+          0,
+          0
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 0,
+      "contactLossJ": 0,
+      "constraintNetLossJ": 0,
+      "v3SignedFluidWorkJ": 0
+    },
+    {
+      "regime": "passive-work-v3",
+      "label": "rotated-native-tape",
+      "hz": 240,
+      "dx": 0.457380075602714,
+      "dy": -1.0205023886471736,
+      "displacementPx": 1.1183119684564462,
+      "rotationRad": -0.028050671567486862,
+      "positiveJ": 0.000010747756358896512,
+      "brakingJ": 3.792062548454378e-7,
+      "motorJ": 0.000042991025435586047,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 0.6487626587028442,
+      "maxAnchorPx": 0.000038262428765262465,
+      "maxOverlapPx": 6.861178292183467e-14,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 6.912159733474255e-11,
+      "maxSolverMomentumChange": 3.895680680159941e-16,
+      "maxSolverCOMShiftPx": 5.305533369364043e-13,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 93.90150499999982,
+      "rootAngleDeg": 14.543572084444808,
+      "angleRangesDeg": [
+        [
+          -27.43492053716878,
+          27.410706079470327
+        ],
+        [
+          -29.793910850161115,
+          29.791900477004106
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.284670039996161,
+        7.327242099788117
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.457380075602714,
+        "y": -1.0205023886471736,
+        "dx": 0.19203925389865617,
+        "dy": -0.3349760478970438,
+        "positiveJ": 0.000003229198696081564,
+        "q": [
+          -0.18152520667791405,
+          -0.4826012549707239
+        ],
+        "minQ": [
+          -0.4788251067896727,
+          -0.5199559200083947
+        ],
+        "maxQ": [
+          0.4784070713831836,
+          0.5199249518112521
+        ],
+        "shapeAreaRad2": 0.7816353216550339,
+        "shapeClosureRad": 0.000003272495991220856,
+        "minQDeg": [
+          -27.434657743949185,
+          -29.791279749322854
+        ],
+        "maxQDeg": [
+          27.410706079470327,
+          29.789505402327453
+        ],
+        "shapeClosureDeg": 0.00018750020877043595,
+        "trackingRmsDeg": [
+          8.036371992524215,
+          7.968385428336524
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 24,
+      "contactLossJ": 3.0317989184543867e-30,
+      "constraintNetLossJ": 1.6047922114361694e-8,
+      "v3SignedFluidWorkJ": -0.000010304043132302764
+    },
+    {
+      "regime": "passive-work-v3",
+      "label": "fluid-off-native-tape",
+      "hz": 240,
+      "dx": -1.5916157281026244e-12,
+      "dy": -4.547473508864641e-13,
+      "displacementPx": 1.6553053431563328e-12,
+      "rotationRad": -0.04173456132631026,
+      "positiveJ": 0.000024972871806276883,
+      "brakingJ": 0.0000032954576741371702,
+      "motorJ": 0.00009989148722510753,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 3.6404595825616393,
+      "maxAnchorPx": 0.003184548949105527,
+      "maxOverlapPx": 0.00006615641380003368,
+      "maxLimitRad": 0.000022524025812042936,
+      "maxChemicalErrorJ": 1.8189894035458565e-11,
+      "maxSolverMomentumChange": 1.5547978811780485e-15,
+      "maxSolverCOMShiftPx": 4.687425197289403e-13,
+      "limitedBatches": 504,
+      "poseRepairs": 0,
+      "runtimeMs": 109.6232399999999,
+      "rootAngleDeg": 47.242903089426086,
+      "angleRangesDeg": [
+        [
+          -90.00129053161668,
+          90.00090708611813
+        ],
+        [
+          -90.00100843425625,
+          90.00038606502866
+        ]
+      ],
+      "trackingRmsDeg": [
+        40.85718814701922,
+        56.08942053780689
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -1.5916157281026244e-12,
+        "y": -4.547473508864641e-13,
+        "dx": 2.2737367544323206e-13,
+        "dy": -5.684341886080801e-13,
+        "positiveJ": 0.0000066616887881135605,
+        "q": [
+          -0.5140199891952659,
+          -1.5707963269216576
+        ],
+        "minQ": [
+          -1.5707689219620544,
+          -1.570797557385797
+        ],
+        "maxQ": [
+          0.8320433921850029,
+          1.570796333145815
+        ],
+        "shapeAreaRad2": 5.530402401918766,
+        "shapeClosureRad": 0.06920234190438602,
+        "minQDeg": [
+          -89.99842981873988,
+          -90.00007050766492
+        ],
+        "maxQDeg": [
+          47.672574743949006,
+          90.00000036388083
+        ],
+        "shapeClosureDeg": 3.9650021235426394,
+        "trackingRmsDeg": [
+          34.00484555082446,
+          61.5957100853464
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true,
+        "dryCOM": true
+      },
+      "contactSamples": 5116,
+      "contactLossJ": 3.968481167625061e-7,
+      "constraintNetLossJ": 0.000021249257449328457,
+      "v3SignedFluidWorkJ": -5.421010862427522e-20
+    },
+    {
+      "regime": "passive-work-v3",
+      "label": "fluid-off-refined-tape",
+      "hz": 960,
+      "dx": -6.821210263296962e-13,
+      "dy": -6.821210263296962e-13,
+      "displacementPx": 9.646648066153115e-13,
+      "rotationRad": -0.11459130174673754,
+      "positiveJ": 0.000023676447622954167,
+      "brakingJ": 0.000003588219796044207,
+      "motorJ": 0.00009470579049181667,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 3.641147369623085,
+      "maxAnchorPx": 0.0006320948627766693,
+      "maxOverlapPx": 0.000032844881606042264,
+      "maxLimitRad": 0.000013926391367213853,
+      "maxChemicalErrorJ": 1.6189005691558123e-10,
+      "maxSolverMomentumChange": 1.2531265855673051e-15,
+      "maxSolverCOMShiftPx": 5.084142270017765e-13,
+      "limitedBatches": 2006,
+      "poseRepairs": 0,
+      "runtimeMs": 217.9136129999997,
+      "rootAngleDeg": -4.501451901261207,
+      "angleRangesDeg": [
+        [
+          -90.00048949438118,
+          90.0007979234492
+        ],
+        [
+          -90.00032001353529,
+          90.0005216459373
+        ]
+      ],
+      "trackingRmsDeg": [
+        48.425774206601226,
+        55.13547156435116
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -6.821210263296962e-13,
+        "y": -6.821210263296962e-13,
+        "dx": 2.0463630789890885e-12,
+        "dy": -1.7053025658242404e-12,
+        "positiveJ": 0.000005574346955660326,
+        "q": [
+          0.46189653418100357,
+          -1.0318715032107195
+        ],
+        "minQ": [
+          -0.10331116361035292,
+          -1.5707963271890508
+        ],
+        "maxQ": [
+          1.5707995681532834,
+          1.5707984629695837
+        ],
+        "shapeAreaRad2": 2.4762623103545676,
+        "shapeClosureRad": 0.7504669978494612,
+        "minQDeg": [
+          -5.919293651458755,
+          -90.00000002258338
+        ],
+        "maxQDeg": [
+          90.00018571615546,
+          90.00012239379387
+        ],
+        "shapeClosureDeg": 42.99859164062756,
+        "trackingRmsDeg": [
+          63.824078632505866,
+          58.82125552408233
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true,
+        "dryCOM": true
+      },
+      "contactSamples": 13731,
+      "contactLossJ": 3.0749605591690586e-7,
+      "constraintNetLossJ": 0.000018314909458800472,
+      "v3SignedFluidWorkJ": -2.405573570202213e-19
+    },
+    {
+      "regime": "passive-work-v3",
+      "label": "reverse-feedback",
+      "hz": 240,
+      "dx": 0.4448593210524905,
+      "dy": -1.0199317994756711,
+      "displacementPx": 1.1127266920088523,
+      "rotationRad": -0.021168585387635257,
+      "positiveJ": 0.000010969795736733504,
+      "brakingJ": 3.736860008804999e-7,
+      "motorJ": 0.000043879182946934014,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 0.6487629447365184,
+      "maxAnchorPx": 0.000038262465534889095,
+      "maxOverlapPx": 1.509903313490213e-14,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 2.7284841053187847e-11,
+      "maxSolverMomentumChange": 4.0592529337857286e-16,
+      "maxSolverCOMShiftPx": 5.383457430960208e-13,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 53.30673899999965,
+      "rootAngleDeg": -0.09793588792075325,
+      "angleRangesDeg": [
+        [
+          -29.791850742328027,
+          29.794140965326196
+        ],
+        [
+          -27.410657817382972,
+          27.434768358879484
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.255530568966451,
+        7.409629237117285
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.4448593210524905,
+        "y": -1.0199317994756711,
+        "dx": 0.191382848163812,
+        "dy": -0.3351020387682411,
+        "positiveJ": 0.0000032291737956277194,
+        "q": [
+          0.1921239569293393,
+          -0.4426257589213405
+        ],
+        "minQ": [
+          -0.5199240824970596,
+          -0.4784062290508554
+        ],
+        "maxQ": [
+          0.5199534850587127,
+          0.47882537095640615
+        ],
+        "shapeAreaRad2": -0.7816333492405084,
+        "shapeClosureRad": 0.000002065290930318603,
+        "minQDeg": [
+          -29.78945559429315,
+          -27.410657817382972
+        ],
+        "maxQDeg": [
+          29.791140236982752,
+          27.4346728795881
+        ],
+        "shapeClosureDeg": 0.00011833245377390333,
+        "trackingRmsDeg": [
+          7.96836830321566,
+          8.036351272084094
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 13,
+      "contactLossJ": 7.494178599599612e-30,
+      "constraintNetLossJ": 1.5607220493808958e-8,
+      "v3SignedFluidWorkJ": -0.000010434825627654323
+    },
+    {
+      "regime": "passive-work-v3",
+      "label": "reciprocal-feedback",
+      "hz": 240,
+      "dx": 0.023592680376168573,
+      "dy": 0.0035333319432311328,
+      "displacementPx": 0.023855795982383556,
+      "rotationRad": 0.0006751149341373089,
+      "positiveJ": 0.000015863130630675196,
+      "brakingJ": 1.7095561436205903e-7,
+      "motorJ": 0.00006345252252270078,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 0.7913183873205254,
+      "maxAnchorPx": 0.00005489470516041059,
+      "maxOverlapPx": 3.6415315207705135e-14,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 1.127773430198431e-10,
+      "maxSolverMomentumChange": 4.2805444176224876e-16,
+      "maxSolverCOMShiftPx": 5.490682699531731e-13,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 79.6679009999998,
+      "rootAngleDeg": 11.921513138034763,
+      "angleRangesDeg": [
+        [
+          -28.894887551790998,
+          28.8894158636281
+        ],
+        [
+          -28.889317885058297,
+          28.894883737983456
+        ]
+      ],
+      "trackingRmsDeg": [
+        8.034937815159829,
+        8.03526868010821
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.023592680376168573,
+        "y": 0.0035333319432311328,
+        "dx": 0.00010713095662140404,
+        "dy": -0.000006079682748350024,
+        "positiveJ": 0.000004767124399729108,
+        "q": [
+          -0.2073328973452266,
+          -0.20751782874253843
+        ],
+        "minQ": [
+          -0.5042990161835268,
+          -0.5042035573493434
+        ],
+        "maxQ": [
+          0.5042035165868738,
+          0.5042989724969591
+        ],
+        "shapeAreaRad2": -3.8215426696204926e-9,
+        "shapeClosureRad": 2.3421998904398425e-8,
+        "minQDeg": [
+          -28.894205239915685,
+          -28.888735851599737
+        ],
+        "maxQDeg": [
+          28.888733516082265,
+          28.894202736859736
+        ],
+        "shapeClosureDeg": 0.0000013419816849820679,
+        "trackingRmsDeg": [
+          8.842488885548397,
+          8.842488781930582
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 8,
+      "contactLossJ": 1.3312027775604574e-30,
+      "constraintNetLossJ": 3.381499424640296e-8,
+      "v3SignedFluidWorkJ": -0.000015375342568097313
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "label": "native-feedback",
+      "hz": 240,
+      "dx": 0.026818693491577505,
+      "dy": -0.21670336268914525,
+      "displacementPx": 0.21835656555592373,
+      "rotationRad": -0.02299061327986346,
+      "positiveJ": 7.866603413849488e-9,
+      "brakingJ": 4.799059973632464e-10,
+      "motorJ": 3.146641365539795e-8,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 7.249147632579143e-9,
+      "fluidNumericalJ": 5.544729212644107e-11,
+      "guardEvents": 0,
+      "maxOmega": 0.6342279133775003,
+      "maxAnchorPx": 0.00003748703404553892,
+      "maxOverlapPx": 1.3322676295501878e-14,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 6.912159733474255e-11,
+      "maxSolverMomentumChange": 6.341238897323519e-17,
+      "maxSolverCOMShiftPx": 5.945434551605549e-13,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 149.83921499999997,
+      "rootAngleDeg": 14.736393447033317,
+      "angleRangesDeg": [
+        [
+          -27.253441442296943,
+          27.277275837294006
+        ],
+        [
+          -30.081425364822415,
+          30.078041394680834
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.0960900102387265,
+        7.2363792281793975
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.026818693491577505,
+        "y": -0.21670336268914525,
+        "dx": 0.014276407010129333,
+        "dy": -0.06860279300610728,
+        "positiveJ": 2.373701738473351e-9,
+        "q": [
+          -0.17577856268185443,
+          -0.48901047103602546
+        ],
+        "minQ": [
+          -0.47563530120069725,
+          -0.5250129136116763
+        ],
+        "maxQ": [
+          0.47604157779803846,
+          0.52495265459852
+        ],
+        "shapeAreaRad2": 0.7851810297386533,
+        "shapeClosureRad": 9.807216531234667e-14,
+        "minQDeg": [
+          -27.25189534623365,
+          -30.081024139815543
+        ],
+        "maxQDeg": [
+          27.27517328057624,
+          30.077571552684063
+        ],
+        "shapeClosureDeg": 5.619121160106775e-12,
+        "trackingRmsDeg": [
+          7.830924567317274,
+          7.87966492681535
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 11,
+      "contactLossJ": 1.1448374581528422e-33,
+      "constraintNetLossJ": 4.61836584318946e-11,
+      "v3SignedFluidWorkJ": null
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "label": "held-native-tape",
+      "hz": 480,
+      "dx": 0.027805526916381496,
+      "dy": -0.2186014193803203,
+      "displacementPx": 0.22036271890269524,
+      "rotationRad": -0.022970132263312293,
+      "positiveJ": 7.822861847334367e-9,
+      "brakingJ": 4.792631112359925e-10,
+      "motorJ": 3.129144738933747e-8,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 7.256360287245841e-9,
+      "fluidNumericalJ": 2.7720092392615885e-11,
+      "guardEvents": 0,
+      "maxOmega": 0.6349312712746148,
+      "maxAnchorPx": 0.000009390358192910235,
+      "maxOverlapPx": 8.08242361927114e-14,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 6.075424607843161e-10,
+      "maxSolverMomentumChange": 6.938893903907228e-17,
+      "maxSolverCOMShiftPx": 5.679169527721696e-13,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 161.90620300000046,
+      "rootAngleDeg": 14.759668414933225,
+      "angleRangesDeg": [
+        [
+          -27.283511830117174,
+          27.30554525008632
+        ],
+        [
+          -30.102740955228857,
+          30.12220503179382
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.105331594624387,
+        7.240160484510773
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.027805526916381496,
+        "y": -0.2186014193803203,
+        "dx": 0.014494704409571568,
+        "dy": -0.06919986051138949,
+        "positiveJ": 2.3604070567369882e-9,
+        "q": [
+          -0.17632873088992926,
+          -0.4890673660396705
+        ],
+        "minQ": [
+          -0.4761621782908073,
+          -0.5252626986199078
+        ],
+        "maxQ": [
+          0.4764731804363221,
+          0.5257228577713047
+        ],
+        "shapeAreaRad2": 0.7867209727998595,
+        "shapeClosureRad": 0.00018102431016716098,
+        "minQDeg": [
+          -27.28208317981909,
+          -30.09533576657285
+        ],
+        "maxQDeg": [
+          27.2999022901766,
+          30.12170094385221
+        ],
+        "shapeClosureDeg": 0.010371928961845482,
+        "trackingRmsDeg": [
+          7.840930298578979,
+          7.884346777929077
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 7,
+      "contactLossJ": 6.195983703410245e-33,
+      "constraintNetLossJ": 2.344116582826769e-11,
+      "v3SignedFluidWorkJ": null
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "label": "held-native-tape",
+      "hz": 960,
+      "dx": 0.02830905105702186,
+      "dy": -0.21956575816511759,
+      "displacementPx": 0.22138320742633566,
+      "rotationRad": -0.022959642769116235,
+      "positiveJ": 7.800988451742082e-9,
+      "brakingJ": 4.789401738969913e-10,
+      "motorJ": 3.120395380696833e-8,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 7.260220922338148e-9,
+      "fluidNumericalJ": 1.3859591589629732e-11,
+      "guardEvents": 0,
+      "maxOmega": 0.63528501046346,
+      "maxAnchorPx": 0.0000023498375407436307,
+      "maxOverlapPx": 1.1368683772161603e-13,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 1.5243131201714277e-9,
+      "maxSolverMomentumChange": 8.241762333316606e-17,
+      "maxSolverCOMShiftPx": 6.011423236350605e-13,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 322.76658300000054,
+      "rootAngleDeg": 14.77137807023214,
+      "angleRangesDeg": [
+        [
+          -27.29868471201253,
+          27.319682552325755
+        ],
+        [
+          -30.11334269653461,
+          30.14449939221017
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.1099414873979665,
+        7.2420447676130415
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.02830905105702186,
+        "y": -0.21956575816511759,
+        "dx": 0.01460559551719598,
+        "dy": -0.0695032552240491,
+        "positiveJ": 2.353758546330257e-9,
+        "q": [
+          -0.1766062939197223,
+          -0.48909388761521533
+        ],
+        "minQ": [
+          -0.47642840965264327,
+          -0.5253855156629883
+        ],
+        "maxQ": [
+          0.47668675926828596,
+          0.526111677508676
+        ],
+        "shapeAreaRad2": 0.787493663479683,
+        "shapeClosureRad": 0.0002727099264494769,
+        "minQDeg": [
+          -27.297337113226313,
+          -30.102372664793638
+        ],
+        "maxQDeg": [
+          27.31213945584146,
+          30.143978673794976
+        ],
+        "shapeClosureDeg": 0.015625127816878127,
+        "trackingRmsDeg": [
+          7.84591894208625,
+          7.8866852690328
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 66,
+      "contactLossJ": 1.1050023055921766e-31,
+      "constraintNetLossJ": 1.1809425339577578e-11,
+      "v3SignedFluidWorkJ": null
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "label": "refined-feedback",
+      "hz": 960,
+      "dx": 0.02817747857534414,
+      "dy": -0.2190323502411502,
+      "displacementPx": 0.22083736266996548,
+      "rotationRad": -0.023002754857049057,
+      "positiveJ": 7.784608035585992e-9,
+      "brakingJ": 4.78309399758372e-10,
+      "motorJ": 3.113843214234397e-8,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 7.244569487927442e-9,
+      "fluidNumericalJ": 1.3827238477558499e-11,
+      "guardEvents": 0,
+      "maxOmega": 0.6345815802977032,
+      "maxAnchorPx": 0.000002346156077639659,
+      "maxOverlapPx": 1.1368683772161603e-13,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 1.4733814168721437e-9,
+      "maxSolverMomentumChange": 8.862382893135568e-17,
+      "maxSolverCOMShiftPx": 6.460747634503427e-13,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 326.89609499999915,
+      "rootAngleDeg": 14.749072583921793,
+      "angleRangesDeg": [
+        [
+          -27.27489280628527,
+          27.29895411063762
+        ],
+        [
+          -30.1007218204259,
+          30.09741475698926
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.097752992358608,
+        7.2414705683181255
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0.02817747857534414,
+        "y": -0.2190323502411502,
+        "dx": 0.014544988290026595,
+        "dy": -0.06932779476039741,
+        "positiveJ": 2.3486703963730323e-9,
+        "q": [
+          -0.1759829920694797,
+          -0.48930191504737663
+        ],
+        "minQ": [
+          -0.47600946177610803,
+          -0.5253490812634642
+        ],
+        "maxQ": [
+          0.47642077828359575,
+          0.5252904211342336
+        ],
+        "shapeAreaRad2": 0.786306831002171,
+        "shapeClosureRad": 3.0014007444312187e-13,
+        "minQDeg": [
+          -27.273333168064873,
+          -30.100285127471818
+        ],
+        "maxQDeg": [
+          27.296899867987978,
+          30.096924149641207
+        ],
+        "shapeClosureDeg": 1.7196759528333227e-11,
+        "trackingRmsDeg": [
+          7.832798007393201,
+          7.885028461394669
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 55,
+      "contactLossJ": 1.495639390912805e-30,
+      "constraintNetLossJ": 1.1777757744406463e-11,
+      "v3SignedFluidWorkJ": null
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "label": "passive",
+      "hz": 240,
+      "dx": 0,
+      "dy": 0,
+      "displacementPx": 0,
+      "rotationRad": 0,
+      "positiveJ": 0,
+      "brakingJ": 0,
+      "motorJ": 0,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 0,
+      "maxAnchorPx": 0,
+      "maxOverlapPx": 0,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 2.9103830456733704e-11,
+      "maxSolverMomentumChange": 0,
+      "maxSolverCOMShiftPx": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 63.75202799999988,
+      "rootAngleDeg": 0,
+      "angleRangesDeg": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "trackingRmsDeg": [
+        0,
+        0
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0,
+        "y": 0,
+        "dx": 0,
+        "dy": 0,
+        "positiveJ": 0,
+        "q": [
+          0,
+          0
+        ],
+        "minQ": [
+          0,
+          0
+        ],
+        "maxQ": [
+          0,
+          0
+        ],
+        "shapeAreaRad2": 0,
+        "shapeClosureRad": 0,
+        "minQDeg": [
+          0,
+          0
+        ],
+        "maxQDeg": [
+          0,
+          0
+        ],
+        "shapeClosureDeg": 0,
+        "trackingRmsDeg": [
+          0,
+          0
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 0,
+      "contactLossJ": 0,
+      "constraintNetLossJ": 0,
+      "v3SignedFluidWorkJ": null
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "label": "passive-refined",
+      "hz": 960,
+      "dx": 0,
+      "dy": 0,
+      "displacementPx": 0,
+      "rotationRad": 0,
+      "positiveJ": 0,
+      "brakingJ": 0,
+      "motorJ": 0,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 0,
+      "maxAnchorPx": 0,
+      "maxOverlapPx": 0,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 2.9103830456733704e-11,
+      "maxSolverMomentumChange": 0,
+      "maxSolverCOMShiftPx": 0,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 242.97693099999924,
+      "rootAngleDeg": 0,
+      "angleRangesDeg": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "trackingRmsDeg": [
+        0,
+        0
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 0,
+        "y": 0,
+        "dx": 0,
+        "dy": 0,
+        "positiveJ": 0,
+        "q": [
+          0,
+          0
+        ],
+        "minQ": [
+          0,
+          0
+        ],
+        "maxQ": [
+          0,
+          0
+        ],
+        "shapeAreaRad2": 0,
+        "shapeClosureRad": 0,
+        "minQDeg": [
+          0,
+          0
+        ],
+        "maxQDeg": [
+          0,
+          0
+        ],
+        "shapeClosureDeg": 0,
+        "trackingRmsDeg": [
+          0,
+          0
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 0,
+      "contactLossJ": 0,
+      "constraintNetLossJ": 0,
+      "v3SignedFluidWorkJ": null
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "label": "rotated-native-tape",
+      "hz": 240,
+      "dx": -0.02681869349066801,
+      "dy": 0.21670336269266954,
+      "displacementPx": 0.21835656555930963,
+      "rotationRad": -0.02299061327987273,
+      "positiveJ": 7.866603413849845e-9,
+      "brakingJ": 4.799059973631924e-10,
+      "motorJ": 3.146641365539938e-8,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 7.249147632579353e-9,
+      "fluidNumericalJ": 5.544729212644328e-11,
+      "guardEvents": 0,
+      "maxOmega": 0.6342279133774987,
+      "maxAnchorPx": 0.000037487034087330935,
+      "maxOverlapPx": 1.3322676295501878e-14,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 6.912159733474255e-11,
+      "maxSolverMomentumChange": 7.026165465786686e-17,
+      "maxSolverCOMShiftPx": 5.33712634895681e-13,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 106.89019499999995,
+      "rootAngleDeg": 14.736393447021426,
+      "angleRangesDeg": [
+        [
+          -27.25344144229249,
+          27.27727583727916
+        ],
+        [
+          -30.081425364860582,
+          30.078041394655948
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.096090010237566,
+        7.236379228175841
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.02681869349066801,
+        "y": 0.21670336269266954,
+        "dx": -0.01427640700876509,
+        "dy": 0.0686027930067894,
+        "positiveJ": 2.3737017384739838e-9,
+        "q": [
+          -0.17577856268128933,
+          -0.4890104710365599
+        ],
+        "minQ": [
+          -0.4756353012004002,
+          -0.5250129136125321
+        ],
+        "maxQ": [
+          0.4760415777984637,
+          0.5249526545980068
+        ],
+        "shapeAreaRad2": 0.7851810297388605,
+        "shapeClosureRad": 3.988825994278127e-13,
+        "minQDeg": [
+          -27.251895346216628,
+          -30.081024139864578
+        ],
+        "maxQDeg": [
+          27.275173280600598,
+          30.077571552654657
+        ],
+        "shapeClosureDeg": 2.2854289468421093e-11,
+        "trackingRmsDeg": [
+          7.83092456731526,
+          7.879664926817897
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 13,
+      "contactLossJ": 1.1447434186047765e-33,
+      "constraintNetLossJ": 4.618365843204075e-11,
+      "v3SignedFluidWorkJ": null
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "label": "fluid-off-native-tape",
+      "hz": 240,
+      "dx": 1.1368683772161603e-12,
+      "dy": -5.684341886080801e-13,
+      "displacementPx": 1.2710574864626038e-12,
+      "rotationRad": -0.07424187670071929,
+      "positiveJ": 1.0987997295402943e-8,
+      "brakingJ": 4.469334427478351e-9,
+      "motorJ": 4.3951989181611774e-8,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 3.0004848668377937,
+      "maxAnchorPx": 0.0017593626381532709,
+      "maxOverlapPx": 0.00037924213621076674,
+      "maxLimitRad": 0.00015779762538481457,
+      "maxChemicalErrorJ": 1.127773430198431e-10,
+      "maxSolverMomentumChange": 2.5408227134324816e-16,
+      "maxSolverCOMShiftPx": 5.084733596971114e-13,
+      "limitedBatches": 338,
+      "poseRepairs": 0,
+      "runtimeMs": 57.58126899999843,
+      "rootAngleDeg": 31.108111887614484,
+      "angleRangesDeg": [
+        [
+          -90.000855169452,
+          90.00904113795173
+        ],
+        [
+          -90.003681962703,
+          90.0060238038407
+        ]
+      ],
+      "trackingRmsDeg": [
+        55.25750772295297,
+        55.68217706773299
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": 1.1368683772161603e-12,
+        "y": -5.684341886080801e-13,
+        "dx": -6.821210263296962e-13,
+        "dy": 0,
+        "positiveJ": 4.482715863587816e-9,
+        "q": [
+          -0.140374730730418,
+          -1.5707930981943048
+        ],
+        "minQ": [
+          -1.3157242345862932,
+          -1.5707930981943048
+        ],
+        "maxQ": [
+          1.5709541244202814,
+          1.570901462005411
+        ],
+        "shapeAreaRad2": 1.1873568360120639,
+        "shapeClosureRad": 2.445089148032129,
+        "minQDeg": [
+          -75.38544564487526,
+          -89.99981501481237
+        ],
+        "maxQDeg": [
+          90.00904113795173,
+          90.0060238038407
+        ],
+        "shapeClosureDeg": 140.09328871547916,
+        "trackingRmsDeg": [
+          59.229045395713655,
+          49.933775480474154
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": false,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true,
+        "dryCOM": true
+      },
+      "contactSamples": 1113,
+      "contactLossJ": 7.276981975063666e-11,
+      "constraintNetLossJ": 6.014173950433253e-9,
+      "v3SignedFluidWorkJ": null
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "label": "fluid-off-refined-tape",
+      "hz": 960,
+      "dx": -5.002220859751105e-12,
+      "dy": 3.979039320256561e-12,
+      "displacementPx": 6.3917890642508595e-12,
+      "rotationRad": 0.06304006762731693,
+      "positiveJ": 1.0343673985565402e-8,
+      "brakingJ": 4.1417468676315065e-9,
+      "motorJ": 4.137469594226161e-8,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 0,
+      "fluidNumericalJ": 0,
+      "guardEvents": 0,
+      "maxOmega": 2.8882335885684047,
+      "maxAnchorPx": 0.0005134521366869728,
+      "maxOverlapPx": 0.000006265487538570369,
+      "maxLimitRad": 0.0000017871222428578193,
+      "maxChemicalErrorJ": 1.1332303984090686e-9,
+      "maxSolverMomentumChange": 2.045920956028256e-16,
+      "maxSolverCOMShiftPx": 5.684341894470252e-13,
+      "limitedBatches": 1898,
+      "poseRepairs": 0,
+      "runtimeMs": 443.5763879999995,
+      "rootAngleDeg": -11.46022577600414,
+      "angleRangesDeg": [
+        [
+          -90.00006145303864,
+          69.56597882026477
+        ],
+        [
+          -90.00010239456198,
+          90.0000732023597
+        ]
+      ],
+      "trackingRmsDeg": [
+        46.89590122721307,
+        52.98954188761006
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -5.002220859751105e-12,
+        "y": 3.979039320256561e-12,
+        "dx": -1.1368683772161603e-12,
+        "dy": 5.684341886080801e-13,
+        "positiveJ": 3.0098840024516463e-9,
+        "q": [
+          0.7201520150209604,
+          -0.6511278087203868
+        ],
+        "minQ": [
+          -0.4129151716253599,
+          -1.57079632679877
+        ],
+        "maxQ": [
+          1.2141495093467554,
+          1.5707963989143428
+        ],
+        "shapeAreaRad2": 1.5392457876518628,
+        "shapeClosureRad": 1.2742470784441187,
+        "minQDeg": [
+          -23.65829663105317,
+          -90.00000000022192
+        ],
+        "maxQDeg": [
+          69.56564258344878,
+          90.00000413213989
+        ],
+        "shapeClosureDeg": 73.00897965172354,
+        "trackingRmsDeg": [
+          53.17072435004659,
+          59.257439918323634
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true,
+        "dryCOM": true
+      },
+      "contactSamples": 5230,
+      "contactLossJ": 9.444255259564456e-11,
+      "constraintNetLossJ": 5.559351626997916e-9,
+      "v3SignedFluidWorkJ": null
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "label": "reverse-feedback",
+      "hz": 240,
+      "dx": -0.047925020163347654,
+      "dy": 0.21553816898949663,
+      "displacementPx": 0.22080196975797584,
+      "rotationRad": -0.04270542413493675,
+      "positiveJ": 8.063143666594629e-9,
+      "brakingJ": 4.653321967595513e-10,
+      "motorJ": 3.2252574666378516e-8,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 7.378178245676959e-9,
+      "fluidNumericalJ": 5.644840768063157e-11,
+      "guardEvents": 0,
+      "maxOmega": 0.6342279140718808,
+      "maxAnchorPx": 0.00003748704929758136,
+      "maxOverlapPx": 0,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 8.913048077374697e-11,
+      "maxSolverMomentumChange": 7.035929142109767e-17,
+      "maxSolverCOMShiftPx": 5.645158714825113e-13,
+      "limitedBatches": 0,
+      "poseRepairs": 0,
+      "runtimeMs": 216.38810700000067,
+      "rootAngleDeg": -1.2877704547835573,
+      "angleRangesDeg": [
+        [
+          -30.07853178923238,
+          30.081425364119138
+        ],
+        [
+          -27.27707644399208,
+          27.253441442261924
+        ]
+      ],
+      "trackingRmsDeg": [
+        7.172635793165734,
+        7.21999318139299
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.047925020163347654,
+        "y": 0.21553816898949663,
+        "dx": -0.014160496499926012,
+        "dy": 0.06862579319806628,
+        "positiveJ": 2.373701738481406e-9,
+        "q": [
+          0.19081190633592912,
+          -0.442312581739035
+        ],
+        "minQ": [
+          -0.5249526545985728,
+          -0.4760415777974718
+        ],
+        "maxQ": [
+          0.5250129136117467,
+          0.4756353012000931
+        ],
+        "shapeAreaRad2": -0.7851810297390667,
+        "shapeClosureRad": 4.1608718429816496e-14,
+        "minQDeg": [
+          -30.077571552687086,
+          -27.27517328054377
+        ],
+        "maxQDeg": [
+          30.08102413981958,
+          27.251895346199035
+        ],
+        "shapeClosureDeg": 2.3840039569766907e-12,
+        "trackingRmsDeg": [
+          7.879664926801337,
+          7.830924567339002
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 2,
+      "contactLossJ": 1.0471303677124937e-33,
+      "constraintNetLossJ": 4.789260145067269e-11,
+      "v3SignedFluidWorkJ": null
+    },
+    {
+      "regime": "prism-resistance-v4",
+      "label": "reciprocal-feedback",
+      "hz": 240,
+      "dx": -0.03453802690455632,
+      "dy": -0.0006137172151738923,
+      "displacementPx": 0.034543479142669704,
+      "rotationRad": -0.0014571079810020242,
+      "positiveJ": 1.400401942754971e-8,
+      "brakingJ": 1.3825475383871687e-10,
+      "motorJ": 5.601607771019884e-8,
+      "metabolicJ": 194.13333333333128,
+      "fluidPhysicalJ": 1.3414208900077638e-8,
+      "fluidNumericalJ": 1.0835144154619147e-10,
+      "guardEvents": 0,
+      "maxOmega": 0.7878568704518236,
+      "maxAnchorPx": 0.00005441479797718587,
+      "maxOverlapPx": 8.215650382226158e-14,
+      "maxLimitRad": 0,
+      "maxChemicalErrorJ": 2.2919266484677792e-10,
+      "maxSolverMomentumChange": 6.967821192014837e-17,
+      "maxSolverCOMShiftPx": 5.673623780632774e-13,
+      "limitedBatches": 35,
+      "poseRepairs": 0,
+      "runtimeMs": 88.96200099999987,
+      "rootAngleDeg": 12.049762406051657,
+      "angleRangesDeg": [
+        [
+          -28.818090673789474,
+          28.82377065896107
+        ],
+        [
+          -28.823431368977946,
+          28.81843424570266
+        ]
+      ],
+      "trackingRmsDeg": [
+        8.209808281732197,
+        8.209482191737184
+      ],
+      "lastCycle": {
+        "cycle": 4,
+        "x": -0.03453802690455632,
+        "y": -0.0006137172151738923,
+        "dx": -2.562089775892673e-7,
+        "dy": 0.000013311100701685064,
+        "positiveJ": 4.247108646171144e-9,
+        "q": [
+          -0.2118700980215253,
+          -0.2115552121058614
+        ],
+        "minQ": [
+          -0.5029665194995641,
+          -0.5030617534259388
+        ],
+        "maxQ": [
+          0.503061753426008,
+          0.5029665194997583
+        ],
+        "shapeAreaRad2": -1.1349517246156404e-12,
+        "shapeClosureRad": 8.891327854947383e-14,
+        "minQDeg": [
+          -28.817858803709445,
+          -28.82331530575718
+        ],
+        "maxQDeg": [
+          28.82331530576114,
+          28.817858803720572
+        ],
+        "shapeClosureDeg": 5.094355603555925e-12,
+        "trackingRmsDeg": [
+          9.057322946741017,
+          9.057322946711794
+        ]
+      },
+      "flags": {
+        "noGuards": true,
+        "anchor": true,
+        "overlap": true,
+        "chemical": true,
+        "prepaid": true
+      },
+      "contactSamples": 2,
+      "contactLossJ": 0,
+      "constraintNetLossJ": 1.2188347045136304e-10,
+      "v3SignedFluidWorkJ": null
+    }
+  ],
+  "limits": "Two reversed-order timing pairs per resolution only; JIT/GC/noisy short trials do not establish universal scaling, browser FPS or ecology throughput. 1250x physical mass/ceiling mismatch unchanged; not a drag-only comparison. Private artificial fixture is not an importable save. No solver correction, tuning or promotion.",
+  "conclusion": "Both regimes show funded non-reciprocal, brain-free displacement with passive/dry controls at numerical COM rest, wave-reversed axial travel and negligible late in-phase-control travel. Both fixed-tape numerical pairs pass the declared local criterion; neither proves the provisional fluid law correct. v4 is slower and swims less in the opposite axial direction. Stop for review."
+}
