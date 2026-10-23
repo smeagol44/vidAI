@@ -1,3 +1,31 @@
+# Nutrient-intake selection checkpoint (#87 / draft #88)
+
+- Fixed experiment COMPLETE: legacy six-output vs neural Mode+Command hybrid
+  from #86; fifteen generations x15 offspring x12s EACH,450 offspring/464 rows.
+  Sole score actual absorbed nutrient J; strict zero ties preserve parent.
+- docs/experiments/nutrient-intake-v1.md, manifest,35 immutable archives and
+  generation log are authoritative. Branch experiment/nutrient-intake-87 based
+  on #86 211025a3f9d5144b3fafa8679ee882c426cee64a. No merge/deployment.
+- Legacy4800->16704J (+248%);201/225 valid,200 valid feeders; five improvements.
+  Hybrid0->0J,120/225 valid,zero fed offspring; unchanged founder retained.
+  All hybrid training samples DIRECT, no discovered mode use/switching.
+- Unseen legacy2/3 improve,1/3 regresses144J; all valid. Hybrid feeds in two
+  physically INVALID held-outs (guards/limits); its one valid held-out has0J.
+  One fresh starting brain per architecture cannot establish superiority.
+- Normal Darter/v3/mouth/vision/metabolism/learning/capacity,10000J newborn stock,
+  deterministic1000x800 bloom habitat240 ordinary nutrients; no targets/topups.
+  Nonlethal protection is ephemeral offline request only, suppressing final
+  mortality marking after ordinary expenditure; no energy/age/force edits or
+  save fields. Zero reserve stays0 with zero work; normal tick restores death.
+  Protection/energy limiting not invoked by any training candidate.
+- 450 genotype/elitism decisions reconstruct, both final specimens and split
+  forks exact; #72/#85/#86 evidence hashes unchanged, representative old Worker
+  states exact.319 fast+metadata/build and all focused Worker checks pass.
+- STOP for owner review. No automatic new search, score/food retuning, physics,
+  muscle, starter, #78, solver, baseline, Wiki, merge/promotion/deployment/3D work.
+  If approved, next evidence could be a preregistered independent paired seed,
+  not tuning to rescue one specimen. Exact remote heads/CI/status in #87/#57.
+
 # Corrected neural motor / food checkpoint (#59/#63 / draft #86)
 
 - Owner correction: #85 compared legacy six-output, three-output gated and a

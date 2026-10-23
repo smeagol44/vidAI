@@ -2,10 +2,10 @@ import type {ActuationObserver} from '../actuationObservation';
 /** Read-only measurements around ordinary fixed authoritative ticks. No score,
  * target coordinates, selection, force edits or neural intervention here. */
 import type {SimulationHost} from '../simulationHost';
-import {calculateOrganismCOM, getCardinalAnchor, getChildAnchorForParentDir} from '../simulation';
+import {calculateOrganismCOM, getCardinalAnchor, getChildAnchorForParentDir, type OfflineMortalityProtection} from '../simulation';
 import {totalAccountedEnergy} from '../persistence';
 
-export function measureWorkerTrial(host: SimulationHost, ticks: number, actuation?: ActuationObserver, afterTick?: (tick:number)=>void) {
+export function measureWorkerTrial(host: SimulationHost, ticks: number, actuation?: ActuationObserver, afterTick?: (tick:number)=>void, offlineMortality?: OfflineMortalityProtection) {
   const initial = host.state.organisms.map(o => ({id: o.id, com: calculateOrganismCOM(o), energy: o.energy}));
   const lateStarts = new Map(initial.map(a => [a.id, a.com]));
   let boundaryTicks = 0;
@@ -18,7 +18,7 @@ export function measureWorkerTrial(host: SimulationHost, ticks: number, actuatio
   for (let tick = 0; tick < ticks; tick++) {
     host.tick((phase, before, after) => {
       if (phase === 'constraint-batch') maxConstraintGainJ = Math.max(maxConstraintGainJ, after - before);
-    }, actuation);
+    }, actuation, offlineMortality);
     afterTick?.(tick);
     const s = host.state;
     if (tick === Math.floor(ticks * 2 / 3)) for (const o of s.organisms) lateStarts.set(o.id, calculateOrganismCOM(o));

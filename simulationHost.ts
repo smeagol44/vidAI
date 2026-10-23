@@ -4,7 +4,7 @@ import {watchLineage} from './lineageChanges';
 import {occupiedPopulation, setWorldEnergy} from './energyEconomy';
 import {stepSimulation, addNutrients, nutrientSpawnSlots, createArchetypeGenome,
   clampVal, type Genome, type SimulationState, type SimulationSettings,
-  type Organism, type Egg, type LineageRecord, type ArchetypeId} from './simulation';
+  type Organism, type Egg, type LineageRecord, type ArchetypeId, type OfflineMortalityProtection} from './simulation';
 import {createSnapshot, restoreSnapshot, clearFreeNutrients, resizeWorld} from './persistence';
 import {addExternalOrganism} from './world';
 
@@ -45,8 +45,8 @@ export class SimulationHost {
     this.genomeIds = new WeakMap(); this.nextGenome = 0;
     this.lineageChanges = watchLineage(this.state.lineage);
   }
-  tick(observe?: MechanicalObserver, actuation?: ActuationObserver): void {
-    stepSimulation(this.state, this.settings, 1 / 60, event => this.events.add(event), observe, actuation);
+  tick(observe?: MechanicalObserver, actuation?: ActuationObserver, offlineMortality?: OfflineMortalityProtection): void {
+    stepSimulation(this.state, this.settings, 1 / 60, event => this.events.add(event), observe, actuation, offlineMortality);
     this.steps++;
   }
   snapshot(metadata: Record<string, unknown> = {}): WorldSnapshot {

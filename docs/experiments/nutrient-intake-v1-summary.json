@@ -1,0 +1,1468 @@
+{
+  "version": "nutrient-intake-v1",
+  "results": [
+    {
+      "architecture": "legacy",
+      "validOffspring": 201,
+      "fedOffspring": 224,
+      "validFedOffspring": 200,
+      "rejectionReasons": {
+        "speed guard": 1,
+        "boundary": 23
+      },
+      "initial": {
+        "valid": true,
+        "reasons": [],
+        "distance": 95.48416473156242,
+        "dx": 64.93041488974654,
+        "dy": 70.00904896318423,
+        "pathPx": 102.98218977851467,
+        "lateDistance": 56.57447955944895,
+        "latePathPx": 58.23199313980494,
+        "spentJ": -4469.238343817533,
+        "motorJ": 20.997439701816937,
+        "positiveJ": 5.249359925454246,
+        "brakingJ": 0.5524989863504671,
+        "metabolicJ": 1509.7642164807132,
+        "remainingJ": 14469.238343817533,
+        "partitionResidualJ": -6.320988177321851e-11,
+        "reserveJ": 10000,
+        "age": 12.000000000000176,
+        "guards": 0,
+        "energyLimited": 0,
+        "limitedBatches": 0,
+        "anchorPx": 0.1342432684881504,
+        "limitRad": 0.013833423912494758,
+        "maxConstraintGainJ": 0,
+        "chemicalErrorJ": 3.4924596548080444e-10,
+        "peakConstraintOmega": 16.46151665953562,
+        "peakPostContactOmega": 16.46151665953562,
+        "constraintOverspeedSamples": 0,
+        "requestRms": 0.3317512403223587,
+        "requestMax": 0.871912887364424,
+        "clipSamples": 12,
+        "deliveryError": 0,
+        "switches": 0,
+        "joints": [
+          {
+            "sampledMinAngle": -0.793070780487589,
+            "sampledMaxAngle": 0.708064165296642,
+            "modeSubsteps": {
+              "servo": 2880
+            },
+            "finalAngle": 0.5578547460935218,
+            "finalTorque": -128279.54851797778
+          },
+          {
+            "sampledMinAngle": -0.9023148628915151,
+            "sampledMaxAngle": 0.9012742790282732,
+            "modeSubsteps": {
+              "servo": 2880
+            },
+            "finalAngle": 0.4203544867082092,
+            "finalTorque": -73626.58732586983
+          }
+        ],
+        "absorbedJ": 4800,
+        "chemicalExpenditureJ": 330.76165618246705,
+        "recordedLossesJ": 0,
+        "food": {
+          "initialCount": 240,
+          "finalCount": 238,
+          "initialFoodJ": 720000,
+          "grossFoodJ": 6000,
+          "absorbedJ": 4800,
+          "assimilationLossJ": 1200,
+          "nutrientRaySamples": 7039,
+          "detectionTicks": 720,
+          "contactTicks": 100,
+          "intakeTicks": 100,
+          "firstDetectionTick": 1,
+          "firstContactTick": 297,
+          "firstIntakeTick": 297,
+          "learnedMotorL1": 0.020077787666693037,
+          "learnedSensoryL1": 0.05076381204468426,
+          "assimilationHeatJ": 1200
+        },
+        "nonlethal": {
+          "version": "nutrient-intake-v1",
+          "initialReserveJ": 10000,
+          "recordedLossesJ": 0,
+          "wouldBeDeaths": []
+        },
+        "wallMs": 340.16541,
+        "finalSnapshotSha": "3499ed075bf4e7afec6a3c4df8fcf28eaef348be3571fc4f206acafc25989f94"
+      },
+      "champion": {
+        "valid": true,
+        "reasons": [],
+        "distance": 279.21845921674026,
+        "dx": 107.39514141497818,
+        "dy": 257.738688535166,
+        "pathPx": 315.81540729136987,
+        "lateDistance": 97.97671265966045,
+        "latePathPx": 102.08411509890506,
+        "spentJ": -16378.760333817525,
+        "motorJ": 15.430814793729107,
+        "positiveJ": 3.8577036984322732,
+        "brakingJ": 0.6888969467918687,
+        "metabolicJ": 4485.808851388604,
+        "remainingJ": 26378.760333817525,
+        "partitionResidualJ": 1.418811734765768e-10,
+        "reserveJ": 10000,
+        "age": 12.000000000000176,
+        "guards": 0,
+        "energyLimited": 0,
+        "limitedBatches": 0,
+        "anchorPx": 0.08023538537439129,
+        "limitRad": 0.022656399965949814,
+        "maxConstraintGainJ": 1.734723475976807e-18,
+        "chemicalErrorJ": 2.3283064365386963e-10,
+        "peakConstraintOmega": 12.21404521458325,
+        "peakPostContactOmega": 12.21404521458325,
+        "constraintOverspeedSamples": 0,
+        "requestRms": 0.26944265692162933,
+        "requestMax": 0.8411499887630437,
+        "clipSamples": 7,
+        "deliveryError": 0,
+        "switches": 0,
+        "joints": [
+          {
+            "sampledMinAngle": -0.8144953028039574,
+            "sampledMaxAngle": 0.6708362526707186,
+            "modeSubsteps": {
+              "servo": 2880
+            },
+            "finalAngle": -0.7360528496686816,
+            "finalTorque": 204946.7852785677
+          },
+          {
+            "sampledMinAngle": -0.910702850138509,
+            "sampledMaxAngle": 0.9000234743772967,
+            "modeSubsteps": {
+              "servo": 2880
+            },
+            "finalAngle": -0.9000000001141475,
+            "finalTorque": 39307.00056777113
+          }
+        ],
+        "absorbedJ": 16704,
+        "chemicalExpenditureJ": 325.23966618247505,
+        "recordedLossesJ": 0,
+        "food": {
+          "initialCount": 240,
+          "finalCount": 237,
+          "initialFoodJ": 720000,
+          "grossFoodJ": 20880,
+          "absorbedJ": 16704,
+          "assimilationLossJ": 4176,
+          "nutrientRaySamples": 7050,
+          "detectionTicks": 720,
+          "contactTicks": 348,
+          "intakeTicks": 348,
+          "firstDetectionTick": 1,
+          "firstContactTick": 130,
+          "firstIntakeTick": 130,
+          "learnedMotorL1": 0.07788465192766048,
+          "learnedSensoryL1": 0.13021366310435667,
+          "assimilationHeatJ": 4176
+        },
+        "nonlethal": {
+          "version": "nutrient-intake-v1",
+          "initialReserveJ": 10000,
+          "recordedLossesJ": 0,
+          "wouldBeDeaths": []
+        },
+        "wallMs": 111.09215200000472,
+        "finalSnapshotSha": "297c83867de712862e0afbaaed64535b5d4fa1363493c3346ffee29c601ac3c0"
+      },
+      "selectedGenerations": [
+        {
+          "g": 1,
+          "i": 13,
+          "absorbedJ": 10176,
+          "mutation": {
+            "kind": "neural",
+            "changes": [
+              {
+                "field": "weightsHH",
+                "row": 4,
+                "column": 22,
+                "before": 0.17933066515991422,
+                "after": 0.12012072348171003
+              },
+              {
+                "field": "weightsIH",
+                "row": 18,
+                "column": 11,
+                "before": 0.02435200630725856,
+                "after": -0.05580876017723024
+              },
+              {
+                "field": "weightsIH",
+                "row": 19,
+                "column": 2,
+                "before": -0.06182037499185984,
+                "after": -0.1656494400674175
+              },
+              {
+                "field": "weightsHH",
+                "row": 17,
+                "column": 8,
+                "before": 0.045668523673853906,
+                "after": -0.050022693604437424
+              },
+              {
+                "field": "weightsIH",
+                "row": 5,
+                "column": 3,
+                "before": -0.03172191938924698,
+                "after": 0.09937485757754652
+              },
+              {
+                "field": "weightsIH",
+                "row": 8,
+                "column": 36,
+                "before": -0.09604630499745118,
+                "after": 0.12257499655385667
+              },
+              {
+                "field": "weightsIH",
+                "row": 20,
+                "column": 24,
+                "before": -0.04028649552773285,
+                "after": -0.007540834228555816
+              },
+              {
+                "field": "weightsHH",
+                "row": 8,
+                "column": 16,
+                "before": -0.07808398531651048,
+                "after": 0.028123089632401774
+              }
+            ]
+          }
+        },
+        {
+          "g": 2,
+          "i": 11,
+          "absorbedJ": 13680,
+          "mutation": {
+            "kind": "neural",
+            "changes": [
+              {
+                "field": "weightsHO",
+                "row": 1,
+                "column": 16,
+                "before": -0.13855593655412665,
+                "after": -0.09074241871676791
+              },
+              {
+                "field": "weightsIH",
+                "row": 12,
+                "column": 26,
+                "before": 0.03742463690564285,
+                "after": 0.20578061393183247
+              },
+              {
+                "field": "weightsHH",
+                "row": 5,
+                "column": 1,
+                "before": 0.12233141723760452,
+                "after": 0.3056362845624588
+              },
+              {
+                "field": "weightsHH",
+                "row": 3,
+                "column": 10,
+                "before": 0.13000752562470133,
+                "after": 0.1849135898749264
+              },
+              {
+                "field": "weightsHH",
+                "row": 9,
+                "column": 18,
+                "before": 0.20322223510047846,
+                "after": 0.030926354618854318
+              },
+              {
+                "field": "weightsHH",
+                "row": 18,
+                "column": 12,
+                "before": 0.16986825634067312,
+                "after": 0.016852316940884376
+              },
+              {
+                "field": "weightsIH",
+                "row": 8,
+                "column": 26,
+                "before": -0.03306728920775484,
+                "after": -0.1900351415037913
+              },
+              {
+                "field": "weightsIH",
+                "row": 0,
+                "column": 31,
+                "before": 0.11725070605774487,
+                "after": 0.1066006426829963
+              }
+            ]
+          }
+        },
+        {
+          "g": 10,
+          "i": 4,
+          "absorbedJ": 13968,
+          "mutation": {
+            "kind": "neural",
+            "changes": [
+              {
+                "field": "weightsHH",
+                "row": 16,
+                "column": 0,
+                "before": 0.05177075200822115,
+                "after": 0.3042598229222866
+              },
+              {
+                "field": "weightsIH",
+                "row": 11,
+                "column": 18,
+                "before": -0.11837933908454652,
+                "after": 0.18674382652772237
+              },
+              {
+                "field": "weightsHO",
+                "row": 6,
+                "column": 12,
+                "before": 0.016531670559692513,
+                "after": -0.22626707205639898
+              },
+              {
+                "field": "weightsHH",
+                "row": 10,
+                "column": 2,
+                "before": -0.05303336398976055,
+                "after": 0.1419659601430409
+              },
+              {
+                "field": "weightsIH",
+                "row": 3,
+                "column": 34,
+                "before": 0.08451041980252463,
+                "after": 0.1890350943632862
+              },
+              {
+                "field": "weightsHH",
+                "row": 1,
+                "column": 19,
+                "before": -0.20040025048641508,
+                "after": 0.021916009913596074
+              },
+              {
+                "field": "weightsIH",
+                "row": 2,
+                "column": 18,
+                "before": -0.051142032794570344,
+                "after": -0.06307449108152824
+              },
+              {
+                "field": "weightsIH",
+                "row": 1,
+                "column": 37,
+                "before": -0.04786204952567007,
+                "after": 0.15881872099908406
+              }
+            ]
+          }
+        },
+        {
+          "g": 11,
+          "i": 8,
+          "absorbedJ": 15648,
+          "mutation": {
+            "kind": "neural",
+            "changes": [
+              {
+                "field": "weightsHO",
+                "row": 10,
+                "column": 16,
+                "before": 0.1867223394268023,
+                "after": 0.3101131247482873
+              },
+              {
+                "field": "weightsIH",
+                "row": 17,
+                "column": 34,
+                "before": -0.09274971271105717,
+                "after": -0.16022279510616405
+              },
+              {
+                "field": "weightsHO",
+                "row": 2,
+                "column": 9,
+                "before": 0.04300102785278215,
+                "after": 0.17115171343236013
+              },
+              {
+                "field": "weightsIH",
+                "row": 20,
+                "column": 1,
+                "before": 0.11900636627394637,
+                "after": 0.27777539180175664
+              },
+              {
+                "field": "weightsIH",
+                "row": 3,
+                "column": 33,
+                "before": 0.06209594553606462,
+                "after": 0.009628262825523766
+              },
+              {
+                "field": "weightsIH",
+                "row": 21,
+                "column": 47,
+                "before": -0.029662984759005515,
+                "after": -0.038839237495198964
+              },
+              {
+                "field": "weightsIH",
+                "row": 20,
+                "column": 43,
+                "before": -0.12770072306864358,
+                "after": -0.26133937480642966
+              },
+              {
+                "field": "weightsHH",
+                "row": 11,
+                "column": 5,
+                "before": -0.014474002238322015,
+                "after": 0.07491369786316114
+              }
+            ]
+          }
+        },
+        {
+          "g": 15,
+          "i": 10,
+          "absorbedJ": 16704,
+          "mutation": {
+            "kind": "neural",
+            "changes": [
+              {
+                "field": "weightsIH",
+                "row": 18,
+                "column": 40,
+                "before": -0.1031625709598796,
+                "after": 0.07812426787092708
+              },
+              {
+                "field": "weightsHO",
+                "row": 2,
+                "column": 17,
+                "before": 0.049547915531533454,
+                "after": 0.03379829595416617
+              },
+              {
+                "field": "weightsIH",
+                "row": 3,
+                "column": 5,
+                "before": 0.016337820581581092,
+                "after": -0.24734077796674728
+              },
+              {
+                "field": "weightsIH",
+                "row": 14,
+                "column": 43,
+                "before": 0.12613187560133107,
+                "after": 0.05540923563467301
+              },
+              {
+                "field": "weightsIH",
+                "row": 20,
+                "column": 9,
+                "before": -0.057117003708214834,
+                "after": 0.1293861685330308
+              },
+              {
+                "field": "weightsIH",
+                "row": 9,
+                "column": 40,
+                "before": -0.10260179255533546,
+                "after": -0.14175015548517578
+              },
+              {
+                "field": "weightsIH",
+                "row": 23,
+                "column": 21,
+                "before": -0.1043327546103908,
+                "after": -0.21950865969621758
+              },
+              {
+                "field": "weightsIH",
+                "row": 21,
+                "column": 12,
+                "before": -0.1266492502317296,
+                "after": 0.020706391270087027
+              }
+            ]
+          }
+        }
+      ],
+      "generations": [
+        {
+          "generation": 1,
+          "bestJ": 10176,
+          "medianValidJ": 5976,
+          "medianAllJ": 5952,
+          "valid": 14,
+          "fed": 15,
+          "validFed": 14,
+          "selected": 13
+        },
+        {
+          "generation": 2,
+          "bestJ": 13680,
+          "medianValidJ": 6648,
+          "medianAllJ": 6672,
+          "valid": 14,
+          "fed": 15,
+          "validFed": 14,
+          "selected": 11
+        },
+        {
+          "generation": 3,
+          "bestJ": 13680,
+          "medianValidJ": 5712,
+          "medianAllJ": 5712,
+          "valid": 15,
+          "fed": 15,
+          "validFed": 15,
+          "selected": -1
+        },
+        {
+          "generation": 4,
+          "bestJ": 13680,
+          "medianValidJ": 6336,
+          "medianAllJ": 6336,
+          "valid": 15,
+          "fed": 15,
+          "validFed": 15,
+          "selected": -1
+        },
+        {
+          "generation": 5,
+          "bestJ": 13680,
+          "medianValidJ": 6048,
+          "medianAllJ": 6048,
+          "valid": 15,
+          "fed": 14,
+          "validFed": 14,
+          "selected": -1
+        },
+        {
+          "generation": 6,
+          "bestJ": 13680,
+          "medianValidJ": 6384,
+          "medianAllJ": 6384,
+          "valid": 15,
+          "fed": 15,
+          "validFed": 15,
+          "selected": -1
+        },
+        {
+          "generation": 7,
+          "bestJ": 13680,
+          "medianValidJ": 5808,
+          "medianAllJ": 5808,
+          "valid": 15,
+          "fed": 15,
+          "validFed": 15,
+          "selected": -1
+        },
+        {
+          "generation": 8,
+          "bestJ": 13680,
+          "medianValidJ": 6144,
+          "medianAllJ": 6144,
+          "valid": 15,
+          "fed": 15,
+          "validFed": 15,
+          "selected": -1
+        },
+        {
+          "generation": 9,
+          "bestJ": 13680,
+          "medianValidJ": 6480,
+          "medianAllJ": 6480,
+          "valid": 15,
+          "fed": 15,
+          "validFed": 15,
+          "selected": -1
+        },
+        {
+          "generation": 10,
+          "bestJ": 13968,
+          "medianValidJ": 6000,
+          "medianAllJ": 6000,
+          "valid": 15,
+          "fed": 15,
+          "validFed": 15,
+          "selected": 4
+        },
+        {
+          "generation": 11,
+          "bestJ": 15648,
+          "medianValidJ": 9408,
+          "medianAllJ": 10320,
+          "valid": 13,
+          "fed": 15,
+          "validFed": 13,
+          "selected": 8
+        },
+        {
+          "generation": 12,
+          "bestJ": 15648,
+          "medianValidJ": 9216,
+          "medianAllJ": 11664,
+          "valid": 8,
+          "fed": 15,
+          "validFed": 8,
+          "selected": -1
+        },
+        {
+          "generation": 13,
+          "bestJ": 15648,
+          "medianValidJ": 11496,
+          "medianAllJ": 13008,
+          "valid": 10,
+          "fed": 15,
+          "validFed": 10,
+          "selected": -1
+        },
+        {
+          "generation": 14,
+          "bestJ": 15648,
+          "medianValidJ": 12816,
+          "medianAllJ": 13584,
+          "valid": 11,
+          "fed": 15,
+          "validFed": 11,
+          "selected": -1
+        },
+        {
+          "generation": 15,
+          "bestJ": 16704,
+          "medianValidJ": 6624,
+          "medianAllJ": 9024,
+          "valid": 11,
+          "fed": 15,
+          "validFed": 11,
+          "selected": 10
+        }
+      ],
+      "wallMs": {
+        "allMedian": 112.25696200000675,
+        "validMedian": 112.27316500000052,
+        "min": 94.64501100000052,
+        "max": 238.99297
+      },
+      "maxChemicalErrorJ": 5.820766091346741e-10,
+      "maxPartitionResidualJ": 5.481410880747717e-10,
+      "minReserveJ": 9678.624904366681,
+      "energyLimitedCandidates": 0,
+      "wouldBeDeathCandidates": 0,
+      "modeSubsteps": {
+        "servo": 1296000
+      }
+    },
+    {
+      "architecture": "neural-hybrid",
+      "validOffspring": 120,
+      "fedOffspring": 0,
+      "validFedOffspring": 0,
+      "rejectionReasons": {
+        "joint limit": 105,
+        "speed guard": 1
+      },
+      "initial": {
+        "valid": true,
+        "reasons": [],
+        "distance": 5.520735569572192,
+        "dx": -4.049086564387494,
+        "dy": -3.752788193228639,
+        "pathPx": 5.570009739065128,
+        "lateDistance": 0.21000021356399498,
+        "latePathPx": 0.21174095089105077,
+        "spentJ": 319.59273438302444,
+        "motorJ": 9.886734383582988,
+        "positiveJ": 2.471683595895744,
+        "brakingJ": 0.01057896373246314,
+        "metabolicJ": 309.7059999999994,
+        "remainingJ": 9680.407265616976,
+        "partitionResidualJ": -5.579181561188307e-10,
+        "reserveJ": 10000,
+        "age": 12.000000000000176,
+        "guards": 0,
+        "energyLimited": 0,
+        "limitedBatches": 0,
+        "anchorPx": 0.14787655133598587,
+        "limitRad": 0.036699890108193634,
+        "maxConstraintGainJ": 0,
+        "chemicalErrorJ": 6.984919309616089e-10,
+        "peakConstraintOmega": 14.690313436879613,
+        "peakPostContactOmega": 14.690313436879613,
+        "constraintOverspeedSamples": 0,
+        "requestRms": 0.25077999708489734,
+        "requestMax": 0.4036884045739898,
+        "clipSamples": 0,
+        "deliveryError": 0,
+        "switches": 0,
+        "joints": [
+          {
+            "sampledMinAngle": -0.9017572608369091,
+            "sampledMaxAngle": 0.876497856829167,
+            "modeSubsteps": {
+              "direct": 2880
+            },
+            "finalAngle": -0.9013670908950264,
+            "finalTorque": 30198.28148975008
+          },
+          {
+            "sampledMinAngle": -0.9082114636284935,
+            "sampledMaxAngle": -0.9000000000000001,
+            "modeSubsteps": {
+              "direct": 2880
+            },
+            "finalAngle": -0.9038319807673532,
+            "finalTorque": -263691.7612116319
+          }
+        ],
+        "absorbedJ": 0,
+        "chemicalExpenditureJ": 319.59273438302444,
+        "recordedLossesJ": 0,
+        "food": {
+          "initialCount": 240,
+          "finalCount": 240,
+          "initialFoodJ": 720000,
+          "grossFoodJ": 0,
+          "absorbedJ": 0,
+          "assimilationLossJ": 0,
+          "nutrientRaySamples": 6749,
+          "detectionTicks": 720,
+          "contactTicks": 0,
+          "intakeTicks": 0,
+          "firstDetectionTick": 1,
+          "firstContactTick": null,
+          "firstIntakeTick": null,
+          "learnedMotorL1": 0,
+          "learnedSensoryL1": 0,
+          "assimilationHeatJ": 0
+        },
+        "nonlethal": {
+          "version": "nutrient-intake-v1",
+          "initialReserveJ": 10000,
+          "recordedLossesJ": 0,
+          "wouldBeDeaths": []
+        },
+        "wallMs": 237.540933,
+        "finalSnapshotSha": "cc82babd40ce917efe21011764a2cc043340fa0a9cb5b68f31962b9a36dcd8fc"
+      },
+      "champion": {
+        "valid": true,
+        "reasons": [],
+        "distance": 5.520735569572192,
+        "dx": -4.049086564387494,
+        "dy": -3.752788193228639,
+        "pathPx": 5.570009739065128,
+        "lateDistance": 0.21000021356399498,
+        "latePathPx": 0.21174095089105077,
+        "spentJ": 319.59273438302444,
+        "motorJ": 9.886734383582988,
+        "positiveJ": 2.471683595895744,
+        "brakingJ": 0.01057896373246314,
+        "metabolicJ": 309.7059999999994,
+        "remainingJ": 9680.407265616976,
+        "partitionResidualJ": -5.579181561188307e-10,
+        "reserveJ": 10000,
+        "age": 12.000000000000176,
+        "guards": 0,
+        "energyLimited": 0,
+        "limitedBatches": 0,
+        "anchorPx": 0.14787655133598587,
+        "limitRad": 0.036699890108193634,
+        "maxConstraintGainJ": 0,
+        "chemicalErrorJ": 6.984919309616089e-10,
+        "peakConstraintOmega": 14.690313436879613,
+        "peakPostContactOmega": 14.690313436879613,
+        "constraintOverspeedSamples": 0,
+        "requestRms": 0.25077999708489734,
+        "requestMax": 0.4036884045739898,
+        "clipSamples": 0,
+        "deliveryError": 0,
+        "switches": 0,
+        "joints": [
+          {
+            "sampledMinAngle": -0.9017572608369091,
+            "sampledMaxAngle": 0.876497856829167,
+            "modeSubsteps": {
+              "direct": 2880
+            },
+            "finalAngle": -0.9013670908950264,
+            "finalTorque": 30198.28148975008
+          },
+          {
+            "sampledMinAngle": -0.9082114636284935,
+            "sampledMaxAngle": -0.9000000000000001,
+            "modeSubsteps": {
+              "direct": 2880
+            },
+            "finalAngle": -0.9038319807673532,
+            "finalTorque": -263691.7612116319
+          }
+        ],
+        "absorbedJ": 0,
+        "chemicalExpenditureJ": 319.59273438302444,
+        "recordedLossesJ": 0,
+        "food": {
+          "initialCount": 240,
+          "finalCount": 240,
+          "initialFoodJ": 720000,
+          "grossFoodJ": 0,
+          "absorbedJ": 0,
+          "assimilationLossJ": 0,
+          "nutrientRaySamples": 6749,
+          "detectionTicks": 720,
+          "contactTicks": 0,
+          "intakeTicks": 0,
+          "firstDetectionTick": 1,
+          "firstContactTick": null,
+          "firstIntakeTick": null,
+          "learnedMotorL1": 0,
+          "learnedSensoryL1": 0,
+          "assimilationHeatJ": 0
+        },
+        "nonlethal": {
+          "version": "nutrient-intake-v1",
+          "initialReserveJ": 10000,
+          "recordedLossesJ": 0,
+          "wouldBeDeaths": []
+        },
+        "wallMs": 237.540933,
+        "finalSnapshotSha": "cc82babd40ce917efe21011764a2cc043340fa0a9cb5b68f31962b9a36dcd8fc"
+      },
+      "selectedGenerations": [],
+      "generations": [
+        {
+          "generation": 1,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 8,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 2,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 7,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 3,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 6,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 4,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 5,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 5,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 8,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 6,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 9,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 7,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 10,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 8,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 9,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 9,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 9,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 10,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 10,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 11,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 9,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 12,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 8,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 13,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 7,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 14,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 9,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        },
+        {
+          "generation": 15,
+          "bestJ": 0,
+          "medianValidJ": 0,
+          "medianAllJ": 0,
+          "valid": 6,
+          "fed": 0,
+          "validFed": 0,
+          "selected": -1
+        }
+      ],
+      "wallMs": {
+        "allMedian": 109.60085399999662,
+        "validMedian": 111.64387050000005,
+        "min": 91.5812470000019,
+        "max": 182.7432860000008
+      },
+      "maxChemicalErrorJ": 6.984919309616089e-10,
+      "maxPartitionResidualJ": 6.730829227308277e-10,
+      "minReserveJ": 9675.480791899696,
+      "energyLimitedCandidates": 0,
+      "wouldBeDeathCandidates": 0,
+      "modeSubsteps": {
+        "direct": 1296000
+      }
+    }
+  ],
+  "heldOut": [
+    {
+      "architecture": "legacy",
+      "role": "initial",
+      "condition": {
+        "seed": 811,
+        "heading": -0.7
+      },
+      "valid": true,
+      "reasons": [],
+      "absorbedJ": 15168,
+      "distance": 96.62393590798882,
+      "motorJ": 19.26221995502623,
+      "chemicalExpenditureJ": 329.1425784365383,
+      "food": {
+        "initialCount": 240,
+        "finalCount": 235,
+        "initialFoodJ": 720000,
+        "grossFoodJ": 18960,
+        "absorbedJ": 15168,
+        "assimilationLossJ": 3792,
+        "nutrientRaySamples": 7200,
+        "detectionTicks": 720,
+        "contactTicks": 316,
+        "intakeTicks": 316,
+        "firstDetectionTick": 1,
+        "firstContactTick": 1,
+        "firstIntakeTick": 1,
+        "learnedMotorL1": 0.056342043384983595,
+        "learnedSensoryL1": 0.16587161553777552,
+        "assimilationHeatJ": 3792
+      },
+      "guards": 0,
+      "limitRad": 0.027881736933519585,
+      "anchorPx": 0.10438275655330427,
+      "chemicalErrorJ": 4.656612873077393e-10
+    },
+    {
+      "architecture": "legacy",
+      "role": "final",
+      "condition": {
+        "seed": 811,
+        "heading": -0.7
+      },
+      "valid": true,
+      "reasons": [],
+      "absorbedJ": 22320,
+      "distance": 154.38809983201523,
+      "motorJ": 18.558618076066786,
+      "chemicalExpenditureJ": 328.4108437227151,
+      "food": {
+        "initialCount": 240,
+        "finalCount": 234,
+        "initialFoodJ": 720000,
+        "grossFoodJ": 27900,
+        "absorbedJ": 22320,
+        "assimilationLossJ": 5580,
+        "nutrientRaySamples": 7200,
+        "detectionTicks": 720,
+        "contactTicks": 465,
+        "intakeTicks": 465,
+        "firstDetectionTick": 1,
+        "firstContactTick": 1,
+        "firstIntakeTick": 1,
+        "learnedMotorL1": 0.09065483504455706,
+        "learnedSensoryL1": 0.1564717310529165,
+        "assimilationHeatJ": 5580
+      },
+      "guards": 0,
+      "limitRad": 0.02096633559929384,
+      "anchorPx": 0.13592543637242552,
+      "chemicalErrorJ": 3.4924596548080444e-10
+    },
+    {
+      "architecture": "legacy",
+      "role": "initial",
+      "condition": {
+        "seed": 977,
+        "heading": 2.3
+      },
+      "valid": true,
+      "reasons": [],
+      "absorbedJ": 14208,
+      "distance": 159.61055619566392,
+      "motorJ": 17.764833642970004,
+      "chemicalExpenditureJ": 327.62851392777156,
+      "food": {
+        "initialCount": 240,
+        "finalCount": 236,
+        "initialFoodJ": 720000,
+        "grossFoodJ": 17760,
+        "absorbedJ": 14208,
+        "assimilationLossJ": 3552,
+        "nutrientRaySamples": 7167,
+        "detectionTicks": 720,
+        "contactTicks": 296,
+        "intakeTicks": 296,
+        "firstDetectionTick": 1,
+        "firstContactTick": 217,
+        "firstIntakeTick": 217,
+        "learnedMotorL1": 0.07635387488324623,
+        "learnedSensoryL1": 0.20464949719509942,
+        "assimilationHeatJ": 3552
+      },
+      "guards": 0,
+      "limitRad": 0.029744133830806763,
+      "anchorPx": 0.11990128310609353,
+      "chemicalErrorJ": 2.3283064365386963e-10
+    },
+    {
+      "architecture": "legacy",
+      "role": "final",
+      "condition": {
+        "seed": 977,
+        "heading": 2.3
+      },
+      "valid": true,
+      "reasons": [],
+      "absorbedJ": 14064,
+      "distance": 278.97968748851986,
+      "motorJ": 13.544797150257375,
+      "chemicalExpenditureJ": 323.35008502120763,
+      "food": {
+        "initialCount": 240,
+        "finalCount": 237,
+        "initialFoodJ": 720000,
+        "grossFoodJ": 17580,
+        "absorbedJ": 14064,
+        "assimilationLossJ": 3516,
+        "nutrientRaySamples": 7123,
+        "detectionTicks": 720,
+        "contactTicks": 293,
+        "intakeTicks": 293,
+        "firstDetectionTick": 1,
+        "firstContactTick": 117,
+        "firstIntakeTick": 117,
+        "learnedMotorL1": 0.04533032044917551,
+        "learnedSensoryL1": 0.08654634866039937,
+        "assimilationHeatJ": 3516
+      },
+      "guards": 0,
+      "limitRad": 0.01586525718528342,
+      "anchorPx": 0.08757707525050704,
+      "chemicalErrorJ": 3.4924596548080444e-10
+    },
+    {
+      "architecture": "legacy",
+      "role": "initial",
+      "condition": {
+        "seed": 2301,
+        "heading": 1.5707963267948966
+      },
+      "valid": true,
+      "reasons": [],
+      "absorbedJ": 10224,
+      "distance": 220.99452594698946,
+      "motorJ": 12.290356685556715,
+      "chemicalExpenditureJ": 322.08229810026023,
+      "food": {
+        "initialCount": 240,
+        "finalCount": 237,
+        "initialFoodJ": 720000,
+        "grossFoodJ": 12780,
+        "absorbedJ": 10224,
+        "assimilationLossJ": 2556,
+        "nutrientRaySamples": 7130,
+        "detectionTicks": 720,
+        "contactTicks": 213,
+        "intakeTicks": 213,
+        "firstDetectionTick": 1,
+        "firstContactTick": 1,
+        "firstIntakeTick": 1,
+        "learnedMotorL1": 0.03284137650350466,
+        "learnedSensoryL1": 0.07245977740493584,
+        "assimilationHeatJ": 2556
+      },
+      "guards": 0,
+      "limitRad": 0.020351382114702,
+      "anchorPx": 0.09580706528165935,
+      "chemicalErrorJ": 4.656612873077393e-10
+    },
+    {
+      "architecture": "legacy",
+      "role": "final",
+      "condition": {
+        "seed": 2301,
+        "heading": 1.5707963267948966
+      },
+      "valid": true,
+      "reasons": [],
+      "absorbedJ": 12288,
+      "distance": 207.53823777589412,
+      "motorJ": 19.338102486239315,
+      "chemicalExpenditureJ": 329.1142998747855,
+      "food": {
+        "initialCount": 240,
+        "finalCount": 236,
+        "initialFoodJ": 720000,
+        "grossFoodJ": 15360,
+        "absorbedJ": 12288,
+        "assimilationLossJ": 3072,
+        "nutrientRaySamples": 7147,
+        "detectionTicks": 720,
+        "contactTicks": 256,
+        "intakeTicks": 256,
+        "firstDetectionTick": 1,
+        "firstContactTick": 1,
+        "firstIntakeTick": 1,
+        "learnedMotorL1": 0.03426152329303493,
+        "learnedSensoryL1": 0.056713615878255914,
+        "assimilationHeatJ": 3072
+      },
+      "guards": 0,
+      "limitRad": 0.02476749166134362,
+      "anchorPx": 0.13062713650496363,
+      "chemicalErrorJ": 3.4924596548080444e-10
+    },
+    {
+      "architecture": "neural-hybrid",
+      "role": "initial",
+      "condition": {
+        "seed": 811,
+        "heading": -0.7
+      },
+      "valid": false,
+      "reasons": [
+        "speed guard",
+        "joint limit"
+      ],
+      "absorbedJ": 4800,
+      "distance": 1.148069465439278,
+      "motorJ": 8.234150511150009,
+      "chemicalExpenditureJ": 318.0063836811114,
+      "food": {
+        "initialCount": 240,
+        "finalCount": 238,
+        "initialFoodJ": 720000,
+        "grossFoodJ": 6000,
+        "absorbedJ": 4800,
+        "assimilationLossJ": 1200,
+        "nutrientRaySamples": 7200,
+        "detectionTicks": 720,
+        "contactTicks": 100,
+        "intakeTicks": 100,
+        "firstDetectionTick": 1,
+        "firstContactTick": 1,
+        "firstIntakeTick": 1,
+        "learnedMotorL1": 0.014561161489188538,
+        "learnedSensoryL1": 0.021212582332484062,
+        "assimilationHeatJ": 1200
+      },
+      "guards": 3,
+      "limitRad": 0.07724865999552744,
+      "anchorPx": 0.19916184075515292,
+      "chemicalErrorJ": 3.4924596548080444e-10
+    },
+    {
+      "architecture": "neural-hybrid",
+      "role": "final",
+      "condition": {
+        "seed": 811,
+        "heading": -0.7
+      },
+      "valid": false,
+      "reasons": [
+        "speed guard",
+        "joint limit"
+      ],
+      "absorbedJ": 4800,
+      "distance": 1.148069465439278,
+      "motorJ": 8.234150511150009,
+      "chemicalExpenditureJ": 318.0063836811114,
+      "food": {
+        "initialCount": 240,
+        "finalCount": 238,
+        "initialFoodJ": 720000,
+        "grossFoodJ": 6000,
+        "absorbedJ": 4800,
+        "assimilationLossJ": 1200,
+        "nutrientRaySamples": 7200,
+        "detectionTicks": 720,
+        "contactTicks": 100,
+        "intakeTicks": 100,
+        "firstDetectionTick": 1,
+        "firstContactTick": 1,
+        "firstIntakeTick": 1,
+        "learnedMotorL1": 0.014561161489188538,
+        "learnedSensoryL1": 0.021212582332484062,
+        "assimilationHeatJ": 1200
+      },
+      "guards": 3,
+      "limitRad": 0.07724865999552744,
+      "anchorPx": 0.19916184075515292,
+      "chemicalErrorJ": 3.4924596548080444e-10
+    },
+    {
+      "architecture": "neural-hybrid",
+      "role": "initial",
+      "condition": {
+        "seed": 977,
+        "heading": 2.3
+      },
+      "valid": true,
+      "reasons": [],
+      "absorbedJ": 0,
+      "distance": 6.381986671274848,
+      "motorJ": 5.633491051208439,
+      "chemicalExpenditureJ": 315.33949105064676,
+      "food": {
+        "initialCount": 240,
+        "finalCount": 240,
+        "initialFoodJ": 720000,
+        "grossFoodJ": 0,
+        "absorbedJ": 0,
+        "assimilationLossJ": 0,
+        "nutrientRaySamples": 7197,
+        "detectionTicks": 720,
+        "contactTicks": 0,
+        "intakeTicks": 0,
+        "firstDetectionTick": 1,
+        "firstContactTick": null,
+        "firstIntakeTick": null,
+        "learnedMotorL1": 0,
+        "learnedSensoryL1": 0,
+        "assimilationHeatJ": 0
+      },
+      "guards": 0,
+      "limitRad": 0.01710029485134057,
+      "anchorPx": 0.13302224840945326,
+      "chemicalErrorJ": 5.820766091346741e-10
+    },
+    {
+      "architecture": "neural-hybrid",
+      "role": "final",
+      "condition": {
+        "seed": 977,
+        "heading": 2.3
+      },
+      "valid": true,
+      "reasons": [],
+      "absorbedJ": 0,
+      "distance": 6.381986671274848,
+      "motorJ": 5.633491051208439,
+      "chemicalExpenditureJ": 315.33949105064676,
+      "food": {
+        "initialCount": 240,
+        "finalCount": 240,
+        "initialFoodJ": 720000,
+        "grossFoodJ": 0,
+        "absorbedJ": 0,
+        "assimilationLossJ": 0,
+        "nutrientRaySamples": 7197,
+        "detectionTicks": 720,
+        "contactTicks": 0,
+        "intakeTicks": 0,
+        "firstDetectionTick": 1,
+        "firstContactTick": null,
+        "firstIntakeTick": null,
+        "learnedMotorL1": 0,
+        "learnedSensoryL1": 0,
+        "assimilationHeatJ": 0
+      },
+      "guards": 0,
+      "limitRad": 0.01710029485134057,
+      "anchorPx": 0.13302224840945326,
+      "chemicalErrorJ": 5.820766091346741e-10
+    },
+    {
+      "architecture": "neural-hybrid",
+      "role": "initial",
+      "condition": {
+        "seed": 2301,
+        "heading": 1.5707963267948966
+      },
+      "valid": false,
+      "reasons": [
+        "speed guard",
+        "joint limit"
+      ],
+      "absorbedJ": 3984,
+      "distance": 4.292650806163949,
+      "motorJ": 6.699236523611405,
+      "chemicalExpenditureJ": 316.45815898720684,
+      "food": {
+        "initialCount": 240,
+        "finalCount": 239,
+        "initialFoodJ": 720000,
+        "grossFoodJ": 4980,
+        "absorbedJ": 3984,
+        "assimilationLossJ": 996,
+        "nutrientRaySamples": 7199,
+        "detectionTicks": 720,
+        "contactTicks": 83,
+        "intakeTicks": 83,
+        "firstDetectionTick": 1,
+        "firstContactTick": 1,
+        "firstIntakeTick": 1,
+        "learnedMotorL1": 0.01113056011458422,
+        "learnedSensoryL1": 0.01675488330703088,
+        "assimilationHeatJ": 996
+      },
+      "guards": 1,
+      "limitRad": 0.05047379450383083,
+      "anchorPx": 0.18909840183331456,
+      "chemicalErrorJ": 4.656612873077393e-10
+    },
+    {
+      "architecture": "neural-hybrid",
+      "role": "final",
+      "condition": {
+        "seed": 2301,
+        "heading": 1.5707963267948966
+      },
+      "valid": false,
+      "reasons": [
+        "speed guard",
+        "joint limit"
+      ],
+      "absorbedJ": 3984,
+      "distance": 4.292650806163949,
+      "motorJ": 6.699236523611405,
+      "chemicalExpenditureJ": 316.45815898720684,
+      "food": {
+        "initialCount": 240,
+        "finalCount": 239,
+        "initialFoodJ": 720000,
+        "grossFoodJ": 4980,
+        "absorbedJ": 3984,
+        "assimilationLossJ": 996,
+        "nutrientRaySamples": 7199,
+        "detectionTicks": 720,
+        "contactTicks": 83,
+        "intakeTicks": 83,
+        "firstDetectionTick": 1,
+        "firstContactTick": 1,
+        "firstIntakeTick": 1,
+        "learnedMotorL1": 0.01113056011458422,
+        "learnedSensoryL1": 0.01675488330703088,
+        "assimilationHeatJ": 996
+      },
+      "guards": 1,
+      "limitRad": 0.05047379450383083,
+      "anchorPx": 0.18909840183331456,
+      "chemicalErrorJ": 4.656612873077393e-10
+    }
+  ]
+}

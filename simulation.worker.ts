@@ -1,3 +1,4 @@
+import {createIntakeEvaluation} from './experiments/intakeEvaluation';
 import {createFoodObservation} from './experiments/foodObservation';
 import {createTorqueRecorder} from './experiments/torqueRecorder';
 import {SimulationHost, type WorldSnapshot, type WorldAction} from './simulationHost';
@@ -45,7 +46,9 @@ port.onmessage = ({data}: MessageEvent) => {
       if (data.auditTorque !== undefined && (typeof data.auditTorque !== 'boolean' || host.settings.physicsRegime !== 'passive-work-v3'))
         throw new Error('Torque audit requires passive-work-v3 and a boolean selector');
       if(data.traceJoints!==undefined&&typeof data.traceJoints!=='boolean')throw new Error('Invalid joint trace selector');
-      if(data.traceFood!==undefined&&(typeof data.traceFood!=='boolean'||host.settings.motorExperiment!=='neural-motor-v1'))throw new Error('Food audit requires explicit neural motor world');
+      if(data.traceFood!==undefined&&(typeof data.traceFood!=='boolean'||!['gated-torque-v1','neural-motor-v1'].includes(host.settings.motorExperiment!)))throw new Error('Food audit requires explicit experimental world');
+      if(data.nonlethalEvaluation!==undefined&&data.nonlethalEvaluation!=='nutrient-intake-v1')throw new Error('Unknown offline nonlethal evaluation');
+      const intake=data.nonlethalEvaluation?createIntakeEvaluation(host,data.ticks):undefined;
       const food=data.traceFood?createFoodObservation(host):undefined;
       const trajectory:unknown[]=[];
       const trace=data.traceJoints?(tick:number)=>{if(tick%10===9)trajectory.push({tick:tick+1,organisms:host.state.organisms.map(o=>({
@@ -53,9 +56,9 @@ port.onmessage = ({data}: MessageEvent) => {
           angle:Math.atan2(Math.sin(o.segments[i+1].angle-o.segments[o.genome.parts[i+1].parentIndex].angle-o.genome.parts[i+1].baseAngleOffset),
             Math.cos(o.segments[i+1].angle-o.segments[o.genome.parts[i+1].parentIndex].angle-o.genome.parts[i+1].baseAngleOffset))}))}))});}:undefined;
       const recorder = data.auditTorque ? createTorqueRecorder() : undefined;
-      const metrics = measureWorkerTrial(host, data.ticks, recorder?.observe,food?(tick)=>{trace?.(tick);food.afterTick(tick);}:trace);
+      const metrics = measureWorkerTrial(host, data.ticks, recorder?.observe,(tick)=>{trace?.(tick);food?.afterTick(tick);intake?.afterTick(tick);},intake?.mortality);
       dirty = true;
-      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot(), ...(recorder ? {torqueAudit: recorder.report()} : {}),...(trace?{trajectory}:{}),...(food?{foodAudit:food.report()}:{})}});
+      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot(), ...(recorder ? {torqueAudit: recorder.report()} : {}),...(trace?{trajectory}:{}),...(food?{foodAudit:food.report()}:{}),...(intake?{intakeAudit:intake.report()}:{})}});
       return;
     }
     if (data.type === 'action') {

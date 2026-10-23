@@ -3566,6 +3566,12 @@ function closedCarrion(state: SimulationState, x: number, y: number, energy: num
     bottomTimer: 0, pulseTimer: state.prng.range(0, Math.PI * 2)});
 }
 
+/** Ephemeral offline evaluation protection; never a setting, genome or save field.
+ * It suppresses ONLY mortality marking after ordinary energy debits and feeding. */
+export interface OfflineMortalityProtection {
+  readonly version: 'nonlethal-evaluation-v1';
+  record: (id: string, cause: 'Old Age' | 'Starvation', time: number, reserveJ: number) => void;
+}
 export function stepSimulation(
   state: SimulationState,
   settings: SimulationSettings,
@@ -3573,6 +3579,7 @@ export function stepSimulation(
   onEvent?: (type: 'birth' | 'death' | 'eat' | 'clash' | 'egg_loss') => void,
   observeMechanics?: MechanicalObserver,
   observeActuation?: ActuationObserver,
+  offlineMortality?: OfflineMortalityProtection,
 ): void {
   const mu = settings.waterViscosity ?? 0.22;
   const worldWidth = settings.worldWidth;
@@ -4313,13 +4320,19 @@ export function stepSimulation(
     // F. Starvation & Senescence (Precise Cause Attribution)
     if (!org.dissolving) {
       if (org.age >= org.maxLifespan) {
-        org.deathCause = 'Old Age';
-        org.dissolving = true;
-        org.dissolveAlpha = 1.0;
+        if (offlineMortality) offlineMortality.record(org.id, 'Old Age', state.simTime, org.energy);
+        else {
+          org.deathCause = 'Old Age';
+          org.dissolving = true;
+          org.dissolveAlpha = 1.0;
+        }
       } else if (org.energy <= 0) {
-        org.deathCause = 'Starvation';
-        org.dissolving = true;
-        org.dissolveAlpha = 1.0;
+        if (offlineMortality) offlineMortality.record(org.id, 'Starvation', state.simTime, org.energy);
+        else {
+          org.deathCause = 'Starvation';
+          org.dissolving = true;
+          org.dissolveAlpha = 1.0;
+        }
       }
     }
   }
