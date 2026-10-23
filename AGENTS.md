@@ -1,3 +1,35 @@
+# Corrected neural motor / food checkpoint (#59/#63 / draft #86)
+
+- Owner correction: #85 compared legacy six-output, three-output gated and a
+  GENETIC retained-head selector. Preserve it, but it did not answer the intended
+  oscillator-only / direct-only / NEURAL Mode+Command hybrid comparison.
+- Corrected experiment COMPLETE on experiment/neural-modes-food-63, based on
+  #85 e09bf46a27e84edbe1dc72e698c259ac7b8e6e9e; independently draft/unmerged.
+- neural-motor-v1/schema19 explicitly supports 1 strength / 1 signed torque /
+  2 Mode+Command outputs per joint. Hybrid uses original #72 mapping/.06
+  hysteresis. No genetic selector/extra legacy head. Old save semantics unchanged.
+- docs/experiments/neural-food-v1.md is authoritative. ALL9 architecture/food
+  combinations received12x16x3x5s,5184 offspring total. 5445 unique planned rows.
+  18 valid direct/hybrid champions;9 oscillator failures with no valid offspring.
+- Median5s direct/hybrid px: A13.02/19.71, B13.09/9.06, C15.67/15.39.
+  Valid held-outs direct15/27, hybrid18/27. No superiority/promotion claim.
+  No final OFF; one C/1901 hybrid has a real .0667s oscillator burst, benefit
+  unproven. Both Mode and Command mutate in ordinary8-event neural proposals.
+- Food is sensed by every B/C champion, but no valid training offspring or
+  champion has food contact/intake at5s. Do not call zero intake failed seeking;
+  this horizon cannot assess feeding-driven learning. No #78 semantics changed.
+- Source/archive/generation/genotype evidence preserved. All5184 genotypes/elite
+  choices reconstruct;324 summaries match original runner log;27 final specimens
+  and9 reset forks exact. Four stale partial archives required14 replacement
+  HELD-OUT/CONTROL rows, explicitly tagged/recovery-logged; zero training reruns.
+  Keep original manifest/log/partials. Never silently claim lost receipts intact.
+- Old #72/#85 report hashes unchanged; three old final snapshots exact under
+  new bundle. Local313fast+metadata, six corrected focused tests, typecheck/build
+  and production/gated/retained/new Worker checks pass. Final-head CI in #86/#57.
+- STOP for owner review: no new search, coefficient/gain/starter change, solver
+  investigation, #60/#78 feature, merge, promotion, deployment, Wiki or3D edits.
+  V3 remains accepted; fluid stack stays closed. Precise heads/statuses in #57.
+
 # Equal-budget neural selection checkpoint (#63 / draft #85)
 
 - Owner-approved 12 generations x 16 offspring x 3 seeds x 5 seconds for EACH

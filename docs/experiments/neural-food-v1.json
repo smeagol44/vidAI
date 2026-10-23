@@ -1,0 +1,522 @@
+{
+  "version": "neural-food-v1",
+  "base": "e09bf46a27e84edbe1dc72e698c259ac7b8e6e9e",
+  "budget": {
+    "generations": 12,
+    "offspring": 16,
+    "neuralEvents": 8,
+    "sigma": 0.15,
+    "reserveJ": 50000
+  },
+  "training": {
+    "seed": 73,
+    "heading": 0.37,
+    "viscosity": 0.18,
+    "seconds": 5
+  },
+  "heldOut": [
+    {
+      "seed": 811,
+      "heading": -0.7,
+      "viscosity": 0.18,
+      "seconds": 10
+    },
+    {
+      "seed": 977,
+      "heading": 2.3,
+      "viscosity": 0.18,
+      "seconds": 15
+    },
+    {
+      "seed": 2301,
+      "heading": 1.5707963267948966,
+      "viscosity": 0.18,
+      "seconds": 15
+    }
+  ],
+  "gates": {
+    "anchorPx": 0.5,
+    "limitRad": 0.05,
+    "constraintGainJ": 1e-12,
+    "chemicalJ": 0.00001,
+    "omega": 20.001,
+    "billingJ": 1e-9
+  },
+  "seeds": [
+    17,
+    71,
+    1901
+  ],
+  "codeHash": "4d20d32c65c849487d8f87d2bee1f84643a10364260ff74044b1cb291d8237ca",
+  "workerSha": "140b1fb11ed2da4dda0e34068d57c16fc9ae8c209866e855f092702b26c835f7",
+  "workerAsset": "simulation.worker-Bec82G-y.js",
+  "protectedHashes": {
+    "gated-worker-v1.json": "f7f251f7a4985f2554da23e19601890b9936d94fe775d7fe32a04827a32fd1d6",
+    "torque-demand-v1.json": "9fb3742390044467085c2094529f14b282c678535d5ea8402dec034e76ef372a",
+    "retained-head-v1.json.gz": "fc19831f3a214a4e4bb2360cca38c28de83513f2a47ba7657172687591f7b44f",
+    "retained-head-v1-summary.json": "0189022ba65bf639a31020bd3b67e19958db480bf4bcfb5ca011414a5dc1f1fb",
+    "neural-selection-v1-champions.json": "8aa35a6d3c76f89e39c4df019e8075dd285268ad1bb3673cc6b5a540be0e7b09",
+    "neural-selection-v1-finalization.json": "b60420e6505c174c5d37c3c37ade177d43a03cb4269863b65f4e89b3cb6c1594",
+    "neural-selection-v1-hybrid-17.json.gz": "53ea0ff0f99ef97d5f64ce4299630c6247795dd89604c6f906e492a1a0fb8038",
+    "neural-selection-v1-hybrid-1901.json.gz": "e00b0a045d3aa69f61421288e7d400383bd7986f46d597869252e22bb2853620",
+    "neural-selection-v1-hybrid-71.json.gz": "395e09eb4d5b63fc72bbbef7501ca4ec330171681c8650a8e2a3413079b1c325",
+    "neural-selection-v1-legacy-17.json.gz": "d2ca19a306c6e755ce65d58645709b5ae8bc6fbf4916d1e62f31815eb1d00011",
+    "neural-selection-v1-legacy-1901.json.gz": "547d96f899b2187c171f7972208cb0e8c26e251bb42b55f9c69a1c7a5df2cbe3",
+    "neural-selection-v1-legacy-71.json.gz": "7a7177b2c3935f30a386ec52428fba3ca9458e49994c52ddf56d94d6e0613618",
+    "neural-selection-v1-progress.svg": "ba1cb10761a19dbb3480c675a159d1b029de8801c419c59ffdce6ce86d61768c",
+    "neural-selection-v1-protocol.md": "63168599a6c8e85aab0e6d3b6734e2e211f128efc00cacd6163aa98785f49ea8",
+    "neural-selection-v1-signed-17.json.gz": "46e74c5f4e7ac4b6919a4798074f858683c17f4e15098d607bf580570d181c7a",
+    "neural-selection-v1-signed-1901.json.gz": "6e2cb34f9e092ea1256f7a038e100c132a89ed6c595be96aa66a40900389fb48",
+    "neural-selection-v1-signed-71.json.gz": "576af2d8d242eed76eef9d7f848b5d665d38c575bf05b1542278f81a40e63279",
+    "neural-selection-v1-summary.json": "53f2ef72b788119cbda6ecb3ac137581cf1f27800be947d440c5169b041f1da7",
+    "neural-selection-v1-verification.json": "e893bf4c8124a6e064a38ae831d0b01d5832ae15163a823171515b6036785d53",
+    "neural-selection-v1.json": "5bbd7226dbfa441bdbe21a07eaf2a35306841cadb8102c0db565e2195022f272",
+    "neural-selection-v1.md": "c17f538999a04c546c8ce859e27c1d3fa260ac58e6e139115724ef52460841e7"
+  },
+  "runs": [
+    {
+      "environment": "A",
+      "architecture": "oscillator-only",
+      "seed": 17,
+      "archive": "neural-food-v1-A-oscillator-only-17.json.gz",
+      "sha256": "696da6c2badbe54af268ce45ae4a71a695095b5172103aefaafefb4534eb6a49",
+      "championAvailable": false,
+      "initialValid": false,
+      "initialDistance": 29.434003604775278,
+      "finalDistance": null,
+      "parameterCount": 1922
+    },
+    {
+      "environment": "A",
+      "architecture": "direct-only",
+      "seed": 17,
+      "archive": "neural-food-v1-A-direct-only-17.json.gz",
+      "sha256": "f128ee4f5cd4bef518d15ea70b8933e74a7decfe90d5e6a72b658c89ff89b6cf",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 1.207169612132531,
+      "finalDistance": 5.230648202838012,
+      "parameterCount": 1922,
+      "originalArchiveSha256": "29f4dfb7aa2fe3904f22082378ad6e8c83009ab25cb1db8b98674951b6d81b22"
+    },
+    {
+      "environment": "A",
+      "architecture": "two-output",
+      "seed": 17,
+      "archive": "neural-food-v1-A-two-output-17.json.gz",
+      "sha256": "2075ad10620eb5e77b2868dbb5407681566c80ca403218871579e0bf832aea7b",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 1.207169612132531,
+      "finalDistance": 3.5800948331687747,
+      "parameterCount": 1972
+    },
+    {
+      "environment": "B",
+      "architecture": "direct-only",
+      "seed": 17,
+      "archive": "neural-food-v1-B-direct-only-17.json.gz",
+      "sha256": "45fb163f05cc727d637a80fe8846e76df5ebda5773f50a28187082c2b067d785",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 1.3241381789955469,
+      "finalDistance": 14.538043248647025,
+      "parameterCount": 1922
+    },
+    {
+      "environment": "B",
+      "architecture": "two-output",
+      "seed": 17,
+      "archive": "neural-food-v1-B-two-output-17.json.gz",
+      "sha256": "39c039fdda677d0ba92371d8a3d0434a46252330aa9a0d80332c413a714876df",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 1.3241381789955469,
+      "finalDistance": 6.758583512756376,
+      "parameterCount": 1972
+    },
+    {
+      "environment": "B",
+      "architecture": "oscillator-only",
+      "seed": 17,
+      "archive": "neural-food-v1-B-oscillator-only-17.json.gz",
+      "sha256": "506d00f8864c7c8b3d23207a807d5a8191b42458a47344da2bcf8e7ee7130f5a",
+      "championAvailable": false,
+      "initialValid": false,
+      "initialDistance": 37.495238686466834,
+      "finalDistance": null,
+      "parameterCount": 1922,
+      "originalArchiveSha256": "11427eb529487a625227a319e94ca86827287d3c1280c26ed4abf21ac6fa6de8"
+    },
+    {
+      "environment": "C",
+      "architecture": "two-output",
+      "seed": 17,
+      "archive": "neural-food-v1-C-two-output-17.json.gz",
+      "sha256": "f9cfd6e17fb79da0879fd0cf345c1fad4d167cf3827923b85394386f1034832b",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 1.1158739134920492,
+      "finalDistance": 15.312468275658155,
+      "parameterCount": 1972
+    },
+    {
+      "environment": "C",
+      "architecture": "oscillator-only",
+      "seed": 17,
+      "archive": "neural-food-v1-C-oscillator-only-17.json.gz",
+      "sha256": "188cff2e03f6435323b223c04f86f74e7cdc7bacb34288849498ac42043a8c44",
+      "championAvailable": false,
+      "initialValid": false,
+      "initialDistance": 22.76094933984697,
+      "finalDistance": null,
+      "parameterCount": 1922
+    },
+    {
+      "environment": "C",
+      "architecture": "direct-only",
+      "seed": 17,
+      "archive": "neural-food-v1-C-direct-only-17.json.gz",
+      "sha256": "7406fc6a68372020a61b13711dde3e8e7b56009e4b98bcb2ec859c13793be87e",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 1.1158739134920492,
+      "finalDistance": 8.018526199513131,
+      "parameterCount": 1922
+    },
+    {
+      "environment": "B",
+      "architecture": "direct-only",
+      "seed": 71,
+      "archive": "neural-food-v1-B-direct-only-71.json.gz",
+      "sha256": "9e204e5ec53af8b88cd68e4baff9e8d89796211f54b7757119bea1400b387424",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 3.3999950448303697,
+      "finalDistance": 13.093162955835826,
+      "parameterCount": 1922
+    },
+    {
+      "environment": "B",
+      "architecture": "two-output",
+      "seed": 71,
+      "archive": "neural-food-v1-B-two-output-71.json.gz",
+      "sha256": "40c0ef2257c54ec02d2bfee0daf390dd4fb61534af2a54b26a187dcde245bbb9",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 3.3999950448303697,
+      "finalDistance": 14.211697757098824,
+      "parameterCount": 1972
+    },
+    {
+      "environment": "B",
+      "architecture": "oscillator-only",
+      "seed": 71,
+      "archive": "neural-food-v1-B-oscillator-only-71.json.gz",
+      "sha256": "8416a8895c9526fd0346f05fe5dd5ef6d8bbab10eb9bcbbbf02b46116d70f98d",
+      "championAvailable": false,
+      "initialValid": false,
+      "initialDistance": 8.485260382415383,
+      "finalDistance": null,
+      "parameterCount": 1922
+    },
+    {
+      "environment": "C",
+      "architecture": "two-output",
+      "seed": 71,
+      "archive": "neural-food-v1-C-two-output-71.json.gz",
+      "sha256": "69104873dcc02c1dd36c9a0ea4ba8ff508b5ae8ccb003d87d4b015d5b69f7514",
+      "championAvailable": true,
+      "initialValid": true,
+      "initialDistance": 14.61150721775323,
+      "finalDistance": 25.002696706078154,
+      "parameterCount": 1972
+    },
+    {
+      "environment": "C",
+      "architecture": "oscillator-only",
+      "seed": 71,
+      "archive": "neural-food-v1-C-oscillator-only-71.json.gz",
+      "sha256": "5114a95c74eac48d1866ca72ec6269367a0abf5ed5bb67cb2ab770660e68e897",
+      "championAvailable": false,
+      "initialValid": false,
+      "initialDistance": 35.851739628873794,
+      "finalDistance": null,
+      "parameterCount": 1922
+    },
+    {
+      "environment": "C",
+      "architecture": "direct-only",
+      "seed": 71,
+      "archive": "neural-food-v1-C-direct-only-71.json.gz",
+      "sha256": "9011030424411e091e6755fff1b44c2ece566b821368b9ef5eddbe21068457fc",
+      "championAvailable": true,
+      "initialValid": true,
+      "initialDistance": 14.61150721775323,
+      "finalDistance": 28.866515366542043,
+      "parameterCount": 1922,
+      "originalArchiveSha256": "15992d0ced5ed05a1f217f4582506dacc66d599509b17905a97d501daa6a6f20"
+    },
+    {
+      "environment": "A",
+      "architecture": "oscillator-only",
+      "seed": 71,
+      "archive": "neural-food-v1-A-oscillator-only-71.json.gz",
+      "sha256": "d37540ecea2ffceabf77c0b216ce8d3354661e5838f650c3cbe06ea8a12f3441",
+      "championAvailable": false,
+      "initialValid": false,
+      "initialDistance": 30.44317375570039,
+      "finalDistance": null,
+      "parameterCount": 1922
+    },
+    {
+      "environment": "A",
+      "architecture": "direct-only",
+      "seed": 71,
+      "archive": "neural-food-v1-A-direct-only-71.json.gz",
+      "sha256": "f2243fcc4b46a0ce95f45ba8c1935fec199d47624206b9d299ac29b3b0fe49fd",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 7.818865360131883,
+      "finalDistance": 19.00709435457522,
+      "parameterCount": 1922
+    },
+    {
+      "environment": "A",
+      "architecture": "two-output",
+      "seed": 71,
+      "archive": "neural-food-v1-A-two-output-71.json.gz",
+      "sha256": "eeaccdec09ad55c0111e0f02c19a85468659a72187906630df4eac24ff531f41",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 7.818865360131883,
+      "finalDistance": 19.705754894549017,
+      "parameterCount": 1972
+    },
+    {
+      "environment": "C",
+      "architecture": "two-output",
+      "seed": 1901,
+      "archive": "neural-food-v1-C-two-output-1901.json.gz",
+      "sha256": "0c175510513cdbb6529a34e74de783bd99a02de349b7ea620f52008944b75d5f",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 0.5913371091647056,
+      "finalDistance": 15.394103389518314,
+      "parameterCount": 1972
+    },
+    {
+      "environment": "C",
+      "architecture": "oscillator-only",
+      "seed": 1901,
+      "archive": "neural-food-v1-C-oscillator-only-1901.json.gz",
+      "sha256": "1df58c751e77aa55e61f742261d2ce66c3aafde328933ef7edd5b2ffac1b8bab",
+      "championAvailable": false,
+      "initialValid": false,
+      "initialDistance": 23.799234998217635,
+      "finalDistance": null,
+      "parameterCount": 1922
+    },
+    {
+      "environment": "C",
+      "architecture": "direct-only",
+      "seed": 1901,
+      "archive": "neural-food-v1-C-direct-only-1901.json.gz",
+      "sha256": "5693929e0553b3b7af71b71683fcd07e9c89c7066d5319bcc488c8f4acb530ce",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 0.5913371091647056,
+      "finalDistance": 15.674709746468007,
+      "parameterCount": 1922
+    },
+    {
+      "environment": "A",
+      "architecture": "oscillator-only",
+      "seed": 1901,
+      "archive": "neural-food-v1-A-oscillator-only-1901.json.gz",
+      "sha256": "c9b15202a6b547f98a8527b7f1110bf60a499f29b9aa64f6042f660765c0d7ad",
+      "championAvailable": false,
+      "initialValid": false,
+      "initialDistance": 33.99408663732092,
+      "finalDistance": null,
+      "parameterCount": 1922
+    },
+    {
+      "environment": "A",
+      "architecture": "direct-only",
+      "seed": 1901,
+      "archive": "neural-food-v1-A-direct-only-1901.json.gz",
+      "sha256": "5651044aa853e995b3e4ed00fe215e1fb1c861e20045c0feeb36394a07b4a8e5",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 0.6577582519942525,
+      "finalDistance": 13.022254399167277,
+      "parameterCount": 1922,
+      "originalArchiveSha256": "ff4cdfa32a5857fc8f14ee3186f7682e80c49662044ca94db06d7cc705e96d52"
+    },
+    {
+      "environment": "A",
+      "architecture": "two-output",
+      "seed": 1901,
+      "archive": "neural-food-v1-A-two-output-1901.json.gz",
+      "sha256": "d25bc2ad2d2257be27af25e701bad55b8ecf26f801feaa4f6807b480b23c15c8",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 0.6577582519942525,
+      "finalDistance": 24.079151888705546,
+      "parameterCount": 1972
+    },
+    {
+      "environment": "B",
+      "architecture": "direct-only",
+      "seed": 1901,
+      "archive": "neural-food-v1-B-direct-only-1901.json.gz",
+      "sha256": "f3deb2115dccacf0318f9503cb072a96c31458f45a4ef94bd6aaf9e5b0b599bf",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 2.817936413329456,
+      "finalDistance": 12.49312045804633,
+      "parameterCount": 1922
+    },
+    {
+      "environment": "B",
+      "architecture": "two-output",
+      "seed": 1901,
+      "archive": "neural-food-v1-B-two-output-1901.json.gz",
+      "sha256": "b09c832defff60f26b1d9e90512cbba3ba6028d5ca4cc73ff5048d606581d6be",
+      "championAvailable": true,
+      "initialValid": false,
+      "initialDistance": 2.817936413329456,
+      "finalDistance": 9.063498515404856,
+      "parameterCount": 1972
+    },
+    {
+      "environment": "B",
+      "architecture": "oscillator-only",
+      "seed": 1901,
+      "archive": "neural-food-v1-B-oscillator-only-1901.json.gz",
+      "sha256": "d2c68e4ff16f0860f03e0fc44072ee43c7e0333745000199bffd3f9e0a0d2bb4",
+      "championAvailable": false,
+      "initialValid": false,
+      "initialDistance": 35.02561299302317,
+      "finalDistance": null,
+      "parameterCount": 1922
+    }
+  ],
+  "completed": true,
+  "counts": {
+    "initial": 27,
+    "offspring": 5184,
+    "heldOut": 162,
+    "controls": 72,
+    "total": 5445
+  },
+  "recovery": {
+    "trainingEvaluationsRepeated": 0,
+    "validationRowsRecovered": 14,
+    "note": "Four stale finalization checkpoints detected after original runner completed. Original unavailable validation rows excluded; same frozen conditions remeasured. Timing of recovered rows is new. Cause of stale files not established.",
+    "repairs": [
+      {
+        "archive": "neural-food-v1-A-direct-only-17.json.gz",
+        "partial": "neural-food-v1-A-direct-only-17.partial.json.gz",
+        "previousSha256": "1eba990d9a7136bd459e9d880f7d06784c467c37c82ffc37c3dd770cb38c1898",
+        "originalRecordedSha256": "29f4dfb7aa2fe3904f22082378ad6e8c83009ab25cb1db8b98674951b6d81b22",
+        "recoveredRows": [
+          {
+            "kind": "control",
+            "control": "passive"
+          },
+          {
+            "kind": "control",
+            "control": "fluid-off"
+          }
+        ],
+        "finalSha256": "f128ee4f5cd4bef518d15ea70b8933e74a7decfe90d5e6a72b658c89ff89b6cf",
+        "trainingRowsChanged": 0
+      },
+      {
+        "archive": "neural-food-v1-B-oscillator-only-17.json.gz",
+        "partial": "neural-food-v1-B-oscillator-only-17.partial.json.gz",
+        "previousSha256": "1e9b59937f2e1fa0011ded403399f99582277909e89e533baed61c1f2b8066ed",
+        "originalRecordedSha256": "11427eb529487a625227a319e94ca86827287d3c1280c26ed4abf21ac6fa6de8",
+        "recoveredRows": [
+          {
+            "kind": "held-out",
+            "conditionIndex": 2,
+            "role": "final"
+          },
+          {
+            "kind": "control",
+            "control": "passive"
+          },
+          {
+            "kind": "control",
+            "control": "fluid-off"
+          },
+          {
+            "kind": "control",
+            "control": "food-removed"
+          }
+        ],
+        "finalSha256": "506d00f8864c7c8b3d23207a807d5a8191b42458a47344da2bcf8e7ee7130f5a",
+        "trainingRowsChanged": 0
+      },
+      {
+        "archive": "neural-food-v1-C-direct-only-71.json.gz",
+        "partial": "neural-food-v1-C-direct-only-71.partial.json.gz",
+        "previousSha256": "5ad5a6ef5d57c5648dd466f64f49f6f56941cae181e571aa7c548a2f07c18fe7",
+        "originalRecordedSha256": "15992d0ced5ed05a1f217f4582506dacc66d599509b17905a97d501daa6a6f20",
+        "recoveredRows": [
+          {
+            "kind": "control",
+            "control": "fluid-off"
+          },
+          {
+            "kind": "control",
+            "control": "food-removed"
+          }
+        ],
+        "finalSha256": "9011030424411e091e6755fff1b44c2ece566b821368b9ef5eddbe21068457fc",
+        "trainingRowsChanged": 0
+      },
+      {
+        "archive": "neural-food-v1-A-direct-only-1901.json.gz",
+        "partial": "neural-food-v1-A-direct-only-1901.partial.json.gz",
+        "previousSha256": "8f7fa5313b1ccab9e16e8caeb19092e674540a0fc81f19fa9a8e792b9c90b785",
+        "originalRecordedSha256": "ff4cdfa32a5857fc8f14ee3186f7682e80c49662044ca94db06d7cc705e96d52",
+        "recoveredRows": [
+          {
+            "kind": "held-out",
+            "conditionIndex": 1,
+            "role": "initial"
+          },
+          {
+            "kind": "held-out",
+            "conditionIndex": 1,
+            "role": "final"
+          },
+          {
+            "kind": "held-out",
+            "conditionIndex": 2,
+            "role": "initial"
+          },
+          {
+            "kind": "held-out",
+            "conditionIndex": 2,
+            "role": "final"
+          },
+          {
+            "kind": "control",
+            "control": "passive"
+          },
+          {
+            "kind": "control",
+            "control": "fluid-off"
+          }
+        ],
+        "finalSha256": "5651044aa853e995b3e4ed00fe215e1fb1c861e20045c0feeb36394a07b4a8e5",
+        "trainingRowsChanged": 0
+      }
+    ]
+  }
+}
