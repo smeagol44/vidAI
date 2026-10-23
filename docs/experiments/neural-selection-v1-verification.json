@@ -1,0 +1,89 @@
+{
+  "workerSha": "36b1d1ff2c366f5509c4fe7f464ffedc931a02fb014e2ce1288764a9a45881fb",
+  "finalSpecimenReplays": 9,
+  "additionalSplitContinuations": 3,
+  "protectedHashesExact": true,
+  "results": [
+    {
+      "architecture": "legacy",
+      "seed": 17,
+      "championAvailable": true,
+      "metricsExact": true,
+      "trajectoryExact": true,
+      "snapshotExact": true,
+      "forkExact": true
+    },
+    {
+      "architecture": "signed",
+      "seed": 17,
+      "championAvailable": true,
+      "metricsExact": true,
+      "trajectoryExact": true,
+      "snapshotExact": true,
+      "forkExact": true
+    },
+    {
+      "architecture": "hybrid",
+      "seed": 17,
+      "championAvailable": true,
+      "metricsExact": true,
+      "trajectoryExact": true,
+      "snapshotExact": true,
+      "forkExact": true
+    },
+    {
+      "architecture": "signed",
+      "seed": 71,
+      "championAvailable": true,
+      "metricsExact": true,
+      "trajectoryExact": true,
+      "snapshotExact": true,
+      "forkExact": null
+    },
+    {
+      "architecture": "hybrid",
+      "seed": 71,
+      "championAvailable": true,
+      "metricsExact": true,
+      "trajectoryExact": true,
+      "snapshotExact": true,
+      "forkExact": null
+    },
+    {
+      "architecture": "legacy",
+      "seed": 71,
+      "championAvailable": true,
+      "metricsExact": true,
+      "trajectoryExact": true,
+      "snapshotExact": true,
+      "forkExact": null
+    },
+    {
+      "architecture": "hybrid",
+      "seed": 1901,
+      "championAvailable": true,
+      "metricsExact": true,
+      "trajectoryExact": true,
+      "snapshotExact": true,
+      "forkExact": null
+    },
+    {
+      "architecture": "legacy",
+      "seed": 1901,
+      "championAvailable": true,
+      "metricsExact": true,
+      "trajectoryExact": true,
+      "snapshotExact": true,
+      "forkExact": null
+    },
+    {
+      "architecture": "signed",
+      "seed": 1901,
+      "championAvailable": true,
+      "metricsExact": true,
+      "trajectoryExact": true,
+      "snapshotExact": true,
+      "forkExact": null
+    }
+  ]
+}
