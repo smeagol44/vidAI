@@ -1,3 +1,32 @@
+# Issue #61 first articulated event — stopped diagnostic (2026-10-23)
+
+- Incremental draft #79, `experiment/prism-resistance-v4` → testing d7a6814,
+  parent d2826d7. Read-only solver telemetry, no physics correction implemented.
+- Existing CUR-006 tape only: first-second prefixes 1920/3840 Hz equal old saved
+  trajectories exactly. Detailed 2.083 ms contact and 7.813 ms first-overspeed windows
+  preserve exact observed/unobserved Worker snapshots/PRNG/work.
+- First significant angular-speed separation .125520833s at head–tail self-contact:
+  precontact difference .01261 →2.66655rad/s at next common endpoint. Coarse contact
+  depth .03166px exceeds .02px position slop; fine .00224px does not. Different
+  discrete contact times and additional fine joint/contact passes explain the
+  localized response sequence; not proof of an invalid impulse calculation.
+- First post-guard joint overspeed .404427083s fine (P5 -20.10348rad/s),
+  .410937500s coarse (P4 +20.05207). Both aggregate batches lose energy, scale 1.
+  Existing pre-joint guard cannot bound later redistribution. No clamp added.
+- Independent Jacobian/mass/velocity/work identities pass 3420 anchor impulses,
+  440 angular-limit impulses and 368 contact calls; max work residual 2.17e-15 J.
+  Projection leaves velocities/kinetic energy unchanged but changes angular
+  momentum up to 6.61e-10 J s per batch, an explicit stabilization approximation.
+- **No specific invalid calculation demonstrated. STOP investigation.** No further
+  automatic numerical study or speculative correction is justified. A new solver
+  coupling/guard design needs a separately authorized objective and release gates.
+- Local 294 fast + metadata, build/typecheck, legacy and prism actual Worker checks
+  pass; new-head CI status lives in #57/#61/#79. Full report/receipts/start-end
+  snapshots, independent checks and excluded checker are in
+  `docs/experiments/solver-event-v1.md`. Fifteen protected files byte-identical.
+- Original v4 movement/ecology/performance rejection remains. Main v0.37.0/
+  testing T1.1 unchanged. No merge/deploy/Wiki/3D/learning/related-issue changes.
+
 # Issue #61 numerical integration checkpoint (2026-10-22)
 
 - Incremental draft #79, same `experiment/prism-resistance-v4` → testing d7a6814.

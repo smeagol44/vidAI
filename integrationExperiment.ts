@@ -1,3 +1,4 @@
+import type {SolverTraceEvent,SolverTrace} from './solverTrace';
 /** Paused offline diagnostic. No saved integrator setting or controller semantics.
  * A captured native 60Hz neural / 240Hz bounded torque tape is externally replayed.
  * The live brain/learning still runs; only local actuator inputs use the tape. */
@@ -16,6 +17,7 @@ export interface CommandTape {
 export interface IntegrationRequest {
   ticks:number;substeps:number;splitting:IntegrationDiagnostic['splitting'];
   tape?:CommandTape;offset?:number;probe?:boolean;
+  solverTrace?:{mode:'scan'}|{mode:'window';startTime:number;endTime:number};
 }
 const methods=['motor-drag','motor-half-half','half-motor-half'];
 function validate(host:SimulationHost,r:IntegrationRequest) {
@@ -24,6 +26,12 @@ function validate(host:SimulationHost,r:IntegrationRequest) {
     host.state.organisms[0].joints.length<1||host.state.eggs.length>0||host.running||host.settings.physicsRegime!=='prism-resistance-v4'||!Number.isInteger(r.ticks)||r.ticks<1||r.ticks>300||
     ![4,8,16,32,64].includes(r.substeps)||!methods.includes(r.splitting)||
     (r.probe!==undefined&&typeof r.probe!=='boolean')||(r.probe&&r.ticks>60))bad();
+  if(r.solverTrace) {
+    const trace=r.solverTrace,begin=(r.tape?.startTime??0)+(r.offset??0)/60,finish=begin+r.ticks/60;
+    if(!r.tape||r.ticks>60||![32,64].includes(r.substeps)||r.splitting!=='motor-drag'||!['scan','window'].includes(trace.mode))bad();
+    if(trace.mode==='window'&&(!Number.isFinite(trace.startTime)||!Number.isFinite(trace.endTime)||
+      trace.startTime<begin-1e-12||trace.endTime>finish+1e-12||trace.endTime<=trace.startTime||trace.endTime-trace.startTime>4/60+1e-12))bad();
+  }
   if(!r.tape) {if(r.substeps!==4||r.splitting!=='motor-drag'||(r.offset??0)!==0)bad();return;}
   const t=r.tape,offset=r.offset??0,orgs=host.state.organisms.filter(o=>!o.dissolving);
   if(t.version!=='prism-held-torque-1'||t.controlHz!==60||t.torqueHz!==240||!Number.isFinite(t.startTime)||
@@ -70,6 +78,8 @@ export function runIntegrationExperiment(host:SimulationHost,request:Integration
   const probe:Array<{tick:number;limited:number;repairs:number;minScale:number;maxBias:number;maxAngularBias:number}>=[];
   let tickLimited=0,tickRepairs=0,tickMinScale=1,tickMaxBias=0,tickMaxAngularBias=0;
   const observer:PhysicsObserver=r=>{
+    if(request.solverTrace&&trace.detailed&&['fluid','budget','motor','guard'].includes(r.stage))
+      trace.emit(Object.freeze({...r,stage:'physics-'+r.stage}));
     if(r.stage==='joint-batch') {
       jointBatches++;jointLimited+=Number(r.scale<1);poseRepairs+=Number(r.repairPose);
       minScale=Math.min(minScale,r.scale);maxBias=Math.max(maxBias,r.maxBias);maxAngularBias=Math.max(maxAngularBias,r.maxAngularBias);
@@ -99,12 +109,47 @@ export function runIntegrationExperiment(host:SimulationHost,request:Integration
       maxAnchorPx=Math.max(maxAnchorPx,r.anchorPx);maxLimitRad=Math.max(maxLimitRad,r.limitRad);maxPostContactOmega=Math.max(maxPostContactOmega,r.maxOmega);
     }
   };
+  const traceSteps:Array<Record<string,unknown>>=[],traceEvents:Array<Record<string,unknown>>=[];
+  let traceStep:Record<string,unknown>={},traceTick=0,traceSub=0;
+  let firstContact:Record<string,unknown>|undefined,firstOverspeed:Record<string,unknown>|undefined,firstLimited:Record<string,unknown>|undefined,firstRepair:Record<string,unknown>|undefined;
+  const timing=()=>({tick:offset+traceTick,substep:traceSub,hz:substeps*60,
+    startTime:tape.startTime+(offset+traceTick)/60+traceSub/(60*substeps),
+    endTime:tape.startTime+(offset+traceTick)/60+(traceSub+1)/(60*substeps)});
+  const detail=()=>{const s=request.solverTrace,t=timing();return s?.mode==='window'&&t.endTime>s.startTime+1e-12&&t.startTime<s.endTime-1e-12;};
+  const trace:SolverTrace={
+    get detailed(){return detail();},
+    begin(sub){traceSub=sub;traceStep={...timing(),contacts:[],projections:0};},
+    emit(e:Readonly<SolverTraceEvent>) {
+      const packet={...timing(),...e};
+      if(detail())traceEvents.push(packet);
+      if(e.stage==='contact-impulse') {
+        (traceStep.contacts as unknown[]).push([e.a,e.b]);firstContact??=packet;
+      }
+      if(e.stage==='joint-accept') {
+        traceStep.jointOmega=e.maxOmega;traceStep.scale=e.scale;
+        if(Number(e.scale)<1)firstLimited??=packet;
+        if(e.repairPose)firstRepair??=packet;
+      }
+      if(e.stage==='after-guards')traceStep.guardOmega=e.maxOmega;
+      if(e.stage==='contact-projection')traceStep.projections=Number(traceStep.projections)+1;
+      if(typeof e.maxOmega==='number'&&e.maxOmega>20.001)firstOverspeed??=packet;
+      if(e.stage==='substep-end') {
+        const parts=e.parts as Array<{x:number;y:number;angle:number;vx:number;vy:number;omega:number}>;
+        if(parts.some(p=>Math.abs(p.omega)>20.001))firstOverspeed??=packet;
+        traceStep.parts=parts.map(p=>[p.x,p.y,p.angle,p.vx,p.vy,p.omega]);traceStep.com=e.com;
+        // Shared physical clock: retain every1920Hz end, both finer halves are
+        // still inspected for first contact/overspeed/branch events above.
+        if((traceSub+1)%(substeps/32)===0)traceSteps.push(traceStep);
+      }
+    }
+  };
   const start=performance.now(),initialMotor=host.state.ledger.mechanicalWorkHeat;
   for(let tick=0;tick<ticks;tick++) {
+    traceTick=tick;
     tickLimited=0;tickRepairs=0;tickMinScale=1;tickMaxBias=0;tickMaxAngularBias=0;
     if(request.tape)current=tape.frames[offset+tick];
     else {current=[];tape.frames.push(current);}
-    const diagnostic:IntegrationDiagnostic={substeps,splitting,
+    const diagnostic:IntegrationDiagnostic={substeps,splitting,...(request.solverTrace?{trace}:{}),
       ...(request.tape?{outputs:new Map(current.map(f=>[f.id,f.outputs])),torqueAt:(id:string,sub:number)=>{
         const f=current.find(f=>f.id===id);if(!f)throw new Error('Tape population changed');
         return f.torques[Math.floor(sub*4/substeps)];
@@ -134,5 +179,7 @@ export function runIntegrationExperiment(host:SimulationHost,request:Integration
     maxConstraintDeltaV,maxConstraintDeltaOmega,constraintLossJ,constraintGainJ,contactLossJ,contactGainJ,
     energyLimited,maxChemicalErrorJ,requests,mismatches,signedTorqueImpulse,absoluteTorqueImpulse,maxNewtonIterations,
     ...(request.probe?{probe,jointBatches,jointLimited,poseRepairs,minScale,maxBias,maxAngularBias}:{}),
+    ...(request.solverTrace?{solverTrace:{version:'solver-event-trace-v1',mode:request.solverTrace.mode,
+      steps:traceSteps,events:traceEvents,firstContact,firstOverspeed,firstLimited,firstRepair}}:{}),
     ...(!request.tape?{tape}:{})};
 }

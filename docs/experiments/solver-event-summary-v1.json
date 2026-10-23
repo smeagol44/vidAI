@@ -1,0 +1,596 @@
+{
+  "protocol": "solver-event-summary-v1",
+  "source": "d2826d7966a76564bf05d57e0cd2aeabb545bacf",
+  "scopeComment": 6357228221,
+  "inputSha256": "8b69f6d665620544356ac20375719253c426794f455c2a31b933d02b66fc40d3",
+  "protectedSha256": {
+    "docs/experiments/solver-passivity-v3.json": "f931f2f17c76d8e3c4d0caf247f6655d683d5ee634b09ea71d3bad9a7d6312b8",
+    "docs/experiments/prism-integration-v1.json": "9e508c394d60045170785f1b79032481c23f6ee2751e69954de0e27078522169",
+    "docs/experiments/prism-integration-v1-CUR-008.json": "38059468a98b27a3fb6d40f7d5b17e66e982098aede9078b8465f1782a5793d3",
+    "docs/experiments/prism-worker-v4-excluded-stale-bundle.json": "55315f8b6dec7ab4a87a22b489ecf430b0a8a0dfc6ed64d5d83aa8a057132c97",
+    "docs/experiments/prism-integration-isolated-v1.json": "7d487dde1f4b12e5a83446f9af79578d7e9b3685599d76e1d5dc40fdb59c47af",
+    "docs/experiments/prism-integration-v1-CUR-006.json": "8b69f6d665620544356ac20375719253c426794f455c2a31b933d02b66fc40d3",
+    "docs/experiments/prism-worker-v4.json": "585c4e9ba5f32bc100ab4485190272481d00552254243ed0476baff7dc219cc8",
+    "docs/experiments/prism-worker-v4-excluded-work-factor.json": "fce175f82efdd45558538a27a87d74652289964d6e8a3ef16e2c85891abb3e8f",
+    "docs/experiments/prism-integration-v1-CUR-007.json": "644aba1d7047b93836d8d44c1c2c0d34f00151fd7055f3f9f2b5cf10dfbf32bc",
+    "docs/experiments/prism-integration-probe-v1.json": "9d3fa80ba57ce418517502751c2c114724ea6e5b5dea638a3ab2fb01b8d46c75",
+    "prismPhysics.ts": "15dee446e289bf055d4c7051e2688f45797f0831d69aa0ee8fe802677c5b2205",
+    "foundationPhysics.ts": "270b6b5bba3e9c89b31f9dc09d428da87e7e043d9a6d6227f6d653e337799d4c",
+    "persistence.ts": "83610c5d275babeb467918210b27780cc9663e4ec388060b778c1c6fcd4fee5c",
+    "founders.ts": "c371a24e46da7157586127d327b97593fbe1e911801e2507f4edff3c2c1d867b",
+    "data/founders.json": "60305135da2809830b76b4f9944bd4cc14570e1840b60e7c7d9fabef8a1873f6"
+  },
+  "thresholds": {
+    "comPx": 0.25,
+    "angleRad": 0.05,
+    "omegaDifferenceRadS": 0.5,
+    "overspeedRadS": 20.001
+  },
+  "firstCommonDivergence": {
+    "com": {
+      "time": 0.7869791666666667,
+      "comPx": 0.25008313967590257,
+      "maxAngle": 0.27108900030048527,
+      "maxOmega": 3.6743298918531497,
+      "maxPartPose": 1.4666226786522207,
+      "anglePart": 3,
+      "omegaPart": 3
+    },
+    "angle": {
+      "time": 0.309375,
+      "comPx": 0.011334440354645271,
+      "maxAngle": 0.0505117250505539,
+      "maxOmega": 1.5934354554121377,
+      "maxPartPose": 0.17996101973669612,
+      "anglePart": 5,
+      "omegaPart": 5
+    },
+    "omega": {
+      "time": 0.12552083333333333,
+      "comPx": 0.000372497829552663,
+      "maxAngle": 0.0021488429319335145,
+      "maxOmega": 2.6665454375029896,
+      "maxPartPose": 0.013325717276674462,
+      "anglePart": 6,
+      "omegaPart": 6
+    }
+  },
+  "firstEvents": [
+    {
+      "hz": 1920,
+      "firstContact": {
+        "tick": 7,
+        "substep": 16,
+        "hz": 1920,
+        "startTime": 0.125,
+        "endTime": 0.12552083333333333,
+        "stage": "contact-impulse",
+        "iteration": 0,
+        "a": {
+          "id": "ORG-1h1edfo-4dvq9a",
+          "part": 0
+        },
+        "b": {
+          "id": "ORG-1h1edfo-4dvq9a",
+          "part": 6
+        },
+        "maxOmega": 12.321915206110024
+      },
+      "firstOverspeed": {
+        "tick": 24,
+        "substep": 20,
+        "hz": 1920,
+        "startTime": 0.4104166666666667,
+        "endTime": 0.4109375,
+        "stage": "joint-accept",
+        "id": "ORG-1h1edfo-4dvq9a",
+        "maxOmega": 20.052073443974816,
+        "scale": 1,
+        "repairPose": false,
+        "linear": -1198.560467115291,
+        "quadratic": 602.2466855210115
+      }
+    },
+    {
+      "hz": 3840,
+      "firstContact": {
+        "tick": 7,
+        "substep": 32,
+        "hz": 3840,
+        "startTime": 0.125,
+        "endTime": 0.12526041666666668,
+        "stage": "contact-impulse",
+        "iteration": 0,
+        "a": {
+          "id": "ORG-1h1edfo-4dvq9a",
+          "part": 0
+        },
+        "b": {
+          "id": "ORG-1h1edfo-4dvq9a",
+          "part": 6
+        },
+        "maxOmega": 12.670392853893496
+      },
+      "firstOverspeed": {
+        "tick": 24,
+        "substep": 16,
+        "hz": 3840,
+        "startTime": 0.4041666666666667,
+        "endTime": 0.4044270833333334,
+        "stage": "joint-accept",
+        "id": "ORG-1h1edfo-4dvq9a",
+        "maxOmega": 20.103479083945178,
+        "scale": 1,
+        "repairPose": false,
+        "linear": -1073.9944095958967,
+        "quadratic": 540.004734088137
+      },
+      "firstLimited": {
+        "tick": 30,
+        "substep": 22,
+        "hz": 3840,
+        "startTime": 0.5057291666666667,
+        "endTime": 0.5059895833333333,
+        "stage": "joint-accept",
+        "id": "ORG-1h1edfo-4dvq9a",
+        "maxOmega": 12.312678871041141,
+        "scale": 0.6165988805722933,
+        "repairPose": false,
+        "linear": -111.95916569976305,
+        "quadratic": 181.57536321805884
+      }
+    }
+  ],
+  "windows": [
+    {
+      "name": "first-contact",
+      "hz": 1920,
+      "startTime": 0.12447916666666667,
+      "endTime": 0.1265625,
+      "passed": true,
+      "counts": {
+        "substep-start": 4,
+        "body-reference": 4,
+        "physics-budget": 4,
+        "physics-motor": 24,
+        "force-impulse": 28,
+        "physics-fluid": 28,
+        "guard": 28,
+        "after-guards": 4,
+        "joint-geometry": 4,
+        "joint-anchor": 240,
+        "joint-accept": 4,
+        "substep-end": 4,
+        "contact-impulse": 24,
+        "contact-correction": 24,
+        "contact-projection": 27
+      },
+      "maxRelativeError": {
+        "massUnits": 8.673617379884035e-19,
+        "inertiaUnits": 2.117582368135751e-22,
+        "inverseMass": 0,
+        "inverseInertia": 0,
+        "guardPlacement": 0,
+        "velocityImpulse": 2.8538622462131046e-16,
+        "anchorEffectiveInverse": 2.1713083215868847e-16,
+        "anchorRelativeSpeed": 7.105427357601002e-15,
+        "anchorImpulseResidual": 7.108896804552955e-15,
+        "anchorArms": 0,
+        "anchorBias": 1.3727685654885136e-10,
+        "passiveScale": 0,
+        "acceptedVelocity": 1.114714611833003e-16,
+        "unitNormal": 1.1102230246251565e-16,
+        "contactInverseMass": 0,
+        "contactInverseInertia": 1.0842021724855044e-19,
+        "contactRestitution": 2.1316282072803006e-14,
+        "contactPositionCorrection": 0,
+        "positionCorrectionVelocity": 0,
+        "projectionVelocity": 0
+      },
+      "maxWorkResidualJ": 7.733740638429211e-16,
+      "firstContact": {
+        "startTime": 0.125,
+        "endTime": 0.12552083333333333,
+        "iteration": 0,
+        "pair": [
+          0,
+          6
+        ],
+        "depth": 0.031657111766463686,
+        "normal": [
+          -0.8474166386374029,
+          -0.5309284702862386
+        ],
+        "point": [
+          1179.160691451814,
+          754.8521904325011
+        ],
+        "arms": [
+          16.619128219494655,
+          -3.9786014341716838
+        ],
+        "normalSpeed": -71.04232960713446,
+        "impulseMpxS": 27.8558315537772,
+        "impulseNS": 2.388637555736395e-05,
+        "effectiveMassM": 0.3921018878156237,
+        "effectiveMassKg": 0.0003362273688018973,
+        "workJ": -8.484718827330239e-07,
+        "beforeOmega": [
+          1.0342065815160078,
+          -5.536573285503731
+        ],
+        "afterOmega": [
+          0.6885572762002774,
+          -12.321915206110024
+        ]
+      },
+      "firstOverspeed": null,
+      "maxProjectionAngularMomentumChangeJs": 1.3255273401464612e-10,
+      "energy": {
+        "motorJ": 5.5337001832071565e-05,
+        "positiveJ": 1.3834250458017891e-05,
+        "brakingJ": 2.4638502544248295e-05,
+        "maxChemicalErrorJ": 1.4551915228366852e-11,
+        "requestMismatch": 0,
+        "energyLimited": 0,
+        "observedUnobservedExact": true
+      },
+      "maxContactCorrectionAngularMomentumChangeJs": 2.1062650799511364e-11,
+      "maxContactCorrectionEnergyChangeJ": 0
+    },
+    {
+      "name": "first-contact",
+      "hz": 3840,
+      "startTime": 0.12447916666666667,
+      "endTime": 0.1265625,
+      "passed": true,
+      "counts": {
+        "substep-start": 8,
+        "body-reference": 8,
+        "physics-budget": 8,
+        "physics-motor": 48,
+        "force-impulse": 56,
+        "physics-fluid": 56,
+        "guard": 56,
+        "after-guards": 8,
+        "joint-geometry": 8,
+        "joint-anchor": 480,
+        "joint-accept": 8,
+        "substep-end": 8,
+        "contact-impulse": 48,
+        "contact-correction": 48,
+        "contact-projection": 54
+      },
+      "maxRelativeError": {
+        "massUnits": 8.673617379884035e-19,
+        "inertiaUnits": 2.117582368135751e-22,
+        "inverseMass": 0,
+        "inverseInertia": 0,
+        "guardPlacement": 0,
+        "velocityImpulse": 2.9521833711523886e-16,
+        "anchorEffectiveInverse": 2.220446049250313e-16,
+        "anchorRelativeSpeed": 7.105427357601002e-15,
+        "anchorImpulseResidual": 7.126244039312724e-15,
+        "anchorArms": 0,
+        "anchorBias": 2.7694113668985665e-10,
+        "passiveScale": 0,
+        "acceptedVelocity": 2.220446049250313e-16,
+        "unitNormal": 2.220446049250313e-16,
+        "contactInverseMass": 0,
+        "contactInverseInertia": 1.0842021724855044e-19,
+        "contactRestitution": 1.0658141036401503e-14,
+        "contactPositionCorrection": 0,
+        "positionCorrectionVelocity": 0,
+        "projectionVelocity": 0
+      },
+      "maxWorkResidualJ": 2.7797923788833056e-16,
+      "firstContact": {
+        "startTime": 0.125,
+        "endTime": 0.12526041666666668,
+        "iteration": 0,
+        "pair": [
+          0,
+          6
+        ],
+        "depth": 0.0022353299600510468,
+        "normal": [
+          -0.8466810778621767,
+          -0.5321006976035106
+        ],
+        "point": [
+          1179.0229200896576,
+          755.0324088182841
+        ],
+        "arms": [
+          16.86319723645417,
+          -3.761020455062958
+        ],
+        "normalSpeed": -73.14500627918487,
+        "impulseMpxS": 29.814248596490206,
+        "impulseNS": 2.5565718171490352e-05,
+        "effectiveMassM": 0.4076047034939492,
+        "effectiveMassKg": 0.0003495210332460615,
+        "workJ": -9.35002308092766e-07,
+        "beforeOmega": [
+          1.0370327270050266,
+          -5.805168436114003
+        ],
+        "afterOmega": [
+          0.6616492865824599,
+          -12.670392853893496
+        ]
+      },
+      "firstOverspeed": null,
+      "maxProjectionAngularMomentumChangeJs": 4.304831122784156e-11,
+      "energy": {
+        "motorJ": 5.285615437112126e-05,
+        "positiveJ": 1.3214038592780316e-05,
+        "brakingJ": 2.398533618095443e-05,
+        "maxChemicalErrorJ": 4.001776687800884e-11,
+        "requestMismatch": 0,
+        "energyLimited": 0,
+        "observedUnobservedExact": true
+      },
+      "maxContactCorrectionAngularMomentumChangeJs": 5.1042975159675615e-12,
+      "maxContactCorrectionEnergyChangeJ": 0
+    },
+    {
+      "name": "first-overspeed",
+      "hz": 1920,
+      "startTime": 0.4036458333333333,
+      "endTime": 0.41145833333333337,
+      "passed": true,
+      "counts": {
+        "substep-start": 15,
+        "body-reference": 15,
+        "physics-budget": 15,
+        "physics-motor": 90,
+        "force-impulse": 105,
+        "physics-fluid": 105,
+        "guard": 105,
+        "after-guards": 15,
+        "joint-geometry": 15,
+        "joint-anchor": 900,
+        "joint-limit": 140,
+        "joint-accept": 15,
+        "substep-end": 15,
+        "contact-impulse": 56,
+        "contact-correction": 56,
+        "contact-projection": 63,
+        "physics-guard": 1
+      },
+      "maxRelativeError": {
+        "massUnits": 8.673617379884035e-19,
+        "inertiaUnits": 2.117582368135751e-22,
+        "inverseMass": 0,
+        "inverseInertia": 0,
+        "guardPlacement": 0,
+        "velocityImpulse": 5.076108969401017e-16,
+        "anchorEffectiveInverse": 2.220446049250313e-16,
+        "anchorRelativeSpeed": 1.4210854715202004e-14,
+        "anchorImpulseResidual": 1.432187701766452e-14,
+        "anchorArms": 0,
+        "anchorBias": 1.4085799193708226e-10,
+        "limitEffectiveInverse": 0,
+        "limitImpulseResidual": 6.938893903907228e-18,
+        "limitBias": 4.263256414560601e-14,
+        "passiveScale": 0,
+        "acceptedVelocity": 3.389770346688215e-16,
+        "unitNormal": 2.2204460492503126e-16,
+        "contactInverseMass": 0,
+        "contactInverseInertia": 1.0842021724855044e-19,
+        "contactRestitution": 2.1316282072803006e-14,
+        "contactPositionCorrection": 0,
+        "positionCorrectionVelocity": 0,
+        "projectionVelocity": 0
+      },
+      "maxWorkResidualJ": 2.1618944418220227e-15,
+      "firstContact": {
+        "startTime": 0.4078125,
+        "endTime": 0.4083333333333334,
+        "iteration": 0,
+        "pair": [
+          0,
+          6
+        ],
+        "depth": 0.007432250189133072,
+        "normal": [
+          -0.8401144476205986,
+          -0.5424091766361779
+        ],
+        "point": [
+          1179.3956628584485,
+          754.2370218293049
+        ],
+        "arms": [
+          15.64716415986896,
+          -5.435469923863753
+        ],
+        "normalSpeed": -106.44396194705298,
+        "impulseMpxS": 31.617274189023046,
+        "impulseNS": 2.7111812617087263e-05,
+        "effectiveMassM": 0.2970321060085119,
+        "effectiveMassKg": 0.00025470503090229893,
+        "workJ": -1.4429443752644368e-06,
+        "beforeOmega": [
+          2.824356638647962,
+          -3.98160651177737
+        ],
+        "afterOmega": [
+          2.454978331388207,
+          -14.503325466613399
+        ]
+      },
+      "firstOverspeed": {
+        "time": 0.4109375,
+        "startTime": 0.4104166666666667,
+        "beforeJ": 0.00018264183244784255,
+        "afterJ": 0.00018213049338012546,
+        "deltaJ": -5.113390677170956e-07,
+        "scale": 1,
+        "beforeOmega": [
+          1.646729592035274,
+          -2.1858060111263744,
+          -7.316456648110893,
+          -1.8261664512967763,
+          19.92385615147242,
+          -17.924932695560138,
+          -8.989976428667559
+        ],
+        "afterOmega": [
+          1.719912550346164,
+          -1.8799991978913828,
+          -7.5067959155314234,
+          -1.607687398224145,
+          20.052073443974816,
+          -18.36175202392986,
+          -1.9089469360024685
+        ],
+        "linear": -1.027765600551362e-06,
+        "quadratic": 5.164265328342674e-07
+      },
+      "maxProjectionAngularMomentumChangeJs": 6.606600519725314e-10,
+      "energy": {
+        "motorJ": 0.00012348546233630946,
+        "positiveJ": 3.0871365584077364e-05,
+        "brakingJ": 5.590843885575485e-06,
+        "maxChemicalErrorJ": 0,
+        "requestMismatch": 0,
+        "energyLimited": 0,
+        "observedUnobservedExact": true
+      },
+      "maxContactCorrectionAngularMomentumChangeJs": 3.2421572412495523e-10,
+      "maxContactCorrectionEnergyChangeJ": 0
+    },
+    {
+      "name": "first-overspeed",
+      "hz": 3840,
+      "startTime": 0.4036458333333333,
+      "endTime": 0.41145833333333337,
+      "passed": true,
+      "counts": {
+        "substep-start": 30,
+        "body-reference": 30,
+        "physics-budget": 30,
+        "physics-motor": 180,
+        "force-impulse": 210,
+        "physics-fluid": 210,
+        "guard": 210,
+        "after-guards": 30,
+        "joint-geometry": 30,
+        "joint-anchor": 1800,
+        "joint-limit": 300,
+        "joint-accept": 30,
+        "contact-impulse": 240,
+        "contact-correction": 240,
+        "contact-projection": 270,
+        "substep-end": 30,
+        "physics-guard": 42
+      },
+      "maxRelativeError": {
+        "massUnits": 8.673617379884035e-19,
+        "inertiaUnits": 2.117582368135751e-22,
+        "inverseMass": 0,
+        "inverseInertia": 0,
+        "guardPlacement": 0,
+        "velocityImpulse": 7.771561172376096e-16,
+        "anchorEffectiveInverse": 2.8741871219489673e-16,
+        "anchorRelativeSpeed": 1.4210854715202004e-14,
+        "anchorImpulseResidual": 1.4432899320127035e-14,
+        "anchorArms": 0,
+        "anchorBias": 2.9096725029376103e-10,
+        "limitEffectiveInverse": 0,
+        "limitImpulseResidual": 5.551115123125783e-17,
+        "limitBias": 8.526512829121202e-14,
+        "passiveScale": 0,
+        "acceptedVelocity": 2.220446049250313e-16,
+        "unitNormal": 2.220446049250313e-16,
+        "contactInverseMass": 0,
+        "contactInverseInertia": 1.0842021724855044e-19,
+        "contactRestitution": 2.1316282072803006e-14,
+        "contactPositionCorrection": 0,
+        "positionCorrectionVelocity": 0,
+        "projectionVelocity": 0
+      },
+      "maxWorkResidualJ": 6.5953211525762965e-16,
+      "firstContact": {
+        "startTime": 0.40364583333333337,
+        "endTime": 0.40390625,
+        "iteration": 0,
+        "pair": [
+          0,
+          6
+        ],
+        "depth": 0.04968431984754673,
+        "normal": [
+          -0.8425098610123276,
+          -0.5386809204872476
+        ],
+        "point": [
+          1179.3222017265236,
+          754.401366182094
+        ],
+        "arms": [
+          15.682523826208865,
+          -5.414986744614603
+        ],
+        "normalSpeed": -70.85716283699614,
+        "impulseMpxS": 21.12705285122434,
+        "impulseNS": 1.811644781992487e-05,
+        "effectiveMassM": 0.2981639682614194,
+        "effectiveMassKg": 0.0002556756027841671,
+        "workJ": -6.418400466021813e-07,
+        "beforeOmega": [
+          2.062031624562574,
+          -2.462999780577398
+        ],
+        "afterOmega": [
+          1.814650706406601,
+          -9.467247401525476
+        ]
+      },
+      "firstOverspeed": {
+        "time": 0.4044270833333334,
+        "startTime": 0.4041666666666667,
+        "beforeJ": 0.00018934280448115062,
+        "afterJ": 0.0001888849083344027,
+        "deltaJ": -4.578961467479128e-07,
+        "scale": 1,
+        "beforeOmega": [
+          1.6636350419334451,
+          -2.0936718708480857,
+          -8.133037866809717,
+          -0.5616538753314285,
+          19.820747273671845,
+          -19.788225199446867,
+          -8.507405413340411
+        ],
+        "afterOmega": [
+          1.730168836863679,
+          -1.7911620631149026,
+          -8.285310276364646,
+          -0.4111126496015515,
+          19.969558672638602,
+          -20.103479083945178,
+          -1.821741019732733
+        ],
+        "linear": -9.209502062284815e-07,
+        "quadratic": 4.6305405948057744e-07
+      },
+      "maxProjectionAngularMomentumChangeJs": 2.1250494527421476e-10,
+      "energy": {
+        "motorJ": 0.0001227838911308947,
+        "positiveJ": 3.0695972782723674e-05,
+        "brakingJ": 6.001773619572486e-06,
+        "maxChemicalErrorJ": 8.003553375601768e-11,
+        "requestMismatch": 0,
+        "energyLimited": 0,
+        "observedUnobservedExact": true
+      },
+      "maxContactCorrectionAngularMomentumChangeJs": 1.6795648360608059e-10,
+      "maxContactCorrectionEnergyChangeJ": 0
+    }
+  ],
+  "conclusion": "No specific invalid mass/Jacobian/constraint/contact impulse calculation demonstrated in inspected windows. First significant separation localizes at self-contact and changed contact/hinge cadence; first post-guard overspeed is dissipative joint redistribution. Pose stabilization has measured angular-momentum drift. No correction justified; stop numerical investigation at this bounded checkpoint.",
+  "archivePrefixExact": true
+}

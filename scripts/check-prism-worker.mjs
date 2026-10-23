@@ -39,6 +39,19 @@ try {
       const refinedEnd=await worker.request('snapshot');await worker.reset(source);
       await worker.request('integration-experiment',{request:{ticks:12,substeps:16,splitting:'half-motor-half',tape:capture.tape}});
       assert.deepEqual(await worker.request('snapshot'),refinedEnd);
+      // New bounded read-only solver packets must traverse the real built port.
+      await worker.reset(source);
+      const traced=await worker.request('integration-experiment',{request:{ticks:12,substeps:32,splitting:'motor-drag',tape:capture.tape,
+        solverTrace:{mode:'window',startTime:5/60,endTime:6/60}}});
+      const tracedEnd=await worker.request('snapshot');assert.equal(traced.solverTrace.version,'solver-event-trace-v1');
+      assert.ok(traced.solverTrace.events.some(e=>e.stage==='joint-anchor'));
+      await worker.reset(source);
+      await worker.request('integration-experiment',{request:{ticks:12,substeps:32,splitting:'motor-drag',tape:capture.tape}});
+      assert.deepEqual(await worker.request('snapshot'),tracedEnd,'solver tracing leaves full Worker state/PRNG unchanged');
+      await worker.reset(source);
+      await assert.rejects(worker.request('integration-experiment',{request:{ticks:12,substeps:32,splitting:'motor-drag',tape:capture.tape,
+        solverTrace:{mode:'window',startTime:0,endTime:1}}}),/Invalid/);
+      assert.deepEqual(await worker.request('snapshot'),source);
       // Continue a real Worker export exactly through reset/fork.
       await worker.trial(end,12,{audit:false});const continued=await worker.request('snapshot');
       const fork=new SimulationHost();fork.reset(end,1);for(let i=0;i<12;i++)fork.tick();assert.deepEqual(continued,fork.snapshot());
@@ -50,5 +63,5 @@ try {
     const other=regime==='passive-work-v3'?'prism-resistance-v4':'passive-work-v3';
     await assert.rejects(worker.request('control',{settings:{...source.settings,physicsRegime:other},running:false,speed:1,selected:null}),/resetting/);
   }
-  console.log('Prism built Worker: exact host/observed/unobserved/fork continuation, work/drag receipts, strict request/regime gates and integration tape replay/fork/rejection passed.');
+  console.log('Prism built Worker: exact host/observed/unobserved/fork continuation, work/drag receipts, strict request/regime gates and integration tape replay/fork/rejection and solver tracing passed.');
 }finally{await worker.close();}

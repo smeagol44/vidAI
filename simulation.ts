@@ -1,3 +1,4 @@
+import {solverPart,solverParts,solverPeak,solverEmit} from './solverTrace';
 import {prismProperties, integratePrismDrag, PRISM_REFERENCE} from './prismPhysics';
 import type {PhysicsObserver, IntegrationDiagnostic} from './physicsObservation';
 import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
@@ -2993,6 +2994,7 @@ function applyPrismDrag(org:Organism,i:number,settings:SimulationSettings,dt:num
 const scratchAuditCeiling = new Float64Array(MAX_PARTS), scratchAuditRequest = new Float64Array(MAX_PARTS);
 function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number, observe?: MechanicalObserver, physicsObserve?: PhysicsObserver, diagnostic?: IntegrationDiagnostic, substep = 0): number {
   const g = org.genome, numJoints = org.joints.length;
+  const trace=diagnostic?.trace;
   const corrected = usesPaidActuation(settings.physicsRegime);
   const surfaceModel = settings.physicsRegime === 'surface-work-v1';
   const prismModel = settings.physicsRegime === 'prism-resistance-v4';
@@ -3011,6 +3013,8 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     scratchInvInertias[i] = 1 / inertia;
   }
 
+  if(trace?.detailed)solverEmit(trace,{stage:'body-reference',id:org.id,parts:g.parts.map((d,i)=>({part:i,parent:d.parentIndex,
+    width:d.width,height:d.height,mass:scratchMasses[i],inertia:scratchInertias[i],inverseMass:scratchInvMasses[i],inverseInertia:scratchInvInertias[i]}))});
   const motorOutputs = diagnostic?.outputs?.get(org.id) ?? org.neuralOutputs;
   const heldTorque = diagnostic?.torqueAt?.(org.id, substep);
   if (diagnostic?.splitting === 'half-motor-half') for(let i=0;i<partCount;i++)
@@ -3201,12 +3205,15 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
   for (let i = 0; i < partCount; i++) {
     const seg = org.segments[i];
     const incomingOmega = seg.angVel;
+    const forceStart=trace?.detailed?solverPart(seg):undefined;
     const beforeForces = observe ? partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY, settings.physicsRegime) : 0;
     seg.vx += scratchFx[i] * scratchInvMasses[i] * dt_sub;
     seg.vy += scratchFy[i] * scratchInvMasses[i] * dt_sub;
     seg.angVel += scratchTorque[i] * scratchInvInertias[i] * dt_sub;
 
     const forceOmega = seg.angVel;
+    if(trace?.detailed)solverEmit(trace,{stage:'force-impulse',id:org.id,part:i,dt:dt_sub,before:forceStart,after:solverPart(seg),
+      fx:scratchFx[i],fy:scratchFy[i],torque:scratchTorque[i],motorTorque:scratchMotorTorque[i],inverseMass:scratchInvMasses[i],inverseInertia:scratchInvInertias[i]});
     const beforeFluid = observe || physicsObserve ? partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY, settings.physicsRegime) : 0;
     observe?.('forces-and-motors', beforeForces, beforeFluid);
     if(prismModel) {
@@ -3218,6 +3225,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     }
     const beforeGuards = observe || physicsObserve ? partKineticEnergy(seg,g.parts[i],BASE_PART_DENSITY,settings.physicsRegime) : 0;
     const auditOmega=seg.angVel;
+    const guardStart=trace?.detailed?solverPart(seg):undefined;
     const spd = Math.hypot(seg.vx, seg.vy);
     if (corrected && (spd > 400 || Math.abs(seg.angVel) > 20)) org.motorDiagnostics!.numericalGuardEvents++;
     if (spd > 400.0) {
@@ -3225,10 +3233,13 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       seg.vy = (seg.vy / spd) * 400.0;
     }
     seg.angVel = clampVal(seg.angVel, -20.0, 20.0);
+    if(trace?.detailed)solverEmit(trace,{stage:'guard',id:org.id,part:i,before:guardStart,after:solverPart(seg),linearLimit:400,angularLimit:20});
     if (observe) observe('speed-guards', beforeGuards, partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY, settings.physicsRegime));
     if(physicsObserve && (spd>400 || Math.abs(auditOmega)>20)) physicsObserve(Object.freeze({stage:'guard',id:org.id,part:i,dt:dt_sub,
       incomingOmega,forceOmega,omega:auditOmega,speed:spd,lossJ:beforeGuards-partKineticEnergy(seg,g.parts[i],BASE_PART_DENSITY,settings.physicsRegime)}));
   }
+
+  if(trace)solverEmit(trace,{stage:'after-guards',id:org.id,maxOmega:solverPeak(org),...(trace.detailed?{parts:solverParts(org)}:{})});
 
   // A complete joint solve is one provisional impulse batch. Preserve its
   // established response, but never let the accepted batch increase kinetic energy.
@@ -3275,6 +3286,8 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     }
   }
 
+  if(trace?.detailed)solverEmit(trace,{stage:'joint-geometry',id:org.id,dt:dt_sub,constraints:scratchConstraints.slice(0,numJoints).map(c=>({...c,angularBias:c.limited?c.angularBias:0}))});
+  const batchStart=trace?.detailed?solverParts(org):undefined;
   let repairPose = false;
   // Historical regimes retain every original impulse and arithmetic order.
   for (let iter = 0; iter < 10; iter++) {
@@ -3290,6 +3303,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       const pairEnergy = observe && !passiveSolver ? () => partKineticEnergy(parentPhys, g.parts[parentIdx], BASE_PART_DENSITY, settings.physicsRegime)
         + partKineticEnergy(childPhys, g.parts[childIdx], BASE_PART_DENSITY, settings.physicsRegime) : undefined;
       if (det > 1e-7) {
+        const traceBefore=trace?.detailed?[solverPart(parentPhys),solverPart(childPhys)]:undefined;
         const beforeAnchor = pairEnergy?.() ?? 0;
         const rhsX = -(vRelX + biasX), rhsY = -(vRelY + biasY);
         const impulseX = (k22 * rhsX - k12 * rhsY) / det;
@@ -3298,13 +3312,20 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
         childPhys.angVel += (rCx * impulseY - rCy * impulseX) * iC;
         parentPhys.vx -= impulseX * wP; parentPhys.vy -= impulseY * wP;
         parentPhys.angVel -= (rPx * impulseY - rPy * impulseX) * iP;
+        if(trace?.detailed)solverEmit(trace,{stage:'joint-anchor',id:org.id,iteration:iter,joint:j,parent:parentIdx,child:childIdx,
+          before:traceBefore,after:[solverPart(parentPhys),solverPart(childPhys)],relative:[vRelX,vRelY],bias:[biasX,biasY],
+          impulse:[impulseX,impulseY],effectiveInverse:[k11,k12,k22],det,arms:[rPx,rPy,rCx,rCy],inverseMass:[wP,wC],inverseInertia:[iP,iC]});
         if (observe && !passiveSolver) observe('anchor-constraint', beforeAnchor, pairEnergy!());
       }
       if (limited) {
+        const traceBefore=trace?.detailed?[solverPart(parentPhys),solverPart(childPhys)]:undefined;
         const beforeLimit = pairEnergy?.() ?? 0;
         const relAngVel = childPhys.angVel - parentPhys.angVel;
         const angImpulse = -(relAngVel + angularBias) / (iP + iC);
         childPhys.angVel += angImpulse * iC; parentPhys.angVel -= angImpulse * iP;
+        if(trace?.detailed)solverEmit(trace,{stage:'joint-limit',id:org.id,iteration:iter,joint:j,parent:parentIdx,child:childIdx,
+          before:traceBefore,after:[solverPart(parentPhys),solverPart(childPhys)],relative:relAngVel,bias:angularBias,impulse:angImpulse,
+          effectiveInverse:iP+iC,inverseInertia:[iP,iC]});
         if (observe && !passiveSolver) observe('angular-limit', beforeLimit, pairEnergy!());
       }
     }
@@ -3321,6 +3342,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       quadratic += .5 * (scratchMasses[i] * (dx * dx + dy * dy) + scratchInertias[i] * dw * dw);
     }
     const scale = passiveConstraintScale(linear, quadratic);
+    const provisional=trace?.detailed?solverParts(org):undefined;
     if(physicsObserve) {
       let maxBias=0,maxAngularBias=0;
       for(let j=0;j<numJoints;j++) {const c=scratchConstraints[j];maxBias=Math.max(maxBias,Math.hypot(c.biasX,c.biasY));
@@ -3340,6 +3362,8 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
         p.angVel = scratchConstraintStart[k + 2] + scale * (p.angVel - scratchConstraintStart[k + 2]);
       }
     }
+    if(trace)solverEmit(trace,{stage:'joint-accept',id:org.id,maxOmega:solverPeak(org),scale,repairPose,linear,quadratic,
+      ...(trace.detailed?{before:batchStart,provisional,after:solverParts(org)}:{})});
     if(physicsObserve) for(let i=0;i<partCount;i++) physicsObserve(Object.freeze({stage:'constraint',id:org.id,part:i,
       dt:dt_sub,deltaV:Math.hypot(org.segments[i].vx-scratchConstraintStart[i*3],org.segments[i].vy-scratchConstraintStart[i*3+1]),
       deltaOmega:org.segments[i].angVel-scratchConstraintStart[i*3+2],beforeOmega:scratchConstraintStart[i*3+2],afterOmega:org.segments[i].angVel}));
@@ -3349,7 +3373,10 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
 
   if (passiveSolver && repairPose) {
     const beforeProjection = observe ? org.segments.reduce((sum, p, i) => sum + partKineticEnergy(p, g.parts[i], BASE_PART_DENSITY, settings.physicsRegime), 0) : 0;
+    const traceBefore=trace?.detailed?solverParts(org):undefined;
     projectBodyJoints(org, 12, settings.physicsRegime);
+    if(trace)solverEmit(trace,{stage:'joint-pose',id:org.id,iterations:12,maxOmega:solverPeak(org),
+      ...(trace.detailed?{before:traceBefore,after:solverParts(org)}:{})});
     if (observe) observe('position-projection', beforeProjection, org.segments.reduce((sum, p, i) => sum + partKineticEnergy(p, g.parts[i], BASE_PART_DENSITY, settings.physicsRegime), 0));
   }
 
@@ -3993,10 +4020,13 @@ export function stepSimulation(
   if(diagnostic?.captureOutputs) for(const org of active) diagnostic.captureOutputs(org.id,org.neuralOutputs);
   const substeps = diagnostic?.substeps ?? Math.max(NUM_SUBSTEPS, Math.ceil(dt * 240));
   for (let sub = 0; sub < substeps; sub++) {
+    diagnostic?.trace?.begin(sub);
+    if(diagnostic?.trace?.detailed)for(const org of active)solverEmit(diagnostic.trace,{stage:'substep-start',id:org.id,parts:solverParts(org)});
     for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics, physicsObserve, diagnostic, sub));
     resolveBodyContacts(active, BASE_PART_DENSITY,
       settings.physicsRegime === 'prism-resistance-v4' ? (o,n)=>projectBodyJoints(o,n,settings.physicsRegime) : projectBodyJoints,
-      observeMechanics, settings.physicsRegime);
+      observeMechanics, settings.physicsRegime,diagnostic?.trace);
+    if(diagnostic?.trace)for(const org of active)solverEmit(diagnostic.trace,{stage:'substep-end',id:org.id,parts:solverParts(org),com:calculateOrganismCOM(org,settings.physicsRegime)});
     if(physicsObserve) for(const org of active) {
       let anchorPx=0,limitRad=0,maxOmega=0,overspeedParts=0;
       for(const part of org.segments) {maxOmega=Math.max(maxOmega,Math.abs(part.angVel));overspeedParts+=Number(Math.abs(part.angVel)>20);}

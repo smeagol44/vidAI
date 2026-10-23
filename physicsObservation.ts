@@ -1,3 +1,4 @@
+import type {SolverTrace} from './solverTrace';
 /** Frozen scalar experiment receipts. No observer result affects simulation. */
 export type PhysicsReceipt =
   | {stage:'joint-batch';id:string;dt:number;scale:number;repairPose:boolean;maxBias:number;maxAngularBias:number}
@@ -12,6 +13,7 @@ export type PhysicsObserver = (receipt:Readonly<PhysicsReceipt>)=>void;
 /** Ephemeral, offline-only physical integration experiment. Never serialized in saves.
  * Held outputs supply capacity modulation without overwriting the live brain. */
 export interface IntegrationDiagnostic {
+  trace?: SolverTrace;
   substeps: number;
   splitting: 'motor-drag' | 'motor-half-half' | 'half-motor-half';
   outputs?: ReadonlyMap<string, readonly number[]>;

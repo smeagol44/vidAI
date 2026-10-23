@@ -1,3 +1,23 @@
+# Stopped first-event numerical audit (#61 / draft #79, 2026-10-23)
+
+- `docs/experiments/solver-event-v1.md` is the latest bounded checkpoint. Replayed
+  only CUR-006 first-second prefixes at existing 1920/3840 Hz and two short windows.
+  First major speed separation is P0–P6 contact at .12552s; first post-guard joint
+  overspeed .40443/.41094s is dissipative velocity redistribution.
+- No invalid effective mass, Jacobian, impulse sign/update or work calculation
+  demonstrated. No physics correction selected. Pose projection's angular-momentum
+  artifact is explicit; do not claim complete physical conservation from energy.
+- STOP numerical investigation. No further automatic bug-hunting, Hz refinement,
+  old swim/ecology/search rerun, coefficient tuning or speculative solver redesign.
+  A different coupling/guard contract requires a separately authorized scope.
+- New solver packets are copied/frozen, read-only, paused v4 diagnostics, never
+  saved or used by solver decisions. Keep exact observed/unobserved snapshots,
+  prepaid positive work, separate braking, PRNG/legacy continuation and all guards.
+  Inactive angular-bias scratch values are emitted as zero, not applied to physics.
+- Preserve new raw receipts/snapshots/checks and excluded coordinate-bias checker;
+  existing prism inputs/results/baselines unchanged. #79 remains draft/unmerged/
+  undeployed. Do not alter #59/#72, #60 or #78 from this numerical checkpoint.
+
 # Testing-only numerical diagnostic checkpoint (#61 / draft #79)
 
 - `integration-experiment` is explicit, paused and v4-only; never saved as a new

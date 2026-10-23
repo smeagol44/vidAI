@@ -1,3 +1,4 @@
+import {solverPart,solverParts,solverPeak,solverEmit,type SolverTrace} from './solverTrace';
 import {bodyMass, type PhysicsRegime} from './foundationPhysics';
 import {partKineticEnergy, organismKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
 import type {Organism, PartDef, PartPhys} from './simulation';
@@ -148,11 +149,14 @@ function pairs(list: Body[]): [Body, Body][] {
 
 /** Contacts alternate with hinge projection; position repair never creates separation velocity. */
 export function resolveBodyContacts(organisms: Organism[], density: number,
-  projectJoints: (org: Organism, iterations: number) => void, observe?: MechanicalObserver, regime?: PhysicsRegime): Set<Organism> {
+  projectJoints: (org: Organism, iterations: number) => void, observe?: MechanicalObserver, regime?: PhysicsRegime,trace?:SolverTrace): Set<Organism> {
   const touched = new Set<Organism>();
   const project = (org: Organism, iterations: number) => {
     const before = observe ? organismKineticEnergy(org, density, regime) : 0;
+    const traceBefore=trace?.detailed?solverParts(org):undefined;
     projectJoints(org, iterations);
+    if(trace)solverEmit(trace,{stage:'contact-projection',id:org.id,iterations,maxOmega:solverPeak(org),
+      ...(trace.detailed?{before:traceBefore,after:solverParts(org)}:{})});
     if (observe) observe('position-projection', before, organismKineticEnergy(org, density, regime));
   };
   for (let iteration = 0; iteration < 8; iteration++) {
@@ -161,14 +165,21 @@ export function resolveBodyContacts(organisms: Organism[], density: number,
       // Position repair changes centers, not angles; projections refresh rotations next pass.
       const contact = rotatedContact(a.p, a.def, b.p, b.def, a.c, a.s, b.c, b.s); if (!contact) continue;
       contactCount++; touched.add(a.org); touched.add(b.org);
+      const traceBefore=trace?.detailed?[solverPart(a.p),solverPart(b.p)]:undefined;
       const beforeImpulse = observe ? partKineticEnergy(a.p, a.def, density, regime) + partKineticEnergy(b.p, b.def, density, regime) : 0;
       contactImpulse(a.p, a.im, a.ii, b.p, b.im, b.ii, contact);
+      if(trace)solverEmit(trace,{stage:'contact-impulse',iteration,a:{id:a.org.id,part:a.index},b:{id:b.org.id,part:b.index},
+        maxOmega:Math.max(Math.abs(a.p.angVel),Math.abs(b.p.angVel)),
+        ...(trace.detailed?{before:traceBefore,after:[solverPart(a.p),solverPart(b.p)],contact:{...contact},inverseMass:[a.im,b.im],inverseInertia:[a.ii,b.ii]}:{})});
       if (observe) observe('contact-impulse', beforeImpulse,
         partKineticEnergy(a.p, a.def, density, regime) + partKineticEnergy(b.p, b.def, density, regime));
       // Split positional correction prevents overlap recovery from acting as propulsion.
       const correction = Math.min(3, Math.max(0, contact.depth - .02) * .6) / (a.im + b.im);
+      const correctionBefore=trace?.detailed?[solverPart(a.p),solverPart(b.p)]:undefined;
       a.p.x -= contact.nx * correction * a.im; a.p.y -= contact.ny * correction * a.im;
       b.p.x += contact.nx * correction * b.im; b.p.y += contact.ny * correction * b.im;
+      if(trace?.detailed)solverEmit(trace,{stage:'contact-correction',iteration,a:{id:a.org.id,part:a.index},b:{id:b.org.id,part:b.index},
+        contact:{...contact},correction,inverseMass:[a.im,b.im],before:correctionBefore,after:[solverPart(a.p),solverPart(b.p)]});
     }
     if (!contactCount) break;
     for (const org of touched) project(org, 4);
