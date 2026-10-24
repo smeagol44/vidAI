@@ -1,0 +1,50 @@
+{
+  "action": "generation",
+  "c": "off",
+  "seed": 17,
+  "g": 14,
+  "label": "vida98-off-17-g14",
+  "archiveName": "vida98-off-17-g14.zip",
+  "bytes": 3421924,
+  "sha256": "86bb63549e97e573c715e79c064fa81bac1be20c14fef89f0a597e7e4641e31b",
+  "parts": [
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-off-17-g14.zip.part000",
+      "bytes": 600000,
+      "gitSha": "a246240132d86a625cab51dfa9dfc760c8529e93",
+      "sha256": "836a8fbb219c38484ffada4b4c30de25458b2b97865f4fe71c0ccfeabc88fc0a"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-off-17-g14.zip.part001",
+      "bytes": 600000,
+      "gitSha": "e24318a309176f8b9fe1dc60d29dde18751ff0ed",
+      "sha256": "f801f19d52282624fcd392f68b098b1bf0b54b04d043c409dff33e2afd6937b7"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-off-17-g14.zip.part002",
+      "bytes": 600000,
+      "gitSha": "c7019470cb0b33ba4f4364ee23dc51ec68f38c7e",
+      "sha256": "f90afbb089ff96d1322d0195b108ae18ba64f2b82291007da1bfc4fd97c0779d"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-off-17-g14.zip.part003",
+      "bytes": 600000,
+      "gitSha": "83a8bc86a00ca8a96325bb882a86138f4f00978d",
+      "sha256": "2bc8aa62d03ca2a755a4ada4b51151a83fe1ec73d7dd150bfb81bfcf571c1c9d"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-off-17-g14.zip.part004",
+      "bytes": 600000,
+      "gitSha": "cbd55bab7de85a726d2038761364fd4d9e8ce6b0",
+      "sha256": "e9273f5fb8a4963897adefef41125be148754ffaf12f9c4e4b7174fbe6d182c5"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-off-17-g14.zip.part005",
+      "bytes": 421924,
+      "gitSha": "04b9601ae807595dcea46615da3cd0d9212607c4",
+      "sha256": "edbc0acede194ff33649f011a2aca3ab9e721072c4f06bacff39ed5b3bfe6087"
+    }
+  ],
+  "scientificImplementation": "1d805c9a45ee97be32af4e4e74214f27d6aff07c",
+  "note": "Concatenate ordered parts;verify full SHA256/bytes then extract immutable ZIP. Existing completed units reused without simulation."
+}
