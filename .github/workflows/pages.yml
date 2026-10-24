@@ -55,7 +55,8 @@ jobs:
       # Frozen #85/#86 evidence is hash-checked by the intake audit; the old
       # #86 verifier remains pinned to its original Worker, never rewritten.
       - run: npm run test:intake-worker
-      - run: npm run audit:intake
+      - run: npm run test:uncapped-worker
+      - run: npm run audit:uncapped-intake
       - run: npx playwright install --with-deps chromium
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
       - run: npm run test:e2e
