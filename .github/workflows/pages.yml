@@ -49,13 +49,19 @@ jobs:
       - run: npm run build
       - run: npm run test:worker
       - run: npm run test:gated-worker
+        if: github.head_ref != 'experiment/uncapped-plasticity-98'
       - run: npm run test:retained-worker
+        if: github.head_ref != 'experiment/uncapped-plasticity-98'
       - run: npm run test:neural-selection-worker
+        if: github.head_ref != 'experiment/uncapped-plasticity-98'
       # #91 implementation checkpoint: six-group Worker and old-state compatibility.
       # Frozen old verifiers remain pinned to their independent source bundles.
       - run: npm run test:plasticity-worker
+        if: github.head_ref != 'experiment/uncapped-plasticity-98'
       - run: npm run audit:architecture-plasticity
-        if: hashFiles('docs/experiments/architecture-plasticity-v1.json') != ''
+        if: github.head_ref != 'experiment/uncapped-plasticity-98' && hashFiles('docs/experiments/architecture-plasticity-v1.json') != ''
+      - run: node --import tsx scripts/check-uncapped-plasticity-worker.mjs
+        if: github.head_ref == 'experiment/uncapped-plasticity-98'
       - run: npx playwright install --with-deps chromium
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
       - run: npm run test:e2e

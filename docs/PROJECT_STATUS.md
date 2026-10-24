@@ -1,3 +1,25 @@
+# Active #98 / draft #99 — uncapped OFF vs MUTABLE two-output study
+
+- Owner authorized exactly2250 offspring:ONLY original #93 two-output v2,
+  OFF then MUTABLE,five seeds each,15x15x12s.30 final held-outs+15 matched
+  mutable learning-OFF ablations. No legacy/three-output campaigns.
+- Exact baselinebc4504613b33a8f8e022e17e4b7db6369b3a36c1. Keep original
+  heritable-plastic-v1 traits/masks/genetics/learning/extra9draws/costs.
+- New schema98.0.0/uncapped-plasticity-v1 bypasses only400px/s and±20rad/s
+  clamps. Preserve physical joints/contacts/walls/drag/actuators/prepaid work.
+- Actual founder incumbent;strict actual absorbed-J-only selection. All former
+  physical flags diagnostic-only. No first-valid gate or substitute thresholds.
+- Atomic immutable per-proposal requests/full packets and generation lineage
+  manifests,fsync/byte/hash/readback. Save every generation externally BEFORE
+  next generation;initial frozen source/genomes/environments before founders.
+  If request has no completed packet:STOP,reportgap,request recoveryapproval.
+- Preregister before any evaluation. Preserve #93/#97 and all historical data.
+  Verify full2250mutation/150decision/2305packet integrity and actual Worker
+  replay/reset/heritable-vs-somatic boundaries. No long browser/search suites.
+- Interpret OFF vs MUTABLE as package(inherited variation+learning+costs),
+  historical #93 as changed physics AND selection;#97 fixed-learning differs.
+- STOP aftercompletion forownerreview. No merge/deploy/releases/Wiki/VIDA3D/#78.
+
 # Corrected neural motor / food checkpoint (#59/#63 / draft #86)
 
 - Owner correction: #85 compared legacy six-output, three-output gated and a
