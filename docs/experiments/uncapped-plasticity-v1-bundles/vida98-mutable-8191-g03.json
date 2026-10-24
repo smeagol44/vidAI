@@ -1,0 +1,38 @@
+{
+  "action": "generation",
+  "c": "mutable",
+  "seed": 8191,
+  "g": 3,
+  "label": "vida98-mutable-8191-g03",
+  "archiveName": "vida98-mutable-8191-g03.zip",
+  "bytes": 11609016,
+  "sha256": "3a828371fae22187526b87e34794d344c977955ee91e79483c65c2789bf2ca1a",
+  "parts": [
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-8191-g03.zip.part000",
+      "bytes": 3000000,
+      "gitSha": "ae274184a27f29212cdb7e8e456ae014da37ba52",
+      "sha256": "7b709fcae8485b0e751c6adc44a8c99dd6f867f047e54c541d15f6423f123bd3"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-8191-g03.zip.part001",
+      "bytes": 3000000,
+      "gitSha": "29418133d5dc1094911ed145bc1e6e4c3fe44d8b",
+      "sha256": "3164293cbe705dc96a654f4e4b57f0895d0294b63ca51727f7d29e0f6c290c77"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-8191-g03.zip.part002",
+      "bytes": 3000000,
+      "gitSha": "6d7e47933948d6e614cb9966a56de2f40830c836",
+      "sha256": "be9500c6294965d6bbf6b8ac1d5b744a9144017d681172a583946f502469c6cb"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-8191-g03.zip.part003",
+      "bytes": 2609016,
+      "gitSha": "64cc74493e502deeb8fc4d4a43d847445c43ed40",
+      "sha256": "7a190b3859ca1ca83f97ea6f5a490febb2ce5d9006d8a1a7778365c73c04c1f0"
+    }
+  ],
+  "scientificImplementation": "1d805c9a45ee97be32af4e4e74214f27d6aff07c",
+  "note": "Concatenate ordered parts;verify full SHA256/bytes then extract immutable ZIP. Existing completed units reused without simulation."
+}
