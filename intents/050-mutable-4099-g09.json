@@ -1,0 +1,13 @@
+{
+  "label": "050-mutable-4099-g09",
+  "detail": {
+    "action": "generation",
+    "controller": "mutable",
+    "seed": 4099,
+    "generation": 9,
+    "logicalOffspring": 10
+  },
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "previousEvidence": "7b9cee8c59bbf3c12dcc2c0b192a13bd0ac364ec",
+  "notStartedAtIntent": true
+}
