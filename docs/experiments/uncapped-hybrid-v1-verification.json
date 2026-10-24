@@ -1,0 +1,13 @@
+{
+  "version": "uncapped-hybrid-v1",
+  "offspringReconstructed": 225,
+  "trainingAndHeldOutTrialsVerified": 229,
+  "allArchivesAndProtectedEvidenceExact": true,
+  "allOriginalEnvironmentsAndFreshFounderExact": true,
+  "partStageReceipts": 3957120,
+  "tickIntakeReceipts": 164880,
+  "acquiredWeightChangeReceipts": 240048,
+  "modeEntries": 458,
+  "finalWorkerPacketReplayExact": true,
+  "splitResetSnapshotPRNGExact": true
+}

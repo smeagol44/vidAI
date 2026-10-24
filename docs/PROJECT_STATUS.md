@@ -1,3 +1,29 @@
+# Original #88 uncapped hybrid checkpoint (#94 / draft #95)
+
+- Fixed owner-requested repeat COMPLETE; STOP for review. Do not rerun/extend.
+- Scientific base #88 b64481eb02a4c253637cae3d91375a5051405fd1. Protocol
+  fd38301e1f0744228cd5ec0628c58fc5db69862b; frozen implementation2779de2.
+- Exactly225 offspring +1 founder +3 held-outs. Original seed17 neural-motor-v1,
+  thresholds-.30/+.30,hysteresis.06,24-hidden recurrent Darter,normal learning.
+- Isolated saved experimentalVelocityMode:uncapped-hybrid-v1/schema94.0.0
+  bypasses400px/s and±20rad/s caps ONLY. Old/default physics unchanged.
+- Former thresholds diagnostic-only; all225 finite offspring eligible; strict
+  actual-absorbed-J selection. Founder/final/all generations0J;0/225 fed;
+  no accepted improvements. All offspring DIRECT; no OFF/OSC use or switches.
+- Held-outs811/977/2301:4800/0/4080J,retained despite former flags. Feeders
+  contact from tick1;no evolved food-seeking demonstration. Historical capped
+  legacy4800->16704J,held-outs22320/14064/12288J DESCRIPTIVE only,different physics.
+- g2/o12 reaches20.376830rad/s,remains eligible,0J. Offspring max sampled
+  speed280.765px/s,anchor.237715px,limit excess.118512rad. No nonfinite/corrupt
+  trial;chemical error<=6.985e-10J;zero applied clamp loss;no resource limiting.
+- Report docs/experiments/uncapped-hybrid-v1.md;246 immutable gzip files,
+  229 full Worker packets/genes/snapshots,all trajectories/learning/intake receipts.
+  All225 genotypes/15 decisions reconstruct,exact final packet replay and
+  360+360 reset/PRNG continuation;original environments/founder/prior hashes exact.
+- Local322fast+1metadata/build,typecheck,production and focused uncapped Worker
+  pass. Remote final head/checks and Project status in #94/#57. Prior stacks/data
+  preserved unchanged. No merge/deploy/Wiki/VIDA3D change;main v0.37.0/testing T1.1.
+
 # Corrected neural motor / food checkpoint (#59/#63 / draft #86)
 
 - Owner correction: #85 compared legacy six-output, three-output gated and a
