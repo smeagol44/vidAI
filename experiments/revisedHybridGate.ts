@@ -20,3 +20,9 @@ export function revisedHybridTorque(mode:number,command:number,previous:HybridBa
  const result=gatedTorque({architecture:'two-output',mode:selected==='off'?-1:selected==='direct'?0:1,command},selected,wave,ceiling,0);
  return{...result,band};
 }
+
+/** Explicit neural-motor-v3: same four-band gate, separate direct/strength heads. */
+export function revisedHybridThreeTorque(mode:number,direct:number,strength:number,previous:HybridBand,wave:number,ceiling:number,width=.06){
+ const band=selectHybridBand(mode,previous,width),selected=hybridBandMode(band);
+ return{...gatedTorque({architecture:'three-output',mode:selected==='off'?-1:selected==='direct'?0:1,direct,strength},selected,wave,ceiling,0),band};
+}

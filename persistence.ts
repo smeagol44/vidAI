@@ -1,3 +1,4 @@
+import {validPlasticConnections} from './plasticGenetics';
 import {isPrimaryMotorOutput} from './neuralRuntime';
 import {embodiedEnergy, FOOD_SAFETY_LIMIT} from './energyEconomy';
 import {
@@ -60,7 +61,7 @@ export function resizeWorld(s: SimulationState, old: SimulationSettings, width: 
 
 export function createSnapshot(s: SimulationState, settings: SimulationSettings, metadata: Record<string, unknown> = {}) {
   const {prng, lineage, ...data} = s;
-  const snapshot = {schemaVersion: settings.motorExperiment === 'neural-motor-v2' ? '20.0.0' : settings.motorExperiment === 'neural-motor-v1' ? '19.0.0' : settings.motorExperiment === 'retained-head-v1' ? '18.0.0' : settings.motorExperiment ? '16.0.0' : settings.physicsRegime === 'passive-work-v3' ? '15.0.0' : settings.mouthContactModel === 'capsule-v1' ? '14.0.0' : s.energyPool ? '13.0.0' : '12.0.0', build: BUILD_VERSION, metadata, settings: {...settings,
+  const snapshot = {schemaVersion: settings.motorExperiment === 'plasticity-study-v1' ? '21.0.0' : settings.motorExperiment === 'neural-motor-v2' ? '20.0.0' : settings.motorExperiment === 'neural-motor-v1' ? '19.0.0' : settings.motorExperiment === 'retained-head-v1' ? '18.0.0' : settings.motorExperiment ? '16.0.0' : settings.physicsRegime === 'passive-work-v3' ? '15.0.0' : settings.mouthContactModel === 'capsule-v1' ? '14.0.0' : s.energyPool ? '13.0.0' : '12.0.0', build: BUILD_VERSION, metadata, settings: {...settings,
     ...(s.energyPool ? {ecologyRegime: 'closed-v1' as const, nutrientLimit: settings.nutrientLimit ?? null} : {}),
     physicsRegime: settings.physicsRegime ?? 'legacy-v0'},
     state: {...data, prngState: prng.getState(), lineage: [...lineage]}};
@@ -87,9 +88,10 @@ export function validateGenome(raw: unknown): Genome {
     && g.eyes.length + g.mouths.length <= MAX_SURFACE_ORGANS, 'organ count');
   if (g.motorController !== undefined) {
     const c = g.motorController;
-    assert(c && ['gated-torque-v1','retained-head-v1','neural-motor-v1','neural-motor-v2'].includes(c.version)
-      && (c.version==='neural-motor-v2'?['two-output']:c.version==='neural-motor-v1'?['oscillator-only','direct-only','two-output']:['two-output', 'three-output']).includes(c.architecture)
+    assert(c && ['gated-torque-v1','retained-head-v1','neural-motor-v1','neural-motor-v2','neural-motor-v3'].includes(c.version)
+      && (c.version==='neural-motor-v3'?['three-output']:c.version==='neural-motor-v2'?['two-output']:c.version==='neural-motor-v1'?['oscillator-only','direct-only','two-output']:['two-output', 'three-output']).includes(c.architecture)
       && [0, .06].includes(c.hysteresisWidth) && g.brainVersion === 7, 'experimental motor controller');
+    if(c.version==='neural-motor-v3') assert(c.architecture==='three-output'&&c.hysteresisWidth===.06&&!('signedJoints' in c),'three-head revised hybrid contract');
     if(c.version==='neural-motor-v2') assert(c.architecture==='two-output' && c.hysteresisWidth===.06 && !('signedJoints' in c), 'revised hybrid contract');
     if(c.version==='neural-motor-v1') assert(c.hysteresisWidth===.06 && !('signedJoints' in c), 'neural motor contract');
     if(c.version==='retained-head-v1') assert(c.architecture==='three-output' && Array.isArray(c.signedJoints)
@@ -97,6 +99,7 @@ export function validateGenome(raw: unknown): Genome {
       && c.signedJoints.every(id=>typeof id==='string' && g.parts.slice(1).some(p=>p.id===id)), 'retained joint selectors');
     else assert(!('signedJoints' in c), 'retained selectors in old controller');
   }
+  if(g.plasticConnections!==undefined)assert(validPlasticConnections(g),'heritable plastic edge identities');
   assert(g.anatomyVersion === undefined || g.anatomyVersion === 1, 'anatomy version');
   assert(new Set(g.eyes.map(e => e.id)).size === g.eyes.length
     && new Set(g.mouths.map(m => m.id)).size === g.mouths.length, 'duplicate organ IDs');
@@ -187,7 +190,8 @@ export function validateGenome(raw: unknown): Genome {
   assert(g.memoryConsolidationRate === undefined ||
     (typeof g.memoryConsolidationRate === 'number' && Number.isFinite(g.memoryConsolidationRate)
       && g.memoryConsolidationRate >= 0 && g.memoryConsolidationRate <= 2
-      && ((g.plasticityRate ?? 0) > 0 || (g.sensoryPlasticityRate ?? 0) > 0)),
+      && ((g.plasticityRate ?? 0) > 0 || (g.sensoryPlasticityRate ?? 0) > 0
+        || (!!g.plasticConnections && g.memoryConsolidationRate===0))),
     'memory consolidation rate');
   assert(g.colorMutationRate === undefined || (Number.isFinite(g.colorMutationRate) && g.colorMutationRate >= 0 && g.colorMutationRate <= 1), 'pigment variability');
   assert(Array.isArray(g.parentIds) && g.parentIds.every(id => typeof id === 'string'), 'parent IDs');
@@ -213,9 +217,9 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     assert(input.length <= 25_000_000, 'file exceeds 25 MB'); return JSON.parse(input);
   })() : structuredClone(input);
   assert(raw && typeof raw === 'object', 'document');
-  assert(['20.0.0', '19.0.0', '18.0.0', '16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
-  const experiment = ['20.0.0', '19.0.0', '18.0.0','16.0.0'].includes(raw.schemaVersion);
-  assert(experiment ? raw.settings?.motorExperiment === (raw.schemaVersion==='20.0.0'?'neural-motor-v2':raw.schemaVersion==='19.0.0'?'neural-motor-v1':raw.schemaVersion==='18.0.0'?'retained-head-v1':'gated-torque-v1') : raw.settings?.motorExperiment === undefined, 'experimental motor schema');
+  assert(['21.0.0', '20.0.0', '19.0.0', '18.0.0', '16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
+  const experiment = ['21.0.0', '20.0.0', '19.0.0', '18.0.0','16.0.0'].includes(raw.schemaVersion);
+  assert(experiment ? raw.settings?.motorExperiment === (raw.schemaVersion==='21.0.0'?'plasticity-study-v1':raw.schemaVersion==='20.0.0'?'neural-motor-v2':raw.schemaVersion==='19.0.0'?'neural-motor-v1':raw.schemaVersion==='18.0.0'?'retained-head-v1':'gated-torque-v1') : raw.settings?.motorExperiment === undefined, 'experimental motor schema');
   const legacy = raw.schemaVersion === '3.0.0';
   const data = legacy ? raw : raw.state;
   assert(data && typeof data === 'object', 'state');
@@ -223,14 +227,14 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   // Historical omitted fields retain their original values; new-world defaults
   // must not silently change old snapshot ecology.
   const settings: SimulationSettings = {...DEFAULT_SETTINGS, targetNutrients: 400, maxOrganisms: 100, physicsRegime: 'legacy-v0', ...raw.settings};
-  if (!['20.0.0', '19.0.0', '18.0.0', '16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0'].includes(raw.schemaVersion)) settings.physicsRegime = 'legacy-v0';
-  else assert(['20.0.0', '19.0.0', '18.0.0', '16.0.0', '15.0.0'].includes(raw.schemaVersion) ? raw.settings?.physicsRegime === 'passive-work-v3'
+  if (!['21.0.0', '20.0.0', '19.0.0', '18.0.0', '16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0'].includes(raw.schemaVersion)) settings.physicsRegime = 'legacy-v0';
+  else assert(['21.0.0', '20.0.0', '19.0.0', '18.0.0', '16.0.0', '15.0.0'].includes(raw.schemaVersion) ? raw.settings?.physicsRegime === 'passive-work-v3'
     : ['legacy-v0', 'surface-work-v1', 'paid-work-v2'].includes(raw.settings?.physicsRegime), 'physics regime');
-  assert(['20.0.0', '19.0.0', '18.0.0', '16.0.0', '15.0.0'].includes(raw.schemaVersion) ? settings.mouthContactModel === undefined || settings.mouthContactModel === 'capsule-v1'
+  assert(['21.0.0', '20.0.0', '19.0.0', '18.0.0', '16.0.0', '15.0.0'].includes(raw.schemaVersion) ? settings.mouthContactModel === undefined || settings.mouthContactModel === 'capsule-v1'
     : raw.schemaVersion === '14.0.0' ? settings.mouthContactModel === 'capsule-v1'
     : settings.mouthContactModel === undefined, 'mouth contact model');
   const closed = raw.schemaVersion === '13.0.0'
-    || (['20.0.0', '19.0.0', '18.0.0', '16.0.0', '15.0.0', '14.0.0'].includes(raw.schemaVersion) && settings.ecologyRegime === 'closed-v1');
+    || (['21.0.0', '20.0.0', '19.0.0', '18.0.0', '16.0.0', '15.0.0', '14.0.0'].includes(raw.schemaVersion) && settings.ecologyRegime === 'closed-v1');
   assert(closed ? settings.ecologyRegime === 'closed-v1' && data.energyPool?.regime === 'closed-v1'
     : settings.ecologyRegime === undefined && data.energyPool === undefined, 'ecology regime');
   if (closed) {
@@ -255,10 +259,11 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   const prng = new XoshiroPRNG(); prng.setState(data.prngState);
   const checkExperimentalGenome = (g: Genome) => {
     assert(experiment || g.motorController === undefined, 'experimental genes in historical schema');
-    assert(!g.motorController || g.motorController.version===settings.motorExperiment, 'controller version/schema mismatch');
+    if(settings.motorExperiment==='plasticity-study-v1')assert(!!g.plasticConnections&&(!g.motorController||['neural-motor-v2','neural-motor-v3'].includes(g.motorController.version)), 'plasticity-study genome contract');
+    else {assert(g.plasticConnections===undefined,'heritable plastic genes in historical world');assert(!g.motorController||g.motorController.version===settings.motorExperiment,'controller version/schema mismatch');}
   };
   const organisms: Organism[] = data.organisms.map((o: Organism) => {
-    if (['20.0.0', '19.0.0', '18.0.0', '16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0'].includes(raw.schemaVersion)) {
+    if (['21.0.0', '20.0.0', '19.0.0', '18.0.0', '16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0'].includes(raw.schemaVersion)) {
       assert(o.genome.brainVersion === 7, 'current brain version');
     } else {
       if (raw.schemaVersion === '10.0.0') assert(o.genome.brainVersion === 6, 'previous brain version');
@@ -280,7 +285,7 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     assert(o.segments.every(p => [p.x, p.y, p.vx, p.vy, p.angle, p.angVel].every(Number.isFinite)), 'physical state');
     assert(o.joints.every(j => o.genome.motorController
       ? ['off', 'direct', 'oscillator'].includes(j.gateMode!) : j.gateMode === undefined), 'experimental gate mode state');
-    assert(o.joints.every(j => o.genome.motorController?.version==='neural-motor-v2'
+    assert(o.joints.every(j => ['neural-motor-v2','neural-motor-v3'].includes(o.genome.motorController?.version??'')
       ? Number.isInteger(j.gateBand) && j.gateBand!>=0 && j.gateBand!<=3
         && j.gateMode===(j.gateBand===1?'direct':j.gateBand===2?'oscillator':'off')
       : j.gateBand===undefined), 'revised hybrid band state');
@@ -318,7 +323,7 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
         try { edge = JSON.parse(record.edge); } catch { assert(false, 'plastic synapse ID'); }
         assert(Array.isArray(edge) && edge.length === 3
           && edge[0] === 'ho' && typeof edge[1] === 'string' && output.has(edge[1])
-          && (o.genome.plasticMotorScope === 'all' || isPrimaryMotorOutput(o.genome, edge[1]))
+          && (!!o.genome.plasticConnections || o.genome.plasticMotorScope === 'all' || isPrimaryMotorOutput(o.genome, edge[1]))
           && typeof edge[2] === 'string' && hidden.has(edge[2])
           && record.edge === brainEdgeKey('ho', edge[1], edge[2])
           && !inactive.has(record.edge) && allowed.has(record.edge), 'plastic edge identity');

@@ -3,7 +3,7 @@ import type {SimulationHost} from '../simulationHost';
 import type {OfflineMortalityProtection} from '../simulation';
 export function createIntakeEvaluation(host:SimulationHost,ticks:number){
  const s=host.state,c=host.settings,o=s.organisms[0];
- if(!['gated-torque-v1','neural-motor-v1','neural-motor-v2'].includes(c.motorExperiment!)||c.physicsRegime!=='passive-work-v3'
+ if(!['gated-torque-v1','neural-motor-v1','neural-motor-v2','plasticity-study-v1'].includes(c.motorExperiment!)||c.physicsRegime!=='passive-work-v3'
   ||s.organisms.length!==1||s.eggs.length||!o||o.dissolving||o.genome.mouths.some(m=>m.mouthType!=='herbivore')
   ||c.inflowRate!==0||ticks<1||ticks>720||s.simTime+ticks/60>12+1e-8)
   throw new Error('Nonlethal intake evaluation requires a paused singleton herbivore v3 experiment, no inflow/eggs, and at most12s');

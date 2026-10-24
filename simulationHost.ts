@@ -1,3 +1,4 @@
+import type {LearningObserver} from './learningObservation';
 import type {ActuationObserver} from './actuationObservation';
 import type {MechanicalObserver} from './mechanicalObservation';
 import {watchLineage} from './lineageChanges';
@@ -45,8 +46,8 @@ export class SimulationHost {
     this.genomeIds = new WeakMap(); this.nextGenome = 0;
     this.lineageChanges = watchLineage(this.state.lineage);
   }
-  tick(observe?: MechanicalObserver, actuation?: ActuationObserver, offlineMortality?: OfflineMortalityProtection): void {
-    stepSimulation(this.state, this.settings, 1 / 60, event => this.events.add(event), observe, actuation, offlineMortality);
+  tick(observe?: MechanicalObserver, actuation?: ActuationObserver, offlineMortality?: OfflineMortalityProtection,observeLearning?:LearningObserver): void {
+    stepSimulation(this.state, this.settings, 1 / 60, event => this.events.add(event), observe, actuation, offlineMortality,observeLearning);
     this.steps++;
   }
   snapshot(metadata: Record<string, unknown> = {}): WorldSnapshot {

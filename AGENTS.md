@@ -1,3 +1,27 @@
+# Architecture x lifetime plasticity (#91 / draft #93)
+
+- Owner approved EXACT6750 offspring: two stages OFF then MUTABLE x three
+  architectures (legacy6, revised2, revised3) x5seeds17/71/1901/4099/8191,
+ 15x15x12s each. Complete protocol registered before training in
+ docs/experiments/architecture-plasticity-v1-protocol.md atf49cfce.
+- Implementation checkpoint: new testing-only plasticity-study-v1/schema21,
+ neural-motor-v3 three-output SAME revised bands/.06/four-band latch;
+ inherited heritable-plastic-v1 enabled HO/RGB-IH masks, initial48/category,
+ cap96. Old genes/saves/fixed-order learning semantics unchanged.
+- Exact8 neural scalar sigma.15 per offspring; separate one-trait +one-mask
+ edit/category budget with9 paired draws, OFF discards proposals. Rates,
+ forgetting/consolidation/aversion existing bounds/equations, no #78 change.
+- User requested future interactive Experiment Lab separately: issue#92,
+ Backlog; no detailed description supplied, no implementation in #91.
+- Seven focused tests,333fast+metadata/build and six-group actual Worker
+ verification pass. OFF acquired state/cost0, real Mode/RGB learning/cost,
+ inheritance/remap/strict saves/continuation and old snapshots exact.
+- TRAINING NOT YET RUN at implementation checkpoint. Run ONLY fixed stages,
+ immutable per-generation receipts, manifests and matched final ablations.
+ Same #87/#89 Darter/v3/habitat/nonlethal/gates/intake-only strict elitism.
+ Preserve all earlier evidence and auxiliary-log limitations. Stop after
+ fixed report/#91/#57; no tuning, extra search, merge/deployment/Wiki/3D.
+
 # Revised hybrid thresholds checkpoint (#89 / draft #90)
 
 - Owner-approved five-seed experiment COMPLETE, ONLY revised neural hybrid:
