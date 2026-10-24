@@ -1,3 +1,4 @@
+import {createUncappedPlasticityObservation} from './experiments/uncappedPlasticityObservation';
 import {createPlasticityObservation} from './experiments/plasticityObservation';
 import {createHybridModeObservation} from './experiments/hybridModeObservation';
 import {createIntakeEvaluation} from './experiments/intakeEvaluation';
@@ -36,6 +37,7 @@ port.onmessage = ({data}: MessageEvent) => {
         throw new Error('Ecology regime can change only by resetting the world');
       if (data.settings.motorExperiment !== host.settings.motorExperiment)
         throw new Error('Motor experiment can change only by resetting the world');
+      if(data.settings.experimentalVelocityMode !== host.settings.experimentalVelocityMode)throw new Error('Velocity mode can change only by reset');
       if (data.settings.mouthContactModel !== host.settings.mouthContactModel)
         throw new Error('Mouth contact model can change only by resetting the world');
       host.settings = {...data.settings, physicsRegime: host.settings.physicsRegime ?? 'legacy-v0'} as SimulationSettings; host.speed = data.speed;
@@ -59,12 +61,14 @@ port.onmessage = ({data}: MessageEvent) => {
             Math.cos(o.segments[i+1].angle-o.segments[o.genome.parts[i+1].parentIndex].angle-o.genome.parts[i+1].baseAngleOffset))}))}))});}:undefined;
       if(data.traceModes!==undefined&&(typeof data.traceModes!=='boolean'||!['neural-motor-v2','plasticity-study-v1'].includes(host.settings.motorExperiment!)))throw new Error('Revised mode audit requires explicit v2 world');
       if(data.traceLearning!==undefined&&(typeof data.traceLearning!=='boolean'||host.settings.motorExperiment!=='plasticity-study-v1'))throw new Error('Learning audit requires explicit plasticity study');
+      if(data.traceUncapped!==undefined&&(typeof data.traceUncapped!=='boolean'||host.settings.experimentalVelocityMode!=='uncapped-plasticity-v1'))throw new Error('Uncapped audit requires explicit98 mode');
+      const uncapped=data.traceUncapped?createUncappedPlasticityObservation(host):undefined;
       const learning=data.traceLearning?createPlasticityObservation(host):undefined;
       const modes=data.traceModes?createHybridModeObservation(host):undefined;
       const recorder = data.auditTorque ? createTorqueRecorder() : undefined;
-      const metrics = measureWorkerTrial(host, data.ticks,recorder||modes?(s)=>{recorder?.observe(s);modes?.observe(s);}:undefined,(tick)=>{trace?.(tick);food?.afterTick(tick);intake?.afterTick(tick);learning?.afterTick(tick);},intake?.mortality,learning?.observe);
+      const metrics = measureWorkerTrial(host, data.ticks,recorder||modes||uncapped?(s)=>{recorder?.observe(s);modes?.observe(s);uncapped?.observe(s);}:undefined,(tick)=>{trace?.(tick);food?.afterTick(tick);intake?.afterTick(tick);learning?.afterTick(tick);uncapped?.afterTick(tick);},intake?.mortality,learning?.observe);
       dirty = true;
-      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot(), ...(recorder ? {torqueAudit: recorder.report()} : {}),...(trace?{trajectory}:{}),...(food?{foodAudit:food.report()}:{}),...(intake?{intakeAudit:intake.report()}:{}),...(modes?{modeAudit:modes.report()}:{}),...(learning?{learningAudit:learning.report()}:{})}});
+      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot(), ...(recorder ? {torqueAudit: recorder.report()} : {}),...(trace?{trajectory}:{}),...(food?{foodAudit:food.report()}:{}),...(intake?{intakeAudit:intake.report()}:{}),...(modes?{modeAudit:modes.report()}:{}),...(learning?{learningAudit:learning.report()}:{}),...(uncapped?{uncappedAudit:uncapped.report()}:{})}});
       return;
     }
     if (data.type === 'action') {
@@ -77,7 +81,7 @@ port.onmessage = ({data}: MessageEvent) => {
   } catch (error) {
     host.running = false;
     port.postMessage({type: 'error', id: data.id, epoch: data.epoch,
-      message: error instanceof Error ? error.message : String(error)});
+      message: error instanceof Error ? error.message : String(error),...(host.settings.experimentalVelocityMode?{failureSnapshot:structuredClone({settings:host.settings,state:host.state})}:{})});
   }
 };
 // A queued message yields to commands without the minimum delay imposed on

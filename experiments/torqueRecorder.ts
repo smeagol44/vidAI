@@ -22,6 +22,7 @@ export function createTorqueRecorder() {
     let g=groups.get(key);if(!g){g=group();groups.set(key,g);}return g;
   };
   const observe:ActuationObserver = s => {
+    if(s.kind==='uncapped-part')return;
     if(s.kind==='demand') {
       pending.set(`${s.organism}/${s.joint}`,s); if(firstDemands.length<24)firstDemands.push(s);
       for(const g of [totals,get(s)]) {

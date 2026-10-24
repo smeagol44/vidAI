@@ -1,3 +1,33 @@
+# Complete #98 / draft #99 — STOP owner review
+
+- Original #93 two-output OFF then MUTABLE study COMPLETE: 2250 unique offspring,
+  10 founders,30 held-outs,15 matched learning-OFF ablations. Zero training
+  repeats/unknown slots. Scientific source1d805c9 remains frozen;no merge/deploy.
+- Final J seeds17/71/1901/4099/8191: OFF9600/10848/8496/2400/10752;
+  MUTABLE11328/12048/7200/2448/6384. MUT wins3/5,median delta48J,
+  mean delta-513.6J. Matched ablations ON6/OFF5/tie4,median0J.
+  Package includes inherited variation+learning+costs;no consistent causal
+  learning advantage established. Historical93 changes physics AND selection.
+- Full report/CSV/JSON/ancestry/held-outs/ablations in
+  docs/experiments/uncapped-plasticity-v1/. Preserve original historical nulls.
+  956OFF/922MUT feeders;883/902 old-flagged feeders eligible.18 improvements each.
+  DIRECT/physicalOSC used,post1s switches;OFF never reached. Normal funded learning,
+  mutable genes/masks and somatic inheritance boundary exact;OFF acquired/cost0.
+- All2305 packets/2250mutation histories/150choices/33541647 acquired-change rows
+  audited. Ten full champion actual Worker packets and ten split/reset
+  snapshots/PRNG exact. No recorded nonfinite/corrupt trial. Max training speed
+  487.511px/s,37.145rad/s;clamp loss0,chemical error<=1.281e-9J.
+- All163 primary ZIP checkpoints/hash receipts preserved on separate
+  experiment/uncapped-plasticity-evidence-98,head3640e4f89ce40997cfbb7b0cb7e0c986bc2a1fca.
+  evidence-index.json lists immutable commits/parts/hashes. Restore script verifies
+  without simulation/refuses differences. Final reports/source archived separately.
+  Transient disconnect affected checkpoint byte reads only;all packets survived.
+- Implementation336fast+metadata/build/typecheck/production+focused Worker pass;
+  full raw audit/replays local,portable2250-slot/150-choice ledger pass. Final
+  remote head/CI/status in #98/#57/#99;Pages publication/deploy deliberately skipped.
+- STOP: no extra experiments,seeds,tuning,merge,promotion,production/testing release,
+  Wiki,VIDA3D or#78 work. Productionv0.37.0/main194d70d,testingT1.1/d7a6814 unchanged.
+
 # Corrected neural motor / food checkpoint (#59/#63 / draft #86)
 
 - Owner correction: #85 compared legacy six-output, three-output gated and a
