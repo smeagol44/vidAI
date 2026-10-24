@@ -1,0 +1,9 @@
+{
+  "action": "generation",
+  "controller": "mutable",
+  "seed": 71,
+  "generation": 1,
+  "implementation": "893c6a22b998dff61e40921f66c4bae95ec41103",
+  "previousVerifiedEvidence": "db5b1e40ab2de79eeae5779cd4a504943ab6bd8f",
+  "note": "Intent recorded before execution. An uncertain started slot must not be silently re-executed."
+}
