@@ -1,3 +1,4 @@
+import {createUncappedObservation} from './experiments/uncappedObservation';
 import {createIntakeEvaluation} from './experiments/intakeEvaluation';
 import {createFoodObservation} from './experiments/foodObservation';
 import {createTorqueRecorder} from './experiments/torqueRecorder';
@@ -30,6 +31,7 @@ port.onmessage = ({data}: MessageEvent) => {
       if (host.selected !== data.selected) dirty = true;
       if ((data.settings.physicsRegime ?? 'legacy-v0') !== (host.settings.physicsRegime ?? 'legacy-v0'))
         throw new Error('Physics regime can change only by resetting the world');
+      if(data.settings.experimentalVelocityMode !== host.settings.experimentalVelocityMode) throw new Error('Velocity mode can change only by resetting the world');
       if (data.settings.ecologyRegime !== host.settings.ecologyRegime)
         throw new Error('Ecology regime can change only by resetting the world');
       if (data.settings.motorExperiment !== host.settings.motorExperiment)
@@ -48,6 +50,8 @@ port.onmessage = ({data}: MessageEvent) => {
       if(data.traceJoints!==undefined&&typeof data.traceJoints!=='boolean')throw new Error('Invalid joint trace selector');
       if(data.traceFood!==undefined&&(typeof data.traceFood!=='boolean'||!['gated-torque-v1','neural-motor-v1'].includes(host.settings.motorExperiment!)))throw new Error('Food audit requires explicit experimental world');
       if(data.nonlethalEvaluation!==undefined&&data.nonlethalEvaluation!=='nutrient-intake-v1')throw new Error('Unknown offline nonlethal evaluation');
+      if(data.traceUncapped !== undefined && (typeof data.traceUncapped !== 'boolean' || host.settings.experimentalVelocityMode !== 'uncapped-hybrid-v1')) throw new Error('Uncapped trace requires identified uncapped hybrid world');
+      const uncapped=data.traceUncapped?createUncappedObservation(host):undefined;
       const intake=data.nonlethalEvaluation?createIntakeEvaluation(host,data.ticks):undefined;
       const food=data.traceFood?createFoodObservation(host):undefined;
       const trajectory:unknown[]=[];
@@ -56,9 +60,9 @@ port.onmessage = ({data}: MessageEvent) => {
           angle:Math.atan2(Math.sin(o.segments[i+1].angle-o.segments[o.genome.parts[i+1].parentIndex].angle-o.genome.parts[i+1].baseAngleOffset),
             Math.cos(o.segments[i+1].angle-o.segments[o.genome.parts[i+1].parentIndex].angle-o.genome.parts[i+1].baseAngleOffset))}))}))});}:undefined;
       const recorder = data.auditTorque ? createTorqueRecorder() : undefined;
-      const metrics = measureWorkerTrial(host, data.ticks, recorder?.observe,(tick)=>{trace?.(tick);food?.afterTick(tick);intake?.afterTick(tick);},intake?.mortality);
+      const metrics = measureWorkerTrial(host, data.ticks, recorder || uncapped ? s=>{recorder?.observe(s);uncapped?.observe(s);} : undefined,(tick)=>{trace?.(tick);food?.afterTick(tick);intake?.afterTick(tick);uncapped?.afterTick(tick);},intake?.mortality);
       dirty = true;
-      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot(), ...(recorder ? {torqueAudit: recorder.report()} : {}),...(trace?{trajectory}:{}),...(food?{foodAudit:food.report()}:{}),...(intake?{intakeAudit:intake.report()}:{})}});
+      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot(), ...(recorder ? {torqueAudit: recorder.report()} : {}),...(trace?{trajectory}:{}),...(food?{foodAudit:food.report()}:{}),...(intake?{intakeAudit:intake.report()}:{}),...(uncapped?{uncappedAudit:uncapped.report()}:{})}});
       return;
     }
     if (data.type === 'action') {
@@ -71,7 +75,7 @@ port.onmessage = ({data}: MessageEvent) => {
   } catch (error) {
     host.running = false;
     port.postMessage({type: 'error', id: data.id, epoch: data.epoch,
-      message: error instanceof Error ? error.message : String(error)});
+      message: error instanceof Error ? error.message : String(error), ...(host.settings.experimentalVelocityMode ? {failureState:structuredClone(host.state),failureSettings:structuredClone(host.settings)} : {})});
   }
 };
 // A queued message yields to commands without the minimum delay imposed on

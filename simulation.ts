@@ -451,6 +451,7 @@ export interface SimulationLedger {
 }
 
 export interface SimulationSettings {
+  experimentalVelocityMode?: 'uncapped-hybrid-v1'; // #94 only; persisted explicit semantics, never a default.
   motorExperiment?: 'gated-torque-v1' | 'retained-head-v1' | 'neural-motor-v1'; // Explicit testing-only world; never inferred from genes.
   /** Omitted retains exact historical prey-contact geometry. */
   mouthContactModel?: 'capsule-v1';
@@ -3253,14 +3254,18 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
 
     const beforeGuards = observe || observeActuation ? partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY) : 0;
     observe?.('forces-and-motors', beforeForces, beforeGuards);
+    if(settings.experimentalVelocityMode === 'uncapped-hybrid-v1' && ![seg.x,seg.y,seg.angle,seg.vx,seg.vy,seg.angVel,org.energy].every(Number.isFinite)) throw new Error('Nonfinite uncapped force state');
     const spd = Math.hypot(seg.vx, seg.vy);
     const auditAngularSpeed = observeActuation ? seg.angVel : 0;
     if (corrected && (spd > 400 || Math.abs(seg.angVel) > 20)) org.motorDiagnostics!.numericalGuardEvents++;
-    if (spd > 400.0) {
-      seg.vx = (seg.vx / spd) * 400.0;
-      seg.vy = (seg.vy / spd) * 400.0;
+    if (settings.experimentalVelocityMode !== 'uncapped-hybrid-v1') {
+      if (spd > 400.0) {
+        seg.vx = (seg.vx / spd) * 400.0;
+        seg.vy = (seg.vy / spd) * 400.0;
+      }
+      seg.angVel = clampVal(seg.angVel, -20.0, 20.0);
     }
-    seg.angVel = clampVal(seg.angVel, -20.0, 20.0);
+    if (observeActuation && settings.experimentalVelocityMode === 'uncapped-hybrid-v1') observeActuation(Object.freeze({kind:'uncapped-part',time:auditTime,organism:org.id,part:i,stage:'forces',x:seg.x,y:seg.y,angle:seg.angle,vx:seg.vx,vy:seg.vy,omega:seg.angVel}));
     if (observe) observe('speed-guards', beforeGuards, partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY));
     if (observeActuation && (spd > 400 || Math.abs(auditAngularSpeed) > 20)) observeActuation(Object.freeze({
       kind: 'guard', time: auditTime, organism: org.id, part: i, speed: spd, angularSpeed: auditAngularSpeed,
@@ -3596,6 +3601,7 @@ export function stepSimulation(
     throw new Error('Motor controller requires its matching explicit experimental world');
   if (settings.motorExperiment === undefined && (state.organisms.some(o => o.genome.motorController) || state.eggs.some(o => o.genome.motorController)))
     throw new Error('Gated controllers require an explicit experimental world');
+  if (settings.experimentalVelocityMode !== undefined && (settings.experimentalVelocityMode !== 'uncapped-hybrid-v1' || settings.physicsRegime !== 'passive-work-v3' || settings.motorExperiment !== 'neural-motor-v1' || [...state.organisms,...state.eggs].some(o=>o.genome.motorController?.architecture !== 'two-output'))) throw new Error('Invalid uncapped hybrid world');
   state.simTime += dt;
   const organisms = state.organisms;
   const eggs = state.eggs;
@@ -4036,6 +4042,7 @@ export function stepSimulation(
   for (let sub = 0; sub < substeps; sub++) {
     for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics, observeActuation, state.simTime - dt + (sub + 1) * dt / substeps));
     resolveBodyContacts(active, BASE_PART_DENSITY, projectBodyJoints, observeMechanics);
+    if(settings.experimentalVelocityMode === 'uncapped-hybrid-v1' && active.some(o=>!Number.isFinite(o.energy)||o.segments.some(p=>!Object.values(p).every(Number.isFinite)))) throw new Error('Nonfinite uncapped contact state');
     if (observeActuation) for (const org of active) {
       let maxAnchorPx = 0, maxLimitRad = 0;
       for (let j = 1; j < org.segments.length; j++) {
@@ -4049,6 +4056,7 @@ export function stepSimulation(
         const relative = b.angle - a.angle - def.baseAngleOffset;
         maxLimitRad = Math.max(maxLimitRad, Math.abs(Math.atan2(Math.sin(relative), Math.cos(relative))) - def.maxAngle);
       }
+      if (settings.experimentalVelocityMode === 'uncapped-hybrid-v1') org.segments.forEach((p,part)=>observeActuation(Object.freeze({kind:'uncapped-part',time:state.simTime-dt+(sub+1)*dt/substeps,organism:org.id,part,stage:'contact',x:p.x,y:p.y,angle:p.angle,vx:p.vx,vy:p.vy,omega:p.angVel})));
       observeActuation(Object.freeze({kind: 'pose', time: state.simTime - dt + (sub + 1) * dt / substeps,
         organism: org.id, maxAnchorPx, maxLimitRad, maxAngularSpeed: Math.max(...org.segments.map(p => Math.abs(p.angVel)))}));
     }

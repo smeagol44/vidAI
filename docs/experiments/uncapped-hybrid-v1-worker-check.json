@@ -1,0 +1,11 @@
+{
+  "hostQuietForkExact": true,
+  "workerUncapped": {
+    "maxSpeed": 1140.7834947450008,
+    "maxOmega": 57.10756074208746,
+    "guardLossJ": 0
+  },
+  "physicalFeeding144JAndLearning": true,
+  "modeIsolation": true,
+  "original88HybridSnapshotAndPRNGExact": true
+}
