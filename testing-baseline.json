@@ -1,7 +1,0 @@
-{
-  "environment": "testing",
-  "mainCommit": "b2a05e5e2b03027bbfd278953d79c6d0f9c6f231",
-  "mainVersion": "0.37.0",
-  "cycle": 1,
-  "description": "Branch-only version cycle; reset by explicitly starting a new testing branch cut and updating mainVersion/mainCommit with an incremented cycle."
-}

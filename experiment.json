@@ -1,0 +1,11 @@
+{
+  "experiment": 103,
+  "source": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "protocol": "d01d1fd1359b27ee4b8df6bd39356d0071717fb1",
+  "budget": {
+    "offspring": 500,
+    "founders": 5,
+    "heldOut": 15
+  },
+  "policy": "Data-only immutable checkpoints. Intent before unit, completed ZIP/hash/independent Git readback before advancing. No unknown-outcome reruns."
+}

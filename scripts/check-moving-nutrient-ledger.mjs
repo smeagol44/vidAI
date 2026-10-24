@@ -1,9 +1,0 @@
-/** Portable reconstruction only: no physics, extra offspring or selection search. */
-import assert from 'node:assert/strict';import {read,geneHash} from './uncapped-plasticity-archive.mjs';import {RUNS,initial,mutate,mutationSeed} from '../experiments/movingNutrient.ts';
-const l=read('docs/experiments/moving-nutrient-v1/complete-ledger.json.gz');let n=0,decisions=0;
-for(const{controller,seed}of RUNS){const run=l.runs.find(r=>r.controller===controller&&r.seed===seed);let parent=initial(controller,seed).genome,J=run.initialJ;assert.equal(geneHash(parent),run.initialGenomeSha);
- for(let g=1;g<=10;g++){const d=l.generations.find(r=>r.controller===controller&&r.seed===seed&&r.generation===g);assert.equal(d.parentHash,geneHash(parent));assert.equal(d.incumbentJ,J);assert.equal(d.offspring.length,10);let best=J,chosen=-1;
- for(let i=0;i<10;i++){const o=d.offspring[i],key=mutationSeed(seed,g,i),p=mutate(parent,controller,key,i);assert.equal(o.index,i);assert.equal(o.mutationSeed,key);assert.equal(o.genomeSha,geneHash(p.genome));assert.deepEqual(o.neuralMutation,p.neuralMutation);assert.equal(o.neuralMutation.changes.length,8);if(controller==='mutable'){assert.deepEqual(o.learningMutation,p.learningMutation);assert.equal(o.learningMutation.draws.length,9);}assert.ok(Number.isFinite(o.absorbedJ)&&o.absorbedJ>=0);if(o.absorbedJ>best){best=o.absorbedJ;chosen=i;}n++;}
- assert.equal(chosen,d.selectedIndex);if(chosen>=0){const o=d.offspring[chosen];parent=mutate(parent,controller,o.mutationSeed,chosen).genome;}J=best;assert.equal(geneHash(parent),d.selectedGenomeSha);assert.equal(J,d.bestJ);decisions++;}
- assert.equal(geneHash(parent),run.finalGenomeSha);assert.equal(J,run.finalJ);
-}assert.equal(n,500);assert.equal(decisions,50);console.log(JSON.stringify({portableLedger:true,offspring:n,decisions,simulationEvaluations:0,scope:'genotypes/mutations/strict intake-only choices;full520-packet and Worker replay audit separately recorded'}));
