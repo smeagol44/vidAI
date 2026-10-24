@@ -1,0 +1,20 @@
+{
+  "action": "initial",
+  "c": "off",
+  "seed": 1901,
+  "g": 0,
+  "label": "vida98-off-1901-initial",
+  "archiveName": "vida98-off-1901-initial.zip",
+  "bytes": 221302,
+  "sha256": "6ff97765f2f5ba6a54daa14dd243377e896e1bcc826e5def514868fa51cd55e3",
+  "parts": [
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-off-1901-initial.zip.part000",
+      "bytes": 221302,
+      "gitSha": "88037c762ad37899476e7051b77f5d47b4c955a8",
+      "sha256": "6ff97765f2f5ba6a54daa14dd243377e896e1bcc826e5def514868fa51cd55e3"
+    }
+  ],
+  "scientificImplementation": "1d805c9a45ee97be32af4e4e74214f27d6aff07c",
+  "note": "Concatenate ordered parts;verify full SHA256/bytes then extract immutable ZIP. Existing completed units reused without simulation."
+}
