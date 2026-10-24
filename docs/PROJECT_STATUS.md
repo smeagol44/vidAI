@@ -1,3 +1,27 @@
+# Completed #96 / draft #97 — bounded recovery verified
+
+- Owner authorized deterministic recovery on2026-10-24; COMPLETE original1125
+  logical offspring,5 founders,30 held-outs. No new evolutionary seed/search.
+- Frozen #90 base531e2d0 /uncapped implementation6276c79 unchanged. ONLY v2
+  four-band Mode+Command,original rules/learning/habitat;intake-only strict selection.
+- Founder→final J:17 4032→12624;71 0→8496;1901 5472→7200;4099 240→336;
+  8191 2160→8064. All0–15 curves,old capped curves,held-outs in completed report/CSV.
+-873 original raw packets reused;37 known lost packets recovered EXACT metrics/
+  trajectories/final hashes;5 uncertain1901/g13 slots(o4,o11–14) explicit;210
+  remaining original slots. Original interruption files/six bundles unchanged.
+  No discrepancy;252 recovery offspring executions,never duplicate selection.
+-922 offspring fed;841 old-flagged feeders eligible.14 accepted improvements.
+  Exact old rejected feeders1901g1/o13,4099g3/o4,8191g1/o8 became parents.
+- OFF0;DIRECT+physicalOSC used,post-startup switches. Max485.72px/s,39.28rad/s;
+  zero clamp loss,no nonfinite/corrupt physics. All thresholds read-only diagnostics.
+-1160 packets/1125 mutations/75 choices/835200 tick receipts/60181200 learning
+  changes verified;all5 champion Worker packets and reset forks exact.331fast+
+  metadata/build/focusedWorker pass. Portable ledger CI and local full raw audit
+  scopes distinguished.17 primary recovery bundles saved incrementally,originals
+  immutable;complete index/provenance/report in docs/experiments/uncapped-revised-v1-*.
+- STOP owner review. No merge/deploy/release/Wiki/VIDA3D change. Both physics AND
+  selection policy differ from historical #90;not controlled causal ranking.
+
 # Interrupted #90 uncapped repeat — #96 / draft #97
 
 - STOP:primary process lost during generation13. Do not restart or silently

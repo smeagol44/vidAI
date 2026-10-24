@@ -65,6 +65,8 @@ jobs:
         if: github.head_ref == 'experiment/uncapped-revised-hybrid-96' && hashFiles('scripts/check-uncapped-revised-worker.mjs') != ''
       - run: npm run audit:uncapped-revised
         if: github.head_ref == 'experiment/uncapped-revised-hybrid-96' && hashFiles('docs/experiments/uncapped-revised-v1.json') != ''
+      - run: node --import tsx scripts/check-uncapped-revised-recovery-ledger.mjs
+        if: github.head_ref == 'experiment/uncapped-revised-hybrid-96' && hashFiles('docs/experiments/uncapped-revised-v1-complete-ledger.json.gz') != ''
       - run: npx playwright install --with-deps chromium
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
       - run: npm run test:e2e

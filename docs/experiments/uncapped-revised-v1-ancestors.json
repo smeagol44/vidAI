@@ -1,0 +1,475 @@
+[
+  {
+    "seed": 17,
+    "ref": "initial",
+    "J": 4032,
+    "genomeSha": "9a3e3c84c5da34816ae16d1bfa1b1d354c86198007e49e0da139008277ed80a6",
+    "formerReasons": [
+      "speed guard",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [
+      {
+        "seed": 17,
+        "ref": "initial",
+        "absorbedJ": 2400,
+        "valid": false,
+        "reasons": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ]
+      }
+    ],
+    "exactHistoricalRejectedFeederMatches": [
+      {
+        "seed": 17,
+        "ref": "initial",
+        "absorbedJ": 2400,
+        "valid": false,
+        "reasons": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ]
+      }
+    ],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 17,
+    "ref": "g1/o2",
+    "generation": 1,
+    "index": 2,
+    "J": 7968,
+    "genomeSha": "2f06f42359d8bafce48e38505cce069fd66c7ee517e619cb4d354824abb339ff",
+    "formerReasons": [
+      "speed guard",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [
+      {
+        "seed": 17,
+        "ref": "g1/o2",
+        "absorbedJ": 0,
+        "valid": false,
+        "reasons": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ]
+      }
+    ],
+    "exactHistoricalRejectedFeederMatches": [],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 17,
+    "ref": "g4/o10",
+    "generation": 4,
+    "index": 10,
+    "J": 12624,
+    "genomeSha": "69d931569a37134df906d245b0344aa2d86e75982aa0f2bd784798710ec55198",
+    "formerReasons": [
+      "speed guard",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [],
+    "exactHistoricalRejectedFeederMatches": [],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 71,
+    "ref": "initial",
+    "J": 0,
+    "genomeSha": "9428a3175c56f4736f552be07cb1f35bcbbc5c39004a2dbc80a8f3e09e8ecc08",
+    "formerReasons": [
+      "speed guard",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [
+      {
+        "seed": 71,
+        "ref": "initial",
+        "absorbedJ": 2640,
+        "valid": false,
+        "reasons": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ]
+      }
+    ],
+    "exactHistoricalRejectedFeederMatches": [
+      {
+        "seed": 71,
+        "ref": "initial",
+        "absorbedJ": 2640,
+        "valid": false,
+        "reasons": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ]
+      }
+    ],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 71,
+    "ref": "g2/o0",
+    "generation": 2,
+    "index": 0,
+    "J": 3648,
+    "genomeSha": "ed853346e01c8d446290b6ce986df6455bbc1527e1c316042d887d28e4f3a071",
+    "formerReasons": [
+      "speed guard",
+      "anchor",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [
+      {
+        "seed": 71,
+        "ref": "g2/o0",
+        "absorbedJ": 0,
+        "valid": false,
+        "reasons": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ]
+      }
+    ],
+    "exactHistoricalRejectedFeederMatches": [],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 71,
+    "ref": "g4/o11",
+    "generation": 4,
+    "index": 11,
+    "J": 6384,
+    "genomeSha": "c323186ea575ccb90d85ba3ee02a80b03c362f80458cd24bc57d316358418183",
+    "formerReasons": [
+      "speed guard",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [],
+    "exactHistoricalRejectedFeederMatches": [],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 71,
+    "ref": "g5/o11",
+    "generation": 5,
+    "index": 11,
+    "J": 6528,
+    "genomeSha": "b99e20fa9944b9fa0f25769205b01bde514a676a5a27d235075402e1ba01cdaf",
+    "formerReasons": [
+      "speed guard",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [],
+    "exactHistoricalRejectedFeederMatches": [],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 71,
+    "ref": "g8/o10",
+    "generation": 8,
+    "index": 10,
+    "J": 7200,
+    "genomeSha": "86c0ba0ccd9d36f4b6da431fda2ef3c21942ca9094d9d9adecded88e5233d9dc",
+    "formerReasons": [
+      "speed guard",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [],
+    "exactHistoricalRejectedFeederMatches": [],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 71,
+    "ref": "g10/o12",
+    "generation": 10,
+    "index": 12,
+    "J": 8496,
+    "genomeSha": "fd25a1d57c610839084c3a543212f1c88254500d0ba3d6e2ebb06b8a56e7ae69",
+    "formerReasons": [
+      "speed guard",
+      "anchor",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [],
+    "exactHistoricalRejectedFeederMatches": [],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 1901,
+    "ref": "initial",
+    "J": 5472,
+    "genomeSha": "7d93785e7d8efdd17bf23fcd6de28d3afd7a752ca59adcf0e325cbda264c0d54",
+    "formerReasons": [
+      "speed guard",
+      "anchor",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [
+      {
+        "seed": 1901,
+        "ref": "initial",
+        "absorbedJ": 6240,
+        "valid": false,
+        "reasons": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ]
+      }
+    ],
+    "exactHistoricalRejectedFeederMatches": [
+      {
+        "seed": 1901,
+        "ref": "initial",
+        "absorbedJ": 6240,
+        "valid": false,
+        "reasons": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ]
+      }
+    ],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 1901,
+    "ref": "g1/o13",
+    "generation": 1,
+    "index": 13,
+    "J": 7200,
+    "genomeSha": "0c65e2072465f3e73b473b78370010d82a00b207b4c97ab204cccfc453267703",
+    "formerReasons": [
+      "speed guard",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [
+      {
+        "seed": 1901,
+        "ref": "g1/o13",
+        "absorbedJ": 5520,
+        "valid": false,
+        "reasons": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ]
+      }
+    ],
+    "exactHistoricalRejectedFeederMatches": [
+      {
+        "seed": 1901,
+        "ref": "g1/o13",
+        "absorbedJ": 5520,
+        "valid": false,
+        "reasons": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ]
+      }
+    ],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 4099,
+    "ref": "initial",
+    "J": 240,
+    "genomeSha": "4a4291024291b6710b981c9c9afd02a5fb1d06f5602105041550f64bc01edb86",
+    "formerReasons": [],
+    "historicalMatches": [
+      {
+        "seed": 4099,
+        "ref": "initial",
+        "absorbedJ": 240,
+        "valid": true,
+        "reasons": []
+      }
+    ],
+    "exactHistoricalRejectedFeederMatches": [],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 4099,
+    "ref": "g3/o4",
+    "generation": 3,
+    "index": 4,
+    "J": 288,
+    "genomeSha": "dfe7b4859d8f8c1a9f4f7ea0c54fa30f22bafe159bcecf0b742aaf77bebf9f7c",
+    "formerReasons": [
+      "joint limit"
+    ],
+    "historicalMatches": [
+      {
+        "seed": 4099,
+        "ref": "g3/o4",
+        "absorbedJ": 288,
+        "valid": false,
+        "reasons": [
+          "joint limit"
+        ]
+      }
+    ],
+    "exactHistoricalRejectedFeederMatches": [
+      {
+        "seed": 4099,
+        "ref": "g3/o4",
+        "absorbedJ": 288,
+        "valid": false,
+        "reasons": [
+          "joint limit"
+        ]
+      }
+    ],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 4099,
+    "ref": "g5/o11",
+    "generation": 5,
+    "index": 11,
+    "J": 336,
+    "genomeSha": "26d7866a6d0165edc2daaed0e38fe830ce523b0db6661254d9b9e727ea22b7d6",
+    "formerReasons": [
+      "joint limit"
+    ],
+    "historicalMatches": [],
+    "exactHistoricalRejectedFeederMatches": [],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 8191,
+    "ref": "initial",
+    "J": 2160,
+    "genomeSha": "4553c66c76016890a725a5908964743ec3613c922ba8de7683faa9a5c769606a",
+    "formerReasons": [
+      "speed guard",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [
+      {
+        "seed": 8191,
+        "ref": "initial",
+        "absorbedJ": 0,
+        "valid": false,
+        "reasons": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ]
+      }
+    ],
+    "exactHistoricalRejectedFeederMatches": [],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 8191,
+    "ref": "g1/o8",
+    "generation": 1,
+    "index": 8,
+    "J": 5136,
+    "genomeSha": "84300fa6428198f8928313f43ed1d5c0f4b0541ac5d2d37c6bf0f37357b2e0e0",
+    "formerReasons": [
+      "speed guard",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [
+      {
+        "seed": 8191,
+        "ref": "g1/o8",
+        "absorbedJ": 240,
+        "valid": false,
+        "reasons": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ]
+      }
+    ],
+    "exactHistoricalRejectedFeederMatches": [
+      {
+        "seed": 8191,
+        "ref": "g1/o8",
+        "absorbedJ": 240,
+        "valid": false,
+        "reasons": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ]
+      }
+    ],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 8191,
+    "ref": "g3/o5",
+    "generation": 3,
+    "index": 5,
+    "J": 7104,
+    "genomeSha": "b3bfb9e9c8760baa0e3a337bc74c0cfd63c8d62663102633be3833c56e2c2d2a",
+    "formerReasons": [
+      "speed guard",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [],
+    "exactHistoricalRejectedFeederMatches": [],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 8191,
+    "ref": "g4/o4",
+    "generation": 4,
+    "index": 4,
+    "J": 7200,
+    "genomeSha": "e49da1c39d4d032b7ce6b55bc2fcf5d8e77c296b1a0f6b484e907da49cd6804b",
+    "formerReasons": [
+      "speed guard",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [],
+    "exactHistoricalRejectedFeederMatches": [],
+    "reproducedInBudget": true
+  },
+  {
+    "seed": 8191,
+    "ref": "g11/o6",
+    "generation": 11,
+    "index": 6,
+    "J": 8064,
+    "genomeSha": "48c10e43ce7e8eba10c4074ac1e14c51437c0b4883adb34ee486a234947b9a16",
+    "formerReasons": [
+      "speed guard",
+      "joint limit",
+      "post-guard overspeed"
+    ],
+    "historicalMatches": [],
+    "exactHistoricalRejectedFeederMatches": [],
+    "reproducedInBudget": true
+  }
+]

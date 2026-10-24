@@ -1,0 +1,89 @@
+{
+  "proposalsReconstructed": 1125,
+  "decisionsReconstructed": 75,
+  "packetsVerified": 1160,
+  "tickReceipts": 835200,
+  "acquiredChangeRecords": 60181200,
+  "original275FilesUnchanged": true,
+  "priorArchiveHashesExact": true,
+  "allFrozenSourceHashesExact": true,
+  "all20EnvironmentsExact": true,
+  "allArchiveHashesExact": true,
+  "learning": {
+    "17": {
+      "changeRecords": 80640,
+      "motorWeights": 48,
+      "sensoryWeights": 96,
+      "motorNonzero": 48,
+      "sensoryNonzero": 96
+    },
+    "71": {
+      "changeRecords": 86400,
+      "motorWeights": 48,
+      "sensoryWeights": 96,
+      "motorNonzero": 48,
+      "sensoryNonzero": 96
+    },
+    "1901": {
+      "changeRecords": 64368,
+      "motorWeights": 48,
+      "sensoryWeights": 96,
+      "motorNonzero": 48,
+      "sensoryNonzero": 96
+    },
+    "4099": {
+      "changeRecords": 83952,
+      "motorWeights": 48,
+      "sensoryWeights": 96,
+      "motorNonzero": 48,
+      "sensoryNonzero": 96
+    },
+    "8191": {
+      "changeRecords": 80784,
+      "motorWeights": 48,
+      "sensoryWeights": 96,
+      "motorNonzero": 48,
+      "sensoryNonzero": 96
+    }
+  },
+  "provenance": {
+    "original-surviving": 873,
+    "recovered-known": 37,
+    "new-original-slot": 210,
+    "recovered-uncertain": 5
+  },
+  "workerSha": "68f3684972c9d1be7d69fd191bf12a4d97747d042ea6632552603ace94b730fd",
+  "verificationOnly": {
+    "fullChampionReplays": 5,
+    "splitRuns": 5,
+    "halfStepRequests": 10,
+    "trainingSelectionUses": 0
+  },
+  "replay": [
+    {
+      "seed": 17,
+      "fullPacketReplayExact": true,
+      "splitResetSnapshotPRNGExact": true
+    },
+    {
+      "seed": 71,
+      "fullPacketReplayExact": true,
+      "splitResetSnapshotPRNGExact": true
+    },
+    {
+      "seed": 1901,
+      "fullPacketReplayExact": true,
+      "splitResetSnapshotPRNGExact": true
+    },
+    {
+      "seed": 4099,
+      "fullPacketReplayExact": true,
+      "splitResetSnapshotPRNGExact": true
+    },
+    {
+      "seed": 8191,
+      "fullPacketReplayExact": true,
+      "splitResetSnapshotPRNGExact": true
+    }
+  ]
+}

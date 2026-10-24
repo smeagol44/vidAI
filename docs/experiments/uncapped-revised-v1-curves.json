@@ -1,0 +1,966 @@
+{
+  "curves": [
+    {
+      "brain_seed": 17,
+      "generation": 0,
+      "selected_absorbed_J": 4032
+    },
+    {
+      "brain_seed": 17,
+      "generation": 1,
+      "selected_absorbed_J": 7968
+    },
+    {
+      "brain_seed": 17,
+      "generation": 2,
+      "selected_absorbed_J": 7968
+    },
+    {
+      "brain_seed": 17,
+      "generation": 3,
+      "selected_absorbed_J": 7968
+    },
+    {
+      "brain_seed": 17,
+      "generation": 4,
+      "selected_absorbed_J": 12624
+    },
+    {
+      "brain_seed": 17,
+      "generation": 5,
+      "selected_absorbed_J": 12624
+    },
+    {
+      "brain_seed": 17,
+      "generation": 6,
+      "selected_absorbed_J": 12624
+    },
+    {
+      "brain_seed": 17,
+      "generation": 7,
+      "selected_absorbed_J": 12624
+    },
+    {
+      "brain_seed": 17,
+      "generation": 8,
+      "selected_absorbed_J": 12624
+    },
+    {
+      "brain_seed": 17,
+      "generation": 9,
+      "selected_absorbed_J": 12624
+    },
+    {
+      "brain_seed": 17,
+      "generation": 10,
+      "selected_absorbed_J": 12624
+    },
+    {
+      "brain_seed": 17,
+      "generation": 11,
+      "selected_absorbed_J": 12624
+    },
+    {
+      "brain_seed": 17,
+      "generation": 12,
+      "selected_absorbed_J": 12624
+    },
+    {
+      "brain_seed": 17,
+      "generation": 13,
+      "selected_absorbed_J": 12624
+    },
+    {
+      "brain_seed": 17,
+      "generation": 14,
+      "selected_absorbed_J": 12624
+    },
+    {
+      "brain_seed": 17,
+      "generation": 15,
+      "selected_absorbed_J": 12624
+    },
+    {
+      "brain_seed": 71,
+      "generation": 0,
+      "selected_absorbed_J": 0
+    },
+    {
+      "brain_seed": 71,
+      "generation": 1,
+      "selected_absorbed_J": 0
+    },
+    {
+      "brain_seed": 71,
+      "generation": 2,
+      "selected_absorbed_J": 3648
+    },
+    {
+      "brain_seed": 71,
+      "generation": 3,
+      "selected_absorbed_J": 3648
+    },
+    {
+      "brain_seed": 71,
+      "generation": 4,
+      "selected_absorbed_J": 6384
+    },
+    {
+      "brain_seed": 71,
+      "generation": 5,
+      "selected_absorbed_J": 6528
+    },
+    {
+      "brain_seed": 71,
+      "generation": 6,
+      "selected_absorbed_J": 6528
+    },
+    {
+      "brain_seed": 71,
+      "generation": 7,
+      "selected_absorbed_J": 6528
+    },
+    {
+      "brain_seed": 71,
+      "generation": 8,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 71,
+      "generation": 9,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 71,
+      "generation": 10,
+      "selected_absorbed_J": 8496
+    },
+    {
+      "brain_seed": 71,
+      "generation": 11,
+      "selected_absorbed_J": 8496
+    },
+    {
+      "brain_seed": 71,
+      "generation": 12,
+      "selected_absorbed_J": 8496
+    },
+    {
+      "brain_seed": 71,
+      "generation": 13,
+      "selected_absorbed_J": 8496
+    },
+    {
+      "brain_seed": 71,
+      "generation": 14,
+      "selected_absorbed_J": 8496
+    },
+    {
+      "brain_seed": 71,
+      "generation": 15,
+      "selected_absorbed_J": 8496
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 0,
+      "selected_absorbed_J": 5472
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 1,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 2,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 3,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 4,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 5,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 6,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 7,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 8,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 9,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 10,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 11,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 12,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 13,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 14,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 15,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 0,
+      "selected_absorbed_J": 240
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 1,
+      "selected_absorbed_J": 240
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 2,
+      "selected_absorbed_J": 240
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 3,
+      "selected_absorbed_J": 288
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 4,
+      "selected_absorbed_J": 288
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 5,
+      "selected_absorbed_J": 336
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 6,
+      "selected_absorbed_J": 336
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 7,
+      "selected_absorbed_J": 336
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 8,
+      "selected_absorbed_J": 336
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 9,
+      "selected_absorbed_J": 336
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 10,
+      "selected_absorbed_J": 336
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 11,
+      "selected_absorbed_J": 336
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 12,
+      "selected_absorbed_J": 336
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 13,
+      "selected_absorbed_J": 336
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 14,
+      "selected_absorbed_J": 336
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 15,
+      "selected_absorbed_J": 336
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 0,
+      "selected_absorbed_J": 2160
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 1,
+      "selected_absorbed_J": 5136
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 2,
+      "selected_absorbed_J": 5136
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 3,
+      "selected_absorbed_J": 7104
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 4,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 5,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 6,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 7,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 8,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 9,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 10,
+      "selected_absorbed_J": 7200
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 11,
+      "selected_absorbed_J": 8064
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 12,
+      "selected_absorbed_J": 8064
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 13,
+      "selected_absorbed_J": 8064
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 14,
+      "selected_absorbed_J": 8064
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 15,
+      "selected_absorbed_J": 8064
+    }
+  ],
+  "comparison": [
+    {
+      "brain_seed": 17,
+      "generation": 0,
+      "uncapped_selected_absorbed_J": 4032,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 1,
+      "uncapped_selected_absorbed_J": 7968,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 2,
+      "uncapped_selected_absorbed_J": 7968,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 3,
+      "uncapped_selected_absorbed_J": 7968,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 4,
+      "uncapped_selected_absorbed_J": 12624,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 5,
+      "uncapped_selected_absorbed_J": 12624,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 6,
+      "uncapped_selected_absorbed_J": 12624,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 7,
+      "uncapped_selected_absorbed_J": 12624,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 8,
+      "uncapped_selected_absorbed_J": 12624,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 9,
+      "uncapped_selected_absorbed_J": 12624,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 10,
+      "uncapped_selected_absorbed_J": 12624,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 11,
+      "uncapped_selected_absorbed_J": 12624,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 12,
+      "uncapped_selected_absorbed_J": 12624,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 13,
+      "uncapped_selected_absorbed_J": 12624,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 14,
+      "uncapped_selected_absorbed_J": 12624,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 17,
+      "generation": 15,
+      "uncapped_selected_absorbed_J": 12624,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 71,
+      "generation": 0,
+      "uncapped_selected_absorbed_J": 0,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 71,
+      "generation": 1,
+      "uncapped_selected_absorbed_J": 0,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 71,
+      "generation": 2,
+      "uncapped_selected_absorbed_J": 3648,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 71,
+      "generation": 3,
+      "uncapped_selected_absorbed_J": 3648,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 71,
+      "generation": 4,
+      "uncapped_selected_absorbed_J": 6384,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 71,
+      "generation": 5,
+      "uncapped_selected_absorbed_J": 6528,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 71,
+      "generation": 6,
+      "uncapped_selected_absorbed_J": 6528,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 71,
+      "generation": 7,
+      "uncapped_selected_absorbed_J": 6528,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 71,
+      "generation": 8,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 71,
+      "generation": 9,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 71,
+      "generation": 10,
+      "uncapped_selected_absorbed_J": 8496,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 71,
+      "generation": 11,
+      "uncapped_selected_absorbed_J": 8496,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 71,
+      "generation": 12,
+      "uncapped_selected_absorbed_J": 8496,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 71,
+      "generation": 13,
+      "uncapped_selected_absorbed_J": 8496,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 71,
+      "generation": 14,
+      "uncapped_selected_absorbed_J": 8496,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 71,
+      "generation": 15,
+      "uncapped_selected_absorbed_J": 8496,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 0,
+      "uncapped_selected_absorbed_J": 5472,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 1,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 2,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 3,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 4,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 5,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 6,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 7,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 8,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 9,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 10,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 11,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 12,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 13,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 14,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 1901,
+      "generation": 15,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 0,
+      "uncapped_selected_absorbed_J": 240,
+      "capped_selected_absorbed_J": 240,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 1,
+      "uncapped_selected_absorbed_J": 240,
+      "capped_selected_absorbed_J": 240,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 2,
+      "uncapped_selected_absorbed_J": 240,
+      "capped_selected_absorbed_J": 240,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 3,
+      "uncapped_selected_absorbed_J": 288,
+      "capped_selected_absorbed_J": 240,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 4,
+      "uncapped_selected_absorbed_J": 288,
+      "capped_selected_absorbed_J": 240,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 5,
+      "uncapped_selected_absorbed_J": 336,
+      "capped_selected_absorbed_J": 240,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 6,
+      "uncapped_selected_absorbed_J": 336,
+      "capped_selected_absorbed_J": 240,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 7,
+      "uncapped_selected_absorbed_J": 336,
+      "capped_selected_absorbed_J": 240,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 8,
+      "uncapped_selected_absorbed_J": 336,
+      "capped_selected_absorbed_J": 240,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 9,
+      "uncapped_selected_absorbed_J": 336,
+      "capped_selected_absorbed_J": 288,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 10,
+      "uncapped_selected_absorbed_J": 336,
+      "capped_selected_absorbed_J": 288,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 11,
+      "uncapped_selected_absorbed_J": 336,
+      "capped_selected_absorbed_J": 288,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 12,
+      "uncapped_selected_absorbed_J": 336,
+      "capped_selected_absorbed_J": 288,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 13,
+      "uncapped_selected_absorbed_J": 336,
+      "capped_selected_absorbed_J": 384,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 14,
+      "uncapped_selected_absorbed_J": 336,
+      "capped_selected_absorbed_J": 384,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 4099,
+      "generation": 15,
+      "uncapped_selected_absorbed_J": 336,
+      "capped_selected_absorbed_J": 432,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 0,
+      "uncapped_selected_absorbed_J": 2160,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 1,
+      "uncapped_selected_absorbed_J": 5136,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 2,
+      "uncapped_selected_absorbed_J": 5136,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 3,
+      "uncapped_selected_absorbed_J": 7104,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 4,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 5,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 6,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 7,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": null,
+      "capped_champion_available": false
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 8,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 9,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 0,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 10,
+      "uncapped_selected_absorbed_J": 7200,
+      "capped_selected_absorbed_J": 1152,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 11,
+      "uncapped_selected_absorbed_J": 8064,
+      "capped_selected_absorbed_J": 1152,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 12,
+      "uncapped_selected_absorbed_J": 8064,
+      "capped_selected_absorbed_J": 1152,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 13,
+      "uncapped_selected_absorbed_J": 8064,
+      "capped_selected_absorbed_J": 1152,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 14,
+      "uncapped_selected_absorbed_J": 8064,
+      "capped_selected_absorbed_J": 1152,
+      "capped_champion_available": true
+    },
+    {
+      "brain_seed": 8191,
+      "generation": 15,
+      "uncapped_selected_absorbed_J": 8064,
+      "capped_selected_absorbed_J": 1152,
+      "capped_champion_available": true
+    }
+  ]
+}
