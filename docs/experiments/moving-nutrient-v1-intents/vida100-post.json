@@ -1,0 +1,9 @@
+{
+  "action": "post",
+  "controller": "none",
+  "seed": 0,
+  "generation": 0,
+  "implementation": "893c6a22b998dff61e40921f66c4bae95ec41103",
+  "previousVerifiedEvidence": "686e789c1580cfef599c35adb048d9da3249bc48",
+  "note": "Intent before execution. An uncertain started slot must not be silently re-executed."
+}
