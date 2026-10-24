@@ -1,0 +1,13 @@
+import {openSync,writeSync,writeFileSync,readFileSync,fsyncSync,closeSync} from 'node:fs';import {gzipSync,gunzipSync} from 'node:zlib';
+export {hash,geneHash,median} from './intake-archive.mjs';import {hash} from './intake-archive.mjs';
+export const root='docs/experiments/',prefix='uncapped-revised-v1';
+export function writeArchive(name,value){const bytes=name.endsWith('.gz')?gzipSync(JSON.stringify(value)+'\n',{level:9}):Buffer.from(JSON.stringify(value,null,2)+'\n'),fd=openSync(root+name,'wx');try{writeFileSync(fd,bytes);fsyncSync(fd);}finally{closeSync(fd);}if(!readFileSync(root+name).equals(bytes))throw Error('Archive readback mismatch');return{archive:name,bytes:bytes.length,sha256:hash(bytes)};}
+export function readArchive(name){const b=readFileSync(root+name);return JSON.parse(name.endsWith('.gz')?gunzipSync(b):b);}
+/** Independently fsynced gzip member per proposal; no in-flight receipt loss. */
+export function openJournal(name,header){const fd=openSync(root+name,'wx');const append=value=>{const bytes=gzipSync(JSON.stringify(value)+'\n',{level:9});let offset=0;while(offset<bytes.length)offset+=writeSync(fd,bytes,offset);fsyncSync(fd);};append(header);let closed=false;return{append,close(){if(!closed){fsyncSync(fd);closeSync(fd);closed=true;}const b=readFileSync(root+name);const rows=gunzipSync(b).toString().trim().split('\n').map(x=>JSON.parse(x));if(rows.length!==6)throw Error('Expected header and5 proposals');return{archive:name,bytes:b.length,sha256:hash(b)};},abort(){if(!closed){fsyncSync(fd);closeSync(fd);closed=true;}}};}
+export function readJournal(name){return gunzipSync(readFileSync(root+name)).toString().trim().split('\n').map(x=>JSON.parse(x));}
+/** Lossless column-major IEEE754 binary packing; no float rounding or sampling. */
+function packRows(rows,width){const bytes=Buffer.allocUnsafe(rows.length*width*8);for(let c=0;c<width;c++)for(let r=0;r<rows.length;r++)bytes.writeDoubleLE(rows[r][c],(c*rows.length+r)*8);return{encoding:'float64-le-columns-v1',rows:rows.length,width,data:bytes.toString('base64')};}
+function unpackRows(p){const b=Buffer.from(p.data,'base64');if(b.length!==p.rows*p.width*8)throw Error('Corrupt packed receipt');return Array.from({length:p.rows},(_,r)=>Array.from({length:p.width},(_,c)=>b.readDoubleLE((c*p.rows+r)*8)));}
+export function packPacket(p){const u=p.uncappedAudit;return{...p,uncappedAudit:{...u,learning:packRows(u.learning,5),ticks:packRows(u.ticks,u.tickColumns.length)}};}
+export function unpackPacket(p){const u=p.uncappedAudit;return{...p,uncappedAudit:{...u,learning:unpackRows(u.learning),ticks:unpackRows(u.ticks)}};}

@@ -59,8 +59,8 @@ jobs:
       # Existing old Worker scripts remain independently preserved on #88.
       - run: npm run test:hybrid-threshold-worker
         if: github.head_ref != 'experiment/uncapped-revised-hybrid-96'
-      - run: npm run audit:hybrid
-        if: github.head_ref != 'experiment/uncapped-revised-hybrid-96'-threshold
+      - run: npm run audit:hybrid-threshold
+        if: github.head_ref != 'experiment/uncapped-revised-hybrid-96'
       - run: npm run test:uncapped-revised-worker
         if: github.head_ref == 'experiment/uncapped-revised-hybrid-96' && hashFiles('scripts/check-uncapped-revised-worker.mjs') != ''
       - run: npm run audit:uncapped-revised

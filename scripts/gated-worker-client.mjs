@@ -23,7 +23,7 @@ export async function startGatedWorker() {
     if (value.type === 'ready') {ready(); return;}
     if (value.type === 'frame') {worker.postMessage({type: 'ack', epoch: value.frame.epoch}); return;}
     const p = pending.get(value.id);
-    if (p) {pending.delete(value.id); clearTimeout(p.timer); value.type === 'error' ? p.reject(new Error(value.message)) : p.resolve(value.value);}
+    if (p) {pending.delete(value.id); clearTimeout(p.timer); value.type === 'error' ? p.reject(Object.assign(new Error(value.message),{workerFailure:value})) : p.resolve(value.value);}
   });
   await started;
   const request = (type, extra = {}) => new Promise((resolve, reject) => {

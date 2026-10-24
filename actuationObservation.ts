@@ -1,6 +1,7 @@
 /** Opt-in scalar receipts. Never persisted, evaluated by a brain, or read by
  * the solver. Torque is in simulation units; J uses the existing conversion. */
 export type ActuationSample = Readonly<
+  | {kind:'uncapped-part';time:number;organism:string;part:number;stage:'forces'|'contact';vx:number;vy:number;omega:number}
   | {kind: 'demand'; time: number; organism: string; joint: number; mode: 'servo'|'off'|'direct'|'oscillator';
       modeBand?: 0|1|2|3; neuralCommand: number; modeSignal: number; rawWave: number; strength: number;
       rawTorque: number; requestedTorque: number; ceiling: number; baseCeiling: number;
