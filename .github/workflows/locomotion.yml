@@ -20,6 +20,8 @@ permissions:
   contents: read
 jobs:
   calibration:
+    # #96 owner permits only the registered revised-hybrid study; no extra searches/browser campaign.
+    if: github.head_ref != 'experiment/uncapped-revised-hybrid-96'
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:

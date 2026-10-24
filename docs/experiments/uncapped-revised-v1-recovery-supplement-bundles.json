@@ -1,0 +1,217 @@
+{
+  "originalImmutableBundles": [
+    {
+      "local_path": "/workspace/scratch/4b3e1fd14e68/recovery_archives/vida96-interrupted-seed-17.zip",
+      "purpose": "create_library_file",
+      "library_artifact_type": "other",
+      "bytes": 196794835,
+      "sha256": "8d1b4b1d9e3d124acb18cd5e76d52a440d1c1de6ed189e33a051cace72b263dc",
+      "files": 49,
+      "library_file_id": "libfile_26e506824c4c8191b5e6c4282a01bb16",
+      "file_id": "file_000000007a8c820da433e07900abac8a",
+      "url": "https://chatgpt.com/library?file_id=libfile_26e506824c4c8191b5e6c4282a01bb16&account_id=personal"
+    },
+    {
+      "local_path": "/workspace/scratch/4b3e1fd14e68/recovery_archives/vida96-interrupted-seed-71.zip",
+      "purpose": "create_library_file",
+      "library_artifact_type": "other",
+      "bytes": 125553439,
+      "sha256": "7c50a0ec9c6321d342b1f75deb2e3810caadc12b62281b151dccecda9ecac4f4",
+      "files": 49,
+      "library_file_id": "libfile_5313b964b5d48191b1d51f281ada2b7e",
+      "file_id": "file_000000002ebc820d8e55612f19c60e33",
+      "url": "https://chatgpt.com/library?file_id=libfile_5313b964b5d48191b1d51f281ada2b7e&account_id=personal"
+    },
+    {
+      "local_path": "/workspace/scratch/4b3e1fd14e68/recovery_archives/vida96-interrupted-seed-1901.zip",
+      "purpose": "create_library_file",
+      "library_artifact_type": "other",
+      "bytes": 188983071,
+      "sha256": "717d073f74bac0fa6de44f9cc3797286614aed0a445ce85cf1829d3320432404",
+      "files": 52,
+      "library_file_id": "libfile_e4f86e1e518c8191a12c9b861d79e8ea",
+      "file_id": "file_000000003018820db2fe51c1e0df31e2",
+      "url": "https://chatgpt.com/library?file_id=libfile_e4f86e1e518c8191a12c9b861d79e8ea&account_id=personal"
+    },
+    {
+      "local_path": "/workspace/scratch/4b3e1fd14e68/recovery_archives/vida96-interrupted-seed-4099.zip",
+      "purpose": "create_library_file",
+      "library_artifact_type": "other",
+      "bytes": 150972636,
+      "sha256": "e41924c677f96ba1e0303ea933f31b97ca0e31107eca722ed0333976ea8f3353",
+      "files": 49,
+      "library_file_id": "libfile_38c4b37a333c8191b7fb3b5378417f41",
+      "file_id": "file_00000000fbdc820db7ae2240ee37f3ad",
+      "url": "https://chatgpt.com/library?file_id=libfile_38c4b37a333c8191b7fb3b5378417f41&account_id=personal"
+    },
+    {
+      "local_path": "/workspace/scratch/4b3e1fd14e68/recovery_archives/vida96-interrupted-seed-8191.zip",
+      "purpose": "create_library_file",
+      "library_artifact_type": "other",
+      "bytes": 172921816,
+      "sha256": "59b468cc19ce1759d2fa9f4073201784807914e218497921da478ae741b57832",
+      "files": 49,
+      "library_file_id": "libfile_e7fbd348cb9081919a2a8da6524405f3",
+      "file_id": "file_00000000091481f9ae3652433a698ff1",
+      "url": "https://chatgpt.com/library?file_id=libfile_e7fbd348cb9081919a2a8da6524405f3&account_id=personal"
+    },
+    {
+      "local_path": "/workspace/scratch/4b3e1fd14e68/recovery_archives/vida96-interrupted-seed-common.zip",
+      "purpose": "create_library_file",
+      "library_artifact_type": "other",
+      "bytes": 1646583,
+      "sha256": "2af9384a7251ff811ce905a7eff46b9ea97953331184fe5d4c6a8b3d5dee73d8",
+      "files": 24,
+      "library_file_id": "libfile_13c9ecc31ea48191a04b98d7c092f90b",
+      "file_id": "file_00000000e30081f9a72cedc2b32a82a9",
+      "url": "https://chatgpt.com/library?file_id=libfile_13c9ecc31ea48191a04b98d7c092f90b&account_id=personal"
+    }
+  ],
+  "recoveryBundles": [
+    {
+      "name": "vida96-known-recovery-37.zip",
+      "bytes": 48926832,
+      "sha256": "1ffa35af7e0ac787c39497558667958331e87207e8689e3479bb0ffb68c7d99a",
+      "library_file_id": "libfile_400d99be8f848191ae1d76f04d8188ab",
+      "file_id": "file_000000005cb481f5a0379ed8be18da81",
+      "url": "https://chatgpt.com/library?file_id=libfile_400d99be8f848191ae1d76f04d8188ab&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-17-g13.zip",
+      "bytes": 21134298,
+      "sha256": "dd7ac81d3453509dfa55a5ed9228a0cd40c42148231fa61cb783eb5f58d50144",
+      "library_file_id": "libfile_4b118f2c40ac8191be611852c67ca14c",
+      "file_id": "file_00000000ee40820eaeb5a60715296e60",
+      "url": "https://chatgpt.com/library?file_id=libfile_4b118f2c40ac8191be611852c67ca14c&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-17-g14.zip",
+      "bytes": 21766077,
+      "sha256": "d424ea324611b0dc628352f247b4d61cf800deb4fb7bc1f34a0daa48e9123b8e",
+      "library_file_id": "libfile_fd98c02cb89c8191adeedcb37aa1ac8d",
+      "file_id": "file_000000006f4881f6a1130bb31f56b293",
+      "url": "https://chatgpt.com/library?file_id=libfile_fd98c02cb89c8191adeedcb37aa1ac8d&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-17-g15.zip",
+      "bytes": 20939869,
+      "sha256": "5674e453deba21788687b2837a277277b3a2a68470ad12cc38bc962231a309e5",
+      "library_file_id": "libfile_b80d9735f85881919adb324aa2a672da",
+      "file_id": "file_00000000fba481f9b5d49c5d2927a64a",
+      "url": "https://chatgpt.com/library?file_id=libfile_b80d9735f85881919adb324aa2a672da&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-1901-g13.zip",
+      "bytes": 7593537,
+      "sha256": "972ac4bd9679e64b014bcf58e95a6d08dbe5880fd7c5c9c1e825003a010946ce",
+      "library_file_id": "libfile_998b239ea64c8191a2312cea8c892113",
+      "file_id": "file_00000000bf0081f9b4d3eb607f4928b7",
+      "url": "https://chatgpt.com/library?file_id=libfile_998b239ea64c8191a2312cea8c892113&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-1901-g14.zip",
+      "bytes": 20473341,
+      "sha256": "843d9390d5f872d733d74dd7585731a1129005be23351f57f80f422daca3caee",
+      "library_file_id": "libfile_5bb584a4cb608191a6686718346f9397",
+      "file_id": "file_00000000f2dc81f69106f2ece0a9bf1b",
+      "url": "https://chatgpt.com/library?file_id=libfile_5bb584a4cb608191a6686718346f9397&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-1901-g15.zip",
+      "bytes": 19928445,
+      "sha256": "5d484214c1a1b773fe0d0e955d2213e848aac70205ebb8357c5153d08e25e9a9",
+      "library_file_id": "libfile_63d2c1f3ffd88191b73b2bf6fc5d8788",
+      "file_id": "file_000000006ac081f59989c811806f35eb",
+      "url": "https://chatgpt.com/library?file_id=libfile_63d2c1f3ffd88191b73b2bf6fc5d8788&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-4099-g13.zip",
+      "bytes": 15593525,
+      "sha256": "e854ec2df5976eae86d8a7ec843be83fb76a4e56fb0f1a585e09b7f421b96905",
+      "library_file_id": "libfile_0217084669308191b86d14d86a14a910",
+      "file_id": "file_00000000364881f592c35622dda56544",
+      "url": "https://chatgpt.com/library?file_id=libfile_0217084669308191b86d14d86a14a910&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-4099-g14.zip",
+      "bytes": 13611082,
+      "sha256": "e271c64e7235439f1d92dfeb17212f803497adde2201155b5d8705d6b336b5bb",
+      "library_file_id": "libfile_2561a57c6480819186cda74e30d13274",
+      "file_id": "file_000000007d1481f5afe62910db924441",
+      "url": "https://chatgpt.com/library?file_id=libfile_2561a57c6480819186cda74e30d13274&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-4099-g15.zip",
+      "bytes": 17716984,
+      "sha256": "fb4d5332fe23c45e1f16e7ba87145aedc372a8db2ba40429c0b4d5a12a86e211",
+      "library_file_id": "libfile_8d07fa87eb948191bfa3a18d0edac08f",
+      "file_id": "file_00000000ef6c81f5bafe01db38831e71",
+      "url": "https://chatgpt.com/library?file_id=libfile_8d07fa87eb948191bfa3a18d0edac08f&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-71-g13.zip",
+      "bytes": 23557105,
+      "sha256": "23b74fb6e159d724a3eb539bb4cdd2e28465c1a29ee1ec211ffdb24176ae9d1f",
+      "library_file_id": "libfile_41cd2466beb481919c67f02ad74d136d",
+      "file_id": "file_00000000380081f9bb1688f81e5d53f4",
+      "url": "https://chatgpt.com/library?file_id=libfile_41cd2466beb481919c67f02ad74d136d&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-71-g14.zip",
+      "bytes": 26022181,
+      "sha256": "8e7002cac240642ed30314855f59a760285526150223c801323b7859fae2370e",
+      "library_file_id": "libfile_7dc18158d2408191b763ab0f36f63354",
+      "file_id": "file_00000000807881f8bb905aba02b94299",
+      "url": "https://chatgpt.com/library?file_id=libfile_7dc18158d2408191b763ab0f36f63354&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-71-g15.zip",
+      "bytes": 25667801,
+      "sha256": "abbbff427cb64e522a21317491b9cdc06af1bed866ee15096581dff7bec697e3",
+      "library_file_id": "libfile_c529b97384dc81919bd555f940bc9cb0",
+      "file_id": "file_00000000fbdc820d83c248d2f0fc53f2",
+      "url": "https://chatgpt.com/library?file_id=libfile_c529b97384dc81919bd555f940bc9cb0&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-8191-g13.zip",
+      "bytes": 17795267,
+      "sha256": "94ea7232573f82d6d94c48ce68158799fa463f40ad9e8edd7a54d6faf76f4db5",
+      "library_file_id": "libfile_a2ccee985aa08191bb6f531e38a811cf",
+      "file_id": "file_00000000e02481f5bebf1da531399242",
+      "url": "https://chatgpt.com/library?file_id=libfile_a2ccee985aa08191bb6f531e38a811cf&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-8191-g14.zip",
+      "bytes": 19535935,
+      "sha256": "4395c8daed2aa5b79ccfd05dbb80f16cc3bcf50249616a6aaf173cf751c4da84",
+      "library_file_id": "libfile_6a7b760f29488191be425cc039698b1d",
+      "file_id": "file_00000000b7fc81f5abcba1a5e5f27fcd",
+      "url": "https://chatgpt.com/library?file_id=libfile_6a7b760f29488191be425cc039698b1d&account_id=personal"
+    },
+    {
+      "name": "vida96-recovery-8191-g15.zip",
+      "bytes": 20801579,
+      "sha256": "8eac67a52c5f8ff70f5f53c5e30ee11f31993e13c05a64839964b9e90506f88e",
+      "library_file_id": "libfile_18d8fdae15b881918e2715b4d3ebb7ff",
+      "file_id": "file_00000000b74881f58b46bab26e60911d",
+      "url": "https://chatgpt.com/library?file_id=libfile_18d8fdae15b881918e2715b4d3ebb7ff&account_id=personal"
+    },
+    {
+      "name": "vida96-original-held-outs-30.zip",
+      "bytes": 50025922,
+      "sha256": "cbb9fda82c99f8d2de5921958b550be2c8b2704044687cfe8e6702fd1b451915",
+      "library_file_id": "libfile_ecafd843bf308191942f257970d517f4",
+      "file_id": "file_0000000030e081f6b95125a009efe792",
+      "url": "https://chatgpt.com/library?file_id=libfile_ecafd843bf308191942f257970d517f4&account_id=personal"
+    }
+  ],
+  "instructions": "Clone draft97. Materialize/extract six original bundles into sibling interrupted-original/. Extract recovery bundles at repository root. Both archive conditions remain separate. Final evidence bundle additionally contains report,complete index and audit outputs. No simulations needed for extraction.",
+  "finalEvidenceBundle": {
+    "name": "vida96-final-evidence.zip",
+    "bytes": 1188672,
+    "sha256": "1a91372c4f6c9491ab478ea377b48c72c7aa3ecaf72a3637486d7d5d13a6fe21",
+    "library_file_id": "libfile_3e553481dc4c819191a9a482bbbcb18a",
+    "file_id": "file_000000000dec81f5ae20a9323145b02d",
+    "url": "https://chatgpt.com/library?file_id=libfile_3e553481dc4c819191a9a482bbbcb18a&account_id=personal"
+  }
+}

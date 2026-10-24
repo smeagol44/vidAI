@@ -1,3 +1,4 @@
+import {createUncappedRevisedObservation} from './experiments/uncappedRevisedObservation';
 import {createHybridModeObservation} from './experiments/hybridModeObservation';
 import {createIntakeEvaluation} from './experiments/intakeEvaluation';
 import {createFoodObservation} from './experiments/foodObservation';
@@ -31,6 +32,7 @@ port.onmessage = ({data}: MessageEvent) => {
       if (host.selected !== data.selected) dirty = true;
       if ((data.settings.physicsRegime ?? 'legacy-v0') !== (host.settings.physicsRegime ?? 'legacy-v0'))
         throw new Error('Physics regime can change only by resetting the world');
+      if(data.settings.experimentalVelocityMode !== host.settings.experimentalVelocityMode)throw new Error('Velocity mode can change only by resetting the world');
       if (data.settings.ecologyRegime !== host.settings.ecologyRegime)
         throw new Error('Ecology regime can change only by resetting the world');
       if (data.settings.motorExperiment !== host.settings.motorExperiment)
@@ -49,6 +51,8 @@ port.onmessage = ({data}: MessageEvent) => {
       if(data.traceJoints!==undefined&&typeof data.traceJoints!=='boolean')throw new Error('Invalid joint trace selector');
       if(data.traceFood!==undefined&&(typeof data.traceFood!=='boolean'||!['gated-torque-v1','neural-motor-v1','neural-motor-v2'].includes(host.settings.motorExperiment!)))throw new Error('Food audit requires explicit experimental world');
       if(data.nonlethalEvaluation!==undefined&&data.nonlethalEvaluation!=='nutrient-intake-v1')throw new Error('Unknown offline nonlethal evaluation');
+      if(data.traceUncapped !== undefined && (typeof data.traceUncapped !== 'boolean' || host.settings.experimentalVelocityMode !== 'uncapped-revised-v1'))throw new Error('Uncapped trace requires identified revised-hybrid world');
+      const uncapped=data.traceUncapped?createUncappedRevisedObservation(host):undefined;
       const intake=data.nonlethalEvaluation?createIntakeEvaluation(host,data.ticks):undefined;
       const food=data.traceFood?createFoodObservation(host):undefined;
       const trajectory:unknown[]=[];
@@ -59,9 +63,9 @@ port.onmessage = ({data}: MessageEvent) => {
       if(data.traceModes!==undefined&&(typeof data.traceModes!=='boolean'||host.settings.motorExperiment!=='neural-motor-v2'))throw new Error('Revised mode audit requires explicit v2 world');
       const modes=data.traceModes?createHybridModeObservation(host):undefined;
       const recorder = data.auditTorque ? createTorqueRecorder() : undefined;
-      const metrics = measureWorkerTrial(host, data.ticks,recorder||modes?(s)=>{recorder?.observe(s);modes?.observe(s);}:undefined,(tick)=>{trace?.(tick);food?.afterTick(tick);intake?.afterTick(tick);},intake?.mortality);
+      const metrics = measureWorkerTrial(host, data.ticks,recorder||modes||uncapped?(s)=>{recorder?.observe(s);modes?.observe(s);uncapped?.observe(s);}:undefined,(tick)=>{trace?.(tick);food?.afterTick(tick);intake?.afterTick(tick);uncapped?.afterTick(tick);},intake?.mortality);
       dirty = true;
-      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot(), ...(recorder ? {torqueAudit: recorder.report()} : {}),...(trace?{trajectory}:{}),...(food?{foodAudit:food.report()}:{}),...(intake?{intakeAudit:intake.report()}:{}),...(modes?{modeAudit:modes.report()}:{})}});
+      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot(), ...(recorder ? {torqueAudit: recorder.report()} : {}),...(trace?{trajectory}:{}),...(food?{foodAudit:food.report()}:{}),...(intake?{intakeAudit:intake.report()}:{}),...(modes?{modeAudit:modes.report()}:{}),...(uncapped?{uncappedAudit:uncapped.report()}:{})}});
       return;
     }
     if (data.type === 'action') {
@@ -74,7 +78,7 @@ port.onmessage = ({data}: MessageEvent) => {
   } catch (error) {
     host.running = false;
     port.postMessage({type: 'error', id: data.id, epoch: data.epoch,
-      message: error instanceof Error ? error.message : String(error)});
+      message: error instanceof Error ? error.message : String(error),...(host.settings.experimentalVelocityMode?{failureState:structuredClone(host.state),failureSettings:structuredClone(host.settings)}:{})});
   }
 };
 // A queued message yields to commands without the minimum delay imposed on

@@ -1,3 +1,52 @@
+# Completed #96 / draft #97 — bounded recovery verified
+
+- Owner authorized deterministic recovery on2026-10-24; COMPLETE original1125
+  logical offspring,5 founders,30 held-outs. No new evolutionary seed/search.
+- Frozen #90 base531e2d0 /uncapped implementation6276c79 unchanged. ONLY v2
+  four-band Mode+Command,original rules/learning/habitat;intake-only strict selection.
+- Founder→final J:17 4032→12624;71 0→8496;1901 5472→7200;4099 240→336;
+  8191 2160→8064. All0–15 curves,old capped curves,held-outs in completed report/CSV.
+-873 original raw packets reused;37 known lost packets recovered EXACT metrics/
+  trajectories/final hashes;5 uncertain1901/g13 slots(o4,o11–14) explicit;210
+  remaining original slots. Original interruption files/six bundles unchanged.
+  No discrepancy;252 recovery offspring executions,never duplicate selection.
+-922 offspring fed;841 old-flagged feeders eligible.14 accepted improvements.
+  Exact old rejected feeders1901g1/o13,4099g3/o4,8191g1/o8 became parents.
+- OFF0;DIRECT+physicalOSC used,post-startup switches. Max485.72px/s,39.28rad/s;
+  zero clamp loss,no nonfinite/corrupt physics. All thresholds read-only diagnostics.
+-1160 packets/1125 mutations/75 choices/835200 tick receipts/60181200 learning
+  changes verified;all5 champion Worker packets and reset forks exact.331fast+
+  metadata/build/focusedWorker pass. Portable ledger CI and local full raw audit
+  scopes distinguished.17 primary recovery bundles saved incrementally,originals
+  immutable;complete index/provenance/report in docs/experiments/uncapped-revised-v1-*.
+- STOP owner review. No merge/deploy/release/Wiki/VIDA3D change. Both physics AND
+  selection policy differ from historical #90;not controlled causal ranking.
+
+# Interrupted #90 uncapped repeat — #96 / draft #97
+
+- STOP:primary process lost during generation13. Do not restart or silently
+  recover measurements. Owner's exact-once requirement now needs a recovery
+  decision. No physics failure is established by this infrastructure interruption.
+- Scientific base531e2d0b5fef6d6ce15fa6a83905b8c99f7606ee;preregistered
+  4d81373e5bc4877aa26ef23da0adb8b322c875f9;frozen implementation6276c79.
+- All5 seeds have generation0–12 summaries:900 offspring metadata/60 strict
+  intake-only decisions reconstruct. Scores at12:17=12624,71=8496,1901=7200,
+  4099=336,8191=8064J. These are checkpoints,not final15-generation champions.
+-873 raw offspring packets survive (863 completed-generation +10 partial13).
+  37 completed raw packets lost locally despite retained scores/mutations/hashes.
+  Seed1901 generation13/o4 lacks its raw score although later receipts survive;
+  endpoint aftero10 unknown. No held-outs or final replay/full-budget audit done.
+- Complete surviving originals in6 immutable recovery ZIPs;native file IDs/SHA256
+  in docs/experiments/uncapped-revised-v1-recovery-bundles.json. Exact raw/gap
+  census and partial curves/report accompany them. GitHub contains source/all60
+  summary ledgers/subsets;extract bundles into checkout for raw inspection.
+-22 bad GitHub transport objects are excluded in an index/history/subfolder;
+  upload bridge now checks command success,expected lengths and Git blob hashes.
+  No corrupted transport data is food or a scientific result. Prior data untouched.
+- Local331fast+metadata/build/focused v2 Worker verified before interruption.
+  Do not claim completed1125 or held-outs/replay. Branch remains draft/unmerged;
+  no production/testing/Wiki/VIDA3D change. #57/#96 hold current recovery gate.
+
 # Corrected neural motor / food checkpoint (#59/#63 / draft #86)
 
 - Owner correction: #85 compared legacy six-output, three-output gated and a

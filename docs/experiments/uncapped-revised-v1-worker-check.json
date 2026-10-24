@@ -1,0 +1,24 @@
+{
+  "losslessReceiptPacking": true,
+  "hostQuietObserverForkExact": true,
+  "actualWorkerUncapped": {
+    "forces": {
+      "samples": 12,
+      "maxLinear": 1198.8812242433391,
+      "maxOmega": 58.18561646924009,
+      "linearExceedances": 12,
+      "angularExceedances": 9
+    },
+    "contact": {
+      "samples": 12,
+      "maxLinear": 1270.4711311894894,
+      "maxOmega": 31.50169379196562,
+      "linearExceedances": 12,
+      "angularExceedances": 7
+    }
+  },
+  "fourBandPersistenceImmediateIndependentTorque": true,
+  "realFeeding144JAndActualLearning": true,
+  "modeControlIsolation": true,
+  "historicalV2HostWorkerShortContinuation": true
+}
