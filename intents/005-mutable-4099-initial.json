@@ -1,0 +1,12 @@
+{
+  "label": "005-mutable-4099-initial",
+  "detail": {
+    "action": "initial",
+    "controller": "mutable",
+    "seed": 4099,
+    "logicalFounders": 1
+  },
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "previousEvidence": "4d81c0a1261c0e0a3eac47b8b6b0296dc597f713",
+  "notStartedAtIntent": true
+}
