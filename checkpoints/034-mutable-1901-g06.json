@@ -1,0 +1,54 @@
+{
+  "path": "/workspace/scratch/4b3e1fd14e68/proximity-targeting-bundles/034-mutable-1901-g06.zip",
+  "file": "034-mutable-1901-g06.zip",
+  "bytes": 20227477,
+  "sha256": "bd83f049b496be1d6da5ade56f720c797e2444097f5efee7cc662ad98071f9c0",
+  "gitSha": "9e2565f062e57d98baf52cc8520d5d174872f39e",
+  "label": "034-mutable-1901-g06",
+  "parts": [
+    {
+      "path": "checkpoints/034-mutable-1901-g06.zip.part000",
+      "bytes": 3000000,
+      "sha256": "76575c53b4bfe694e3122c3fdca9ba185180354567725cb48c5510001eda7c68",
+      "gitSha": "c866f53e0cc0b180cadf06c0e0716f405fe4fe48"
+    },
+    {
+      "path": "checkpoints/034-mutable-1901-g06.zip.part001",
+      "bytes": 3000000,
+      "sha256": "10989923076ff862586956910dbe92190f441190b5d545ca0df81b23b35a6638",
+      "gitSha": "0a6b64d94b7da964f1e8c2ffab9a6d673c23d4db"
+    },
+    {
+      "path": "checkpoints/034-mutable-1901-g06.zip.part002",
+      "bytes": 3000000,
+      "sha256": "631d9e642df44e7150da35625941e7bc65268dd9c642c5c5965bd2dd201ed059",
+      "gitSha": "dbbbef20cc9f3c1b3de1821b488e6a5154cb6f52"
+    },
+    {
+      "path": "checkpoints/034-mutable-1901-g06.zip.part003",
+      "bytes": 3000000,
+      "sha256": "53749e4fb3f50443514460e7ecced5f1fbecefdeff01a0f34cc2fac4654ce697",
+      "gitSha": "aa7584aec1ad964f9018fc09bfec3cb77f879e11"
+    },
+    {
+      "path": "checkpoints/034-mutable-1901-g06.zip.part004",
+      "bytes": 3000000,
+      "sha256": "824003e35cb6f3bb2ac8b15dfa76791aa848aea09381deb3305f02a343f80c84",
+      "gitSha": "c5348d48346b2cdd335665313003f9efc4d501f8"
+    },
+    {
+      "path": "checkpoints/034-mutable-1901-g06.zip.part005",
+      "bytes": 3000000,
+      "sha256": "9743e73782e0ca6e5b5b9b5b2259ab48660615647bba8f8fa28a398b780f2a71",
+      "gitSha": "da13de2f3692c47dabdfe94face5ef3d97873b47"
+    },
+    {
+      "path": "checkpoints/034-mutable-1901-g06.zip.part006",
+      "bytes": 2227477,
+      "sha256": "56a347eda9274f733ab79d9c0334ef1de2b14a9c4901c9c9a9549a41dae555b4",
+      "gitSha": "3f6e3566e470962dd5955ffca47422b99d015f7a"
+    }
+  ],
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "intentHead": "d386f36e4e54e4adb9e66117a0acb12fb930a5df"
+}
