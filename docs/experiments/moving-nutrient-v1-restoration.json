@@ -1,0 +1,9 @@
+{
+  "restoredFrom": "63068dc4fe68035ab00858625b1031f9f8ad0b45",
+  "checkpoints": 40,
+  "fileEntriesVerified": 767,
+  "allZIPPartMemberHashesExact": true,
+  "reexecutions": 0,
+  "nextUnit": "mutable4099/g7",
+  "unstartedReason": "Previous functions.exec stack terminated in commitEvidence reference readback before unit() could call checkpoint-moving-nutrient.py. Durable intent63068dc4 parent5f783112 exists; simulation invocation was never reached."
+}

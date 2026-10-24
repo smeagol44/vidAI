@@ -1,0 +1,391 @@
+{
+  "curves": [
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 0,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 1,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 2,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 3,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 4,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 5,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 6,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 7,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 8,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 9,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 10,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 0,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 1,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 2,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 3,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 4,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 5,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 6,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 7,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 8,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 9,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 10,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 0,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 1,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 2,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 3,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 4,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 5,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 6,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 7,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 8,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 9,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 10,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 0,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 1,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 2,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 3,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 4,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 5,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 6,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 7,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 8,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 9,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 10,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 0,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 1,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 2,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 3,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 4,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 5,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 6,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 7,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 8,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 9,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 10,
+      "selected_absorbed_J": 0
+    }
+  ],
+  "runs": [
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "founder_J": 0,
+      "final_J": 0,
+      "unchanged_founder": true,
+      "selected_at": "initial",
+      "feeding_offspring": 0,
+      "offspring_min_gap_px": 46.139775445123064,
+      "improvements": []
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "founder_J": 0,
+      "final_J": 0,
+      "unchanged_founder": true,
+      "selected_at": "initial",
+      "feeding_offspring": 0,
+      "offspring_min_gap_px": 98.00036068987411,
+      "improvements": []
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "founder_J": 0,
+      "final_J": 0,
+      "unchanged_founder": true,
+      "selected_at": "initial",
+      "feeding_offspring": 0,
+      "offspring_min_gap_px": 87.75459230241468,
+      "improvements": []
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "founder_J": 0,
+      "final_J": 0,
+      "unchanged_founder": true,
+      "selected_at": "initial",
+      "feeding_offspring": 0,
+      "offspring_min_gap_px": 83.36786311727198,
+      "improvements": []
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "founder_J": 0,
+      "final_J": 0,
+      "unchanged_founder": true,
+      "selected_at": "initial",
+      "feeding_offspring": 0,
+      "offspring_min_gap_px": 89.62043299910715,
+      "improvements": []
+    }
+  ]
+}
