@@ -1,0 +1,18 @@
+{
+  "path": "/workspace/scratch/4b3e1fd14e68/proximity-targeting-bundles/001-legacy-17-initial.zip",
+  "file": "001-legacy-17-initial.zip",
+  "bytes": 2796416,
+  "sha256": "3edab6d9e8990d04cf9587b0e03ef1ad0eeb3bddae297641218e02e16ee9c013",
+  "gitSha": "96493c91222d51869525bcb2214cf323def8c3e7",
+  "label": "001-legacy-17-initial",
+  "parts": [
+    {
+      "path": "checkpoints/001-legacy-17-initial.zip.part000",
+      "bytes": 2796416,
+      "sha256": "3edab6d9e8990d04cf9587b0e03ef1ad0eeb3bddae297641218e02e16ee9c013",
+      "gitSha": "96493c91222d51869525bcb2214cf323def8c3e7"
+    }
+  ],
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "intentHead": "058ac09cf75388cd19cc157b0af5174965709024"
+}
