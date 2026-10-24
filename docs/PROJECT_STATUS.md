@@ -1,24 +1,32 @@
-# Active #98 / draft #99 — uncapped OFF vs MUTABLE two-output study
+# Complete #98 / draft #99 — STOP owner review
 
-- Owner authorized exactly2250 offspring:ONLY original #93 two-output v2,
-  OFF then MUTABLE,five seeds each,15x15x12s.30 final held-outs+15 matched
-  mutable learning-OFF ablations. No legacy/three-output campaigns.
-- Exact baselinebc4504613b33a8f8e022e17e4b7db6369b3a36c1. Keep original
-  heritable-plastic-v1 traits/masks/genetics/learning/extra9draws/costs.
-- New schema98.0.0/uncapped-plasticity-v1 bypasses only400px/s and±20rad/s
-  clamps. Preserve physical joints/contacts/walls/drag/actuators/prepaid work.
-- Actual founder incumbent;strict actual absorbed-J-only selection. All former
-  physical flags diagnostic-only. No first-valid gate or substitute thresholds.
-- Atomic immutable per-proposal requests/full packets and generation lineage
-  manifests,fsync/byte/hash/readback. Save every generation externally BEFORE
-  next generation;initial frozen source/genomes/environments before founders.
-  If request has no completed packet:STOP,reportgap,request recoveryapproval.
-- Preregister before any evaluation. Preserve #93/#97 and all historical data.
-  Verify full2250mutation/150decision/2305packet integrity and actual Worker
-  replay/reset/heritable-vs-somatic boundaries. No long browser/search suites.
-- Interpret OFF vs MUTABLE as package(inherited variation+learning+costs),
-  historical #93 as changed physics AND selection;#97 fixed-learning differs.
-- STOP aftercompletion forownerreview. No merge/deploy/releases/Wiki/VIDA3D/#78.
+- Original #93 two-output OFF then MUTABLE study COMPLETE: 2250 unique offspring,
+  10 founders,30 held-outs,15 matched learning-OFF ablations. Zero training
+  repeats/unknown slots. Scientific source1d805c9 remains frozen;no merge/deploy.
+- Final J seeds17/71/1901/4099/8191: OFF9600/10848/8496/2400/10752;
+  MUTABLE11328/12048/7200/2448/6384. MUT wins3/5,median delta48J,
+  mean delta-513.6J. Matched ablations ON6/OFF5/tie4,median0J.
+  Package includes inherited variation+learning+costs;no consistent causal
+  learning advantage established. Historical93 changes physics AND selection.
+- Full report/CSV/JSON/ancestry/held-outs/ablations in
+  docs/experiments/uncapped-plasticity-v1/. Preserve original historical nulls.
+  956OFF/922MUT feeders;883/902 old-flagged feeders eligible.18 improvements each.
+  DIRECT/physicalOSC used,post1s switches;OFF never reached. Normal funded learning,
+  mutable genes/masks and somatic inheritance boundary exact;OFF acquired/cost0.
+- All2305 packets/2250mutation histories/150choices/33541647 acquired-change rows
+  audited. Ten full champion actual Worker packets and ten split/reset
+  snapshots/PRNG exact. No recorded nonfinite/corrupt trial. Max training speed
+  487.511px/s,37.145rad/s;clamp loss0,chemical error<=1.281e-9J.
+- All163 primary ZIP checkpoints/hash receipts preserved on separate
+  experiment/uncapped-plasticity-evidence-98,head3640e4f89ce40997cfbb7b0cb7e0c986bc2a1fca.
+  evidence-index.json lists immutable commits/parts/hashes. Restore script verifies
+  without simulation/refuses differences. Final reports/source archived separately.
+  Transient disconnect affected checkpoint byte reads only;all packets survived.
+- Implementation336fast+metadata/build/typecheck/production+focused Worker pass;
+  full raw audit/replays local,portable2250-slot/150-choice ledger pass. Final
+  remote head/CI/status in #98/#57/#99;Pages publication/deploy deliberately skipped.
+- STOP: no extra experiments,seeds,tuning,merge,promotion,production/testing release,
+  Wiki,VIDA3D or#78 work. Productionv0.37.0/main194d70d,testingT1.1/d7a6814 unchanged.
 
 # Corrected neural motor / food checkpoint (#59/#63 / draft #86)
 

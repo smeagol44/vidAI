@@ -1,0 +1,86 @@
+{
+  "counts": {
+    "founders": 10,
+    "offspring": 2250,
+    "heldOut": 30,
+    "ablations": 15,
+    "total": 2305
+  },
+  "proposals": 2250,
+  "decisions": 150,
+  "packets": 2305,
+  "ticks": 1659600,
+  "learningChanges": 33541647,
+  "numerical": {
+    "maxLearningCostResidualJ": 8.881784197001252e-16,
+    "maxLearningPartitionResidualJ": 1.5987211554602254e-14
+  },
+  "allInitialGenotypesAndFreshLifetimesExact": true,
+  "allSomaticMembershipAndOffCostsExact": true,
+  "allFrozenSourceAndPriorHashesExact": true,
+  "fullWorkerReplays": 10,
+  "splitResetForks": 10,
+  "verificationOnly": true,
+  "replay": [
+    {
+      "condition": "off",
+      "seed": 17,
+      "fullPacketExact": true,
+      "splitResetSnapshotPRNGExact": true
+    },
+    {
+      "condition": "off",
+      "seed": 71,
+      "fullPacketExact": true,
+      "splitResetSnapshotPRNGExact": true
+    },
+    {
+      "condition": "off",
+      "seed": 1901,
+      "fullPacketExact": true,
+      "splitResetSnapshotPRNGExact": true
+    },
+    {
+      "condition": "off",
+      "seed": 4099,
+      "fullPacketExact": true,
+      "splitResetSnapshotPRNGExact": true
+    },
+    {
+      "condition": "off",
+      "seed": 8191,
+      "fullPacketExact": true,
+      "splitResetSnapshotPRNGExact": true
+    },
+    {
+      "condition": "mutable",
+      "seed": 17,
+      "fullPacketExact": true,
+      "splitResetSnapshotPRNGExact": true
+    },
+    {
+      "condition": "mutable",
+      "seed": 71,
+      "fullPacketExact": true,
+      "splitResetSnapshotPRNGExact": true
+    },
+    {
+      "condition": "mutable",
+      "seed": 1901,
+      "fullPacketExact": true,
+      "splitResetSnapshotPRNGExact": true
+    },
+    {
+      "condition": "mutable",
+      "seed": 4099,
+      "fullPacketExact": true,
+      "splitResetSnapshotPRNGExact": true
+    },
+    {
+      "condition": "mutable",
+      "seed": 8191,
+      "fullPacketExact": true,
+      "splitResetSnapshotPRNGExact": true
+    }
+  ]
+}

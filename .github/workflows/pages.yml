@@ -62,6 +62,8 @@ jobs:
         if: github.head_ref != 'experiment/uncapped-plasticity-98' && hashFiles('docs/experiments/architecture-plasticity-v1.json') != ''
       - run: node --import tsx scripts/check-uncapped-plasticity-worker.mjs
         if: github.head_ref == 'experiment/uncapped-plasticity-98'
+      - run: node --import tsx scripts/check-uncapped-plasticity-ledger.mjs
+        if: github.head_ref == 'experiment/uncapped-plasticity-98' && hashFiles('docs/experiments/uncapped-plasticity-v1/complete-ledger.json.gz') != ''
       - run: npx playwright install --with-deps chromium
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
       - run: npm run test:e2e
