@@ -1,22 +1,15 @@
-# #103 training complete — held-out receipts unresolved after runtime loss
+# #103 training audited — STOP for original held-out receipt recovery
 
-- All500 original offspring+5founders and50choices are independently saved through evidence5cefc73c3eecc22c0412319c620717be4d4ec3c7. Never rerun them.
-- Scientific code frozen f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187;protocol d01d1fd.
-- Held-out intent48f75676257297be155f71454c7d2b6cfea47992 exists. Runtime transport disconnected afterward. Active local command is unknown;0–15 held-outs may have started/completed. No remote completed held-out checkpoint.
-- Do NOT invoke post or execute any uncertain held-out again. Recover original requests/packets/received/log/ZIP first;otherwise explicit owner recovery decision is necessary. Do not impute missing scores0 or claim unstarted.
-- See docs/experiments/proximity-targeting-v1-runtime-loss.md. Cloud CI only restores/audits original505 training packets,derives outputs and runs TRAINING-final verification replays. It never starts a scientific evaluation.
-- Training final J:legacy17 30805.749290241907;MUTABLE17 0;71 2.2674251375328573;1901 1150.7401104316946;4099 .17309004905395575. Seeds confound mutation algorithm.
-- No merge,deployment,Wiki,production/testing release,extra experiment orVIDA3D work. Experiment remains incomplete until15 original held-out outcomes are resolved.
-
-# Active #103 / draft #104 — bounded follow-up authorized
-
-- Owner request and preregistered protocol: docs/experiments/proximity-targeting-v1-{owner-request,protocol}.md,commit d01d1fd.
-- Exact #101 base a44515e2;new isolated experiment/proximity-targeting-103.
-- Two deliberate changes only:90px graded real feeding and parent-birth targeting for MUTABLE71/4099.
-- Exactly500 offspring+5founders+15held-outs;strict absorbed-J improvement;no reruns/extra scientific trials.
-- Preserve previous source/evidence. Independent immutable generation checkpoints and full audits required.
-- Standard random mutation17/1901 unchanged;seed/algorithm confounded,no causal claim.
-- STOP owner review after completion;no merge/deploy/Wiki/releases/production/testing/VIDA3D.
+- All500 unique offspring+5founders,50 strict choices and55 curve points are preserved and fully audited. Never rerun these outcomes.
+- Frozen scientific source f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187;preregistration d01d1fd1359b27ee4b8df6bd39356d0071717fb1;exact#101 base a44515e2. No scientific source changes after freeze.
+- Training final J:legacy17 30805.749290241907;MUTABLE17 0;71 2.2674251375328573;1901 1150.7401104316946;4099 .17309004905395575. Legacy contact10080J/proximity20725.749290241907J. All hybrid intake is noncontact.
+- Custom71/4099 have10/60 eligible targeted children,56/316 targeted events. None beat the incumbent;their only selected improvements were original-random founder children. Seeds and algorithm confounded,no causal ranking.
+- Full505-packet audit/500 genotype histories/50choices/454500tick receipts/1818000 body+target substeps passed. Five full training-final Worker packets and five450+450 reset continuations exact;all old source/data hashes match.382 old-flagged offspring remained eligible;all505 alive,clamp0J,chemical error<=1.234e-9J.
+- Original56 ZIP checkpoints through5cefc73c3eecc22c0412319c620717be4d4ec3c7. All505 normalized trajectories on analysis481da436e0f08ff91bc4f4a3cc2cd61e2f97377d. Source/training exports2552e1f;final CI/head in#103/#57/#104.
+- CRITICAL:held-out intent48f75676257297be155f71454c7d2b6cfea47992 exists,but no completed held-out archive is remote. Runtime disconnected;the active command is unknown.0–15may have started/completed. Fresh replacement workspace lacked original receipts. Do not claim unstarted,impute0 or repeat any uncertain held-out.
+- Exact next action:recover original runtime requests/packets/received/champions and056-held-outs log/ZIP. If unrecoverable,obtain an explicit owner recovery decision before any uncertain slot is executed. Full experiment remains INCOMPLETE;15 held-out outcomes unresolved. Current source has all training reports/CSV/JSON/plot/lineage/selected trajectories and restore helpers.
+- Recovery CI40134850893 audit/export/Git publication passed;only redundant backup artifact upload failed on an invalid parent-directory glob. Backup removed. Final CI verifies published artifacts/500-slot/50-choice ledger/all505 normalized exports without simulation. No further full raw replay campaign is needed.
+- STOP for recovery/owner review. No merge,deployment,Wiki,production/testing release,extra experiment,VIDA3D or#78 work. Productionmain194d70d/v0.37.0 andtestingd7a6814/T1.1 untouched.
 
 # Complete #100 / draft #101 — STOP owner review
 

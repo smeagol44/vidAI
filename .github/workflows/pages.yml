@@ -76,6 +76,15 @@ jobs:
         if: github.head_ref == 'experiment/proximity-targeting-103' && hashFiles('docs/experiments/proximity-targeting-v1/complete-ledger.json.gz') != ''
       - run: python scripts/verify-proximity-targeting-exports.py
         if: github.head_ref == 'experiment/proximity-targeting-103' && hashFiles('docs/experiments/proximity-targeting-v1/graph-data.zip') != ''
+      - run: node --import tsx scripts/check-proximity-training-ledger.mjs
+        if: github.head_ref == 'experiment/proximity-targeting-103' && hashFiles('docs/experiments/proximity-targeting-v1/training-ledger.json.gz') != ''
+      - run: python scripts/verify-proximity-training-exports.py
+        if: github.head_ref == 'experiment/proximity-targeting-103' && hashFiles('docs/experiments/proximity-targeting-v1/training-graph-data.zip') != ''
+      - name: Independently verify all505 published trajectory exports
+        if: github.head_ref == 'experiment/proximity-targeting-103' && hashFiles('docs/experiments/proximity-targeting-v1/analysis-links.json') != ''
+        run: |
+          git fetch origin experiment/proximity-analysis-103
+          python scripts/restore-proximity-training-trajectories.py --verify-only
       - run: npx playwright install --with-deps chromium
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
       - run: npm run test:e2e

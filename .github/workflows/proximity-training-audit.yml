@@ -66,18 +66,5 @@ jobs:
       - name: Publish verified derivatives to the two bounded experimental refs
         if: steps.gate.outputs.run == 'true'
         run: python scripts/publish-proximity-training-analysis.py
-      - uses: actions/upload-artifact@v4
-        if: always() && steps.gate.outputs.run == 'true'
-        with:
-          name: vida103-verified-training-held-outs-unresolved
-          retention-days: 90
-          if-no-files-found: warn
-          path: |
-            docs/experiments/proximity-targeting-v1/*.csv
-            docs/experiments/proximity-targeting-v1/*.json
-            docs/experiments/proximity-targeting-v1/*.gz
-            docs/experiments/proximity-targeting-v1/*.md
-            docs/experiments/proximity-targeting-v1/*.zip
-            docs/experiments/proximity-targeting-v1/*.png
-            docs/experiments/proximity-targeting-v1/*.svg
-            ../proximity-trajectory-bundles/*.zip
+      # Verified derivatives are preserved in the two explicit Git refs.
+      # The redundant backup upload rejected a parent-directory glob and is removed.

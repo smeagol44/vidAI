@@ -14,7 +14,7 @@ Scientific implementation: f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187. Preregister
 | mutable | 1901 | original-random | 0 | 1150.74011 | 0 | 1150.74011 | g6/o3 | 2 |
 | mutable | 4099 | parent-targeted-66 | 0 | 0.17309 | 0 | 0.17309 | g4/o6 | 1 |
 
-MUTABLE17 retains its unchanged founder if its final score remains zero. The other rows identify the actual selected offspring. All replacements required strictly greater actual absorbed J. Zero ties retain the parent; all ten siblings use the same frozen genetic parent. No old physical diagnostic excluded or penalized an offspring.
+MUTABLE 17 retains its unchanged founder at 0 J. The other rows identify the actual selected offspring. All replacements required strictly greater actual absorbed J. Zero ties retain the parent; all ten siblings use the same frozen genetic parent. No old physical diagnostic excluded or penalized an offspring.
 
 The standard MUTABLE populations are seeds17/1901; the custom populations are71/4099. Seeds differ between the two groups, so their outcomes cannot establish a causal targeting advantage. The legacy comparison also changes architecture and learning genetics. Results are individual descriptive observations.
 
@@ -81,6 +81,8 @@ For an eligible custom child, a separate deterministic stream requests five targ
 | mutable | 71 | parent-targeted-66 | 90 | 10 | 56 | 744 | 7.0 | 70.0 | 4 | 6 |
 | mutable | 1901 | original-random | 50 | 0 | 0 | 800 | 0.0 | — | 0 | 0 |
 | mutable | 4099 | parent-targeted-66 | 40 | 60 | 316 | 484 | 39.5 | 65.833 | 44 | 16 |
+
+**Targeting exposure:** seed 71 had 10 eligible children and 56/80 targeted events (70%); seed 4099 had 60 eligible children and 316/480 targeted events (65.833%). None of these 70 children beat its parent. Both custom finals were created by the original founder-fallback process. This is a bounded observation, not a causal claim about targeting quality.
 
 mutation-statistics.csv/.json contains500 child summaries and exact current-parent coordinate sets. mutation-events.csv contains4000 ordered events, including reconstructed unbounded Gaussian values and applied deltas. training-ledger.json.gz preserves full origin records, rounding/selection draws, all trait/mask attempts and all50 choices. Ancestry reuse is observational; the mutation algorithm never targets the cumulative ancestry union.
 
@@ -153,3 +155,7 @@ training-graph-data.zip is CRC/member/count verified and contains copyable CSV/J
 
 STOP for original-receipt recovery and owner review. No merge,deployment,Wiki edit,production/testing release change,extra experiment orVIDA3D change.
 
+
+The recovery audit and Git publication steps in [CI40134850893](https://github.com/smeagol44/vidAI/actions/runs/40134850893) passed. Its redundant Actions artifact upload failed afterward because a parent-directory glob was invalid. All deliverables were already committed at2552e1f; the redundant upload is removed. Final scoped CI independently verifies the Git-published files and all505 normalized trajectory exports.
+
+The replacement workspace was inspected and was empty of the original held-out requests,packets,received receipts and056-held-outs log/ZIP. It is a fresh filesystem,not proof that the held-outs never started. All15 remain unresolved. No uncertain slot was re-executed.

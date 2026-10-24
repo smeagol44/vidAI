@@ -15,3 +15,10 @@ with zipfile.ZipFile(r/'training-graph-data.zip')as z:
  for name,count in expected.items():assert len(list(csv.DictReader(io.StringIO(z.read(name).decode()))))==count
 result={'experimentComplete':False,'trainingOriginalPackets':505,'offspring':500,'heldOutUnresolved':15,'curvePoints':55,'mutationEvents':4000,'trajectoryConditions':len(paths),'zipCRCAndMembersExact':True,'rows':expected,'zipSHA256':hashlib.file_digest((r/'training-graph-data.zip').open('rb'),'sha256').hexdigest(),'simulationEvaluations':0}
 (r/'training-export-verification.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
+
+manifest=r/'training-artifact-manifest.json'
+if manifest.exists():
+ m=json.loads(manifest.read_text())
+ for e in m['files']:
+  p=Path(e['path']);assert p.stat().st_size==e['bytes']and hashlib.file_digest(p.open('rb'),'sha256').hexdigest()==e['sha256'],e['path']
+ print(json.dumps({'publishedArtifactHashesExact':True,'files':len(m['files']),'simulationEvaluations':0}))

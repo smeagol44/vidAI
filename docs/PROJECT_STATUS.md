@@ -1,3 +1,15 @@
+## #103 / draft #104 — training audited;15 held-out receipts unresolved
+
+All500 original offspring+5founders/50strict decisions are preserved and audited;no training outcome re-executed or replaced. Legacy17:200.598234→30805.749290J (10080contact,20725.749290proximity). MUTABLE17/71/1901/4099 finals0/2.267425/1150.740110/.173090J. Custom seeds71/4099 had10/60 eligible targeted children;none improved the incumbent. All custom selected improvements occurred during original founder fallback. Different seeds confound mutation algorithm.
+
+Full505-packet,500-genotype,454500tick,1818000-substep audit;five exact canonical training-final Worker packets and five reset continuations passed. Original source/historical hashes exact;all505 alive;clamp0J;chemical residual<=1.234e-9J. Curves,full lineage,learning/movement/feeding/energy results and selected trajectories:docs/experiments/proximity-targeting-v1/training-report.md. All505 normalized trajectories on analysis481da436;original56 primary checkpoints through5cefc73.
+
+Held-out intent48f7567 was published before runtime transport loss. No completed held-out archive is remote;0–15 may have started/completed locally. Replacement workspace has no original receipts. All15 are unresolved,not0J and not re-executed. Recover original requests/packets/received/log/ZIP;otherwise explicit owner recovery decision required. Experiment remains INCOMPLETE. No new scientific evaluation is authorized by this handoff.
+
+Scientific implementation f669e09;protocol d01d1fd;exact#101 basea44515e2. Recovery CI40134850893 audit/export/publication passed;redundant backup upload failed after Git saving and is removed. Final scoped CI verifies artifact hashes/portable ledger/all505 trajectory exports. See#103/#57/#104 for final heads/status. STOP for receipt recovery and owner review;no merge/deploy/Wiki/releases/VIDA3D. Productionv0.37.0/main194d70d,testingT1.1/d7a6814 unchanged.
+
+---
+
 # Complete #100 / draft #101 — STOP owner review
 
 - Fixed moving-resource study COMPLETE:500 unique offspring,5founders,
