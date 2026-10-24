@@ -15,7 +15,7 @@ export const INTAKE_OPTIONS={auditTorque:true,traceJoints:true,traceFood:true,no
 export function intakeNetwork(a:IntakeArchitecture,seed=INTAKE_BUDGET.brainSeed){return a==='legacy'?initialNetwork('legacy',seed):foodNetwork('two-output',seed);}
 export function intakeMutation(g:Genome,seed:number,index:number){return mutateNetwork(g,'signed',seed,index);}
 export function intakeSource(g:Genome,c:{seed:number;heading:number}=INTAKE_TRAINING){
- const settings:SimulationSettings={...DEFAULT_SETTINGS,physicsRegime:'passive-work-v3',motorExperiment:g.motorController?.version??'gated-torque-v1',
+ const settings:SimulationSettings={...DEFAULT_SETTINGS,physicsRegime:'passive-work-v3',motorExperiment:g.plasticConnections||g.motorController?.version==='neural-motor-v3'?'plasticity-study-v1':g.motorController?.version??'gated-torque-v1',
   mouthContactModel:'capsule-v1',worldWidth:1000,worldHeight:800,targetNutrients:0,nutrientPattern:'blooms',inflowRate:0,gravity:0,waterViscosity:.18};
  const s=createInitialWorld(settings,c.seed,'balanced','standard',0);
  addExternalOrganism(s,g,settings,500,400,c.heading);

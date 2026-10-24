@@ -1,3 +1,4 @@
+import {createPlasticityObservation} from './experiments/plasticityObservation';
 import {createHybridModeObservation} from './experiments/hybridModeObservation';
 import {createIntakeEvaluation} from './experiments/intakeEvaluation';
 import {createFoodObservation} from './experiments/foodObservation';
@@ -41,13 +42,13 @@ port.onmessage = ({data}: MessageEvent) => {
       host.running = data.running; host.selected = data.selected; return;
     }
     if (data.type === 'experiment-step') {
-      if (host.running || !['gated-torque-v1','retained-head-v1','neural-motor-v1','neural-motor-v2'].includes(host.settings.motorExperiment!)
+      if (host.running || !['gated-torque-v1','retained-head-v1','neural-motor-v1','neural-motor-v2','plasticity-study-v1'].includes(host.settings.motorExperiment!)
         || !Number.isInteger(data.ticks) || data.ticks < 1 || data.ticks > 3600)
         throw new Error('Paused explicit experimental world and 1–3600 ticks required');
       if (data.auditTorque !== undefined && (typeof data.auditTorque !== 'boolean' || host.settings.physicsRegime !== 'passive-work-v3'))
         throw new Error('Torque audit requires passive-work-v3 and a boolean selector');
       if(data.traceJoints!==undefined&&typeof data.traceJoints!=='boolean')throw new Error('Invalid joint trace selector');
-      if(data.traceFood!==undefined&&(typeof data.traceFood!=='boolean'||!['gated-torque-v1','neural-motor-v1','neural-motor-v2'].includes(host.settings.motorExperiment!)))throw new Error('Food audit requires explicit experimental world');
+      if(data.traceFood!==undefined&&(typeof data.traceFood!=='boolean'||!['gated-torque-v1','neural-motor-v1','neural-motor-v2','plasticity-study-v1'].includes(host.settings.motorExperiment!)))throw new Error('Food audit requires explicit experimental world');
       if(data.nonlethalEvaluation!==undefined&&data.nonlethalEvaluation!=='nutrient-intake-v1')throw new Error('Unknown offline nonlethal evaluation');
       const intake=data.nonlethalEvaluation?createIntakeEvaluation(host,data.ticks):undefined;
       const food=data.traceFood?createFoodObservation(host):undefined;
@@ -56,12 +57,14 @@ port.onmessage = ({data}: MessageEvent) => {
         id:o.id,com:calculateOrganismCOM(o),joints:o.joints.map((j,i)=>({mode:j.gateMode,torque:j.appliedTorque,
           angle:Math.atan2(Math.sin(o.segments[i+1].angle-o.segments[o.genome.parts[i+1].parentIndex].angle-o.genome.parts[i+1].baseAngleOffset),
             Math.cos(o.segments[i+1].angle-o.segments[o.genome.parts[i+1].parentIndex].angle-o.genome.parts[i+1].baseAngleOffset))}))}))});}:undefined;
-      if(data.traceModes!==undefined&&(typeof data.traceModes!=='boolean'||host.settings.motorExperiment!=='neural-motor-v2'))throw new Error('Revised mode audit requires explicit v2 world');
+      if(data.traceModes!==undefined&&(typeof data.traceModes!=='boolean'||!['neural-motor-v2','plasticity-study-v1'].includes(host.settings.motorExperiment!)))throw new Error('Revised mode audit requires explicit v2 world');
+      if(data.traceLearning!==undefined&&(typeof data.traceLearning!=='boolean'||host.settings.motorExperiment!=='plasticity-study-v1'))throw new Error('Learning audit requires explicit plasticity study');
+      const learning=data.traceLearning?createPlasticityObservation(host):undefined;
       const modes=data.traceModes?createHybridModeObservation(host):undefined;
       const recorder = data.auditTorque ? createTorqueRecorder() : undefined;
-      const metrics = measureWorkerTrial(host, data.ticks,recorder||modes?(s)=>{recorder?.observe(s);modes?.observe(s);}:undefined,(tick)=>{trace?.(tick);food?.afterTick(tick);intake?.afterTick(tick);},intake?.mortality);
+      const metrics = measureWorkerTrial(host, data.ticks,recorder||modes?(s)=>{recorder?.observe(s);modes?.observe(s);}:undefined,(tick)=>{trace?.(tick);food?.afterTick(tick);intake?.afterTick(tick);learning?.afterTick(tick);},intake?.mortality,learning?.observe);
       dirty = true;
-      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot(), ...(recorder ? {torqueAudit: recorder.report()} : {}),...(trace?{trajectory}:{}),...(food?{foodAudit:food.report()}:{}),...(intake?{intakeAudit:intake.report()}:{}),...(modes?{modeAudit:modes.report()}:{})}});
+      port.postMessage({type: 'result', id: data.id, epoch: host.epoch, value: {metrics, snapshot: host.snapshot(), ...(recorder ? {torqueAudit: recorder.report()} : {}),...(trace?{trajectory}:{}),...(food?{foodAudit:food.report()}:{}),...(intake?{intakeAudit:intake.report()}:{}),...(modes?{modeAudit:modes.report()}:{}),...(learning?{learningAudit:learning.report()}:{})}});
       return;
     }
     if (data.type === 'action') {

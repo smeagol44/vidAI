@@ -1,6 +1,8 @@
+import {prunePlasticConnections,editPlasticMask,plasticEdgePools,type PlasticConnections} from './plasticGenetics';
+import type {LearningObserver} from './learningObservation';
 import type {ActuationObserver} from './actuationObservation';
 import {gatedTorque, type GateArchitecture, type GateMode} from './experiments/gatedMotor';
-import {revisedHybridTorque,type HybridBand} from './experiments/revisedHybridGate';
+import {revisedHybridTorque,revisedHybridThreeTorque,type HybridBand} from './experiments/revisedHybridGate';
 import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
 import {partKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
 import {passiveConstraintScale, paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
@@ -219,6 +221,7 @@ export type ArchetypeId = 'eel' | 'flapper' | 'tadpole' | 'glider' | 'predator' 
 
 export interface Genome {
   motorController?: {version: 'gated-torque-v1'; architecture: GateArchitecture; hysteresisWidth: number}
+    | {version: 'neural-motor-v3'; architecture: 'three-output'; hysteresisWidth: .06}
     | {version: 'neural-motor-v2'; architecture: 'two-output'; hysteresisWidth: .06}
     | {version: 'neural-motor-v1'; architecture: 'oscillator-only' | 'direct-only' | 'two-output'; hysteresisWidth: .06}
     | {version: 'retained-head-v1'; architecture: 'three-output'; hysteresisWidth: number; signedJoints: string[]};
@@ -246,6 +249,7 @@ export interface Genome {
   brainVersion?: 2 | 3 | 4 | 5 | 6 | 7;
   hiddenIds?: string[]; // Stable neuron identities; index order defines the matrix axes.
   hiddenTimeConstants?: number[]; // Seconds of leaky activation memory per hidden ID; 0 is the exact legacy update.
+  plasticConnections?: PlasticConnections; // Explicit testing-only inherited eligible IDs; absent preserves old fixed-order selection.
   plasticityRate?: number; // Heritable motor-learning rate 0..0.8 / s. Absent or 0 = exact legacy brain.
   forgettingRate?: number; // Heritable learned-weight relaxation 0..1 / s. Absent = 0.1 for learning-enabled descendants.
   plasticMotorScope?: 'angle' | 'all'; // Heritable learner motor scope; absent = exact old Angle-only pathway.
@@ -454,7 +458,7 @@ export interface SimulationLedger {
 }
 
 export interface SimulationSettings {
-  motorExperiment?: 'gated-torque-v1' | 'retained-head-v1' | 'neural-motor-v1' | 'neural-motor-v2'; // Explicit testing-only world; never inferred from genes.
+  motorExperiment?: 'gated-torque-v1' | 'retained-head-v1' | 'neural-motor-v1' | 'neural-motor-v2' | 'plasticity-study-v1'; // Explicit testing-only world; never inferred from genes.
   /** Omitted retains exact historical prey-contact geometry. */
   mouthContactModel?: 'capsule-v1';
   ecologyRegime?: 'closed-v1';
@@ -1317,7 +1321,7 @@ function nextRetention(
  * teaching occurs from mere sight without real reward/punishment.
  */
 export function applySensoryAssociations(
-  org: Organism, dt: number, ledger: SimulationState['ledger'],
+  org: Organism, dt: number, ledger: SimulationState['ledger'],observe?:LearningObserver,
 ): number {
   const g = org.genome;
   if (!(g.sensoryPlasticityRate && g.sensoryPlasticityRate > 0) || dt <= 0 || org.dissolving) return 0;
@@ -1361,6 +1365,7 @@ export function applySensoryAssociations(
       + (plasticConsolidation[i] - oldConsolidation) * (plasticConsolidation[i] > oldConsolidation ? scale : 1);
     else delete record.consolidation;
   }
+  observe?.({organism:org.id,category:'sensory',edges:edges.length,upkeepJ:upkeep,rewriteJ:paid,requestedRewriteJ:wanted,costJ:cost});
   return cost;
 }
 
@@ -1374,7 +1379,7 @@ export function applySensoryAssociations(
  * Learned offsets are per-organism and NEVER copied into a genome.
  */
 export function applyWakingPlasticity(
-  org: Organism, dt: number, ledger: SimulationState['ledger'],
+  org: Organism, dt: number, ledger: SimulationState['ledger'],observe?:LearningObserver,
 ): number {
   const g = org.genome;
   if (!(g.plasticityRate && g.plasticityRate > 0) || dt <= 0 || org.dissolving) return 0;
@@ -1419,6 +1424,7 @@ export function applyWakingPlasticity(
       + (plasticConsolidation[i] - oldConsolidation) * (plasticConsolidation[i] > oldConsolidation ? scale : 1);
     else delete record.consolidation;
   }
+  observe?.({organism:org.id,category:'motor',edges:edges.length,upkeepJ:upkeepPaid,rewriteJ:rewritePaid,requestedRewriteJ:changePrice,costJ:total});
   return total;
 }
 
@@ -1501,6 +1507,7 @@ export function remapBrain(g: Genome, previous: Genome = g): void {
   g.inputKeys = layout.inputs;
   g.outputKeys = layout.outputs;
   g.brainVersion = 7;
+  if(g.plasticConnections)prunePlasticConnections(g);
   checkBrainBudget(g);
 }
 
@@ -2530,6 +2537,7 @@ export function mutateGenome(parent: Genome, severity = 0.25, customPrng: Xoshir
     weightsHO,
     biasesO,
     hiddenIds: [...parent.hiddenIds!],
+    ...(parent.plasticConnections?{plasticConnections:structuredClone(parent.plasticConnections)}:{}),
     plasticityRate: parent.plasticityRate,
     forgettingRate: parent.forgettingRate,
     plasticMotorScope: parent.plasticMotorScope,
@@ -2656,6 +2664,11 @@ export function mutateGenome(parent: Genome, severity = 0.25, customPrng: Xoshir
     child.memoryConsolidationRate = clampVal((child.memoryConsolidationRate ?? 0)
       + customPrng.range(-.3, .65) * mutScale, 0, 2);
   }
+  if(child.plasticConnections){
+    prunePlasticConnections(child);
+    if((child.plasticityRate??0)===0&&(child.sensoryPlasticityRate??0)===0)child.memoryConsolidationRate=0;
+    if(customPrng.nextFloat()<mutChance){const pool=plasticEdgePools(child);for(const kind of ['motor','sensory']as const)child.plasticConnections[kind]=editPlasticMask(child.plasticConnections[kind],pool[kind],[customPrng.nextFloat(),customPrng.nextFloat(),customPrng.nextFloat()]).after;}
+  }
   if(child.motorController?.version==='retained-head-v1') {
     const c=child.motorController;
     c.signedJoints=c.signedJoints.filter(id=>child.parts.slice(1).some(p=>p.id===id));
@@ -2724,7 +2737,7 @@ export function spawnOrganism(
     joints.push({
       phase: pDef.cpgPhaseOffset || 0,
       ...(genome.motorController ? {gateMode: 'direct' as const} : {}),
-      ...(genome.motorController?.version==='neural-motor-v2'?{gateBand:1 as const}:{}),
+      ...(['neural-motor-v2','neural-motor-v3'].includes(genome.motorController?.version??'')?{gateBand:1 as const}:{}),
       targetAngle: 0,
       currentRelAngle: 0,
       currentRelAngVel: 0,
@@ -3051,7 +3064,9 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       joint.phase = (joint.phase + 2 * Math.PI * g.motorFrequency * childDef.cpgFreqMult * dt_sub) % (2 * Math.PI);
       const rawWave = evaluateMotorWave(joint.phase, childDef.waveHarmonics) * childDef.cpgAmp;
       const wave = clampVal(rawWave, -1, 1);
-      const result = c.version==='neural-motor-v2'
+      const result = c.version==='neural-motor-v3'
+        ? revisedHybridThreeTorque(org.neuralOutputs[offset],org.neuralOutputs[offset+1],org.neuralOutputs[offset+2],joint.gateBand!,wave,maxTorque,c.hysteresisWidth)
+        : c.version==='neural-motor-v2'
         ? revisedHybridTorque(org.neuralOutputs[offset],org.neuralOutputs[offset+1],joint.gateBand!,wave,maxTorque,c.hysteresisWidth)
         : gatedTorque(c.architecture === 'oscillator-only'
         ? {architecture: 'three-output', mode: 1, direct: 0, strength: org.neuralOutputs[offset]}
@@ -3061,7 +3076,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
         ? {architecture: c.architecture, mode: org.neuralOutputs[offset], command: org.neuralOutputs[offset + 1]}
         : {architecture: c.architecture, mode: org.neuralOutputs[offset], direct: org.neuralOutputs[offset + 1], strength: org.neuralOutputs[offset + 2]},
         joint.gateMode!, wave, maxTorque, c.hysteresisWidth);
-      if(c.version==='neural-motor-v2')joint.gateBand=(result as ReturnType<typeof revisedHybridTorque>).band;
+      if(c.version==='neural-motor-v2'||c.version==='neural-motor-v3')joint.gateBand=(result as ReturnType<typeof revisedHybridTorque>).band;
       joint.gateMode = result.mode;
       joint.targetAngle = 0; joint.stiffness = 0;
       joint.amplitude = result.oscillatorStrength; joint.engagement = result.mode === 'off' ? 0 : 1;
@@ -3123,7 +3138,7 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
     if (corrected && !Number.isFinite(motorTorque)) throw new Error('Non-finite muscle torque');
     if (isNaN(motorTorque)) motorTorque = 0;
     if (observeActuation) observeActuation(Object.freeze({kind: 'demand', time: auditTime, organism: org.id, joint: j,
-      ...(g.motorController?.version==='neural-motor-v2'?{modeBand:joint.gateBand}:{}),
+      ...(['neural-motor-v2','neural-motor-v3'].includes(g.motorController?.version??'')?{modeBand:joint.gateBand}:{}),
       mode: useGate ? joint.gateMode! : 'servo', neuralCommand: auditCommand, modeSignal: auditModeSignal,
       rawWave: auditWave, strength: auditStrength, rawTorque: auditRaw, requestedTorque: motorTorque,
       ceiling: auditCeiling, baseCeiling: (scratchInertias[parentIdx] + scratchInertias[childIdx]) * .5 * 2200,
@@ -3588,6 +3603,7 @@ export function stepSimulation(
   observeMechanics?: MechanicalObserver,
   observeActuation?: ActuationObserver,
   offlineMortality?: OfflineMortalityProtection,
+  observeLearning?: LearningObserver,
 ): void {
   const mu = settings.waterViscosity ?? 0.22;
   const worldWidth = settings.worldWidth;
@@ -3598,12 +3614,15 @@ export function stepSimulation(
   const mutationSeverity = settings.mutationSeverity ?? 0.25;
   const gravity = settings.gravity ?? 0;
 
-  if (settings.motorExperiment !== undefined && (!['gated-torque-v1','retained-head-v1','neural-motor-v1','neural-motor-v2'].includes(settings.motorExperiment)
+  if (settings.motorExperiment !== undefined && (!['gated-torque-v1','retained-head-v1','neural-motor-v1','neural-motor-v2','plasticity-study-v1'].includes(settings.motorExperiment)
     || settings.physicsRegime !== 'passive-work-v3')) throw new Error('Invalid experimental motor world');
-  if(settings.motorExperiment && [...state.organisms,...state.eggs].some(o=>o.genome.motorController && o.genome.motorController.version!==settings.motorExperiment))
-    throw new Error('Motor controller requires its matching explicit experimental world');
-  if (settings.motorExperiment === undefined && (state.organisms.some(o => o.genome.motorController) || state.eggs.some(o => o.genome.motorController)))
-    throw new Error('Gated controllers require an explicit experimental world');
+  const study=settings.motorExperiment==='plasticity-study-v1';
+  if(study){if([...state.organisms,...state.eggs].some(o=>!o.genome.plasticConnections||o.genome.motorController&&!['neural-motor-v2','neural-motor-v3'].includes(o.genome.motorController.version)))throw new Error('Explicit plasticity-study genomes required');}
+  else {
+    if([...state.organisms,...state.eggs].some(o=>o.genome.plasticConnections))throw new Error('Heritable plasticity requires explicit study world');
+    if(settings.motorExperiment && [...state.organisms,...state.eggs].some(o=>o.genome.motorController && o.genome.motorController.version!==settings.motorExperiment))throw new Error('Motor controller requires its matching explicit experimental world');
+    if(settings.motorExperiment===undefined&&[...state.organisms,...state.eggs].some(o=>o.genome.motorController))throw new Error('Gated controllers require an explicit experimental world');
+  }
   state.simTime += dt;
   const organisms = state.organisms;
   const eggs = state.eggs;
@@ -4016,12 +4035,12 @@ export function stepSimulation(
     // Mutations in a living animal's learned offsets change subsequent
     // motor commands only, with their own debited metabolic cost.
     if ((g.plasticityRate ?? 0) > 0) {
-      const motorLearningCost = applyWakingPlasticity(org, dt, ledger);
+      const motorLearningCost = applyWakingPlasticity(org, dt, ledger,observeLearning);
       org.plasticityEnergyRate = motorLearningCost / dt;
       returnedEnergy += motorLearningCost;
     }
     if ((g.sensoryPlasticityRate ?? 0) > 0) {
-      const sensoryCostJ = applySensoryAssociations(org, dt, ledger);
+      const sensoryCostJ = applySensoryAssociations(org, dt, ledger,observeLearning);
       returnedEnergy += sensoryCostJ;
       const sensoryCost = sensoryCostJ / dt;
       // The displayed rate is THIS tick's debit, not a running sum when

@@ -16,7 +16,7 @@ export interface CompiledBrain {
 }
 type Entry = {inputs: Genome['inputKeys']; outputs: Genome['outputKeys']; hidden: Genome['hiddenIds'];
   disabled: Genome['disabledConnections']; disabledCount: number; scope: Genome['plasticMotorScope'];
-  selector: string; motorEnabled: boolean; sensoryEnabled: boolean; compiled: CompiledBrain};
+  plastic?:Genome['plasticConnections'];motorMask?:string[];sensoryMask?:string[];selector: string; motorEnabled: boolean; sensoryEnabled: boolean; compiled: CompiledBrain};
 const brains = new WeakMap<Genome, Entry>();
 
 /** Dense rows use a straight loop; only rows containing disabled edges need
@@ -48,7 +48,8 @@ export function compiledBrain(g: Genome): CompiledBrain {
     && prior.hidden === g.hiddenIds && prior.disabled === g.disabledConnections
     && prior.disabledCount === (g.disabledConnections?.length ?? 0)
     && prior.scope === g.plasticMotorScope && prior.motorEnabled === motorEnabled
-    && prior.sensoryEnabled === sensoryEnabled && prior.selector===selector) return prior.compiled;
+    && prior.sensoryEnabled === sensoryEnabled && prior.selector===selector
+    && prior.plastic===g.plasticConnections&&prior.motorMask===g.plasticConnections?.motor&&prior.sensoryMask===g.plasticConnections?.sensory) return prior.compiled;
   const inputs = g.inputKeys!, outputs = g.outputKeys!, hidden = g.hiddenIds!;
   const ih = new Uint8Array(hidden.length * inputs.length);
   const hh = new Uint8Array(hidden.length * hidden.length);
@@ -76,7 +77,8 @@ export function compiledBrain(g: Genome): CompiledBrain {
       motor.push({edge: JSON.stringify(['ho', outputs[o], hidden[h]]), slot, output: o, hidden: h});
   };
   if (motorEnabled) {
-    if (g.plasticMotorScope === 'all') {
+    if(g.plasticConnections){for(const key of g.plasticConnections.motor){const [,target,source]=JSON.parse(key),o=outputIndex.get(target),h=hiddenIndex.get(source);if(o!==undefined&&h!==undefined)addMotor(o,h);}}
+    else if (g.plasticMotorScope === 'all') {
       for (let h = 0; h < hidden.length && motor.length < 96; h++)
         for (let o = 0; o < outputs.length && motor.length < 96; o++) addMotor(o, h);
     } else for (let o = 0; o < outputs.length && motor.length < 96; o++) {
@@ -84,7 +86,8 @@ export function compiledBrain(g: Genome): CompiledBrain {
         for (let h = 0; h < hidden.length && motor.length < 96; h++) addMotor(o, h);
     }
   }
-  if (sensoryEnabled) for (let h = 0; h < hidden.length && sensory.length < 96; h++) {
+  if(sensoryEnabled&&g.plasticConnections){for(const key of g.plasticConnections.sensory){const [,target,source]=JSON.parse(key),h=hiddenIndex.get(target),i=inputIndex.get(source);if(h!==undefined&&i!==undefined&&!ih[h*inputs.length+i]&&sensory.length<96)sensory.push({edge:key,slot:h*inputs.length+i,input:i,hidden:h});}}
+  else if (sensoryEnabled) for (let h = 0; h < hidden.length && sensory.length < 96; h++) {
     for (let i = 0; i < inputs.length && sensory.length < 96; i++) {
       const slot = h * inputs.length + i, key = inputs[i];
       if (!ih[slot] && key.startsWith('eye:') && /:(red|green|blue)$/.test(key))
@@ -99,7 +102,7 @@ export function compiledBrain(g: Genome): CompiledBrain {
     sensorySlots: new Map(sensory.map(e => [e.edge, e.slot]))};
   brains.set(g, {inputs, outputs, hidden, disabled: g.disabledConnections,
     disabledCount: g.disabledConnections?.length ?? 0, scope: g.plasticMotorScope,
-    selector, motorEnabled, sensoryEnabled, compiled});
+    plastic:g.plasticConnections,motorMask:g.plasticConnections?.motor,sensoryMask:g.plasticConnections?.sensory,selector, motorEnabled, sensoryEnabled, compiled});
   return compiled;
 }
 

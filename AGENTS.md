@@ -1,3 +1,37 @@
+# Architecture x lifetime plasticity COMPLETE (#91 / draft #93)
+
+- Fixed study COMPLETE: OFF then MUTABLE x legacy6/revised2/revised3 x five
+ seeds17/71/1901/4099/8191 x15x15x12s =6750 offspring;30 founders,90 held-outs,
+45 matched learning-OFF ablations. No extension/rerun/tuning/neutral drift.
+- Authoritative docs/experiments/architecture-plasticity-v1.md; preregistered
+ protocol f49cfce, implementation04b9e93, OFF checkpointc355d53. Branch
+ experiment/architecture-plasticity-91, draft#93 on #90
+531e2d0b5fef6d6ce15fa6a83905b8c99f7606ee. Final heads/CI/status in #91/#57.
+- Final valid J in seed order, FAIL is NO VALID CHAMPION (never imputed0):
+ OFF legacy16080/14976/17952/4800/13872; twoFAIL/0/0/336/0;
+ threeFAIL/0/FAIL/432/1536. MUTABLE legacy14208/15552/12432/12624/4752;
+ twoFAIL/0/0/384/FAIL; threeFAIL/0/FAIL/480/FAIL.
+- Legacy valid offspring1070/1125 OFF,1101/1125 MUTABLE; hybrids143/118
+ OFF,132/77 MUTABLE. Invalid feeding preserved/excluded. No demonstrated
+ consistent learning benefit or hybrid foraging advantage. Legacy ablation
+13 both-valid pairs: ON better3, OFF better10, medianON-OFF=-768J; two1tie,
+three0valid pairs. Ablation removes learning AND its cost, not pure cognition.
+- Testing-only plasticity-study-v1/schema21, explicit neural-motor-v3 three
+ outputs SAME revised bands/.06/four-band latch. Heritable enabled HO/RGB-IH
+ masks initial48/category, cap96; exact8 neural sigma.15 plus separate1trait/
+1mask per category,9paired draws discarded OFF. Original reward/math intact;
+#78 contextual subjective reinforcement remains separate/unimplemented.
+- All6750 genotypes/450elite decisions/hash receipts exact;30 final specimens
+ replay exactly,6reset forks plus3heldout/ablation pairs exact. Somatic/cost
+ edge membership checked allrows.333fast+metadata/build and six-group real
+ Worker compatibility pass; final CI in #91/#57. Historical #87/#90 snapshots
+ and all prior reports/baselines byte-identical. Browser work only automatic
+ relevant CI, no new campaign. Preserve #89 partial-console-log limitation.
+- Future interactive Experiment Lab recorded separately #92, verifiedBacklog;
+ no detailed specification supplied, no implementation.
+- STOP OWNER REVIEW. No merge/deploy/physics/capacity/starter/score/safeguard/
+ #78/Wiki/3D changes. Productionv0.37.0/main194d70d; testingT1.1/d7a6814.
+
 # Revised hybrid thresholds checkpoint (#89 / draft #90)
 
 - Owner-approved five-seed experiment COMPLETE, ONLY revised neural hybrid:

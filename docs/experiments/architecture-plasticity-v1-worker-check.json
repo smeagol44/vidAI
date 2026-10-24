@@ -1,0 +1,70 @@
+{
+  "version": "architecture-plasticity-v1",
+  "results": [
+    {
+      "architecture": "legacy",
+      "condition": "off",
+      "hostQuietReceiptsForkExact": true,
+      "actualLearnedForkExact": true,
+      "ordinaryFeedingJ": 144,
+      "plasticityJ": 0,
+      "ablationZeroCostState": true
+    },
+    {
+      "architecture": "legacy",
+      "condition": "mutable",
+      "hostQuietReceiptsForkExact": true,
+      "actualLearnedForkExact": true,
+      "ordinaryFeedingJ": 144,
+      "plasticityJ": 0.010189972898683048,
+      "ablationZeroCostState": true
+    },
+    {
+      "architecture": "two-output",
+      "condition": "off",
+      "hostQuietReceiptsForkExact": true,
+      "actualLearnedForkExact": true,
+      "ordinaryFeedingJ": 144,
+      "plasticityJ": 0,
+      "ablationZeroCostState": true
+    },
+    {
+      "architecture": "two-output",
+      "condition": "mutable",
+      "hostQuietReceiptsForkExact": true,
+      "actualLearnedForkExact": true,
+      "ordinaryFeedingJ": 144,
+      "plasticityJ": 0.010129071639764314,
+      "ablationZeroCostState": true
+    },
+    {
+      "architecture": "three-output",
+      "condition": "off",
+      "hostQuietReceiptsForkExact": true,
+      "actualLearnedForkExact": true,
+      "ordinaryFeedingJ": 144,
+      "plasticityJ": 0,
+      "ablationZeroCostState": true
+    },
+    {
+      "architecture": "three-output",
+      "condition": "mutable",
+      "hostQuietReceiptsForkExact": true,
+      "actualLearnedForkExact": true,
+      "ordinaryFeedingJ": 144,
+      "plasticityJ": 0.010010136860514243,
+      "ablationZeroCostState": true
+    },
+    {
+      "zeroReserveNoFreeLearningOrWork": true
+    },
+    {
+      "historical": "nutrient-intake-v1-champions.json.gz",
+      "fullSnapshotExact": true
+    },
+    {
+      "historical": "hybrid-threshold-intake-v1-champions.json.gz",
+      "fullSnapshotExact": true
+    }
+  ]
+}

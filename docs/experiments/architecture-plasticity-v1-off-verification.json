@@ -1,0 +1,147 @@
+{
+  "version": "architecture-plasticity-v1",
+  "offspringReconstructed": 3375,
+  "stages": [
+    "off"
+  ],
+  "staticOnly": true,
+  "primaryArchivesExact": true,
+  "priorEvidenceExact": true,
+  "results": [
+    {
+      "stage": "off",
+      "architecture": "legacy",
+      "seed": 17,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 16080,
+      "selectedAt": "g10/o9"
+    },
+    {
+      "stage": "off",
+      "architecture": "legacy",
+      "seed": 71,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 14976,
+      "selectedAt": "g10/o0"
+    },
+    {
+      "stage": "off",
+      "architecture": "legacy",
+      "seed": 1901,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 17952,
+      "selectedAt": "g9/o2"
+    },
+    {
+      "stage": "off",
+      "architecture": "legacy",
+      "seed": 4099,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 4800,
+      "selectedAt": "g9/o0"
+    },
+    {
+      "stage": "off",
+      "architecture": "legacy",
+      "seed": 8191,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 13872,
+      "selectedAt": "g15/o3"
+    },
+    {
+      "stage": "off",
+      "architecture": "two-output",
+      "seed": 17,
+      "genotypesExact": 225,
+      "championAvailable": false,
+      "finalJ": null,
+      "selectedAt": null
+    },
+    {
+      "stage": "off",
+      "architecture": "two-output",
+      "seed": 71,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 0,
+      "selectedAt": "g3/o8"
+    },
+    {
+      "stage": "off",
+      "architecture": "two-output",
+      "seed": 1901,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 0,
+      "selectedAt": "g7/o8"
+    },
+    {
+      "stage": "off",
+      "architecture": "two-output",
+      "seed": 4099,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 336,
+      "selectedAt": "g11/o6"
+    },
+    {
+      "stage": "off",
+      "architecture": "two-output",
+      "seed": 8191,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 0,
+      "selectedAt": "g13/o12"
+    },
+    {
+      "stage": "off",
+      "architecture": "three-output",
+      "seed": 17,
+      "genotypesExact": 225,
+      "championAvailable": false,
+      "finalJ": null,
+      "selectedAt": null
+    },
+    {
+      "stage": "off",
+      "architecture": "three-output",
+      "seed": 71,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 0,
+      "selectedAt": "g7/o11"
+    },
+    {
+      "stage": "off",
+      "architecture": "three-output",
+      "seed": 1901,
+      "genotypesExact": 225,
+      "championAvailable": false,
+      "finalJ": null,
+      "selectedAt": null
+    },
+    {
+      "stage": "off",
+      "architecture": "three-output",
+      "seed": 4099,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 432,
+      "selectedAt": "g8/o3"
+    },
+    {
+      "stage": "off",
+      "architecture": "three-output",
+      "seed": 8191,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 1536,
+      "selectedAt": "g13/o6"
+    }
+  ]
+}
