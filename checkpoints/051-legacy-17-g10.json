@@ -1,0 +1,72 @@
+{
+  "path": "/workspace/scratch/4b3e1fd14e68/proximity-targeting-bundles/051-legacy-17-g10.zip",
+  "file": "051-legacy-17-g10.zip",
+  "bytes": 29383396,
+  "sha256": "b16d59dc630c4ded357746faa2abe7baf4c5f3aff1855d5f3d6717d6437546d2",
+  "gitSha": "e25d7395062374cd1f95fa2e01c14ab3c94c5f94",
+  "label": "051-legacy-17-g10",
+  "parts": [
+    {
+      "path": "checkpoints/051-legacy-17-g10.zip.part000",
+      "bytes": 3000000,
+      "sha256": "8fb209622ea15f06f01d5778ca0a4d43dc621a344b892dc10c5a632117047f40",
+      "gitSha": "1666205a0b49124cd04e833b7ad9487c229c80a8"
+    },
+    {
+      "path": "checkpoints/051-legacy-17-g10.zip.part001",
+      "bytes": 3000000,
+      "sha256": "61cad6436f66a2a47a2e1452b56973e354b9930a429117005371e1e6612871fb",
+      "gitSha": "9e732ab483d17e163940618ee132ae2a15a4e41a"
+    },
+    {
+      "path": "checkpoints/051-legacy-17-g10.zip.part002",
+      "bytes": 3000000,
+      "sha256": "5ede426bb74429d8ef801d61eed1fa55d4760c8a0851a047d5f1a389143eee14",
+      "gitSha": "835ae6a09542511c1896100b871cc6a60bfd3ca7"
+    },
+    {
+      "path": "checkpoints/051-legacy-17-g10.zip.part003",
+      "bytes": 3000000,
+      "sha256": "c7bc9aa2dab9d16669b56c1059858b13a5138df6c48e7239f30c1dd57fa1bdd1",
+      "gitSha": "ff19daa268bd94f18f40ae90c2130a4605573444"
+    },
+    {
+      "path": "checkpoints/051-legacy-17-g10.zip.part004",
+      "bytes": 3000000,
+      "sha256": "93021c28e89a986bb1dd3cd99c1fe26957ebe2ae1f8aa88084ebc52500466a81",
+      "gitSha": "fdcfeb246503c70289769115b296a3460aa38654"
+    },
+    {
+      "path": "checkpoints/051-legacy-17-g10.zip.part005",
+      "bytes": 3000000,
+      "sha256": "260f26095bb9e9091024c6c43b28fe3b08a8e487baa6ffc38d68050e340d12a7",
+      "gitSha": "ca3139efa74a40980e30b04d828446cab80a740d"
+    },
+    {
+      "path": "checkpoints/051-legacy-17-g10.zip.part006",
+      "bytes": 3000000,
+      "sha256": "3b7fc5c91c8d023a6e57ae2a4bcd50ba5857bcad41630d316cbe830e0739a69c",
+      "gitSha": "e82e3bdf9aa756f554c48149e861b79f51ebf30f"
+    },
+    {
+      "path": "checkpoints/051-legacy-17-g10.zip.part007",
+      "bytes": 3000000,
+      "sha256": "045020a98793b45d33b06bdc55a27feea6c1bfab9e420523bbdb1fc9ad53546f",
+      "gitSha": "921a716d8a1dbfde3ebe5d870ff2b03085e840e9"
+    },
+    {
+      "path": "checkpoints/051-legacy-17-g10.zip.part008",
+      "bytes": 3000000,
+      "sha256": "7505ed99421776f3b90a0acf59d21e13f321dd709e1c47e6c8ee8ad765d10aa1",
+      "gitSha": "280929c012a67a05a5c266edfafa4cee69cbbac7"
+    },
+    {
+      "path": "checkpoints/051-legacy-17-g10.zip.part009",
+      "bytes": 2383396,
+      "sha256": "1cee79f939f4b33b6bfeeb8f6e7601c2145cbd6811831644af7fe0fdd2fe7745",
+      "gitSha": "41a3799bb2f3d000cd8bc9bedd3720d2647b9158"
+    }
+  ],
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "intentHead": "b64256ded8e0d7b8ddfa9c96acd65de7ef06ad0e"
+}
