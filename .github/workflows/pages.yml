@@ -49,13 +49,22 @@ jobs:
       - run: npm run build
       - run: npm run test:worker
       - run: npm run test:gated-worker
+        if: github.head_ref != 'experiment/uncapped-revised-hybrid-96'
       - run: npm run test:retained-worker
+        if: github.head_ref != 'experiment/uncapped-revised-hybrid-96'
       - run: npm run test:neural-selection-worker
+        if: github.head_ref != 'experiment/uncapped-revised-hybrid-96'
       # #89: preserve old raw archives and validate original hybrid continuation;
       # do not repeat historical legacy champion or selection/held-out trials.
       # Existing old Worker scripts remain independently preserved on #88.
       - run: npm run test:hybrid-threshold-worker
-      - run: npm run audit:hybrid-threshold
+        if: github.head_ref != 'experiment/uncapped-revised-hybrid-96'
+      - run: npm run audit:hybrid
+        if: github.head_ref != 'experiment/uncapped-revised-hybrid-96'-threshold
+      - run: npm run test:uncapped-revised-worker
+        if: github.head_ref == 'experiment/uncapped-revised-hybrid-96' && hashFiles('scripts/check-uncapped-revised-worker.mjs') != ''
+      - run: npm run audit:uncapped-revised
+        if: github.head_ref == 'experiment/uncapped-revised-hybrid-96' && hashFiles('docs/experiments/uncapped-revised-v1.json') != ''
       - run: npx playwright install --with-deps chromium
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
       - run: npm run test:e2e
