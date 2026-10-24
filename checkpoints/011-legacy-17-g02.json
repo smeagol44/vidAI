@@ -1,0 +1,66 @@
+{
+  "path": "/workspace/scratch/4b3e1fd14e68/proximity-targeting-bundles/011-legacy-17-g02.zip",
+  "file": "011-legacy-17-g02.zip",
+  "bytes": 24489166,
+  "sha256": "e3eb75a2cbf0a17d526d309692042a031e81c2f1e3efe6e7cac51c4e808fe38c",
+  "gitSha": "bd22efbb5660805d27200f3818b08a1138d1ee00",
+  "label": "011-legacy-17-g02",
+  "parts": [
+    {
+      "path": "checkpoints/011-legacy-17-g02.zip.part000",
+      "bytes": 3000000,
+      "sha256": "28406b93237a674cb8adf9fc52895771cbc6df311f9523177b9a66b173c8cd45",
+      "gitSha": "7a8c8b131470860d38940628818de86e00e16824"
+    },
+    {
+      "path": "checkpoints/011-legacy-17-g02.zip.part001",
+      "bytes": 3000000,
+      "sha256": "ae39d596a22dc57b8ac2fe9be8a6f7ebdb4a903f644b7f5ec36674d75cfff6c0",
+      "gitSha": "9d61e1894f84ce7c03ebea2036797974228f498b"
+    },
+    {
+      "path": "checkpoints/011-legacy-17-g02.zip.part002",
+      "bytes": 3000000,
+      "sha256": "968835414148ee865a0fe6af18f400e5e01077328d9a2a25cee46db05582ebe6",
+      "gitSha": "60b924643db4829f035b17dc48bb1685be737978"
+    },
+    {
+      "path": "checkpoints/011-legacy-17-g02.zip.part003",
+      "bytes": 3000000,
+      "sha256": "13ab866f527fb4915de68ac1eca0639e0887804160aaff51c9716bde8b4e1f97",
+      "gitSha": "daa38498517827655b3c14490cbefde1001bafb3"
+    },
+    {
+      "path": "checkpoints/011-legacy-17-g02.zip.part004",
+      "bytes": 3000000,
+      "sha256": "bcdb9f27047c15d92955d187e8ffc1391159052172bfd0c2e6e6b47a8aef7ba3",
+      "gitSha": "4e8f09bad93b66f6e4b87fc6042f1d392bd3b913"
+    },
+    {
+      "path": "checkpoints/011-legacy-17-g02.zip.part005",
+      "bytes": 3000000,
+      "sha256": "fd54cc5d7944c19a77842b68d3ab48085a05c19810bf441f74be77a13dad0111",
+      "gitSha": "c866aaca6124bf206ee36119b36af081e0cc4f17"
+    },
+    {
+      "path": "checkpoints/011-legacy-17-g02.zip.part006",
+      "bytes": 3000000,
+      "sha256": "cbc45f1759519c632517c710a507d3c0784af839085e99805213a22a29b8fff5",
+      "gitSha": "a533995b3ce77074bf49e6a3c8c0cb5e828e262b"
+    },
+    {
+      "path": "checkpoints/011-legacy-17-g02.zip.part007",
+      "bytes": 3000000,
+      "sha256": "1bbcadf2f74138c1657695637ba56204bf0eb02f581c67d34e82d1f50eb5b5f2",
+      "gitSha": "3f6129cf830f0da187639895a9b5ce1bed471f01"
+    },
+    {
+      "path": "checkpoints/011-legacy-17-g02.zip.part008",
+      "bytes": 489166,
+      "sha256": "b8e59ddf39f8e41ec279262f966f06964b309434d30ad25dc256a3f2decfbbea",
+      "gitSha": "4c8e6353a2f7400f9a659d89868295caa803ada3"
+    }
+  ],
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "intentHead": "f46b39c492a8d4116ed225dfe1cc0467a7960e1e"
+}
