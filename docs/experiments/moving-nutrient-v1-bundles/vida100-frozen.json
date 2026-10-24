@@ -1,0 +1,20 @@
+{
+  "action": "frozen",
+  "controller": "none",
+  "seed": 0,
+  "generation": 0,
+  "label": "vida100-frozen",
+  "archiveName": "vida100-frozen.zip",
+  "bytes": 1053010,
+  "sha256": "2cbe0e0b04d380d6727848f218eae1c1924daf587cd36f23f4eaa4e727a7bdec",
+  "parts": [
+    {
+      "path": "docs/experiments/moving-nutrient-v1-bundles/vida100-frozen.zip.part000",
+      "bytes": 1053010,
+      "sha256": "2cbe0e0b04d380d6727848f218eae1c1924daf587cd36f23f4eaa4e727a7bdec",
+      "gitSha": "9053166ae07823e922345b63892ef78787a566d9"
+    }
+  ],
+  "scientificImplementation": "893c6a22b998dff61e40921f66c4bae95ec41103",
+  "note": "Concatenate ordered parts;verify ZIP SHA256/bytes and every member hash. No simulation replay."
+}
