@@ -1,0 +1,182 @@
+{
+  "action": "generation",
+  "c": "mutable",
+  "seed": 1901,
+  "g": 1,
+  "label": "vida98-mutable-1901-g01",
+  "archiveName": "vida98-mutable-1901-g01.zip",
+  "bytes": 16214651,
+  "sha256": "ad93a0f57eed5d264b40d0a057eaba0aa719ccab6f5a83edf65cf9fc31359be4",
+  "parts": [
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part000",
+      "bytes": 600000,
+      "gitSha": "c6aba761d3f16055687ffec7816ad86286324dad",
+      "sha256": "bec2bc9389825217cb4e952022ce60e9aa035d975981221ed4df9790f5c1aec6"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part001",
+      "bytes": 600000,
+      "gitSha": "002273f68b0d745d38aaa77521e75fe06bd2e390",
+      "sha256": "ddcf1de53db543ef826d8589648a237ba9b24f4c32fdef374293301669338f06"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part002",
+      "bytes": 600000,
+      "gitSha": "6142c70b35a265bc4bdac2aec6f1872cea33bb15",
+      "sha256": "b5d93777927fd69e2083bf1f58e59488cfbf6d4ba65d66b6e5ad164b1f7dd7b4"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part003",
+      "bytes": 600000,
+      "gitSha": "a18391542b4a63a9648c41c86664a3fc82ce9557",
+      "sha256": "c8893e47119106fd92f7b9de63c7e8bd778025722a0d492afc3b97fa05b5f373"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part004",
+      "bytes": 600000,
+      "gitSha": "3c8a66e41c4376e44c4c1561c6c227da86ae911e",
+      "sha256": "3da34aeda07114f9b3040f036d950b105588441d5f19d9c1a90abff4f7340192"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part005",
+      "bytes": 600000,
+      "gitSha": "7a05ad29801351b56b0187cd3df022e58f8c0e0a",
+      "sha256": "4b4d6d778f17ec15def203cdef5d5d895278fd935ccc9320bdb9487b68564e45"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part006",
+      "bytes": 600000,
+      "gitSha": "b71302b383acfcab88567149f7b5854456494b69",
+      "sha256": "a0821acdb5d63989b9fc143217704ab6b73560fa1fb685ac0e94c5a7c401637d"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part007",
+      "bytes": 600000,
+      "gitSha": "e4c596a58bea762a1c0e51d457e980dcdbd2790e",
+      "sha256": "30fb182c7ee32d0e4635e48e032d9dd22a843694e36a3dcfb36a9a864130c6b6"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part008",
+      "bytes": 600000,
+      "gitSha": "5a07e2d68ef0e65b822dff5b31b6fb5635ed7a41",
+      "sha256": "be106ff1abf1acf422902bf890ec5af46736e5ab6cf03ea520c5ed653eab3289"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part009",
+      "bytes": 600000,
+      "gitSha": "6c7cea143c8e55d9b90d7bad14b87c9e5ad23df5",
+      "sha256": "bc5884049f895dd93d8d82befc2cc4e7a7f1d66075c8536d472c5660392e656b"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part010",
+      "bytes": 600000,
+      "gitSha": "04629752441e59f2cf1f8e96f30fe31933e2c282",
+      "sha256": "16310b09479149d1cbb8148f1bcabaa7b3684cce93d14a6e30f86e6352a8997a"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part011",
+      "bytes": 600000,
+      "gitSha": "82757565e025cd17480a46feff17a278601de092",
+      "sha256": "134cd8c45b335cc9c1a3e198415b4b9fcea83c91c832397227ece6c05b285f5a"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part012",
+      "bytes": 600000,
+      "gitSha": "f25a381656a99ccbc269ec0ca7205dc5c1d49518",
+      "sha256": "8f84951cf725545714227c30d64950eb9116f9e30595338dad0c253335f52226"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part013",
+      "bytes": 600000,
+      "gitSha": "27a923df12463d1b238930f5c12c37266f03c959",
+      "sha256": "568091319d7d70ea387f0bd01606bca4fe8d16d694370f7a1cb8bcc254be5a9d"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part014",
+      "bytes": 600000,
+      "gitSha": "220a2b05f7493a7106fe41cf5b0e4126cd987d6c",
+      "sha256": "057f856c099d728672c421acb6d31791d5b225dfa1987ca4ee574f070879b015"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part015",
+      "bytes": 600000,
+      "gitSha": "577a0cc3e234b0fa3f90c495849b6965586a8a5f",
+      "sha256": "065ae8edaf9d733f41af7b5e34edb9e46ec0ebf8d8d61352d9a334e1502d10cb"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part016",
+      "bytes": 600000,
+      "gitSha": "adde9251e672be788a13098ca794d8fe089f156e",
+      "sha256": "2cd28294315c6e44c52d6407168f414a6958bce532a85ef77422fd69c3f66fc7"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part017",
+      "bytes": 600000,
+      "gitSha": "8b9d104d01743acf416b19f2558936fdcd8d3c8a",
+      "sha256": "10483acdfba421bc1a29e243a41dbf9be111a8f84456ab5fde5b2afc56227706"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part018",
+      "bytes": 600000,
+      "gitSha": "cadbb6c2dc62eb1bb17d1689470d6715efcd2a7d",
+      "sha256": "b6562051c30282e25cad7261e15f1cd876cd8a44d4246665f81639b717731f6e"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part019",
+      "bytes": 600000,
+      "gitSha": "3bdeea9327effb127652f6d7f5bc686b0ba662f7",
+      "sha256": "d4435f715a4b83ca447c8a051841d60152ffce0e3d8c2579488cd5704a050bf0"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part020",
+      "bytes": 600000,
+      "gitSha": "774efeeee9c45d743d8f8a11e90745d0c5d46974",
+      "sha256": "f6b6567861f23a5de4c1edf0438f949d07817c826e987e0663a2bc483b2f2ea4"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part021",
+      "bytes": 600000,
+      "gitSha": "f01db883a5d443fde5036fdcd53ca78d1ee060f1",
+      "sha256": "8b4fb4e664a9558bac26d393099dd380ff4dd0f31c6ed55711dcc236527271aa"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part022",
+      "bytes": 600000,
+      "gitSha": "7ad62e8e81cc869ab2a87d67c6f67cd4af1202bd",
+      "sha256": "41cac821c97b819ad672de02649347f526f7bfbfcbea8b5fae1095850817e254"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part023",
+      "bytes": 600000,
+      "gitSha": "28d7ec0ada066111a3a234d1381c760c71c44393",
+      "sha256": "739a5a982b481dd0a3b76464be68b2a7133355cbf5a88b5376f61cf366cd0328"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part024",
+      "bytes": 600000,
+      "gitSha": "dbc4b08c7793a8286a4ecdd761f0af05d3ebaac7",
+      "sha256": "a3b38e082b9d9f4aa6030ba5224e1992d70832000927b7226f30de4bb17435a0"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part025",
+      "bytes": 600000,
+      "gitSha": "5b62174ee730bb3e9719cccfefdf52ba89f200eb",
+      "sha256": "be979668187024dc1885a9ba9e798ac9881bca2ba0c2ad3a8805a377d6c28fb3"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part026",
+      "bytes": 600000,
+      "gitSha": "a14804a3b5c31e0d65d7a3262c7a7b173b858cfb",
+      "sha256": "674daf645cc9330f70607e1267589db13f9de64dcc789ccb5bab402f5c5b1e37"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-mutable-1901-g01.zip.part027",
+      "bytes": 14651,
+      "gitSha": "a78d885b2f2fe98a19d00b3243a76d55eaa6f6bc",
+      "sha256": "e691e2c1dba694666e8c76e406f0bc71819ddce05a886de0a25212e851b0dd87"
+    }
+  ],
+  "scientificImplementation": "1d805c9a45ee97be32af4e4e74214f27d6aff07c",
+  "note": "Concatenate ordered parts;verify full SHA256/bytes then extract immutable ZIP. Existing completed units reused without simulation."
+}
