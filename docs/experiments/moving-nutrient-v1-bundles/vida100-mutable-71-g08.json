@@ -1,0 +1,26 @@
+{
+  "action": "generation",
+  "controller": "mutable",
+  "seed": 71,
+  "generation": 8,
+  "label": "vida100-mutable-71-g08",
+  "archiveName": "vida100-mutable-71-g08.zip",
+  "bytes": 5812571,
+  "sha256": "8e321a395b02426b09dbc74b98037e3b0083bdd78825033b272b03cc53389976",
+  "parts": [
+    {
+      "path": "docs/experiments/moving-nutrient-v1-bundles/vida100-mutable-71-g08.zip.part000",
+      "bytes": 3000000,
+      "sha256": "adcfbee595686f9d856a9aa82510776480df0ea690c827676e3ca1c0b3e7984e",
+      "gitSha": "604db6c5c74412c940b11d9b0e4e81c1d1a3fa04"
+    },
+    {
+      "path": "docs/experiments/moving-nutrient-v1-bundles/vida100-mutable-71-g08.zip.part001",
+      "bytes": 2812571,
+      "sha256": "427fffce0a11fd9031f5f427b73813a047e1edccc11a14553e0a00534b170ef8",
+      "gitSha": "d2c7a23f0944970d4994e55847c8d50acda8b840"
+    }
+  ],
+  "scientificImplementation": "893c6a22b998dff61e40921f66c4bae95ec41103",
+  "note": "Concatenate ordered parts;verify ZIP SHA256/bytes and every member hash. No simulation replay."
+}
