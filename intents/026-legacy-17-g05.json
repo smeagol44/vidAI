@@ -1,0 +1,13 @@
+{
+  "label": "026-legacy-17-g05",
+  "detail": {
+    "action": "generation",
+    "controller": "legacy",
+    "seed": 17,
+    "generation": 5,
+    "logicalOffspring": 10
+  },
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "previousEvidence": "981fd3de50b506842f6e1be4863a2b802e152239",
+  "notStartedAtIntent": true
+}
