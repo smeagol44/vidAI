@@ -1,0 +1,36 @@
+{
+  "path": "/workspace/scratch/4b3e1fd14e68/proximity-targeting-bundles/018-mutable-71-g03.zip",
+  "file": "018-mutable-71-g03.zip",
+  "bytes": 11633843,
+  "sha256": "8a96d857dc2d8be37a9bc2c81442dc42207f14f427e25e6c37d979ee103ff016",
+  "gitSha": "7d587443b01f8eb656242d47fe327e0e648d4dd5",
+  "label": "018-mutable-71-g03",
+  "parts": [
+    {
+      "path": "checkpoints/018-mutable-71-g03.zip.part000",
+      "bytes": 3000000,
+      "sha256": "0d9d6402a10a66936d1236e13a21e8b63dca4090f57c1ffaad148fd396f9dd11",
+      "gitSha": "0c2212cf313ade50d9f276a0ca1133b827667d5d"
+    },
+    {
+      "path": "checkpoints/018-mutable-71-g03.zip.part001",
+      "bytes": 3000000,
+      "sha256": "64cecfec7fec3b36f6da126bb3bca61b3a6c2acb557418a55778014b442d1c4d",
+      "gitSha": "093322dd69accf8788733e39149c66e53847bf81"
+    },
+    {
+      "path": "checkpoints/018-mutable-71-g03.zip.part002",
+      "bytes": 3000000,
+      "sha256": "2a94457c31bda8a8faaae01e4cfc727ab602643ff0bea3d2b9e407a0fe260837",
+      "gitSha": "c955f76ad0f53007dfd6e86d0b8af0e49f7efa67"
+    },
+    {
+      "path": "checkpoints/018-mutable-71-g03.zip.part003",
+      "bytes": 2633843,
+      "sha256": "e43dd7f873defbf697c1f7f5154d1a7921b3112ba15852748a1ade03c7823b67",
+      "gitSha": "7842e6ca405ff6186260b805b5d230c88a918c30"
+    }
+  ],
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "intentHead": "ad873633049181c1ca68e5ef684e2be877f56aae"
+}
