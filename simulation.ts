@@ -1,3 +1,4 @@
+import {advancePursuit,organs,type PursuitState} from './movingNutrient';
 import {prunePlasticConnections,editPlasticMask,plasticEdgePools,type PlasticConnections} from './plasticGenetics';
 import type {LearningObserver} from './learningObservation';
 import type {ActuationObserver} from './actuationObservation';
@@ -458,7 +459,7 @@ export interface SimulationLedger {
 }
 
 export interface SimulationSettings {
-  experimentalVelocityMode?: 'uncapped-plasticity-v1'; // #98 explicit two-output heritable-plasticity semantics.
+  experimentalVelocityMode?: 'uncapped-plasticity-v1' | 'uncapped-pursuit-v1'; // #98 explicit two-output heritable-plasticity semantics.
   motorExperiment?: 'gated-torque-v1' | 'retained-head-v1' | 'neural-motor-v1' | 'neural-motor-v2' | 'plasticity-study-v1'; // Explicit testing-only world; never inferred from genes.
   /** Omitted retains exact historical prey-contact geometry. */
   mouthContactModel?: 'capsule-v1';
@@ -481,6 +482,7 @@ export interface SimulationSettings {
 }
 
 export interface SimulationState {
+  pursuit?: PursuitState;
   energyPool?: EnergyPool;
   initialSeed?: number;
   simTime: number;
@@ -3277,18 +3279,18 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
 
     const beforeGuards = observe || observeActuation ? partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY) : 0;
     observe?.('forces-and-motors', beforeForces, beforeGuards);
-    if(settings.experimentalVelocityMode === 'uncapped-plasticity-v1' && ![seg.x,seg.y,seg.angle,seg.vx,seg.vy,seg.angVel,org.energy].every(Number.isFinite)) throw new Error('Nonfinite uncapped force state');
+    if(settings.experimentalVelocityMode !== undefined && ![seg.x,seg.y,seg.angle,seg.vx,seg.vy,seg.angVel,org.energy].every(Number.isFinite)) throw new Error('Nonfinite uncapped force state');
     const spd = Math.hypot(seg.vx, seg.vy);
     const auditAngularSpeed = observeActuation ? seg.angVel : 0;
     if (corrected && (spd > 400 || Math.abs(seg.angVel) > 20)) org.motorDiagnostics!.numericalGuardEvents++;
-    if(settings.experimentalVelocityMode !== 'uncapped-plasticity-v1'){
+    if(settings.experimentalVelocityMode === undefined){
       if (spd > 400.0) {
         seg.vx = (seg.vx / spd) * 400.0;
         seg.vy = (seg.vy / spd) * 400.0;
       }
       seg.angVel = clampVal(seg.angVel, -20.0, 20.0);
     }
-    if(observeActuation && settings.experimentalVelocityMode === 'uncapped-plasticity-v1') observeActuation(Object.freeze({kind:'uncapped-part',time:auditTime,organism:org.id,part:i,stage:'forces',vx:seg.vx,vy:seg.vy,omega:seg.angVel}));
+    if(observeActuation && settings.experimentalVelocityMode !== undefined) observeActuation(Object.freeze({kind:'uncapped-part',time:auditTime,organism:org.id,part:i,stage:'forces',vx:seg.vx,vy:seg.vy,omega:seg.angVel}));
     if (observe) observe('speed-guards', beforeGuards, partKineticEnergy(seg, g.parts[i], BASE_PART_DENSITY));
     if (observeActuation && (spd > 400 || Math.abs(auditAngularSpeed) > 20)) observeActuation(Object.freeze({
       kind: 'guard', time: auditTime, organism: org.id, part: i, speed: spd, angularSpeed: auditAngularSpeed,
@@ -3628,7 +3630,8 @@ export function stepSimulation(
     if(settings.motorExperiment && [...state.organisms,...state.eggs].some(o=>o.genome.motorController && o.genome.motorController.version!==settings.motorExperiment))throw new Error('Motor controller requires its matching explicit experimental world');
     if(settings.motorExperiment===undefined&&[...state.organisms,...state.eggs].some(o=>o.genome.motorController))throw new Error('Gated controllers require an explicit experimental world');
   }
-  if(settings.experimentalVelocityMode !== undefined && (settings.experimentalVelocityMode !== 'uncapped-plasticity-v1' || settings.physicsRegime !== 'passive-work-v3' || settings.motorExperiment !== 'plasticity-study-v1' || [...state.organisms,...state.eggs].some(o=>!o.genome.plasticConnections || o.genome.motorController?.version !== 'neural-motor-v2' || o.genome.motorController.architecture !== 'two-output'))) throw new Error('Invalid uncapped plasticity world');
+  if(settings.experimentalVelocityMode!==undefined){const mode=settings.experimentalVelocityMode;if(settings.physicsRegime!=='passive-work-v3'||(mode==='uncapped-plasticity-v1'?(settings.motorExperiment!=='plasticity-study-v1'||[...state.organisms,...state.eggs].some(o=>!o.genome.plasticConnections||o.genome.motorController?.version!=='neural-motor-v2'||o.genome.motorController.architecture!=='two-output')):mode==='uncapped-pursuit-v1'?!state.pursuit:true))throw Error('Invalid uncapped world');}
+  if(settings.experimentalVelocityMode!=='uncapped-pursuit-v1'&&state.pursuit)throw Error('Moving source requires its explicit mode');
   state.simTime += dt;
   const organisms = state.organisms;
   const eggs = state.eggs;
@@ -3671,6 +3674,7 @@ export function stepSimulation(
         delete nut.decayTimeRemaining;
       }
     }
+    if(state.pursuit?.nutrientId===nut.id){nut.pulseTimer=(nut.pulseTimer||0)+dt*2.5;continue;}
     nut.vy += gravity * dt;
     nut.vx *= fluidDampingExp;
     nut.vy *= fluidDampingExp;
@@ -4067,9 +4071,11 @@ export function stepSimulation(
   const work = new Map(active.map(org => [org, 0]));
   const substeps = Math.max(NUM_SUBSTEPS, Math.ceil(dt * 240));
   for (let sub = 0; sub < substeps; sub++) {
+    const pursuitBefore=state.pursuit?organs(state.organisms.find(o=>o.id===state.pursuit!.organismId)!):undefined;
     for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics, observeActuation, state.simTime - dt + (sub + 1) * dt / substeps));
     resolveBodyContacts(active, BASE_PART_DENSITY, projectBodyJoints, observeMechanics);
-    if(settings.experimentalVelocityMode === 'uncapped-plasticity-v1' && active.some(o=>!Number.isFinite(o.energy)||o.segments.some(p=>!Object.values(p).every(Number.isFinite)))) throw new Error('Nonfinite uncapped contact state');
+    if(pursuitBefore)advancePursuit(state,pursuitBefore,dt/substeps);
+    if(settings.experimentalVelocityMode !== undefined && active.some(o=>!Number.isFinite(o.energy)||o.segments.some(p=>!Object.values(p).every(Number.isFinite)))) throw new Error('Nonfinite uncapped contact state');
     if (observeActuation) for (const org of active) {
       let maxAnchorPx = 0, maxLimitRad = 0;
       for (let j = 1; j < org.segments.length; j++) {
@@ -4083,7 +4089,7 @@ export function stepSimulation(
         const relative = b.angle - a.angle - def.baseAngleOffset;
         maxLimitRad = Math.max(maxLimitRad, Math.abs(Math.atan2(Math.sin(relative), Math.cos(relative))) - def.maxAngle);
       }
-      if(settings.experimentalVelocityMode === 'uncapped-plasticity-v1') org.segments.forEach((p,part)=>observeActuation(Object.freeze({kind:'uncapped-part',time:state.simTime-dt+(sub+1)*dt/substeps,organism:org.id,part,stage:'contact',vx:p.vx,vy:p.vy,omega:p.angVel})));
+      if(settings.experimentalVelocityMode !== undefined) org.segments.forEach((p,part)=>observeActuation(Object.freeze({kind:'uncapped-part',time:state.simTime-dt+(sub+1)*dt/substeps,organism:org.id,part,stage:'contact',vx:p.vx,vy:p.vy,omega:p.angVel})));
       observeActuation(Object.freeze({kind: 'pose', time: state.simTime - dt + (sub + 1) * dt / substeps,
         organism: org.id, maxAnchorPx, maxLimitRad, maxAngularSpeed: Math.max(...org.segments.map(p => Math.abs(p.angVel)))}));
     }
@@ -4253,6 +4259,7 @@ export function stepSimulation(
         feedback.contact = 1;
         const transfer = consume(food.energyValue, carrion ? 'Carrion' : 'Nutrient', carrion ? .85 : 1);
         if (transfer <= 0) continue;
+        if(state.pursuit?.nutrientId===food.id){const p=state.pursuit;p.reservoirInputJ+=transfer;p.grossByState[p.status]+=transfer;p.absorbedJ+=transfer*MOUTH_ASSIMILATION;p.absorbedByState[p.status]+=transfer*MOUTH_ASSIMILATION;ledger.externalInflow+=transfer;continue;}
         food.energyValue = Math.max(0, food.energyValue - transfer);
         food.radius = getNutrientRadius(food.energyValue);
         if (food.energyValue <= 1) {

@@ -1,3 +1,27 @@
+# Active #100 / draft #101 — moving inexhaustible nutrient pursuit
+
+- Owner authorized ONLY legacy fixed-learning seed17 and MUTABLE two-output
+  seeds17/71/1901/4099,10x10x15s each:500 offspring,5founders,50choices,
+  15nonselecting held-outs. Exact#99 basebb39f308;no historical dataset edits.
+- Protocol5ea21bc registered beforeevaluation. Source moving-nutrient-v1/schema100,
+  isolateduncapped-pursuit-v1;preserve oldschema98 and allnormalruntime defaults.
+  Darter body/eyes/mouth/muscles/v3physics/normalmortality/10000J reserve exact.
+- One ordinary nutrient120px ahead physicaleye. External unbounded reservoir
+  replenishes actual gross bites only;finite3000J stock,explicit external ledger.
+  22px/s,ten1.5s/25%STOP intervals,presampled independent offsets;outward halfplane,
+  no-toward pause,permanent405px mounted-eye union freeze with swept substeps.
+  Closed-loop realized paths differ;no privileged neural target input.
+- Eight original sigma.15 neural events,original mutation streams/bounds;
+  MUTABLE original9extra draws/traits/masks/learning/costs. Frozen-generation
+  parents;strict actualabsorbedJ only;tiesretainparent;oldflagsdiagnostic only.
+- Atomic/fsync/hash/readback fullrequests/packets. Save frozen source/initials
+  beforefounders and completegeneration externally BEFOREnext. Unknown request
+  withoutpacket STOP for recoveryapproval. Never repeat undocumented slots.
+- All520packets/500genotypes/50choices,replay5fullchampions+5splitreset;rawtarget
+  trajectories/decisions/eyemouthing/feedingstate/learning/work/energy preserved.
+- STOP ownerreview aftercompletion. No merge/deploy/releases/Wiki/VIDA3D/#78,
+  tuning,extra seeds/experiments. Mainv0.37.0/testingT1.1 unchanged.
+
 # Complete #98 / draft #99 — STOP owner review
 
 - Original #93 two-output OFF then MUTABLE study COMPLETE: 2250 unique offspring,
