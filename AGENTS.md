@@ -1,3 +1,13 @@
+# #103 training complete — held-out receipts unresolved after runtime loss
+
+- All500 original offspring+5founders and50choices are independently saved through evidence5cefc73c3eecc22c0412319c620717be4d4ec3c7. Never rerun them.
+- Scientific code frozen f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187;protocol d01d1fd.
+- Held-out intent48f75676257297be155f71454c7d2b6cfea47992 exists. Runtime transport disconnected afterward. Active local command is unknown;0–15 held-outs may have started/completed. No remote completed held-out checkpoint.
+- Do NOT invoke post or execute any uncertain held-out again. Recover original requests/packets/received/log/ZIP first;otherwise explicit owner recovery decision is necessary. Do not impute missing scores0 or claim unstarted.
+- See docs/experiments/proximity-targeting-v1-runtime-loss.md. Cloud CI only restores/audits original505 training packets,derives outputs and runs TRAINING-final verification replays. It never starts a scientific evaluation.
+- Training final J:legacy17 30805.749290241907;MUTABLE17 0;71 2.2674251375328573;1901 1150.7401104316946;4099 .17309004905395575. Seeds confound mutation algorithm.
+- No merge,deployment,Wiki,production/testing release,extra experiment orVIDA3D work. Experiment remains incomplete until15 original held-out outcomes are resolved.
+
 # Active #103 / draft #104 — bounded follow-up authorized
 
 - Owner request and preregistered protocol: docs/experiments/proximity-targeting-v1-{owner-request,protocol}.md,commit d01d1fd.
