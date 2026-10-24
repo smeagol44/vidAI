@@ -205,5 +205,13 @@
       "url": "https://chatgpt.com/library?file_id=libfile_ecafd843bf308191942f257970d517f4&account_id=personal"
     }
   ],
-  "instructions": "Clone draft97. Materialize/extract six original bundles into sibling interrupted-original/. Extract recovery bundles at repository root. Both archive conditions remain separate. Final evidence bundle additionally contains report,complete index and audit outputs. No simulations needed for extraction."
+  "instructions": "Clone draft97. Materialize/extract six original bundles into sibling interrupted-original/. Extract recovery bundles at repository root. Both archive conditions remain separate. Final evidence bundle additionally contains report,complete index and audit outputs. No simulations needed for extraction.",
+  "finalEvidenceBundle": {
+    "name": "vida96-final-evidence.zip",
+    "bytes": 1188672,
+    "sha256": "1a91372c4f6c9491ab478ea377b48c72c7aa3ecaf72a3637486d7d5d13a6fe21",
+    "library_file_id": "libfile_3e553481dc4c819191a9a482bbbcb18a",
+    "file_id": "file_000000000dec81f5ae20a9323145b02d",
+    "url": "https://chatgpt.com/library?file_id=libfile_3e553481dc4c819191a9a482bbbcb18a&account_id=personal"
+  }
 }
