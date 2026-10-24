@@ -1,0 +1,12 @@
+{
+  "label": "056-held-outs",
+  "detail": {
+    "action": "post",
+    "logicalHeldOuts": 15,
+    "finalSpecimens": 5,
+    "selectionInfluence": false
+  },
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "previousEvidence": "5cefc73c3eecc22c0412319c620717be4d4ec3c7",
+  "notStartedAtIntent": true
+}
