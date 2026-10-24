@@ -1,0 +1,103 @@
+{
+  "status": "EXCLUDED_TRANSPORT_FAILURES",
+  "reason": "22 uploaded objects did not match source Git blob hashes during the environment interruption;20 binary journals are corrupt and2 summary objects empty. Not physics outputs. Previous commit retains all variants;canonical surviving source copies are preserved in recovery bundles. Upload bridge now requires command success,exact chunk sizes and expected Git blob SHA.",
+  "commit": "9ccd70fb298b58dd512c38bfa566754f2bc6b410",
+  "items": [
+    {
+      "path": "docs/experiments/uncapped-revised-v1-1901-g04-p0.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid code lengths set"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-1901-g04-p1.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid block type"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-1901-g04-p2.jsonl.gz",
+      "ERROR": "Not a gzipped file (b'+V')"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-1901-g05-p0.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid block type"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-1901-g05-p1.jsonl.gz",
+      "ERROR": "Not a gzipped file (b'\\n\\x8c')"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-1901-g05-p2.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid distance code"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-1901-g06.json.gz",
+      "github_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "remote_records": "summary",
+      "local_records": "summary",
+      "remote_indices": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-1901-g07-p1.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid block type"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-1901-g07-p2.jsonl.gz",
+      "ERROR": "Not a gzipped file (b'W\\x97')"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-1901-g08-p0.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid block type"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-1901-g08-p1.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid block type"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-1901-g08-p2.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid block type"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-4099-g01-p0.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid block type"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-4099-g01-p2.jsonl.gz",
+      "ERROR": "Not a gzipped file (b'\\x14\\xb5')"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-4099-g02-p0.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid code lengths set"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-4099-g02-p1.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid block type"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-4099-g02-p2.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid literal/length code"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-4099-g03-p1.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid stored block lengths"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-4099-g03-p2.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: too many length or distance symbols"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-4099-g03.json.gz",
+      "github_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "remote_records": "summary",
+      "local_records": "summary",
+      "remote_indices": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-4099-g04-p0.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid code lengths set"
+    },
+    {
+      "path": "docs/experiments/uncapped-revised-v1-4099-g04-p1.jsonl.gz",
+      "ERROR": "Error -3 while decompressing data: invalid code lengths set"
+    }
+  ]
+}

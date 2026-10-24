@@ -1,3 +1,28 @@
+# Interrupted #90 uncapped repeat — #96 / draft #97
+
+- STOP:primary process lost during generation13. Do not restart or silently
+  recover measurements. Owner's exact-once requirement now needs a recovery
+  decision. No physics failure is established by this infrastructure interruption.
+- Scientific base531e2d0b5fef6d6ce15fa6a83905b8c99f7606ee;preregistered
+  4d81373e5bc4877aa26ef23da0adb8b322c875f9;frozen implementation6276c79.
+- All5 seeds have generation0–12 summaries:900 offspring metadata/60 strict
+  intake-only decisions reconstruct. Scores at12:17=12624,71=8496,1901=7200,
+  4099=336,8191=8064J. These are checkpoints,not final15-generation champions.
+-873 raw offspring packets survive (863 completed-generation +10 partial13).
+  37 completed raw packets lost locally despite retained scores/mutations/hashes.
+  Seed1901 generation13/o4 lacks its raw score although later receipts survive;
+  endpoint aftero10 unknown. No held-outs or final replay/full-budget audit done.
+- Complete surviving originals in6 immutable recovery ZIPs;native file IDs/SHA256
+  in docs/experiments/uncapped-revised-v1-recovery-bundles.json. Exact raw/gap
+  census and partial curves/report accompany them. GitHub contains source/all60
+  summary ledgers/subsets;extract bundles into checkout for raw inspection.
+-22 bad GitHub transport objects are excluded in an index/history/subfolder;
+  upload bridge now checks command success,expected lengths and Git blob hashes.
+  No corrupted transport data is food or a scientific result. Prior data untouched.
+- Local331fast+metadata/build/focused v2 Worker verified before interruption.
+  Do not claim completed1125 or held-outs/replay. Branch remains draft/unmerged;
+  no production/testing/Wiki/VIDA3D change. #57/#96 hold current recovery gate.
+
 # Corrected neural motor / food checkpoint (#59/#63 / draft #86)
 
 - Owner correction: #85 compared legacy six-output, three-output gated and a
