@@ -1,0 +1,42 @@
+{
+  "path": "/workspace/scratch/4b3e1fd14e68/proximity-targeting-bundles/010-mutable-4099-g01.zip",
+  "file": "010-mutable-4099-g01.zip",
+  "bytes": 12051697,
+  "sha256": "af3a9a38f4273192bd445fab4b7398d368de8210233137d2fe0d45a06a0fc8cf",
+  "gitSha": "3f095171500b394334639231c37270043a72c0e3",
+  "label": "010-mutable-4099-g01",
+  "parts": [
+    {
+      "path": "checkpoints/010-mutable-4099-g01.zip.part000",
+      "bytes": 3000000,
+      "sha256": "c5668e1414c08aebb2c6b5d264bb2fcdb83d4fdbca9d8e8c8d84908e163283cf",
+      "gitSha": "b1be41129e9480525aa08ea567742d5448eff4af"
+    },
+    {
+      "path": "checkpoints/010-mutable-4099-g01.zip.part001",
+      "bytes": 3000000,
+      "sha256": "5806936d5563a698e71d3ad54047d0f114a73927f619fe5ce6258fa8d64e5d20",
+      "gitSha": "18ee57a625e24391922a4060ac01cd5f5b977789"
+    },
+    {
+      "path": "checkpoints/010-mutable-4099-g01.zip.part002",
+      "bytes": 3000000,
+      "sha256": "7b4905238562d1b683edad5eca336fdcc9213cc1141f885f2927a8d3e5abb658",
+      "gitSha": "f5feb608f149d818fca5d6b39f16831680ce565e"
+    },
+    {
+      "path": "checkpoints/010-mutable-4099-g01.zip.part003",
+      "bytes": 3000000,
+      "sha256": "03b8caaf66e8b8bbbbb1a04a4ea19726127eb6064702e318fb5cc75987e1411a",
+      "gitSha": "87910c4475b0f56fea62a2e0b7483ddf9b33213b"
+    },
+    {
+      "path": "checkpoints/010-mutable-4099-g01.zip.part004",
+      "bytes": 51697,
+      "sha256": "9acb8b133c03e1ff2b9dcc8f4c4fe6dd13eb1d30b20a84610d53292c3ca3180c",
+      "gitSha": "67f036d184e9c796da9088250a6cf23694b732e4"
+    }
+  ],
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "intentHead": "de37616f967ab79da475766fa67d418cf518b993"
+}
