@@ -1,0 +1,343 @@
+{
+  "version": "architecture-plasticity-v1",
+  "offspringReconstructed": 6750,
+  "stages": [
+    "off",
+    "mutable"
+  ],
+  "staticOnly": false,
+  "primaryArchivesExact": true,
+  "priorEvidenceExact": true,
+  "allSomaticEdgesAndCostsChecked": true,
+  "results": [
+    {
+      "stage": "off",
+      "architecture": "legacy",
+      "seed": 17,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 16080,
+      "selectedAt": "g10/o9",
+      "fullReplayExact": true,
+      "resetForkExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "legacy",
+      "seed": 71,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 14976,
+      "selectedAt": "g10/o0",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "legacy",
+      "seed": 1901,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 17952,
+      "selectedAt": "g9/o2",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "legacy",
+      "seed": 4099,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 4800,
+      "selectedAt": "g9/o0",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "legacy",
+      "seed": 8191,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 13872,
+      "selectedAt": "g15/o3",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "two-output",
+      "seed": 17,
+      "genotypesExact": 225,
+      "championAvailable": false,
+      "finalJ": null,
+      "selectedAt": null,
+      "fullReplayExact": true,
+      "resetForkExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "two-output",
+      "seed": 71,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 0,
+      "selectedAt": "g3/o8",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "two-output",
+      "seed": 1901,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 0,
+      "selectedAt": "g7/o8",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "two-output",
+      "seed": 4099,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 336,
+      "selectedAt": "g11/o6",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "two-output",
+      "seed": 8191,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 0,
+      "selectedAt": "g13/o12",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "three-output",
+      "seed": 17,
+      "genotypesExact": 225,
+      "championAvailable": false,
+      "finalJ": null,
+      "selectedAt": null,
+      "fullReplayExact": true,
+      "resetForkExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "three-output",
+      "seed": 71,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 0,
+      "selectedAt": "g7/o11",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "three-output",
+      "seed": 1901,
+      "genotypesExact": 225,
+      "championAvailable": false,
+      "finalJ": null,
+      "selectedAt": null,
+      "fullReplayExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "three-output",
+      "seed": 4099,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 432,
+      "selectedAt": "g8/o3",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "off",
+      "architecture": "three-output",
+      "seed": 8191,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 1536,
+      "selectedAt": "g13/o6",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "legacy",
+      "seed": 17,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 14208,
+      "selectedAt": "g9/o8",
+      "fullReplayExact": true,
+      "resetForkExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "legacy",
+      "seed": 71,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 15552,
+      "selectedAt": "g15/o6",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "legacy",
+      "seed": 1901,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 12432,
+      "selectedAt": "g12/o14",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "legacy",
+      "seed": 4099,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 12624,
+      "selectedAt": "g15/o2",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "legacy",
+      "seed": 8191,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 4752,
+      "selectedAt": "g15/o7",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "two-output",
+      "seed": 17,
+      "genotypesExact": 225,
+      "championAvailable": false,
+      "finalJ": null,
+      "selectedAt": null,
+      "fullReplayExact": true,
+      "resetForkExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "two-output",
+      "seed": 71,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 0,
+      "selectedAt": "g3/o8",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "two-output",
+      "seed": 1901,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 0,
+      "selectedAt": "g7/o8",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "two-output",
+      "seed": 4099,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 384,
+      "selectedAt": "g15/o9",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "two-output",
+      "seed": 8191,
+      "genotypesExact": 225,
+      "championAvailable": false,
+      "finalJ": null,
+      "selectedAt": null,
+      "fullReplayExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "three-output",
+      "seed": 17,
+      "genotypesExact": 225,
+      "championAvailable": false,
+      "finalJ": null,
+      "selectedAt": null,
+      "fullReplayExact": true,
+      "resetForkExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "three-output",
+      "seed": 71,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 0,
+      "selectedAt": "g7/o11",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "three-output",
+      "seed": 1901,
+      "genotypesExact": 225,
+      "championAvailable": false,
+      "finalJ": null,
+      "selectedAt": null,
+      "fullReplayExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "three-output",
+      "seed": 4099,
+      "genotypesExact": 225,
+      "championAvailable": true,
+      "finalJ": 480,
+      "selectedAt": "g6/o14",
+      "fullReplayExact": true
+    },
+    {
+      "stage": "mutable",
+      "architecture": "three-output",
+      "seed": 8191,
+      "genotypesExact": 225,
+      "championAvailable": false,
+      "finalJ": null,
+      "selectedAt": null,
+      "fullReplayExact": true
+    }
+  ],
+  "diagnosticReplays": [
+    {
+      "architecture": "legacy",
+      "seed": 17,
+      "environmentSeed": 811,
+      "heldOutExact": true,
+      "ablationExact": true
+    },
+    {
+      "architecture": "two-output",
+      "seed": 71,
+      "environmentSeed": 811,
+      "heldOutExact": true,
+      "ablationExact": true
+    },
+    {
+      "architecture": "three-output",
+      "seed": 71,
+      "environmentSeed": 811,
+      "heldOutExact": true,
+      "ablationExact": true
+    }
+  ]
+}
