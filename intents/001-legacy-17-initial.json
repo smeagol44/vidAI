@@ -1,0 +1,12 @@
+{
+  "label": "001-legacy-17-initial",
+  "detail": {
+    "action": "initial",
+    "controller": "legacy",
+    "seed": 17,
+    "logicalFounders": 1
+  },
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "previousEvidence": "b2232e7df9c81c5c3ed2a1f553b6f0579a283cb7",
+  "notStartedAtIntent": true
+}
