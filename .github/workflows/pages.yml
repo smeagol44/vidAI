@@ -49,17 +49,17 @@ jobs:
       - run: npm run build
       - run: npm run test:worker
       - run: npm run test:gated-worker
-        if: github.head_ref != 'experiment/uncapped-plasticity-98' && github.head_ref != 'experiment/moving-nutrient-pursuit-100'
+        if: github.head_ref != 'experiment/uncapped-plasticity-98' && github.head_ref != 'experiment/moving-nutrient-pursuit-100' && github.head_ref != 'experiment/proximity-targeting-103'
       - run: npm run test:retained-worker
-        if: github.head_ref != 'experiment/uncapped-plasticity-98' && github.head_ref != 'experiment/moving-nutrient-pursuit-100'
+        if: github.head_ref != 'experiment/uncapped-plasticity-98' && github.head_ref != 'experiment/moving-nutrient-pursuit-100' && github.head_ref != 'experiment/proximity-targeting-103'
       - run: npm run test:neural-selection-worker
-        if: github.head_ref != 'experiment/uncapped-plasticity-98' && github.head_ref != 'experiment/moving-nutrient-pursuit-100'
+        if: github.head_ref != 'experiment/uncapped-plasticity-98' && github.head_ref != 'experiment/moving-nutrient-pursuit-100' && github.head_ref != 'experiment/proximity-targeting-103'
       # #91 implementation checkpoint: six-group Worker and old-state compatibility.
       # Frozen old verifiers remain pinned to their independent source bundles.
       - run: npm run test:plasticity-worker
-        if: github.head_ref != 'experiment/uncapped-plasticity-98' && github.head_ref != 'experiment/moving-nutrient-pursuit-100'
+        if: github.head_ref != 'experiment/uncapped-plasticity-98' && github.head_ref != 'experiment/moving-nutrient-pursuit-100' && github.head_ref != 'experiment/proximity-targeting-103'
       - run: npm run audit:architecture-plasticity
-        if: github.head_ref != 'experiment/uncapped-plasticity-98' && github.head_ref != 'experiment/moving-nutrient-pursuit-100' && hashFiles('docs/experiments/architecture-plasticity-v1.json') != ''
+        if: github.head_ref != 'experiment/uncapped-plasticity-98' && github.head_ref != 'experiment/moving-nutrient-pursuit-100' && github.head_ref != 'experiment/proximity-targeting-103' && hashFiles('docs/experiments/architecture-plasticity-v1.json') != ''
       - run: node --import tsx scripts/check-uncapped-plasticity-worker.mjs
         if: github.head_ref == 'experiment/uncapped-plasticity-98'
       - run: node --import tsx scripts/check-uncapped-plasticity-ledger.mjs
@@ -70,6 +70,12 @@ jobs:
         if: github.head_ref == 'experiment/moving-nutrient-pursuit-100' && hashFiles('docs/experiments/moving-nutrient-v1/complete-ledger.json.gz') != ''
       - run: python scripts/verify-moving-nutrient-exports.py
         if: github.head_ref == 'experiment/moving-nutrient-pursuit-100' && hashFiles('docs/experiments/moving-nutrient-v1/graph-data.zip') != ''
+      - run: node --import tsx scripts/check-proximity-targeting-worker.mjs
+        if: github.head_ref == 'experiment/proximity-targeting-103'
+      - run: node --import tsx scripts/check-proximity-targeting-ledger.mjs
+        if: github.head_ref == 'experiment/proximity-targeting-103' && hashFiles('docs/experiments/proximity-targeting-v1/complete-ledger.json.gz') != ''
+      - run: python scripts/verify-proximity-targeting-exports.py
+        if: github.head_ref == 'experiment/proximity-targeting-103' && hashFiles('docs/experiments/proximity-targeting-v1/graph-data.zip') != ''
       - run: npx playwright install --with-deps chromium
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
       - run: npm run test:e2e

@@ -1,3 +1,13 @@
+# Active #103 / draft #104 — bounded follow-up authorized
+
+- Owner request and preregistered protocol: docs/experiments/proximity-targeting-v1-{owner-request,protocol}.md,commit d01d1fd.
+- Exact #101 base a44515e2;new isolated experiment/proximity-targeting-103.
+- Two deliberate changes only:90px graded real feeding and parent-birth targeting for MUTABLE71/4099.
+- Exactly500 offspring+5founders+15held-outs;strict absorbed-J improvement;no reruns/extra scientific trials.
+- Preserve previous source/evidence. Independent immutable generation checkpoints and full audits required.
+- Standard random mutation17/1901 unchanged;seed/algorithm confounded,no causal claim.
+- STOP owner review after completion;no merge/deploy/Wiki/releases/production/testing/VIDA3D.
+
 # Complete #100 / draft #101 — STOP owner review
 
 - Fixed moving-resource study COMPLETE:500 unique offspring,5founders,

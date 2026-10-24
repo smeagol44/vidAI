@@ -1,3 +1,4 @@
+import {feedingStrength,type ProximityFeedingState,type ProximitySample} from './proximityFeeding';
 import {advancePursuit,organs,type PursuitState} from './movingNutrient';
 import {prunePlasticConnections,editPlasticMask,plasticEdgePools,type PlasticConnections} from './plasticGenetics';
 import type {LearningObserver} from './learningObservation';
@@ -459,6 +460,7 @@ export interface SimulationLedger {
 }
 
 export interface SimulationSettings {
+  experimentalFeedingMode?: 'proximity-90-v1'; // #103 explicit exception only.
   experimentalVelocityMode?: 'uncapped-plasticity-v1' | 'uncapped-pursuit-v1'; // #98 explicit two-output heritable-plasticity semantics.
   motorExperiment?: 'gated-torque-v1' | 'retained-head-v1' | 'neural-motor-v1' | 'neural-motor-v2' | 'plasticity-study-v1'; // Explicit testing-only world; never inferred from genes.
   /** Omitted retains exact historical prey-contact geometry. */
@@ -483,6 +485,7 @@ export interface SimulationSettings {
 
 export interface SimulationState {
   pursuit?: PursuitState;
+  proximityFeeding?: ProximityFeedingState;
   energyPool?: EnergyPool;
   initialSeed?: number;
   simTime: number;
@@ -3630,6 +3633,8 @@ export function stepSimulation(
     if(settings.motorExperiment && [...state.organisms,...state.eggs].some(o=>o.genome.motorController && o.genome.motorController.version!==settings.motorExperiment))throw new Error('Motor controller requires its matching explicit experimental world');
     if(settings.motorExperiment===undefined&&[...state.organisms,...state.eggs].some(o=>o.genome.motorController))throw new Error('Gated controllers require an explicit experimental world');
   }
+  if(settings.experimentalFeedingMode!==undefined&&(settings.experimentalFeedingMode!=='proximity-90-v1'||settings.experimentalVelocityMode!=='uncapped-pursuit-v1'||!state.proximityFeeding||settings.mouthContactModel!=='capsule-v1'))throw Error('Invalid experimental proximity mode');
+  if(settings.experimentalFeedingMode===undefined&&state.proximityFeeding)throw Error('Proximity state needs explicit mode');
   if(settings.experimentalVelocityMode!==undefined){const mode=settings.experimentalVelocityMode;if(settings.physicsRegime!=='passive-work-v3'||(mode==='uncapped-plasticity-v1'?(settings.motorExperiment!=='plasticity-study-v1'||[...state.organisms,...state.eggs].some(o=>!o.genome.plasticConnections||o.genome.motorController?.version!=='neural-motor-v2'||o.genome.motorController.architecture!=='two-output')):mode==='uncapped-pursuit-v1'?!state.pursuit:true))throw Error('Invalid uncapped world');}
   if(settings.experimentalVelocityMode!=='uncapped-pursuit-v1'&&state.pursuit)throw Error('Moving source requires its explicit mode');
   state.simTime += dt;
@@ -4075,6 +4080,7 @@ export function stepSimulation(
     for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics, observeActuation, state.simTime - dt + (sub + 1) * dt / substeps));
     resolveBodyContacts(active, BASE_PART_DENSITY, projectBodyJoints, observeMechanics);
     if(pursuitBefore)advancePursuit(state,pursuitBefore,dt/substeps);
+    if(state.proximityFeeding)state.proximityFeeding.bodyTrace.push([state.pursuit!.steps/240,...state.organisms[0].segments.flatMap(p=>[p.x,p.y,p.angle,p.vx,p.vy,p.angVel])]);
     if(settings.experimentalVelocityMode !== undefined && active.some(o=>!Number.isFinite(o.energy)||o.segments.some(p=>!Object.values(p).every(Number.isFinite)))) throw new Error('Nonfinite uncapped contact state');
     if (observeActuation) for (const org of active) {
       let maxAnchorPx = 0, maxLimitRad = 0;
@@ -4249,15 +4255,35 @@ export function stepSimulation(
       }
       if (!oralFoodGrid || oralFoodGrid.nutrientCount !== nutrients.length)
         oralFoodGrid = new NutrientSightGrid(nutrients);
-      for (const i of oralFoodGrid.queryBounds(left, top, right, bottom).reverse()) {
+      // Post-physics capsule geometry, same tick and mouth budget as ordinary feeding.
+      const proximity = settings.experimentalFeedingMode === 'proximity-90-v1' ? state.proximityFeeding : undefined;
+      let proximitySample: ProximitySample | undefined;
+      if (proximity) {
+        const target = nutrients.find(n => n.id === state.pursuit!.nutrientId)!;
+        const separation = distPointToSegment(target.x, target.y, x1, y1, x2, y2) - target.radius - mouthRadius;
+        const gap = Math.max(0, separation);
+        proximitySample = {time: state.pursuit!.steps / 240, mouthId: mouth.id, gap,
+          strength: feedingStrength(gap), contact: separation <= 0, grossJ: 0, absorbedJ: 0, state: state.pursuit!.status};
+        proximity.samples.push(proximitySample);
+      }
+      const extraReach = proximity ? 90 : 0;
+      for (const i of oralFoodGrid.queryBounds(left-extraReach, top-extraReach, right+extraReach, bottom+extraReach).reverse()) {
         if (!(canEat() || !feedback.contact)) break;
         const food = nutrients[i], carrion = food.kind === 'carrion';
         if (carrion ? !eatsMeat : !eatsPlants) continue;
-        const reach = food.radius + halfAperture + mouthRadius;
+        const sample = proximitySample && state.pursuit!.nutrientId === food.id ? proximitySample : undefined;
+        const reach = food.radius + halfAperture + mouthRadius + (sample ? 90 : 0);
         if (Math.abs(food.x - cx) > reach || Math.abs(food.y - cy) > reach) continue;
-        if (distPointToSegment(food.x, food.y, x1, y1, x2, y2) > food.radius + mouthRadius) continue;
-        feedback.contact = 1;
-        const transfer = consume(food.energyValue, carrion ? 'Carrion' : 'Nutrient', carrion ? .85 : 1);
+        const physicalContact = distPointToSegment(food.x, food.y, x1, y1, x2, y2) <= food.radius + mouthRadius;
+        if (physicalContact) feedback.contact = 1;
+        if (!physicalContact && !(sample && sample.strength > 0)) continue;
+        const transfer = consume(sample ? Math.min(food.energyValue, allowance * sample.strength) : food.energyValue,
+          carrion ? 'Carrion' : 'Nutrient', carrion ? .85 : 1);
+        if (sample) {
+          sample.grossJ = transfer; sample.absorbedJ = transfer * MOUTH_ASSIMILATION;
+          if (physicalContact) proximity!.contactJ += sample.absorbedJ;
+          else proximity!.proximityJ += sample.absorbedJ;
+        }
         if (transfer <= 0) continue;
         if(state.pursuit?.nutrientId===food.id){const p=state.pursuit;p.reservoirInputJ+=transfer;p.grossByState[p.status]+=transfer;p.absorbedJ+=transfer*MOUTH_ASSIMILATION;p.absorbedByState[p.status]+=transfer*MOUTH_ASSIMILATION;ledger.externalInflow+=transfer;continue;}
         food.energyValue = Math.max(0, food.energyValue - transfer);
