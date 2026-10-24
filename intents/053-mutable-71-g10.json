@@ -1,0 +1,13 @@
+{
+  "label": "053-mutable-71-g10",
+  "detail": {
+    "action": "generation",
+    "controller": "mutable",
+    "seed": 71,
+    "generation": 10,
+    "logicalOffspring": 10
+  },
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "previousEvidence": "d61f12f49aead373565e83908aef0d91ad43fd80",
+  "notStartedAtIntent": true
+}
