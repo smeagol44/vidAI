@@ -1,0 +1,18 @@
+{
+  "path": "/workspace/scratch/4b3e1fd14e68/proximity-targeting-bundles/005-mutable-4099-initial.zip",
+  "file": "005-mutable-4099-initial.zip",
+  "bytes": 1199776,
+  "sha256": "449f2d6e9e7be8ca9b2c0bec215b7a16acc2e6c63c49dcd32f03c833497e9360",
+  "gitSha": "3b12e48d266e60ad423743b2006ed79fc5109e8d",
+  "label": "005-mutable-4099-initial",
+  "parts": [
+    {
+      "path": "checkpoints/005-mutable-4099-initial.zip.part000",
+      "bytes": 1199776,
+      "sha256": "449f2d6e9e7be8ca9b2c0bec215b7a16acc2e6c63c49dcd32f03c833497e9360",
+      "gitSha": "3b12e48d266e60ad423743b2006ed79fc5109e8d"
+    }
+  ],
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "intentHead": "0b6e809a9b48c9576443db9c6c6de9c60c60c709"
+}
