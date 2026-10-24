@@ -66,6 +66,8 @@ jobs:
         if: github.head_ref == 'experiment/uncapped-plasticity-98' && hashFiles('docs/experiments/uncapped-plasticity-v1/complete-ledger.json.gz') != ''
       - run: node --import tsx scripts/check-moving-nutrient-worker.mjs
         if: github.head_ref == 'experiment/moving-nutrient-pursuit-100'
+      - run: node --import tsx scripts/check-moving-nutrient-ledger.mjs
+        if: github.head_ref == 'experiment/moving-nutrient-pursuit-100' && hashFiles('docs/experiments/moving-nutrient-v1/complete-ledger.json.gz') != ''
       - run: npx playwright install --with-deps chromium
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
       - run: npm run test:e2e

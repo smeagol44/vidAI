@@ -1,0 +1,14 @@
+{
+  "scope": "all520logicaltrials",
+  "units": "part/stage samples;diagnostics only",
+  "counts": {
+    "forces": {
+      "linearExceedances": 12,
+      "angularExceedances": 52995
+    },
+    "contact": {
+      "linearExceedances": 17,
+      "angularExceedances": 41014
+    }
+  }
+}

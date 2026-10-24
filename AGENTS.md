@@ -1,26 +1,35 @@
-# Active #100 / draft #101 — moving inexhaustible nutrient pursuit
+# Complete #100 / draft #101 — STOP owner review
 
-- Owner authorized ONLY legacy fixed-learning seed17 and MUTABLE two-output
-  seeds17/71/1901/4099,10x10x15s each:500 offspring,5founders,50choices,
-  15nonselecting held-outs. Exact#99 basebb39f308;no historical dataset edits.
-- Protocol5ea21bc registered beforeevaluation. Source moving-nutrient-v1/schema100,
-  isolateduncapped-pursuit-v1;preserve oldschema98 and allnormalruntime defaults.
-  Darter body/eyes/mouth/muscles/v3physics/normalmortality/10000J reserve exact.
-- One ordinary nutrient120px ahead physicaleye. External unbounded reservoir
-  replenishes actual gross bites only;finite3000J stock,explicit external ledger.
-  22px/s,ten1.5s/25%STOP intervals,presampled independent offsets;outward halfplane,
-  no-toward pause,permanent405px mounted-eye union freeze with swept substeps.
-  Closed-loop realized paths differ;no privileged neural target input.
-- Eight original sigma.15 neural events,original mutation streams/bounds;
-  MUTABLE original9extra draws/traits/masks/learning/costs. Frozen-generation
-  parents;strict actualabsorbedJ only;tiesretainparent;oldflagsdiagnostic only.
-- Atomic/fsync/hash/readback fullrequests/packets. Save frozen source/initials
-  beforefounders and completegeneration externally BEFOREnext. Unknown request
-  withoutpacket STOP for recoveryapproval. Never repeat undocumented slots.
-- All520packets/500genotypes/50choices,replay5fullchampions+5splitreset;rawtarget
-  trajectories/decisions/eyemouthing/feedingstate/learning/work/energy preserved.
-- STOP ownerreview aftercompletion. No merge/deploy/releases/Wiki/VIDA3D/#78,
-  tuning,extra seeds/experiments. Mainv0.37.0/testingT1.1 unchanged.
+- Fixed moving-resource study COMPLETE:500 unique offspring,5founders,
+  50choices,15held-outs. All520 trials0J/no mouth contact. Allfive curves
+  generations0–10 are0J;unchanged founders selected. No extra search/tuning.
+- Protocol5ea21bc,scientific implementation893c6a22 on exact#99 bb39f308.
+  Schema100/uncapped-pursuit-v1 isolated;old schemas/default physics exact.
+  Legacy17 fixed learning;MUTABLE17/71/1901/4099 exact original genetics.
+- Closest offspring feeding-capsule gap46.139775px. Allsee targettick1.
+  Legacy and3hybrids retainlate locomotion;mutable17 mostly transient.
+  No food/injury teaching or nonzero acquired deltas;paid upkeep retained.
+  DIRECT/physicalOSC used,OFF0;383old-flagged offspring remained eligible.
+- Max571.070px/s,41.362rad/s,anchor.689909px,rangeovershoot.201658rad;
+  clamp loss0J,chemical residual1.132e-9J. Allalive,no nonfinite/corrupttrial.
+  Finite solver imperfections disclosed;no physical-realism claim.
+- All520 packets/500mutation histories/50decisions/468000 tick receipts/
+  1872000 targetsubsteps verified.5canonical fullWorker packets and5splitreset
+  snapshots/PRNG exact;zero offspring re-execution or recovery exception.
+-57immutable primary ZIPs indexed docs/experiments/moving-nutrient-v1/evidence-index.json,
+  evidenceheadfe169caafd28f7bcc6fbcfc52d3e26520a765036. Restore40oldcheckpoints
+  afterworkspace reset exact. Intent63068dc4/g7mutable4099 was proven NOTSTARTED:
+  toolfailed before simulationcall. Evaluatedonce normally. FreshGitreadback
+  replaces failedAPIrefreadback. Source restoration provenance preserved.
+- Full report,allcurves,CSV/JSON trajectories/contacts/intake state andgraphZIP:
+  docs/experiments/moving-nutrient-v1/. Rawalloffspring/evidencepreserved.
+  Historicalstationaryfood tasks contextualonly. Architecture+learninggenetics
+  differ;onelegacyvsfourhybridseeds doesnotisolatecauses or rankarchitectures.
+- Implementation342fast+metadata/build/actualWorker passed;newpaused-range
+  puregeometryfixture passes. Final343fast+metadata/build/Worker/portableledger
+  CI/status in #100/#57/#101. No browser/calibration/search campaign.
+- STOP:nomerge/deploy/releases/Wiki/VIDA3D/#78/additionalexperiment.
+  Productionv0.37.0/main194d70d;testingT1.1/d7a6814 unchanged.
 
 # Complete #98 / draft #99 — STOP owner review
 
