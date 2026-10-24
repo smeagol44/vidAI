@@ -144,6 +144,8 @@ Full audit:520 packets,500genotypes/mutation histories,50strict decisions,468000
 
 Implementation342fast+metadata/build/production Worker/new focused Worker passed at CI40109538457. Final range-pause fixture also passes;final-head CI checks the343-test fast suite,metadata/build/Worker and portable500-slot/50-choice ledger. Its observed outcome is recorded in #100/#57/#101. No browser campaign,calibration,throughput search,merge,Pages publication,Wiki,release orVIDA3D change. Productionv0.37.0/main194d70d andtestingT1.1/d7a6814 remain unchanged.
 
+The initial derived ZIP at source commit8311cdd99a31f695c6cb5a42e0dddc26239df830 was truncated and rejected (SHA256 d26c1604b6a7e7018eb00a456a516c38e1f1d96006f69524765e4e6d47c14612). CSV/JSON exports and all scientific packets remained valid. The bundle was regenerated from those exports,CRC/member-verified and atomically replaced. The rejected artifact remains in immutable commit history;no simulation or score was repaired or repeated.
+
 ## Graph-ready data
 
 - scores.csv /curves.json:five complete generation0–10 curves and final identities.

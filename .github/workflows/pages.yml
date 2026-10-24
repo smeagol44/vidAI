@@ -68,6 +68,8 @@ jobs:
         if: github.head_ref == 'experiment/moving-nutrient-pursuit-100'
       - run: node --import tsx scripts/check-moving-nutrient-ledger.mjs
         if: github.head_ref == 'experiment/moving-nutrient-pursuit-100' && hashFiles('docs/experiments/moving-nutrient-v1/complete-ledger.json.gz') != ''
+      - run: python scripts/verify-moving-nutrient-exports.py
+        if: github.head_ref == 'experiment/moving-nutrient-pursuit-100' && hashFiles('docs/experiments/moving-nutrient-v1/graph-data.zip') != ''
       - run: npx playwright install --with-deps chromium
         if: github.event_name == 'workflow_dispatch' && inputs.extended_validation
       - run: npm run test:e2e
