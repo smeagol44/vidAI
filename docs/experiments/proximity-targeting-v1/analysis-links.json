@@ -1,0 +1,174 @@
+{
+  "analysisCommit": "481da436e0f08ff91bc4f4a3cc2cd61e2f97377d",
+  "analysisBranch": "experiment/proximity-analysis-103",
+  "primaryTrainingHead": "5cefc73c3eecc22c0412319c620717be4d4ec3c7",
+  "pendingHeldOutIntent": "48f75676257297be155f71454c7d2b6cfea47992",
+  "heldOutUnresolved": 15,
+  "bundles": [
+    {
+      "label": "100-trajectories-legacy-17",
+      "logicalTrials": 101,
+      "bytes": 108020344,
+      "sha256": "01b272495a71c98d11de64393a8f127d4d32b79f7c85c76376f0d44b8fabaf01",
+      "parts": [
+        {
+          "path": "exports/trajectories/100-trajectories-legacy-17.zip.part000",
+          "bytes": 24000000,
+          "sha256": "f7b003095da4d85026dd4d54dd6a29a4c41f8a00125e1ea8aaa1ca0c4d90c082"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-legacy-17.zip.part001",
+          "bytes": 24000000,
+          "sha256": "f16c1296d380ca4e9b89c41daf823cdf34feb98ce8c37f2a9cd957b7d1a80714"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-legacy-17.zip.part002",
+          "bytes": 24000000,
+          "sha256": "b2ef24b6e251f5e1a1ae03db07b6853e09d5e309bf4ca039552a54067aaaf21b"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-legacy-17.zip.part003",
+          "bytes": 24000000,
+          "sha256": "bf4c2dc4d638588906cbf76505c1b652e2bab1393ef3d8959d5173d9b22999ba"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-legacy-17.zip.part004",
+          "bytes": 12020344,
+          "sha256": "58e9ba3bc3437e3bd5b8680614ad30dfdf93f0d844c8cb2d1f68a367473c577d"
+        }
+      ]
+    },
+    {
+      "label": "100-trajectories-mutable-17",
+      "logicalTrials": 101,
+      "bytes": 102460979,
+      "sha256": "bd0a31195ec140348b6358b520ca2c1f162c996849c98b3c0d0bb25125e90ead",
+      "parts": [
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-17.zip.part000",
+          "bytes": 24000000,
+          "sha256": "a383647be199983fb7f25bffc1eb3c1bb7b1874b7d07129546d6b5b6b4079de7"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-17.zip.part001",
+          "bytes": 24000000,
+          "sha256": "6c99ecbb888070f2c00fd44e6f5eacbb7a17ef78808be2b417456939dc43d610"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-17.zip.part002",
+          "bytes": 24000000,
+          "sha256": "24e21c85853a1b00704a9eec8ddf223f7e8ef85aae56f921323301e8b94a1c0a"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-17.zip.part003",
+          "bytes": 24000000,
+          "sha256": "eb0a8430609c5e0024aecab2ccb1a27e7fe66aae5ba4662a397f2e7493c0ee75"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-17.zip.part004",
+          "bytes": 6460979,
+          "sha256": "74f86a30ec1d42a42665f985837f684b52f15f93214cd86833c8552e486ccbed"
+        }
+      ]
+    },
+    {
+      "label": "100-trajectories-mutable-71",
+      "logicalTrials": 101,
+      "bytes": 99967354,
+      "sha256": "aadfd27b25e36a064ee6c88e5b6097c59bc71e351f5966a8056996db725879ff",
+      "parts": [
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-71.zip.part000",
+          "bytes": 24000000,
+          "sha256": "b484b4528426ecc11dbff2c8637b7d027ed1f58e79e38564805af56b5c915f5f"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-71.zip.part001",
+          "bytes": 24000000,
+          "sha256": "ac10528d992d37dcbd8833fcd4600dd2e7283d90ae3f73cb31748df5338705fb"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-71.zip.part002",
+          "bytes": 24000000,
+          "sha256": "1626e7d2eacb1295a937f4004d2e2d087cb095b34c63f0aceba82de904a1d9ac"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-71.zip.part003",
+          "bytes": 24000000,
+          "sha256": "1349e2345799f6519f413cab13aec202ade886836878dacc0fb0d205610eb388"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-71.zip.part004",
+          "bytes": 3967354,
+          "sha256": "70d20bbd641597e699a8061500cc1385c4dac7cabade6338d940c71a1989d739"
+        }
+      ]
+    },
+    {
+      "label": "100-trajectories-mutable-1901",
+      "logicalTrials": 101,
+      "bytes": 102563689,
+      "sha256": "776b1e53ae0c718f4259cee91bdd7fce890d83455e38ccd28104414b1e1666f3",
+      "parts": [
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-1901.zip.part000",
+          "bytes": 24000000,
+          "sha256": "a0ebb5f4a451b98c14da6f553df9923f575783d850a4945f233a1f11389a9281"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-1901.zip.part001",
+          "bytes": 24000000,
+          "sha256": "5684591652a275361e3cefb5a820d84cf36b93b685696185816d69d42fae047f"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-1901.zip.part002",
+          "bytes": 24000000,
+          "sha256": "c8463ffee26cb2e1c9e4e03c3a50456d3d629891761af677867193ae58df6683"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-1901.zip.part003",
+          "bytes": 24000000,
+          "sha256": "8f48b295ce2c54dfa55396cb5714a98c2de42b3be1f59355ac8d9408d01f843f"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-1901.zip.part004",
+          "bytes": 6563689,
+          "sha256": "5ca5dac5ea59e462e67f25a887fc85a377f97494288a78bd2cfbea15e5cb2a42"
+        }
+      ]
+    },
+    {
+      "label": "100-trajectories-mutable-4099",
+      "logicalTrials": 101,
+      "bytes": 103823491,
+      "sha256": "5dbe2f44c61402b66988f44815f5f9454e42029773c5e996a9c22bf17eaa6dac",
+      "parts": [
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-4099.zip.part000",
+          "bytes": 24000000,
+          "sha256": "4b71ba73baa448e9ac0cf641f4505e2f472ac530c4a85313985263a633a9b4bd"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-4099.zip.part001",
+          "bytes": 24000000,
+          "sha256": "1a548a7824dcd1b599ae22e8136015d07dd00b560d3ee01e9a3bf53cd8a97bab"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-4099.zip.part002",
+          "bytes": 24000000,
+          "sha256": "d2b3953e500605f99c88a2ab6ee9a697d68518a993d1c14699fea3ebf8a99fab"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-4099.zip.part003",
+          "bytes": 24000000,
+          "sha256": "8ce24320af7e859eb66c51471982091e1041b2ccd5837fcffec67349f649c60f"
+        },
+        {
+          "path": "exports/trajectories/100-trajectories-mutable-4099.zip.part004",
+          "bytes": 7823491,
+          "sha256": "d039e54cdddd0ba0bb9057a0751dc49d6254a278aeed7a972db1830846428a44"
+        }
+      ]
+    }
+  ]
+}

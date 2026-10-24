@@ -1,0 +1,101 @@
+[
+  {
+    "controller": "legacy",
+    "seed": 17,
+    "generation": 1,
+    "child": "legacy-17-g1/o1",
+    "netChanged": 8,
+    "reusedFromEarlierSelectedBirths": 0,
+    "newToSelectedAncestry": 8
+  },
+  {
+    "controller": "legacy",
+    "seed": 17,
+    "generation": 3,
+    "child": "legacy-17-g3/o2",
+    "netChanged": 8,
+    "reusedFromEarlierSelectedBirths": 0,
+    "newToSelectedAncestry": 8
+  },
+  {
+    "controller": "legacy",
+    "seed": 17,
+    "generation": 5,
+    "child": "legacy-17-g5/o5",
+    "netChanged": 8,
+    "reusedFromEarlierSelectedBirths": 0,
+    "newToSelectedAncestry": 8
+  },
+  {
+    "controller": "legacy",
+    "seed": 17,
+    "generation": 6,
+    "child": "legacy-17-g6/o2",
+    "netChanged": 8,
+    "reusedFromEarlierSelectedBirths": 0,
+    "newToSelectedAncestry": 8
+  },
+  {
+    "controller": "legacy",
+    "seed": 17,
+    "generation": 7,
+    "child": "legacy-17-g7/o8",
+    "netChanged": 8,
+    "reusedFromEarlierSelectedBirths": 0,
+    "newToSelectedAncestry": 8
+  },
+  {
+    "controller": "legacy",
+    "seed": 17,
+    "generation": 8,
+    "child": "legacy-17-g8/o6",
+    "netChanged": 8,
+    "reusedFromEarlierSelectedBirths": 0,
+    "newToSelectedAncestry": 8
+  },
+  {
+    "controller": "legacy",
+    "seed": 17,
+    "generation": 10,
+    "child": "legacy-17-g10/o3",
+    "netChanged": 8,
+    "reusedFromEarlierSelectedBirths": 0,
+    "newToSelectedAncestry": 8
+  },
+  {
+    "controller": "mutable",
+    "seed": 71,
+    "generation": 9,
+    "child": "mutable-71-g9/o9",
+    "netChanged": 8,
+    "reusedFromEarlierSelectedBirths": 0,
+    "newToSelectedAncestry": 8
+  },
+  {
+    "controller": "mutable",
+    "seed": 1901,
+    "generation": 5,
+    "child": "mutable-1901-g5/o9",
+    "netChanged": 8,
+    "reusedFromEarlierSelectedBirths": 0,
+    "newToSelectedAncestry": 8
+  },
+  {
+    "controller": "mutable",
+    "seed": 1901,
+    "generation": 6,
+    "child": "mutable-1901-g6/o3",
+    "netChanged": 8,
+    "reusedFromEarlierSelectedBirths": 0,
+    "newToSelectedAncestry": 8
+  },
+  {
+    "controller": "mutable",
+    "seed": 4099,
+    "generation": 4,
+    "child": "mutable-4099-g4/o6",
+    "netChanged": 8,
+    "reusedFromEarlierSelectedBirths": 0,
+    "newToSelectedAncestry": 8
+  }
+]

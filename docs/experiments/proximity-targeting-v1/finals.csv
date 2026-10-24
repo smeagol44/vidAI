@@ -1,0 +1,6 @@
+controller,brain_seed,mutation_algorithm,founder_J,founder_physical_contact_J,founder_proximity_J,final_J,final_physical_contact_J,final_proximity_J,unchanged_founder,selected_at,feeding_offspring,offspring_min_gap_px
+legacy,17,original-random,200.59823372008472,0,200.59823372008472,30805.749290241907,10080,20725.749290241907,false,g10/o3,93,-21.436445685595203
+mutable,17,original-random,0,0,0,0,0,0,true,initial,0,98.00036068987411
+mutable,71,parent-targeted-66,0,0,0,2.2674251375328573,0,2.2674251375328573,false,g9/o9,1,87.8875745310609
+mutable,1901,original-random,0,0,0,1150.7401104316946,0,1150.7401104316946,false,g6/o3,11,67.67760318487217
+mutable,4099,parent-targeted-66,0,0,0,0.17309004905395575,0,0.17309004905395575,false,g4/o6,2,89.62051025167045

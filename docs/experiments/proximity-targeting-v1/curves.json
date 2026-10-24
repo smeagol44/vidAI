@@ -1,0 +1,3620 @@
+{
+  "curves": [
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 0,
+      "selected_absorbed_J": 200.59823372008472
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 1,
+      "selected_absorbed_J": 1403.8387350337825
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 2,
+      "selected_absorbed_J": 1403.8387350337825
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 3,
+      "selected_absorbed_J": 2809.060979953865
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 4,
+      "selected_absorbed_J": 2809.060979953865
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 5,
+      "selected_absorbed_J": 8505.697501678229
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 6,
+      "selected_absorbed_J": 20926.85732605636
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 7,
+      "selected_absorbed_J": 26086.936733510924
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 8,
+      "selected_absorbed_J": 27674.986288875243
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 9,
+      "selected_absorbed_J": 27674.986288875243
+    },
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "generation": 10,
+      "selected_absorbed_J": 30805.749290241907
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 0,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 1,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 2,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 3,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 4,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 5,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 6,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 7,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 8,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 9,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "generation": 10,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 0,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 1,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 2,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 3,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 4,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 5,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 6,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 7,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 8,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 9,
+      "selected_absorbed_J": 2.2674251375328573
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "generation": 10,
+      "selected_absorbed_J": 2.2674251375328573
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 0,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 1,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 2,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 3,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 4,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 5,
+      "selected_absorbed_J": 144.17912611820222
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 6,
+      "selected_absorbed_J": 1150.7401104316946
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 7,
+      "selected_absorbed_J": 1150.7401104316946
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 8,
+      "selected_absorbed_J": 1150.7401104316946
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 9,
+      "selected_absorbed_J": 1150.7401104316946
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "generation": 10,
+      "selected_absorbed_J": 1150.7401104316946
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 0,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 1,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 2,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 3,
+      "selected_absorbed_J": 0
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 4,
+      "selected_absorbed_J": 0.17309004905395575
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 5,
+      "selected_absorbed_J": 0.17309004905395575
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 6,
+      "selected_absorbed_J": 0.17309004905395575
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 7,
+      "selected_absorbed_J": 0.17309004905395575
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 8,
+      "selected_absorbed_J": 0.17309004905395575
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 9,
+      "selected_absorbed_J": 0.17309004905395575
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "generation": 10,
+      "selected_absorbed_J": 0.17309004905395575
+    }
+  ],
+  "runs": [
+    {
+      "controller": "legacy",
+      "brain_seed": 17,
+      "mutation_algorithm": "original-random",
+      "founder_J": 200.59823372008472,
+      "founder_physical_contact_J": 0,
+      "founder_proximity_J": 200.59823372008472,
+      "founder": {
+        "key": "legacy-17-initial",
+        "controller": "legacy",
+        "brain_seed": 17,
+        "role": "founder",
+        "environment_seed": 73,
+        "heading": 0.37,
+        "initial_reserve_J": 10000,
+        "feeding_duration_s": 1.9666666666666666,
+        "com_path_in_intake_ticks_px": 37.38595109580061,
+        "mean_com_speed_in_intake_ticks_px_s": 19.009805641932513,
+        "last5s_absorbed_J": 0,
+        "intake_weighted_gap_px": 86.19363104466848,
+        "intake_weighted_strength": 0.04229298839257151,
+        "absorbed_J": 200.59823372008472,
+        "physical_contact_J": 0,
+        "proximity_J": 200.59823372008472,
+        "mutation_algorithm": "original-random",
+        "moving_J": 184.29013772942218,
+        "paused_J": 16.30809599066253,
+        "frozen_J": 0,
+        "reservoir_input_J": 250.74779215010574,
+        "first_detection_tick": 1,
+        "first_contact_tick": null,
+        "first_intake_tick": 68,
+        "contact_ticks": 0,
+        "intake_ticks": 118,
+        "detection_ticks": 171,
+        "nutrient_ray_samples": 267,
+        "min_mouth_gap_px": 84.54543972827702,
+        "displacement_px": 128.3264157906314,
+        "path_px_240Hz": 256.68731105718376,
+        "last5s_path_px_240Hz": 63.66393073961952,
+        "target_path_px": 231.00000000005005,
+        "freeze_time": null,
+        "no_toward_pauses": 0,
+        "scheduled_stop_intervals": 3,
+        "alive": true,
+        "motor_learning_upkeep_J": 1.4400000000000248,
+        "motor_learning_rewrite_J": 0.000651810913436918,
+        "sensory_learning_upkeep_J": 2.8800000000000496,
+        "sensory_learning_rewrite_J": 0.00033775930601043745,
+        "learning_cost_J": 4.320989570219448,
+        "motor_learned_L1": 0.00029886321821907173,
+        "sensory_learned_L1": 0.00015481796524159628,
+        "nonzero_learned_motor": 48,
+        "nonzero_learned_sensory": 69,
+        "motor_work_heat_J": 13.48994976970393,
+        "positive_motor_J": 3.3724874424259825,
+        "braking_motor_J": 0.8280656440244366,
+        "chemical_expenditure_J": 400.62343934026103,
+        "final_reserve_J": 9799.974794379823,
+        "constraint_gain_J": 1.0408340855860843e-17,
+        "delivery_error": 0,
+        "energy_limited_batches": 0,
+        "chemical_error_J": 3.383320290595293e-10,
+        "partition_residual_J": 3.333298081997782e-10,
+        "max_anchor_px": 0.12529259247149915,
+        "max_limit_overshoot_rad": 0.026420278011516696,
+        "max_linear_px_s": 194.9952118831639,
+        "max_angular_rad_s": 16.195910089032715,
+        "guard_loss_J": 0,
+        "former_cap_stages": {
+          "forces": {
+            "samples": 10800,
+            "maxLinear": 190.88226078048453,
+            "maxOmega": 16.195910089032715,
+            "linearExceedances": 0,
+            "angularExceedances": 0
+          },
+          "contact": {
+            "samples": 10800,
+            "maxLinear": 194.9952118831639,
+            "maxOmega": 15.87096256836349,
+            "linearExceedances": 0,
+            "angularExceedances": 0
+          }
+        },
+        "former_flags": [],
+        "modes": {
+          "servo": 7200
+        },
+        "physical_oscillator_samples": 0,
+        "late_mode_switches": 0,
+        "learning_genes": {
+          "plasticityRate": 0.016,
+          "sensoryPlasticityRate": 0.016,
+          "forgettingRate": 0.1,
+          "memoryConsolidationRate": 0,
+          "injuryAversionRate": 0
+        },
+        "plastic_masks": null,
+        "mode_transitions": [],
+        "target_decisions": [
+          {
+            "interval": 0,
+            "time": 0,
+            "stop": true,
+            "offset": -0.29839314662085015,
+            "heading": 0.028692680493456302,
+            "x": 2530.7263180445843,
+            "y": 1543.19583047594,
+            "com": {
+              "x": 2376.2106151492135,
+              "y": 1490.7729739779263,
+              "totalMass": 12.4,
+              "vxCOM": 0,
+              "vyCOM": 0
+            }
+          },
+          {
+            "interval": 1,
+            "time": 1.5,
+            "stop": false,
+            "offset": -0.97316624142301,
+            "heading": -0.6517367716350662,
+            "x": 2530.7263180445843,
+            "y": 1543.19583047594,
+            "com": {
+              "x": 2388.0776485109564,
+              "y": 1495.6971599560638,
+              "totalMass": 12.4,
+              "vxCOM": 11.085499392903937,
+              "vyCOM": 9.512173072014692
+            }
+          },
+          {
+            "interval": 2,
+            "time": 3,
+            "stop": false,
+            "offset": -1.173050960383873,
+            "heading": -1.083071678314583,
+            "x": 2556.9623584636465,
+            "y": 1523.1790829097436,
+            "com": {
+              "x": 2411.38608149455,
+              "y": 1510.0447685510778,
+              "totalMass": 12.4,
+              "vxCOM": 21.393471291908686,
+              "vyCOM": 14.314788804667904
+            }
+          },
+          {
+            "interval": 3,
+            "time": 4.5,
+            "stop": true,
+            "offset": -0.32405287602300403,
+            "heading": -0.6048890628928456,
+            "x": 2572.426721253072,
+            "y": 1494.0268362807974,
+            "com": {
+              "x": 2437.0111620847824,
+              "y": 1533.0887912474664,
+              "totalMass": 12.4,
+              "vxCOM": 16.007138757512607,
+              "vyCOM": 19.378539872303126
+            }
+          },
+          {
+            "interval": 4,
+            "time": 6,
+            "stop": false,
+            "offset": 0.2860478413493327,
+            "heading": -0.2960779914240814,
+            "x": 2572.426721253072,
+            "y": 1494.0268362807974,
+            "com": {
+              "x": 2460.4683953431277,
+              "y": 1567.7190411077243,
+              "totalMass": 12.4,
+              "vxCOM": 18.181475132617958,
+              "vyCOM": 28.096233912023838
+            }
+          },
+          {
+            "interval": 5,
+            "time": 7.5,
+            "stop": false,
+            "offset": -0.5161185575181433,
+            "heading": -1.2912695554679245,
+            "x": 2603.990830908755,
+            "y": 1484.3983897993503,
+            "com": {
+              "x": 2482.6269165373583,
+              "y": 1603.3001756108595,
+              "totalMass": 12.4,
+              "vxCOM": 9.759114834455334,
+              "vyCOM": 14.210556477771036
+            }
+          },
+          {
+            "interval": 6,
+            "time": 9,
+            "stop": true,
+            "offset": -1.1782268018527313,
+            "heading": -2.0479246122269803,
+            "x": 2613.095557924138,
+            "y": 1452.6792481657203,
+            "com": {
+              "x": 2483.916894206571,
+              "y": 1605.7040808307888,
+              "totalMass": 12.4,
+              "vxCOM": -5.827811843756891,
+              "vyCOM": -12.71956647907346
+            }
+          },
+          {
+            "interval": 7,
+            "time": 10.5,
+            "stop": false,
+            "offset": 0.6894420991507852,
+            "heading": -0.016055390823336957,
+            "x": 2613.095557924138,
+            "y": 1452.6792481657203,
+            "com": {
+              "x": 2466.7266823888963,
+              "y": 1577.3459924980166,
+              "totalMass": 12.4,
+              "vxCOM": -10.651118972719903,
+              "vyCOM": -19.762980896145
+            }
+          },
+          {
+            "interval": 8,
+            "time": 12,
+            "stop": false,
+            "offset": -0.8190378593000949,
+            "heading": -1.330375287567138,
+            "x": 2646.091304718597,
+            "y": 1452.149443031055,
+            "com": {
+              "x": 2456.2855271340386,
+              "y": 1558.6524859700212,
+              "totalMass": 12.4,
+              "vxCOM": -2.700495212734876,
+              "vyCOM": -1.3438277758830648
+            }
+          },
+          {
+            "interval": 9,
+            "time": 13.5,
+            "stop": false,
+            "offset": -0.00190252715646406,
+            "heading": -0.6377998067343881,
+            "x": 2653.9489867508782,
+            "y": 1420.0985954123162,
+            "com": {
+              "x": 2459.931745879922,
+              "y": 1563.3194378068886,
+              "totalMass": 12.4,
+              "vxCOM": 4.867642645895856,
+              "vyCOM": 8.018872409780746
+            }
+          }
+        ],
+        "target_events": []
+      },
+      "final_J": 30805.749290241907,
+      "final_physical_contact_J": 10080,
+      "final_proximity_J": 20725.749290241907,
+      "unchanged_founder": false,
+      "selected_at": "g10/o3",
+      "feeding_offspring": 93,
+      "offspring_min_gap_px": -21.436445685595203,
+      "improvements": [
+        {
+          "generation": 1,
+          "offspring": 1,
+          "J": 1403.8387350337825
+        },
+        {
+          "generation": 3,
+          "offspring": 2,
+          "J": 2809.060979953865
+        },
+        {
+          "generation": 5,
+          "offspring": 5,
+          "J": 8505.697501678229
+        },
+        {
+          "generation": 6,
+          "offspring": 2,
+          "J": 20926.85732605636
+        },
+        {
+          "generation": 7,
+          "offspring": 8,
+          "J": 26086.936733510924
+        },
+        {
+          "generation": 8,
+          "offspring": 6,
+          "J": 27674.986288875243
+        },
+        {
+          "generation": 10,
+          "offspring": 3,
+          "J": 30805.749290241907
+        }
+      ]
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 17,
+      "mutation_algorithm": "original-random",
+      "founder_J": 0,
+      "founder_physical_contact_J": 0,
+      "founder_proximity_J": 0,
+      "founder": {
+        "key": "mutable-17-initial",
+        "controller": "mutable",
+        "brain_seed": 17,
+        "role": "founder",
+        "environment_seed": 73,
+        "heading": 0.37,
+        "initial_reserve_J": 10000,
+        "feeding_duration_s": 0,
+        "com_path_in_intake_ticks_px": 0,
+        "mean_com_speed_in_intake_ticks_px_s": null,
+        "last5s_absorbed_J": 0,
+        "intake_weighted_gap_px": null,
+        "intake_weighted_strength": null,
+        "absorbed_J": 0,
+        "physical_contact_J": 0,
+        "proximity_J": 0,
+        "mutation_algorithm": "original-random",
+        "moving_J": 0,
+        "paused_J": 0,
+        "frozen_J": 0,
+        "reservoir_input_J": 0,
+        "first_detection_tick": 1,
+        "first_contact_tick": null,
+        "first_intake_tick": null,
+        "contact_ticks": 0,
+        "intake_ticks": 0,
+        "detection_ticks": 838,
+        "nutrient_ray_samples": 1429,
+        "min_mouth_gap_px": 98.35845151079681,
+        "displacement_px": 1.181554001041866,
+        "path_px_240Hz": 1.262033068567753,
+        "last5s_path_px_240Hz": 0.02441345813334981,
+        "target_path_px": 230.999999999925,
+        "freeze_time": null,
+        "no_toward_pauses": 0,
+        "scheduled_stop_intervals": 3,
+        "alive": true,
+        "motor_learning_upkeep_J": 1.4400000000000248,
+        "motor_learning_rewrite_J": 0,
+        "sensory_learning_upkeep_J": 1.4400000000000248,
+        "sensory_learning_rewrite_J": 0,
+        "learning_cost_J": 2.8800000000000496,
+        "motor_learned_L1": 0,
+        "sensory_learned_L1": 0,
+        "nonzero_learned_motor": 0,
+        "nonzero_learned_sensory": 0,
+        "motor_work_heat_J": 14.465259458194481,
+        "positive_motor_J": 3.6163148645486167,
+        "braking_motor_J": 0.0019599195316011833,
+        "chemical_expenditure_J": 400.157759457843,
+        "final_reserve_J": 9599.842240542157,
+        "constraint_gain_J": 0,
+        "delivery_error": 0,
+        "energy_limited_batches": 0,
+        "chemical_error_J": 3.5652192309498787e-10,
+        "partition_residual_J": -3.510081114654895e-10,
+        "max_anchor_px": 0.2119218503959954,
+        "max_limit_overshoot_rad": 0.13094845806238642,
+        "max_linear_px_s": 333.34466201704123,
+        "max_angular_rad_s": 20.386414304150364,
+        "guard_loss_J": 0,
+        "former_cap_stages": {
+          "forces": {
+            "samples": 10800,
+            "maxLinear": 331.55006024830436,
+            "maxOmega": 20.386414304150364,
+            "linearExceedances": 0,
+            "angularExceedances": 4
+          },
+          "contact": {
+            "samples": 10800,
+            "maxLinear": 333.34466201704123,
+            "maxOmega": 16.853449424758757,
+            "linearExceedances": 0,
+            "angularExceedances": 0
+          }
+        },
+        "former_flags": [
+          "speed guard",
+          "joint limit"
+        ],
+        "modes": {
+          "direct": 7200
+        },
+        "physical_oscillator_samples": 0,
+        "late_mode_switches": 0,
+        "learning_genes": {
+          "plasticityRate": 0.5325380433350801,
+          "sensoryPlasticityRate": 0.014256378822028638,
+          "forgettingRate": 0.3729786656331271,
+          "memoryConsolidationRate": 0.6941039403900504,
+          "injuryAversionRate": 0.4226975489873439
+        },
+        "plastic_masks": {
+          "version": "heritable-plastic-v1",
+          "motor": [
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:10\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:14\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:17\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:18\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:19\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:2\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:21\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:22\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:23\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:3\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:4\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:8\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:0\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:1\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:10\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:15\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:16\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:17\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:19\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:20\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:22\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:3\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:6\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:8\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:0\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:10\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:11\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:12\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:13\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:14\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:17\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:19\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:2\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:22\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:5\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:9\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:0\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:1\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:12\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:13\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:14\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:15\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:18\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:2\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:20\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:22\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:3\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:9\"]"
+          ],
+          "sensory": [
+            "[\"ih\",\"hidden:0\",\"eye:CUR-001-E0:ray:4:blue\"]",
+            "[\"ih\",\"hidden:1\",\"eye:CUR-001-E0-mirror:ray:2:blue\"]",
+            "[\"ih\",\"hidden:1\",\"eye:CUR-001-E0-mirror:ray:4:blue\"]",
+            "[\"ih\",\"hidden:1\",\"eye:CUR-001-E0:ray:1:blue\"]",
+            "[\"ih\",\"hidden:1\",\"eye:CUR-001-E0:ray:2:red\"]",
+            "[\"ih\",\"hidden:10\",\"eye:CUR-001-E0:ray:2:blue\"]",
+            "[\"ih\",\"hidden:11\",\"eye:CUR-001-E0-mirror:ray:1:blue\"]",
+            "[\"ih\",\"hidden:11\",\"eye:CUR-001-E0-mirror:ray:4:green\"]",
+            "[\"ih\",\"hidden:11\",\"eye:CUR-001-E0:ray:1:red\"]",
+            "[\"ih\",\"hidden:12\",\"eye:CUR-001-E0-mirror:ray:3:green\"]",
+            "[\"ih\",\"hidden:12\",\"eye:CUR-001-E0:ray:3:red\"]",
+            "[\"ih\",\"hidden:13\",\"eye:CUR-001-E0-mirror:ray:2:blue\"]",
+            "[\"ih\",\"hidden:13\",\"eye:CUR-001-E0-mirror:ray:2:red\"]",
+            "[\"ih\",\"hidden:13\",\"eye:CUR-001-E0-mirror:ray:3:blue\"]",
+            "[\"ih\",\"hidden:14\",\"eye:CUR-001-E0-mirror:ray:2:blue\"]",
+            "[\"ih\",\"hidden:14\",\"eye:CUR-001-E0-mirror:ray:3:green\"]",
+            "[\"ih\",\"hidden:14\",\"eye:CUR-001-E0:ray:1:red\"]",
+            "[\"ih\",\"hidden:15\",\"eye:CUR-001-E0-mirror:ray:0:blue\"]",
+            "[\"ih\",\"hidden:15\",\"eye:CUR-001-E0:ray:1:red\"]",
+            "[\"ih\",\"hidden:15\",\"eye:CUR-001-E0:ray:2:red\"]",
+            "[\"ih\",\"hidden:15\",\"eye:CUR-001-E0:ray:3:red\"]",
+            "[\"ih\",\"hidden:16\",\"eye:CUR-001-E0-mirror:ray:2:green\"]",
+            "[\"ih\",\"hidden:17\",\"eye:CUR-001-E0:ray:3:green\"]",
+            "[\"ih\",\"hidden:17\",\"eye:CUR-001-E0:ray:4:red\"]",
+            "[\"ih\",\"hidden:18\",\"eye:CUR-001-E0-mirror:ray:0:red\"]",
+            "[\"ih\",\"hidden:18\",\"eye:CUR-001-E0-mirror:ray:3:green\"]",
+            "[\"ih\",\"hidden:18\",\"eye:CUR-001-E0:ray:4:red\"]",
+            "[\"ih\",\"hidden:19\",\"eye:CUR-001-E0:ray:1:green\"]",
+            "[\"ih\",\"hidden:19\",\"eye:CUR-001-E0:ray:3:green\"]",
+            "[\"ih\",\"hidden:2\",\"eye:CUR-001-E0-mirror:ray:1:red\"]",
+            "[\"ih\",\"hidden:20\",\"eye:CUR-001-E0-mirror:ray:1:green\"]",
+            "[\"ih\",\"hidden:20\",\"eye:CUR-001-E0-mirror:ray:3:red\"]",
+            "[\"ih\",\"hidden:23\",\"eye:CUR-001-E0-mirror:ray:0:green\"]",
+            "[\"ih\",\"hidden:23\",\"eye:CUR-001-E0:ray:2:blue\"]",
+            "[\"ih\",\"hidden:23\",\"eye:CUR-001-E0:ray:3:blue\"]",
+            "[\"ih\",\"hidden:23\",\"eye:CUR-001-E0:ray:4:red\"]",
+            "[\"ih\",\"hidden:3\",\"eye:CUR-001-E0-mirror:ray:2:red\"]",
+            "[\"ih\",\"hidden:3\",\"eye:CUR-001-E0-mirror:ray:3:red\"]",
+            "[\"ih\",\"hidden:6\",\"eye:CUR-001-E0-mirror:ray:2:blue\"]",
+            "[\"ih\",\"hidden:6\",\"eye:CUR-001-E0:ray:0:red\"]",
+            "[\"ih\",\"hidden:6\",\"eye:CUR-001-E0:ray:2:green\"]",
+            "[\"ih\",\"hidden:7\",\"eye:CUR-001-E0:ray:4:red\"]",
+            "[\"ih\",\"hidden:8\",\"eye:CUR-001-E0:ray:2:red\"]",
+            "[\"ih\",\"hidden:9\",\"eye:CUR-001-E0-mirror:ray:0:green\"]",
+            "[\"ih\",\"hidden:9\",\"eye:CUR-001-E0-mirror:ray:0:red\"]",
+            "[\"ih\",\"hidden:9\",\"eye:CUR-001-E0-mirror:ray:3:red\"]",
+            "[\"ih\",\"hidden:9\",\"eye:CUR-001-E0-mirror:ray:4:red\"]",
+            "[\"ih\",\"hidden:9\",\"eye:CUR-001-E0:ray:0:green\"]"
+          ]
+        },
+        "mode_transitions": [],
+        "target_decisions": [
+          {
+            "interval": 0,
+            "time": 0,
+            "stop": true,
+            "offset": -0.29839314662085015,
+            "heading": 0.028692680493456302,
+            "x": 2530.7263180445843,
+            "y": 1543.19583047594,
+            "com": {
+              "x": 2376.2106151492135,
+              "y": 1490.7729739779263,
+              "totalMass": 12.4,
+              "vxCOM": 0,
+              "vyCOM": 0
+            }
+          },
+          {
+            "interval": 1,
+            "time": 1.5,
+            "stop": false,
+            "offset": -0.97316624142301,
+            "heading": -0.648752655797675,
+            "x": 2530.7263180445843,
+            "y": 1543.19583047594,
+            "com": {
+              "x": 2375.531339687589,
+              "y": 1491.0045518616025,
+              "totalMass": 12.4,
+              "vxCOM": -0.26903021726807386,
+              "vyCOM": 0.028278596533034907
+            }
+          },
+          {
+            "interval": 2,
+            "time": 3,
+            "stop": false,
+            "offset": -1.173050960383873,
+            "heading": -0.9973064206195571,
+            "x": 2557.021973853156,
+            "y": 1523.2574633012673,
+            "com": {
+              "x": 2375.262577267301,
+              "y": 1490.9812597435084,
+              "totalMass": 12.4,
+              "vxCOM": -0.11321900979518655,
+              "vyCOM": -0.023031038511409776
+            }
+          },
+          {
+            "interval": 3,
+            "time": 4.5,
+            "stop": true,
+            "offset": -0.32405287602300403,
+            "heading": -0.30110939736396053,
+            "x": 2574.9266819482946,
+            "y": 1495.5370479359744,
+            "com": {
+              "x": 2375.143411250001,
+              "y": 1490.9525202633433,
+              "totalMass": 12.4,
+              "vxCOM": -0.052852507979134926,
+              "vyCOM": -0.010329695958026356
+            }
+          },
+          {
+            "interval": 4,
+            "time": 6,
+            "stop": false,
+            "offset": 0.2860478413493327,
+            "heading": 0.30904932462510126,
+            "x": 2574.9266819482946,
+            "y": 1495.5370479359744,
+            "com": {
+              "x": 2375.089208410248,
+              "y": 1490.9396788279355,
+              "totalMass": 12.4,
+              "vxCOM": -0.022485516434204586,
+              "vyCOM": -0.003276134489234601
+            }
+          },
+          {
+            "interval": 5,
+            "time": 7.5,
+            "stop": false,
+            "offset": -0.5161185575181433,
+            "heading": -0.45290605459988187,
+            "x": 2606.3632459387045,
+            "y": 1505.574101511499,
+            "com": {
+              "x": 2375.0644637702426,
+              "y": 1490.9336211280706,
+              "totalMass": 12.4,
+              "vxCOM": -0.010026035186579295,
+              "vyCOM": -0.002719397848080583
+            }
+          },
+          {
+            "interval": 6,
+            "time": 9,
+            "stop": true,
+            "offset": -1.1782268018527313,
+            "heading": -1.1774455481918935,
+            "x": 2636.0361617937488,
+            "y": 1491.133946918978,
+            "com": {
+              "x": 2375.051957604621,
+              "y": 1490.9300520125514,
+              "totalMass": 12.4,
+              "vxCOM": -0.005371041946618222,
+              "vyCOM": -0.0016587869894561388
+            }
+          },
+          {
+            "interval": 7,
+            "time": 10.5,
+            "stop": false,
+            "offset": 0.6894420991507852,
+            "heading": 0.6902283123418027,
+            "x": 2636.0361617937488,
+            "y": 1491.133946918978,
+            "com": {
+              "x": 2375.0462222834385,
+              "y": 1490.9287531435332,
+              "totalMass": 12.4,
+              "vxCOM": -0.002480997103491861,
+              "vyCOM": -0.0022804485561771716
+            }
+          },
+          {
+            "interval": 8,
+            "time": 12,
+            "stop": false,
+            "offset": -0.8190378593000949,
+            "heading": -0.7450971476912321,
+            "x": 2661.482483758704,
+            "y": 1512.145484189211,
+            "com": {
+              "x": 2375.042344987221,
+              "y": 1490.9272140143412,
+              "totalMass": 12.4,
+              "vxCOM": -0.00045193703353932265,
+              "vyCOM": 0.00415725708471376
+            }
+          },
+          {
+            "interval": 9,
+            "time": 13.5,
+            "stop": false,
+            "offset": -0.00190252715646406,
+            "heading": -0.0056264800888147625,
+            "x": 2685.7382109307437,
+            "y": 1489.7700579506882,
+            "com": {
+              "x": 2375.040505182408,
+              "y": 1490.9270869315812,
+              "totalMass": 12.4,
+              "vxCOM": -0.0009084952112736744,
+              "vyCOM": -0.0022693455479640178
+            }
+          }
+        ],
+        "target_events": []
+      },
+      "final_J": 0,
+      "final_physical_contact_J": 0,
+      "final_proximity_J": 0,
+      "unchanged_founder": true,
+      "selected_at": "initial",
+      "feeding_offspring": 0,
+      "offspring_min_gap_px": 98.00036068987411,
+      "improvements": []
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 71,
+      "mutation_algorithm": "parent-targeted-66",
+      "founder_J": 0,
+      "founder_physical_contact_J": 0,
+      "founder_proximity_J": 0,
+      "founder": {
+        "key": "mutable-71-initial",
+        "controller": "mutable",
+        "brain_seed": 71,
+        "role": "founder",
+        "environment_seed": 73,
+        "heading": 0.37,
+        "initial_reserve_J": 10000,
+        "feeding_duration_s": 0,
+        "com_path_in_intake_ticks_px": 0,
+        "mean_com_speed_in_intake_ticks_px_s": null,
+        "last5s_absorbed_J": 0,
+        "intake_weighted_gap_px": null,
+        "intake_weighted_strength": null,
+        "absorbed_J": 0,
+        "physical_contact_J": 0,
+        "proximity_J": 0,
+        "mutation_algorithm": "parent-targeted-66",
+        "moving_J": 0,
+        "paused_J": 0,
+        "frozen_J": 0,
+        "reservoir_input_J": 0,
+        "first_detection_tick": 1,
+        "first_contact_tick": null,
+        "first_intake_tick": null,
+        "contact_ticks": 0,
+        "intake_ticks": 0,
+        "detection_ticks": 308,
+        "nutrient_ray_samples": 467,
+        "min_mouth_gap_px": 97.6202601030754,
+        "displacement_px": 10.694665350212443,
+        "path_px_240Hz": 40.10499140156931,
+        "last5s_path_px_240Hz": 16.32234952237408,
+        "target_path_px": 231.00000000001137,
+        "freeze_time": null,
+        "no_toward_pauses": 0,
+        "scheduled_stop_intervals": 3,
+        "alive": true,
+        "motor_learning_upkeep_J": 1.4400000000000248,
+        "motor_learning_rewrite_J": 0,
+        "sensory_learning_upkeep_J": 1.4400000000000248,
+        "sensory_learning_rewrite_J": 0,
+        "learning_cost_J": 2.8800000000000496,
+        "motor_learned_L1": 0,
+        "sensory_learned_L1": 0,
+        "nonzero_learned_motor": 0,
+        "nonzero_learned_sensory": 0,
+        "motor_work_heat_J": 7.2733028234526405,
+        "positive_motor_J": 1.818325705863157,
+        "braking_motor_J": 0.05665571788910254,
+        "chemical_expenditure_J": 392.9658028231315,
+        "final_reserve_J": 9607.034197176868,
+        "constraint_gain_J": 3.469446951953614e-18,
+        "delivery_error": 0,
+        "energy_limited_batches": 0,
+        "chemical_error_J": 3.2378011383116245e-10,
+        "partition_residual_J": -3.205968823749572e-10,
+        "max_anchor_px": 0.41282343631819685,
+        "max_limit_overshoot_rad": 0.1207757217962303,
+        "max_linear_px_s": 297.8653158051472,
+        "max_angular_rad_s": 26.429902090107568,
+        "guard_loss_J": 0,
+        "former_cap_stages": {
+          "forces": {
+            "samples": 10800,
+            "maxLinear": 297.72275278070515,
+            "maxOmega": 26.429902090107568,
+            "linearExceedances": 0,
+            "angularExceedances": 45
+          },
+          "contact": {
+            "samples": 10800,
+            "maxLinear": 297.8653158051472,
+            "maxOmega": 24.89820184240363,
+            "linearExceedances": 0,
+            "angularExceedances": 28
+          }
+        },
+        "former_flags": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ],
+        "modes": {
+          "oscillator": 528,
+          "direct": 6672
+        },
+        "physical_oscillator_samples": 528,
+        "late_mode_switches": 13,
+        "learning_genes": {
+          "plasticityRate": 0.06011079214513302,
+          "sensoryPlasticityRate": 0.7094299310818315,
+          "forgettingRate": 0.581152786500752,
+          "memoryConsolidationRate": 0.5185967553406954,
+          "injuryAversionRate": 0.708672501379624
+        },
+        "plastic_masks": {
+          "version": "heritable-plastic-v1",
+          "motor": [
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:0\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:12\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:13\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:17\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:19\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:23\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:3\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:5\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:6\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:7\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:8\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:9\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:0\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:11\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:12\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:13\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:14\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:18\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:19\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:2\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:23\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:4\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:8\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:9\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:12\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:13\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:14\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:15\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:18\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:19\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:2\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:20\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:21\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:22\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:4\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:6\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:0\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:1\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:11\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:16\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:17\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:18\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:2\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:22\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:23\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:4\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:5\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:6\"]"
+          ],
+          "sensory": [
+            "[\"ih\",\"hidden:10\",\"eye:CUR-001-E0-mirror:ray:3:green\"]",
+            "[\"ih\",\"hidden:10\",\"eye:CUR-001-E0:ray:0:green\"]",
+            "[\"ih\",\"hidden:10\",\"eye:CUR-001-E0:ray:2:blue\"]",
+            "[\"ih\",\"hidden:10\",\"eye:CUR-001-E0:ray:3:green\"]",
+            "[\"ih\",\"hidden:11\",\"eye:CUR-001-E0:ray:4:blue\"]",
+            "[\"ih\",\"hidden:12\",\"eye:CUR-001-E0-mirror:ray:2:red\"]",
+            "[\"ih\",\"hidden:12\",\"eye:CUR-001-E0-mirror:ray:4:green\"]",
+            "[\"ih\",\"hidden:12\",\"eye:CUR-001-E0:ray:0:red\"]",
+            "[\"ih\",\"hidden:12\",\"eye:CUR-001-E0:ray:1:blue\"]",
+            "[\"ih\",\"hidden:13\",\"eye:CUR-001-E0-mirror:ray:3:green\"]",
+            "[\"ih\",\"hidden:13\",\"eye:CUR-001-E0:ray:2:blue\"]",
+            "[\"ih\",\"hidden:14\",\"eye:CUR-001-E0-mirror:ray:2:blue\"]",
+            "[\"ih\",\"hidden:14\",\"eye:CUR-001-E0-mirror:ray:2:red\"]",
+            "[\"ih\",\"hidden:14\",\"eye:CUR-001-E0:ray:4:green\"]",
+            "[\"ih\",\"hidden:16\",\"eye:CUR-001-E0-mirror:ray:0:red\"]",
+            "[\"ih\",\"hidden:16\",\"eye:CUR-001-E0-mirror:ray:4:blue\"]",
+            "[\"ih\",\"hidden:16\",\"eye:CUR-001-E0:ray:0:red\"]",
+            "[\"ih\",\"hidden:17\",\"eye:CUR-001-E0-mirror:ray:3:green\"]",
+            "[\"ih\",\"hidden:18\",\"eye:CUR-001-E0-mirror:ray:1:blue\"]",
+            "[\"ih\",\"hidden:18\",\"eye:CUR-001-E0-mirror:ray:3:green\"]",
+            "[\"ih\",\"hidden:19\",\"eye:CUR-001-E0-mirror:ray:3:red\"]",
+            "[\"ih\",\"hidden:19\",\"eye:CUR-001-E0:ray:1:blue\"]",
+            "[\"ih\",\"hidden:2\",\"eye:CUR-001-E0:ray:1:blue\"]",
+            "[\"ih\",\"hidden:2\",\"eye:CUR-001-E0:ray:4:red\"]",
+            "[\"ih\",\"hidden:20\",\"eye:CUR-001-E0:ray:0:red\"]",
+            "[\"ih\",\"hidden:20\",\"eye:CUR-001-E0:ray:1:green\"]",
+            "[\"ih\",\"hidden:20\",\"eye:CUR-001-E0:ray:1:red\"]",
+            "[\"ih\",\"hidden:21\",\"eye:CUR-001-E0:ray:0:blue\"]",
+            "[\"ih\",\"hidden:22\",\"eye:CUR-001-E0:ray:3:green\"]",
+            "[\"ih\",\"hidden:22\",\"eye:CUR-001-E0:ray:4:red\"]",
+            "[\"ih\",\"hidden:23\",\"eye:CUR-001-E0-mirror:ray:2:green\"]",
+            "[\"ih\",\"hidden:23\",\"eye:CUR-001-E0:ray:3:red\"]",
+            "[\"ih\",\"hidden:3\",\"eye:CUR-001-E0:ray:2:red\"]",
+            "[\"ih\",\"hidden:3\",\"eye:CUR-001-E0:ray:4:green\"]",
+            "[\"ih\",\"hidden:4\",\"eye:CUR-001-E0-mirror:ray:1:green\"]",
+            "[\"ih\",\"hidden:4\",\"eye:CUR-001-E0-mirror:ray:3:blue\"]",
+            "[\"ih\",\"hidden:4\",\"eye:CUR-001-E0:ray:1:green\"]",
+            "[\"ih\",\"hidden:4\",\"eye:CUR-001-E0:ray:4:green\"]",
+            "[\"ih\",\"hidden:5\",\"eye:CUR-001-E0-mirror:ray:1:blue\"]",
+            "[\"ih\",\"hidden:6\",\"eye:CUR-001-E0-mirror:ray:2:blue\"]",
+            "[\"ih\",\"hidden:6\",\"eye:CUR-001-E0-mirror:ray:2:green\"]",
+            "[\"ih\",\"hidden:6\",\"eye:CUR-001-E0:ray:0:red\"]",
+            "[\"ih\",\"hidden:7\",\"eye:CUR-001-E0-mirror:ray:0:blue\"]",
+            "[\"ih\",\"hidden:7\",\"eye:CUR-001-E0-mirror:ray:1:green\"]",
+            "[\"ih\",\"hidden:8\",\"eye:CUR-001-E0:ray:1:green\"]",
+            "[\"ih\",\"hidden:8\",\"eye:CUR-001-E0:ray:3:blue\"]",
+            "[\"ih\",\"hidden:8\",\"eye:CUR-001-E0:ray:4:green\"]",
+            "[\"ih\",\"hidden:9\",\"eye:CUR-001-E0:ray:3:red\"]"
+          ]
+        },
+        "mode_transitions": [
+          {
+            "time": 0.004166666666666667,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.10064480182308529,
+            "command": -0.07060401547797245
+          },
+          {
+            "time": 0.020833333333333332,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.13613457517273264,
+            "command": -0.13156788380318052
+          },
+          {
+            "time": 0.6208333333333336,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06170221837061298,
+            "command": -0.05374747249813763
+          },
+          {
+            "time": 1.8374999999999984,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06134561279291417,
+            "command": -0.09779712265895309
+          },
+          {
+            "time": 3.720833333333325,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.07040099196949086,
+            "command": -0.014495919108847021
+          },
+          {
+            "time": 3.8041666666666583,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.13787928999308513,
+            "command": -0.13560078170654294
+          },
+          {
+            "time": 7.154166666666646,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.0918897965124331,
+            "command": 0.07010638713832618
+          },
+          {
+            "time": 7.220833333333313,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.10414892799681646,
+            "command": -0.15136142211732562
+          },
+          {
+            "time": 9.48750000000005,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.07907818629598601,
+            "command": -0.06833620075731457
+          },
+          {
+            "time": 9.654166666666725,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06875266880531229,
+            "command": -0.2079739221680129
+          },
+          {
+            "time": 9.75416666666673,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.07846703730173704,
+            "command": 0.001673610100929393
+          },
+          {
+            "time": 10.08750000000008,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.11422499888894012,
+            "command": -0.17909062332791315
+          },
+          {
+            "time": 10.137500000000083,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06222973594725094,
+            "command": -0.03023942127351043
+          },
+          {
+            "time": 10.370833333333428,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.08833411152893722,
+            "command": -0.1967094754821268
+          },
+          {
+            "time": 14.454166666666964,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06321748357426,
+            "command": 0.015968576080952868
+          },
+          {
+            "time": 14.537500000000302,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.1202214853217495,
+            "command": -0.13452636968572337
+          }
+        ],
+        "target_decisions": [
+          {
+            "interval": 0,
+            "time": 0,
+            "stop": true,
+            "offset": -0.29839314662085015,
+            "heading": 0.028692680493456302,
+            "x": 2530.7263180445843,
+            "y": 1543.19583047594,
+            "com": {
+              "x": 2376.2106151492135,
+              "y": 1490.7729739779263,
+              "totalMass": 12.4,
+              "vxCOM": 0,
+              "vyCOM": 0
+            }
+          },
+          {
+            "interval": 1,
+            "time": 1.5,
+            "stop": false,
+            "offset": -0.97316624142301,
+            "heading": -0.6440339216354013,
+            "x": 2530.7263180445843,
+            "y": 1543.19583047594,
+            "com": {
+              "x": 2377.3733996086753,
+              "y": 1490.8172707487909,
+              "totalMass": 12.4,
+              "vxCOM": 0.3935956079219047,
+              "vyCOM": -0.014394625787221425
+            }
+          },
+          {
+            "interval": 2,
+            "time": 3,
+            "stop": false,
+            "offset": -1.173050960383873,
+            "heading": -0.9916029548779863,
+            "x": 2557.115764603426,
+            "y": 1523.3817670281105,
+            "com": {
+              "x": 2375.984952149098,
+              "y": 1490.1504435708578,
+              "totalMass": 12.4,
+              "vxCOM": -2.2226470086145382,
+              "vyCOM": -1.5835142531778088
+            }
+          },
+          {
+            "interval": 3,
+            "time": 4.5,
+            "stop": true,
+            "offset": -0.32405287602300403,
+            "heading": -0.289290270718497,
+            "x": 2575.1782830658194,
+            "y": 1495.7639208631163,
+            "com": {
+              "x": 2376.6883465201254,
+              "y": 1488.861112777822,
+              "totalMass": 12.4,
+              "vxCOM": 1.3510564513563545,
+              "vyCOM": -0.6532234581808205
+            }
+          },
+          {
+            "interval": 4,
+            "time": 6,
+            "stop": false,
+            "offset": 0.2860478413493327,
+            "heading": 0.31351850323940367,
+            "x": 2575.1782830658194,
+            "y": 1495.7639208631163,
+            "com": {
+              "x": 2379.0932595635663,
+              "y": 1490.3759800989628,
+              "totalMass": 12.4,
+              "vxCOM": 1.3454219423028482,
+              "vyCOM": 1.2313767298511777
+            }
+          },
+          {
+            "interval": 5,
+            "time": 7.5,
+            "stop": false,
+            "offset": -0.5161185575181433,
+            "heading": -0.4602645310740303,
+            "x": 2606.569675870909,
+            "y": 1505.9413693527467,
+            "com": {
+              "x": 2381.1491095346264,
+              "y": 1493.3376138239976,
+              "totalMass": 12.4,
+              "vxCOM": 1.5083640408315613,
+              "vyCOM": -0.15033623387726294
+            }
+          },
+          {
+            "interval": 6,
+            "time": 9,
+            "stop": true,
+            "offset": -1.1782268018527313,
+            "heading": -1.1818390196400317,
+            "x": 2636.1355317984126,
+            "y": 1491.2832602225053,
+            "com": {
+              "x": 2381.014632570104,
+              "y": 1492.2048164808048,
+              "totalMass": 12.4,
+              "vxCOM": -1.150293106321314,
+              "vyCOM": -0.06605377591416242
+            }
+          },
+          {
+            "interval": 7,
+            "time": 10.5,
+            "stop": false,
+            "offset": 0.6894420991507852,
+            "heading": 0.6949458547977774,
+            "x": 2636.1355317984126,
+            "y": 1491.2832602225053,
+            "com": {
+              "x": 2377.4375605377845,
+              "y": 1489.8594354257714,
+              "totalMass": 12.4,
+              "vxCOM": -3.836306365104096,
+              "vyCOM": -2.3707494464911947
+            }
+          },
+          {
+            "interval": 8,
+            "time": 12,
+            "stop": false,
+            "offset": -0.8190378593000949,
+            "heading": -0.7247258136846029,
+            "x": 2661.4824481557516,
+            "y": 1512.4146073441325,
+            "com": {
+              "x": 2372.4066113770227,
+              "y": 1485.0701515815422,
+              "totalMass": 12.4,
+              "vxCOM": -1.204171507690407,
+              "vyCOM": -1.0920029013590942
+            }
+          },
+          {
+            "interval": 9,
+            "time": 13.5,
+            "stop": false,
+            "offset": -0.00190252715646406,
+            "heading": 0.019262177402562128,
+            "x": 2686.1889282999473,
+            "y": 1490.537911092567,
+            "com": {
+              "x": 2369.9562668472117,
+              "y": 1483.8439407015935,
+              "totalMass": 12.4,
+              "vxCOM": -2.0302767606615606,
+              "vyCOM": -2.2020823828877836
+            }
+          }
+        ],
+        "target_events": []
+      },
+      "final_J": 2.2674251375328573,
+      "final_physical_contact_J": 0,
+      "final_proximity_J": 2.2674251375328573,
+      "unchanged_founder": false,
+      "selected_at": "g9/o9",
+      "feeding_offspring": 1,
+      "offspring_min_gap_px": 87.8875745310609,
+      "improvements": [
+        {
+          "generation": 9,
+          "offspring": 9,
+          "J": 2.2674251375328573
+        }
+      ]
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 1901,
+      "mutation_algorithm": "original-random",
+      "founder_J": 0,
+      "founder_physical_contact_J": 0,
+      "founder_proximity_J": 0,
+      "founder": {
+        "key": "mutable-1901-initial",
+        "controller": "mutable",
+        "brain_seed": 1901,
+        "role": "founder",
+        "environment_seed": 73,
+        "heading": 0.37,
+        "initial_reserve_J": 10000,
+        "feeding_duration_s": 0,
+        "com_path_in_intake_ticks_px": 0,
+        "mean_com_speed_in_intake_ticks_px_s": null,
+        "last5s_absorbed_J": 0,
+        "intake_weighted_gap_px": null,
+        "intake_weighted_strength": null,
+        "absorbed_J": 0,
+        "physical_contact_J": 0,
+        "proximity_J": 0,
+        "mutation_algorithm": "original-random",
+        "moving_J": 0,
+        "paused_J": 0,
+        "frozen_J": 0,
+        "reservoir_input_J": 0,
+        "first_detection_tick": 1,
+        "first_contact_tick": null,
+        "first_intake_tick": null,
+        "contact_ticks": 0,
+        "intake_ticks": 0,
+        "detection_ticks": 133,
+        "nutrient_ray_samples": 232,
+        "min_mouth_gap_px": 93.3583400198698,
+        "displacement_px": 88.52863758863471,
+        "path_px_240Hz": 111.53057260390031,
+        "last5s_path_px_240Hz": 43.03439662691196,
+        "target_path_px": 231.0000000000244,
+        "freeze_time": null,
+        "no_toward_pauses": 0,
+        "scheduled_stop_intervals": 3,
+        "alive": true,
+        "motor_learning_upkeep_J": 1.4400000000000248,
+        "motor_learning_rewrite_J": 0,
+        "sensory_learning_upkeep_J": 1.4400000000000248,
+        "sensory_learning_rewrite_J": 0,
+        "learning_cost_J": 2.8800000000000496,
+        "motor_learned_L1": 0,
+        "sensory_learned_L1": 0,
+        "nonzero_learned_motor": 0,
+        "nonzero_learned_sensory": 0,
+        "motor_work_heat_J": 30.277364885319948,
+        "positive_motor_J": 7.569341221329978,
+        "braking_motor_J": 1.1439820753440877,
+        "chemical_expenditure_J": 415.9698648849444,
+        "final_reserve_J": 9584.030135115056,
+        "constraint_gain_J": 0,
+        "delivery_error": 0,
+        "energy_limited_batches": 0,
+        "chemical_error_J": 3.7834979593753815e-10,
+        "partition_residual_J": -3.750528776436113e-10,
+        "max_anchor_px": 0.3347697942978177,
+        "max_limit_overshoot_rad": 0.13399230340825274,
+        "max_linear_px_s": 358.5384856865088,
+        "max_angular_rad_s": 28.564885431217235,
+        "guard_loss_J": 0,
+        "former_cap_stages": {
+          "forces": {
+            "samples": 10800,
+            "maxLinear": 349.1849566352301,
+            "maxOmega": 28.564885431217235,
+            "linearExceedances": 0,
+            "angularExceedances": 242
+          },
+          "contact": {
+            "samples": 10800,
+            "maxLinear": 358.5384856865088,
+            "maxOmega": 26.701699835446313,
+            "linearExceedances": 0,
+            "angularExceedances": 191
+          }
+        },
+        "former_flags": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ],
+        "modes": {
+          "oscillator": 2656,
+          "direct": 4544
+        },
+        "physical_oscillator_samples": 2656,
+        "late_mode_switches": 133,
+        "learning_genes": {
+          "plasticityRate": 0.4002336418256164,
+          "sensoryPlasticityRate": 0.5116915451362729,
+          "forgettingRate": 0.6269050450064242,
+          "memoryConsolidationRate": 1.2022077203728259,
+          "injuryAversionRate": 0.18471211101859808
+        },
+        "plastic_masks": {
+          "version": "heritable-plastic-v1",
+          "motor": [
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:0\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:10\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:12\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:13\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:14\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:18\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:19\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:2\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:23\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:3\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:6\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:9\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:0\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:1\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:10\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:12\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:13\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:19\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:2\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:20\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:23\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:6\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:7\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:9\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:0\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:10\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:12\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:15\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:16\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:17\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:2\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:20\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:22\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:23\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:6\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:7\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:0\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:1\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:10\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:12\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:16\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:19\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:20\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:21\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:3\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:5\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:6\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:8\"]"
+          ],
+          "sensory": [
+            "[\"ih\",\"hidden:1\",\"eye:CUR-001-E0:ray:0:blue\"]",
+            "[\"ih\",\"hidden:10\",\"eye:CUR-001-E0-mirror:ray:2:blue\"]",
+            "[\"ih\",\"hidden:10\",\"eye:CUR-001-E0-mirror:ray:2:red\"]",
+            "[\"ih\",\"hidden:11\",\"eye:CUR-001-E0:ray:4:blue\"]",
+            "[\"ih\",\"hidden:12\",\"eye:CUR-001-E0-mirror:ray:0:blue\"]",
+            "[\"ih\",\"hidden:13\",\"eye:CUR-001-E0-mirror:ray:2:green\"]",
+            "[\"ih\",\"hidden:13\",\"eye:CUR-001-E0:ray:1:red\"]",
+            "[\"ih\",\"hidden:14\",\"eye:CUR-001-E0-mirror:ray:3:green\"]",
+            "[\"ih\",\"hidden:14\",\"eye:CUR-001-E0:ray:0:red\"]",
+            "[\"ih\",\"hidden:14\",\"eye:CUR-001-E0:ray:2:blue\"]",
+            "[\"ih\",\"hidden:14\",\"eye:CUR-001-E0:ray:3:blue\"]",
+            "[\"ih\",\"hidden:15\",\"eye:CUR-001-E0-mirror:ray:4:green\"]",
+            "[\"ih\",\"hidden:15\",\"eye:CUR-001-E0:ray:3:blue\"]",
+            "[\"ih\",\"hidden:15\",\"eye:CUR-001-E0:ray:3:green\"]",
+            "[\"ih\",\"hidden:16\",\"eye:CUR-001-E0-mirror:ray:2:green\"]",
+            "[\"ih\",\"hidden:17\",\"eye:CUR-001-E0:ray:0:red\"]",
+            "[\"ih\",\"hidden:18\",\"eye:CUR-001-E0-mirror:ray:1:red\"]",
+            "[\"ih\",\"hidden:18\",\"eye:CUR-001-E0-mirror:ray:3:blue\"]",
+            "[\"ih\",\"hidden:18\",\"eye:CUR-001-E0-mirror:ray:4:red\"]",
+            "[\"ih\",\"hidden:19\",\"eye:CUR-001-E0-mirror:ray:1:blue\"]",
+            "[\"ih\",\"hidden:19\",\"eye:CUR-001-E0-mirror:ray:3:red\"]",
+            "[\"ih\",\"hidden:19\",\"eye:CUR-001-E0:ray:1:green\"]",
+            "[\"ih\",\"hidden:2\",\"eye:CUR-001-E0:ray:3:green\"]",
+            "[\"ih\",\"hidden:20\",\"eye:CUR-001-E0-mirror:ray:1:green\"]",
+            "[\"ih\",\"hidden:20\",\"eye:CUR-001-E0:ray:1:green\"]",
+            "[\"ih\",\"hidden:21\",\"eye:CUR-001-E0-mirror:ray:3:green\"]",
+            "[\"ih\",\"hidden:21\",\"eye:CUR-001-E0:ray:2:red\"]",
+            "[\"ih\",\"hidden:22\",\"eye:CUR-001-E0-mirror:ray:4:red\"]",
+            "[\"ih\",\"hidden:22\",\"eye:CUR-001-E0:ray:3:blue\"]",
+            "[\"ih\",\"hidden:23\",\"eye:CUR-001-E0-mirror:ray:2:green\"]",
+            "[\"ih\",\"hidden:23\",\"eye:CUR-001-E0:ray:0:blue\"]",
+            "[\"ih\",\"hidden:23\",\"eye:CUR-001-E0:ray:2:green\"]",
+            "[\"ih\",\"hidden:23\",\"eye:CUR-001-E0:ray:4:green\"]",
+            "[\"ih\",\"hidden:3\",\"eye:CUR-001-E0-mirror:ray:1:blue\"]",
+            "[\"ih\",\"hidden:4\",\"eye:CUR-001-E0-mirror:ray:0:red\"]",
+            "[\"ih\",\"hidden:4\",\"eye:CUR-001-E0-mirror:ray:3:blue\"]",
+            "[\"ih\",\"hidden:4\",\"eye:CUR-001-E0-mirror:ray:4:blue\"]",
+            "[\"ih\",\"hidden:5\",\"eye:CUR-001-E0-mirror:ray:2:blue\"]",
+            "[\"ih\",\"hidden:5\",\"eye:CUR-001-E0-mirror:ray:2:red\"]",
+            "[\"ih\",\"hidden:5\",\"eye:CUR-001-E0-mirror:ray:4:blue\"]",
+            "[\"ih\",\"hidden:5\",\"eye:CUR-001-E0:ray:3:blue\"]",
+            "[\"ih\",\"hidden:6\",\"eye:CUR-001-E0-mirror:ray:2:blue\"]",
+            "[\"ih\",\"hidden:6\",\"eye:CUR-001-E0-mirror:ray:3:green\"]",
+            "[\"ih\",\"hidden:6\",\"eye:CUR-001-E0:ray:2:red\"]",
+            "[\"ih\",\"hidden:7\",\"eye:CUR-001-E0-mirror:ray:1:blue\"]",
+            "[\"ih\",\"hidden:8\",\"eye:CUR-001-E0-mirror:ray:0:green\"]",
+            "[\"ih\",\"hidden:9\",\"eye:CUR-001-E0-mirror:ray:4:green\"]",
+            "[\"ih\",\"hidden:9\",\"eye:CUR-001-E0:ray:1:blue\"]"
+          ]
+        },
+        "mode_transitions": [
+          {
+            "time": 0.004166666666666667,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.15629026074204172,
+            "command": 0.02257088171870286
+          },
+          {
+            "time": 0.0875,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.10081560651352758,
+            "command": 0.07090625025438811
+          },
+          {
+            "time": 0.0875,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.0734503933518303,
+            "command": -0.33590980281161226
+          },
+          {
+            "time": 0.25416666666666665,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07404688188960763,
+            "command": -0.367761019562222
+          },
+          {
+            "time": 0.5041666666666667,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.07451722430170381,
+            "command": -0.2638714507577194
+          },
+          {
+            "time": 0.7041666666666672,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.0626097777595395,
+            "command": -0.2614664849388552
+          },
+          {
+            "time": 0.7541666666666673,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06798465207914846,
+            "command": 0.09012093753504255
+          },
+          {
+            "time": 0.8541666666666676,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.08169586107023454,
+            "command": 0.13751058416925419
+          },
+          {
+            "time": 0.9375000000000012,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.0758570210633248,
+            "command": -0.24853128641705055
+          },
+          {
+            "time": 1.087500000000001,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.061626026562066824,
+            "command": -0.2614308389085322
+          },
+          {
+            "time": 1.1375000000000008,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06607029486244155,
+            "command": 0.09094013372530098
+          },
+          {
+            "time": 1.2375000000000005,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06302787590532709,
+            "command": 0.1428880383223182
+          },
+          {
+            "time": 1.3208333333333335,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06951884986642873,
+            "command": -0.24235346303948904
+          },
+          {
+            "time": 1.3708333333333333,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.0910282543930878,
+            "command": 0.13092493879814593
+          },
+          {
+            "time": 1.3875,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.09299547412221489,
+            "command": -0.08207700316191069
+          },
+          {
+            "time": 1.637499999999999,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.09247343517324084,
+            "command": 0.12732732261326923
+          },
+          {
+            "time": 1.687499999999999,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.0851005785325346,
+            "command": -0.25087813363171046
+          },
+          {
+            "time": 1.8708333333333316,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06647027175229742,
+            "command": -0.2472423921614054
+          },
+          {
+            "time": 1.9208333333333314,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06873360958868334,
+            "command": 0.09627082385657561
+          },
+          {
+            "time": 2.0208333333333313,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06049071326354308,
+            "command": 0.03748810573300864
+          },
+          {
+            "time": 2.0874999999999977,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08799987201429392,
+            "command": -0.24839197443699407
+          },
+          {
+            "time": 2.2541666666666638,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06611624315057042,
+            "command": -0.24743517421162528
+          },
+          {
+            "time": 2.32083333333333,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08663969652563569,
+            "command": 0.123140993771225
+          },
+          {
+            "time": 2.42083333333333,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07018579667793873,
+            "command": 0.051409443736885135
+          },
+          {
+            "time": 2.4874999999999963,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.07975716664299122,
+            "command": -0.2493495981872703
+          },
+          {
+            "time": 2.6374999999999957,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06732366830480413,
+            "command": -0.25199157455948795
+          },
+          {
+            "time": 2.704166666666662,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06567052300903951,
+            "command": 0.09891282061050294
+          },
+          {
+            "time": 2.787499999999995,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07142342113609071,
+            "command": 0.13435233486605966
+          },
+          {
+            "time": 2.9041666666666615,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06925737147517412,
+            "command": 0.11455340576909133
+          },
+          {
+            "time": 2.9041666666666615,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.07955400729127804,
+            "command": -0.28910321010539086
+          },
+          {
+            "time": 2.9541666666666613,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.12174251696917592,
+            "command": -0.10442152712477186
+          },
+          {
+            "time": 3.9708333333333243,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.0792349247080898,
+            "command": 0.1765088983012596
+          },
+          {
+            "time": 4.0041666666666575,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08647990153508063,
+            "command": -0.2493799935709372
+          },
+          {
+            "time": 4.170833333333324,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06446647734616025,
+            "command": -0.25599484038100623
+          },
+          {
+            "time": 4.2208333333333234,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06171407303675234,
+            "command": 0.17665911261141393
+          },
+          {
+            "time": 4.354166666666656,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07419392018415003,
+            "command": 0.1651356208936999
+          },
+          {
+            "time": 4.3874999999999895,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.0907452670220288,
+            "command": -0.24900871562541363
+          },
+          {
+            "time": 4.554166666666656,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06254101770838882,
+            "command": -0.2551240185776182
+          },
+          {
+            "time": 4.604166666666655,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06166378473306235,
+            "command": 0.17726242062784775
+          },
+          {
+            "time": 4.737499999999988,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07441347918591301,
+            "command": 0.16533419975969335
+          },
+          {
+            "time": 4.7708333333333215,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08757518883814791,
+            "command": -0.2499485289355481
+          },
+          {
+            "time": 4.937499999999988,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.061789838170863844,
+            "command": -0.2593297480689904
+          },
+          {
+            "time": 5.004166666666654,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06290530839477042,
+            "command": 0.1843938263497806
+          },
+          {
+            "time": 5.12083333333332,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07439467120104006,
+            "command": 0.12227120039773211
+          },
+          {
+            "time": 5.1541666666666535,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.11046665732160549,
+            "command": -0.23180350066631042
+          },
+          {
+            "time": 5.3208333333333195,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06281790424841872,
+            "command": -0.2608243969423504
+          },
+          {
+            "time": 5.387499999999986,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06304332774083292,
+            "command": 0.1848473461050588
+          },
+          {
+            "time": 5.504166666666652,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.0650649806949984,
+            "command": 0.15286139184273104
+          },
+          {
+            "time": 5.537499999999985,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08560045843287796,
+            "command": -0.250678264577525
+          },
+          {
+            "time": 5.7041666666666515,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06213027751154688,
+            "command": -0.2609934809062524
+          },
+          {
+            "time": 5.770833333333318,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06383978762187287,
+            "command": 0.18454358245858643
+          },
+          {
+            "time": 5.887499999999984,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06284858903646494,
+            "command": 0.15012582113367545
+          },
+          {
+            "time": 5.937499999999984,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08763229547212305,
+            "command": -0.24998687030253722
+          },
+          {
+            "time": 6.0874999999999835,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.061224478027345916,
+            "command": -0.2651080492719246
+          },
+          {
+            "time": 6.15416666666665,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.060770630014091706,
+            "command": 0.18321932748116349
+          },
+          {
+            "time": 6.270833333333316,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06617179742187745,
+            "command": 0.15345740667059482
+          },
+          {
+            "time": 6.304166666666649,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.09213322880936031,
+            "command": -0.24613704936767297
+          },
+          {
+            "time": 6.4708333333333155,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06040541573991226,
+            "command": -0.2652454226513883
+          },
+          {
+            "time": 6.537499999999982,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.0616006584376342,
+            "command": 0.18287742050348524
+          },
+          {
+            "time": 6.654166666666648,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.0640383237462467,
+            "command": 0.1508013463875356
+          },
+          {
+            "time": 6.687499999999981,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08554851236536302,
+            "command": -0.2504636312586967
+          },
+          {
+            "time": 6.870833333333314,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06657979235850309,
+            "command": -0.2472298557482483
+          },
+          {
+            "time": 6.920833333333314,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06247870819623161,
+            "command": 0.18247742430233097
+          },
+          {
+            "time": 7.03749999999998,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06177887606546771,
+            "command": 0.1480938097265459
+          },
+          {
+            "time": 7.08749999999998,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08859815530182812,
+            "command": -0.2497726668306106
+          },
+          {
+            "time": 7.254166666666646,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06610580136015677,
+            "command": -0.2473449054348748
+          },
+          {
+            "time": 7.304166666666646,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06334726120196234,
+            "command": 0.18210042801939097
+          },
+          {
+            "time": 7.437499999999979,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07508430774433253,
+            "command": 0.16832761368080104
+          },
+          {
+            "time": 7.470833333333312,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.0889705464507844,
+            "command": -0.24956579052011738
+          },
+          {
+            "time": 7.637499999999978,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06750874199389693,
+            "command": -0.2517242253030229
+          },
+          {
+            "time": 7.687499999999978,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06043449441073168,
+            "command": 0.1807221922841366
+          },
+          {
+            "time": 7.804166666666644,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.0622808336810448,
+            "command": 0.1481355368147256
+          },
+          {
+            "time": 7.837499999999977,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08340492592565779,
+            "command": -0.2514895768133152
+          },
+          {
+            "time": 8.02083333333331,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06699286216094553,
+            "command": -0.25185465220952646
+          },
+          {
+            "time": 8.070833333333313,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.0612704340347129,
+            "command": 0.18037003764934761
+          },
+          {
+            "time": 8.187499999999986,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07112980254593014,
+            "command": 0.11744272637975521
+          },
+          {
+            "time": 8.22083333333332,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.12007476468911665,
+            "command": -0.23849480090786424
+          },
+          {
+            "time": 8.404166666666663,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06848204701769496,
+            "command": -0.25352387190645453
+          },
+          {
+            "time": 8.454166666666666,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06127906832395046,
+            "command": 0.1809263816611709
+          },
+          {
+            "time": 8.587500000000006,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07572579608377013,
+            "command": 0.1673519913899732
+          },
+          {
+            "time": 8.62083333333334,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08581146432744875,
+            "command": -0.2520250486447141
+          },
+          {
+            "time": 8.787500000000016,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06763424518018624,
+            "command": -0.2577075813310196
+          },
+          {
+            "time": 8.854166666666686,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.061322038450831534,
+            "command": 0.18520914991099313
+          },
+          {
+            "time": 8.970833333333358,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07868895112205553,
+            "command": 0.12281271714968274
+          },
+          {
+            "time": 9.004166666666693,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.11213115914287375,
+            "command": -0.23508053004734875
+          },
+          {
+            "time": 9.170833333333368,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06887388616620255,
+            "command": -0.2592633879963776
+          },
+          {
+            "time": 9.237500000000038,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06132504526278954,
+            "command": 0.18528419010528824
+          },
+          {
+            "time": 9.35416666666671,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06575146020647847,
+            "command": 0.15428218757336126
+          },
+          {
+            "time": 9.404166666666713,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08363684121475097,
+            "command": -0.25251763609979777
+          },
+          {
+            "time": 9.55416666666672,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06792659569350118,
+            "command": -0.25914959968914586
+          },
+          {
+            "time": 9.62083333333339,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06241917055498048,
+            "command": 0.18481237345264714
+          },
+          {
+            "time": 9.737500000000063,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07610567776619998,
+            "command": 0.11819072617545348
+          },
+          {
+            "time": 9.770833333333398,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.113527199860737,
+            "command": -0.23570453312050496
+          },
+          {
+            "time": 9.937500000000073,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07015711916230702,
+            "command": -0.2656896274584976
+          },
+          {
+            "time": 10.254166666666755,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06883648959581647,
+            "command": 0.14476692428430948
+          },
+          {
+            "time": 10.4875000000001,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06430899304538587,
+            "command": 0.1497200937919093
+          },
+          {
+            "time": 10.520833333333435,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.07545995016813929,
+            "command": -0.2562653238277613
+          },
+          {
+            "time": 10.704166666666778,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06627458748066929,
+            "command": -0.2640528881512914
+          },
+          {
+            "time": 10.770833333333448,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06317365653994941,
+            "command": 0.18549849749146666
+          },
+          {
+            "time": 10.88750000000012,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06341452858057266,
+            "command": 0.15060957144897608
+          },
+          {
+            "time": 10.937500000000123,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08328682086327877,
+            "command": -0.2533620985465436
+          },
+          {
+            "time": 11.08750000000013,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06494979477085072,
+            "command": -0.2637236119360862
+          },
+          {
+            "time": 11.1541666666668,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06405335997818273,
+            "command": 0.1851746744244824
+          },
+          {
+            "time": 11.270833333333472,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06085222212345624,
+            "command": 0.1476038590276265
+          },
+          {
+            "time": 11.320833333333475,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.0870573124288942,
+            "command": -0.2511843624720974
+          },
+          {
+            "time": 11.470833333333482,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.0635440091052478,
+            "command": -0.2675126704866304
+          },
+          {
+            "time": 11.537500000000152,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.061067951163080614,
+            "command": 0.18368458440394023
+          },
+          {
+            "time": 11.654166666666825,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06439468312085846,
+            "command": 0.1511376405633785
+          },
+          {
+            "time": 11.68750000000016,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08183626323713764,
+            "command": -0.25329560561573167
+          },
+          {
+            "time": 11.854166666666835,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.062325649570612186,
+            "command": -0.26734768419456645
+          },
+          {
+            "time": 11.920833333333505,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.062050524437802755,
+            "command": 0.1831707537666591
+          },
+          {
+            "time": 12.037500000000177,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.062005062788896115,
+            "command": 0.14833541733201855
+          },
+          {
+            "time": 12.08750000000018,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08571060749674134,
+            "command": -0.2518653066015468
+          },
+          {
+            "time": 12.237500000000187,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06119458476452285,
+            "command": -0.26726446654109187
+          },
+          {
+            "time": 12.304166666666857,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06303868182335717,
+            "command": 0.18265969089164932
+          },
+          {
+            "time": 12.437500000000197,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07519160364525213,
+            "command": 0.16854352646080234
+          },
+          {
+            "time": 12.470833333333532,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08646531346632969,
+            "command": -0.25133919670822386
+          },
+          {
+            "time": 12.637500000000207,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06969432300329594,
+            "command": -0.25322724058144574
+          },
+          {
+            "time": 12.704166666666877,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06144166343161204,
+            "command": 0.1812564732520455
+          },
+          {
+            "time": 12.82083333333355,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.0660935395688068,
+            "command": 0.15691842589372126
+          },
+          {
+            "time": 12.854166666666885,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08044838595933952,
+            "command": -0.25366840810916236
+          },
+          {
+            "time": 13.02083333333356,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06895534527546136,
+            "command": -0.25319210124039043
+          },
+          {
+            "time": 13.070833333333562,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06120959338848555,
+            "command": 0.18062933970086648
+          },
+          {
+            "time": 13.204166666666902,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.075623331114832,
+            "command": 0.16776174512304123
+          },
+          {
+            "time": 13.237500000000237,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.09049118193337169,
+            "command": -0.24922223835496346
+          },
+          {
+            "time": 13.404166666666912,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06828295022861045,
+            "command": -0.25321409616674
+          },
+          {
+            "time": 13.454166666666914,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06209386761189435,
+            "command": 0.18026823817683013
+          },
+          {
+            "time": 13.587500000000254,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07485164848040755,
+            "command": 0.16690766115004188
+          },
+          {
+            "time": 13.62083333333359,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08636039960703253,
+            "command": -0.25124745820951055
+          },
+          {
+            "time": 13.787500000000264,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06744684063137552,
+            "command": -0.2574016450572083
+          },
+          {
+            "time": 13.854166666666934,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.062266408179350106,
+            "command": 0.18482160951966523
+          },
+          {
+            "time": 13.970833333333607,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07796364517906385,
+            "command": 0.122537018910485
+          },
+          {
+            "time": 14.004166666666942,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.11347662454613577,
+            "command": -0.2331270016862336
+          },
+          {
+            "time": 14.170833333333617,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06893894420692026,
+            "command": -0.2591550769114526
+          },
+          {
+            "time": 14.237500000000287,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.06215451075095187,
+            "command": 0.18495046819878322
+          },
+          {
+            "time": 14.35416666666696,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06534262576331568,
+            "command": 0.15428832102531811
+          },
+          {
+            "time": 14.404166666666962,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.08416055648133769,
+            "command": -0.2519309414293865
+          },
+          {
+            "time": 14.55416666666697,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06806501182215254,
+            "command": -0.25910040056810557
+          },
+          {
+            "time": 14.604166666666972,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.060094413814827545,
+            "command": 0.17922155896805517
+          },
+          {
+            "time": 14.737500000000312,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.07506090625764576,
+            "command": 0.1657233762246612
+          },
+          {
+            "time": 14.770833333333647,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.09216520838869069,
+            "command": -0.2486161752419568
+          },
+          {
+            "time": 14.937500000000322,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 1,
+            "from": "oscillator",
+            "to": "direct",
+            "signal": -0.06691779129546516,
+            "command": -0.26300837080580164
+          }
+        ],
+        "target_decisions": [
+          {
+            "interval": 0,
+            "time": 0,
+            "stop": true,
+            "offset": -0.29839314662085015,
+            "heading": 0.028692680493456302,
+            "x": 2530.7263180445843,
+            "y": 1543.19583047594,
+            "com": {
+              "x": 2376.2106151492135,
+              "y": 1490.7729739779263,
+              "totalMass": 12.4,
+              "vxCOM": 0,
+              "vyCOM": 0
+            }
+          },
+          {
+            "interval": 1,
+            "time": 1.5,
+            "stop": false,
+            "offset": -0.97316624142301,
+            "heading": -0.6539718250959612,
+            "x": 2530.7263180445843,
+            "y": 1543.19583047594,
+            "com": {
+              "x": 2382.5785481400026,
+              "y": 1494.2336456128448,
+              "totalMass": 12.4,
+              "vxCOM": 7.881357365955842,
+              "vyCOM": 9.914071855479765
+            }
+          },
+          {
+            "interval": 2,
+            "time": 3,
+            "stop": false,
+            "offset": -1.173050960383873,
+            "heading": -1.0428293392659396,
+            "x": 2556.917554469368,
+            "y": 1523.1204940020662,
+            "com": {
+              "x": 2389.9365607518066,
+              "y": 1501.252206595543,
+              "totalMass": 12.4,
+              "vxCOM": 6.366281453958094,
+              "vyCOM": 10.355313573381562
+            }
+          },
+          {
+            "interval": 3,
+            "time": 4.5,
+            "stop": true,
+            "offset": -0.32405287602300403,
+            "heading": -0.3932109715575624,
+            "x": 2573.5422350746594,
+            "y": 1494.6140036047627,
+            "com": {
+              "x": 2397.415005256441,
+              "y": 1506.8140839484065,
+              "totalMass": 12.4,
+              "vxCOM": 2.468550661639919,
+              "vyCOM": -0.25368357919673606
+            }
+          },
+          {
+            "interval": 4,
+            "time": 6,
+            "stop": false,
+            "offset": 0.2860478413493327,
+            "heading": 0.18077737275518138,
+            "x": 2573.5422350746594,
+            "y": 1494.6140036047627,
+            "com": {
+              "x": 2401.729483497126,
+              "y": 1512.7679218661465,
+              "totalMass": 12.4,
+              "vxCOM": 3.1255604436610422,
+              "vyCOM": 2.037269164208268
+            }
+          },
+          {
+            "interval": 5,
+            "time": 7.5,
+            "stop": false,
+            "offset": -0.5161185575181433,
+            "heading": -0.6152659701322641,
+            "x": 2606.0044744276856,
+            "y": 1500.5472165784313,
+            "com": {
+              "x": 2405.1123888162247,
+              "y": 1520.5306705466883,
+              "totalMass": 12.4,
+              "vxCOM": 2.765348573637657,
+              "vyCOM": 2.2663048378429687
+            }
+          },
+          {
+            "interval": 6,
+            "time": 9,
+            "stop": true,
+            "offset": -1.1782268018527313,
+            "heading": -1.390392353578492,
+            "x": 2632.95293324882,
+            "y": 1481.500417184222,
+            "com": {
+              "x": 2407.5334565724397,
+              "y": 1530.0574463052646,
+              "totalMass": 12.4,
+              "vxCOM": 4.520655346690643,
+              "vyCOM": 4.571464542547257
+            }
+          },
+          {
+            "interval": 7,
+            "time": 10.5,
+            "stop": false,
+            "offset": 0.6894420991507852,
+            "heading": 0.40737534569053835,
+            "x": 2632.95293324882,
+            "y": 1481.500417184222,
+            "com": {
+              "x": 2407.855824507064,
+              "y": 1546.7320528762477,
+              "totalMass": 12.4,
+              "vxCOM": 5.8663535933133675,
+              "vyCOM": 4.750343742415523
+            }
+          },
+          {
+            "interval": 8,
+            "time": 12,
+            "stop": false,
+            "offset": -0.8190378593000949,
+            "heading": -1.062944047669662,
+            "x": 2663.2523411031652,
+            "y": 1494.5750446619031,
+            "com": {
+              "x": 2406.6548447375667,
+              "y": 1558.4321030327965,
+              "totalMass": 12.4,
+              "vxCOM": -6.701723142832267,
+              "vyCOM": 10.961242792537664
+            }
+          },
+          {
+            "interval": 9,
+            "time": 13.5,
+            "stop": false,
+            "offset": -0.00190252715646406,
+            "heading": -0.35511089187668055,
+            "x": 2679.300297560134,
+            "y": 1465.739942901143,
+            "com": {
+              "x": 2402.414613283902,
+              "y": 1567.81901053506,
+              "totalMass": 12.4,
+              "vxCOM": -9.339397501277709,
+              "vyCOM": 8.773343378885574
+            }
+          }
+        ],
+        "target_events": []
+      },
+      "final_J": 1150.7401104316946,
+      "final_physical_contact_J": 0,
+      "final_proximity_J": 1150.7401104316946,
+      "unchanged_founder": false,
+      "selected_at": "g6/o3",
+      "feeding_offspring": 11,
+      "offspring_min_gap_px": 67.67760318487217,
+      "improvements": [
+        {
+          "generation": 5,
+          "offspring": 9,
+          "J": 144.17912611820222
+        },
+        {
+          "generation": 6,
+          "offspring": 3,
+          "J": 1150.7401104316946
+        }
+      ]
+    },
+    {
+      "controller": "mutable",
+      "brain_seed": 4099,
+      "mutation_algorithm": "parent-targeted-66",
+      "founder_J": 0,
+      "founder_physical_contact_J": 0,
+      "founder_proximity_J": 0,
+      "founder": {
+        "key": "mutable-4099-initial",
+        "controller": "mutable",
+        "brain_seed": 4099,
+        "role": "founder",
+        "environment_seed": 73,
+        "heading": 0.37,
+        "initial_reserve_J": 10000,
+        "feeding_duration_s": 0,
+        "com_path_in_intake_ticks_px": 0,
+        "mean_com_speed_in_intake_ticks_px_s": null,
+        "last5s_absorbed_J": 0,
+        "intake_weighted_gap_px": null,
+        "intake_weighted_strength": null,
+        "absorbed_J": 0,
+        "physical_contact_J": 0,
+        "proximity_J": 0,
+        "mutation_algorithm": "parent-targeted-66",
+        "moving_J": 0,
+        "paused_J": 0,
+        "frozen_J": 0,
+        "reservoir_input_J": 0,
+        "first_detection_tick": 1,
+        "first_contact_tick": null,
+        "first_intake_tick": null,
+        "contact_ticks": 0,
+        "intake_ticks": 0,
+        "detection_ticks": 392,
+        "nutrient_ray_samples": 610,
+        "min_mouth_gap_px": 90.43375175742337,
+        "displacement_px": 45.440337987936296,
+        "path_px_240Hz": 127.31650445500945,
+        "last5s_path_px_240Hz": 39.397988917788815,
+        "target_path_px": 230.99999999992755,
+        "freeze_time": null,
+        "no_toward_pauses": 0,
+        "scheduled_stop_intervals": 3,
+        "alive": true,
+        "motor_learning_upkeep_J": 1.4400000000000248,
+        "motor_learning_rewrite_J": 0,
+        "sensory_learning_upkeep_J": 1.4400000000000248,
+        "sensory_learning_rewrite_J": 0,
+        "learning_cost_J": 2.8800000000000496,
+        "motor_learned_L1": 0,
+        "sensory_learned_L1": 0,
+        "nonzero_learned_motor": 0,
+        "nonzero_learned_sensory": 0,
+        "motor_work_heat_J": 29.14912746116459,
+        "positive_motor_J": 7.28728186529116,
+        "braking_motor_J": 0.23631886425766488,
+        "chemical_expenditure_J": 414.84162746076436,
+        "final_reserve_J": 9585.158372539236,
+        "constraint_gain_J": 6.938893903907228e-18,
+        "delivery_error": 0,
+        "energy_limited_batches": 0,
+        "chemical_error_J": 4.001776687800884e-10,
+        "partition_residual_J": -3.9972292142920196e-10,
+        "max_anchor_px": 0.4770358957566451,
+        "max_limit_overshoot_rad": 0.15981727300207937,
+        "max_linear_px_s": 352.0416201225765,
+        "max_angular_rad_s": 31.496334519975388,
+        "guard_loss_J": 0,
+        "former_cap_stages": {
+          "forces": {
+            "samples": 10800,
+            "maxLinear": 342.86686027467846,
+            "maxOmega": 31.496334519975388,
+            "linearExceedances": 0,
+            "angularExceedances": 385
+          },
+          "contact": {
+            "samples": 10800,
+            "maxLinear": 352.0416201225765,
+            "maxOmega": 29.26042616637829,
+            "linearExceedances": 0,
+            "angularExceedances": 301
+          }
+        },
+        "former_flags": [
+          "speed guard",
+          "joint limit",
+          "post-guard overspeed"
+        ],
+        "modes": {
+          "oscillator": 3600,
+          "direct": 3600
+        },
+        "physical_oscillator_samples": 3600,
+        "late_mode_switches": 0,
+        "learning_genes": {
+          "plasticityRate": 0.06888571865856648,
+          "sensoryPlasticityRate": 0.28890569116920234,
+          "forgettingRate": 0.6498831994831562,
+          "memoryConsolidationRate": 0.757610319647938,
+          "injuryAversionRate": 0.24105918197892606
+        },
+        "plastic_masks": {
+          "version": "heritable-plastic-v1",
+          "motor": [
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:12\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:15\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:17\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:2\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:20\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:21\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:22\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:23\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:4\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:6\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:7\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Command\",\"hidden:9\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:1\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:11\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:13\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:16\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:17\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:18\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:19\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:20\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:23\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:5\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:8\"]",
+            "[\"ho\",\"joint:CUR-001-P1:Mode\",\"hidden:9\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:1\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:13\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:15\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:18\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:19\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:20\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:22\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:23\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:3\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:4\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:5\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Command\",\"hidden:7\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:1\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:10\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:11\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:12\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:13\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:15\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:16\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:19\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:23\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:3\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:5\"]",
+            "[\"ho\",\"joint:CUR-001-P2:Mode\",\"hidden:9\"]"
+          ],
+          "sensory": [
+            "[\"ih\",\"hidden:0\",\"eye:CUR-001-E0-mirror:ray:1:blue\"]",
+            "[\"ih\",\"hidden:0\",\"eye:CUR-001-E0-mirror:ray:3:red\"]",
+            "[\"ih\",\"hidden:0\",\"eye:CUR-001-E0:ray:1:blue\"]",
+            "[\"ih\",\"hidden:0\",\"eye:CUR-001-E0:ray:1:green\"]",
+            "[\"ih\",\"hidden:1\",\"eye:CUR-001-E0:ray:0:green\"]",
+            "[\"ih\",\"hidden:1\",\"eye:CUR-001-E0:ray:0:red\"]",
+            "[\"ih\",\"hidden:1\",\"eye:CUR-001-E0:ray:3:red\"]",
+            "[\"ih\",\"hidden:10\",\"eye:CUR-001-E0-mirror:ray:0:green\"]",
+            "[\"ih\",\"hidden:10\",\"eye:CUR-001-E0-mirror:ray:1:blue\"]",
+            "[\"ih\",\"hidden:10\",\"eye:CUR-001-E0:ray:3:green\"]",
+            "[\"ih\",\"hidden:12\",\"eye:CUR-001-E0-mirror:ray:2:blue\"]",
+            "[\"ih\",\"hidden:12\",\"eye:CUR-001-E0:ray:4:red\"]",
+            "[\"ih\",\"hidden:13\",\"eye:CUR-001-E0-mirror:ray:2:red\"]",
+            "[\"ih\",\"hidden:13\",\"eye:CUR-001-E0:ray:1:red\"]",
+            "[\"ih\",\"hidden:13\",\"eye:CUR-001-E0:ray:4:blue\"]",
+            "[\"ih\",\"hidden:14\",\"eye:CUR-001-E0:ray:0:green\"]",
+            "[\"ih\",\"hidden:14\",\"eye:CUR-001-E0:ray:4:green\"]",
+            "[\"ih\",\"hidden:15\",\"eye:CUR-001-E0-mirror:ray:3:green\"]",
+            "[\"ih\",\"hidden:16\",\"eye:CUR-001-E0:ray:4:red\"]",
+            "[\"ih\",\"hidden:17\",\"eye:CUR-001-E0-mirror:ray:4:green\"]",
+            "[\"ih\",\"hidden:17\",\"eye:CUR-001-E0:ray:2:green\"]",
+            "[\"ih\",\"hidden:18\",\"eye:CUR-001-E0-mirror:ray:0:green\"]",
+            "[\"ih\",\"hidden:18\",\"eye:CUR-001-E0:ray:2:red\"]",
+            "[\"ih\",\"hidden:18\",\"eye:CUR-001-E0:ray:4:red\"]",
+            "[\"ih\",\"hidden:19\",\"eye:CUR-001-E0-mirror:ray:2:red\"]",
+            "[\"ih\",\"hidden:2\",\"eye:CUR-001-E0-mirror:ray:2:red\"]",
+            "[\"ih\",\"hidden:2\",\"eye:CUR-001-E0-mirror:ray:4:blue\"]",
+            "[\"ih\",\"hidden:2\",\"eye:CUR-001-E0:ray:0:green\"]",
+            "[\"ih\",\"hidden:20\",\"eye:CUR-001-E0-mirror:ray:3:blue\"]",
+            "[\"ih\",\"hidden:20\",\"eye:CUR-001-E0:ray:2:blue\"]",
+            "[\"ih\",\"hidden:20\",\"eye:CUR-001-E0:ray:2:green\"]",
+            "[\"ih\",\"hidden:21\",\"eye:CUR-001-E0-mirror:ray:2:green\"]",
+            "[\"ih\",\"hidden:22\",\"eye:CUR-001-E0:ray:2:red\"]",
+            "[\"ih\",\"hidden:22\",\"eye:CUR-001-E0:ray:4:green\"]",
+            "[\"ih\",\"hidden:23\",\"eye:CUR-001-E0-mirror:ray:0:green\"]",
+            "[\"ih\",\"hidden:23\",\"eye:CUR-001-E0-mirror:ray:4:red\"]",
+            "[\"ih\",\"hidden:23\",\"eye:CUR-001-E0:ray:4:red\"]",
+            "[\"ih\",\"hidden:3\",\"eye:CUR-001-E0:ray:3:green\"]",
+            "[\"ih\",\"hidden:3\",\"eye:CUR-001-E0:ray:3:red\"]",
+            "[\"ih\",\"hidden:4\",\"eye:CUR-001-E0:ray:2:green\"]",
+            "[\"ih\",\"hidden:4\",\"eye:CUR-001-E0:ray:3:red\"]",
+            "[\"ih\",\"hidden:5\",\"eye:CUR-001-E0-mirror:ray:1:blue\"]",
+            "[\"ih\",\"hidden:5\",\"eye:CUR-001-E0:ray:1:blue\"]",
+            "[\"ih\",\"hidden:5\",\"eye:CUR-001-E0:ray:2:red\"]",
+            "[\"ih\",\"hidden:6\",\"eye:CUR-001-E0:ray:4:red\"]",
+            "[\"ih\",\"hidden:8\",\"eye:CUR-001-E0-mirror:ray:3:green\"]",
+            "[\"ih\",\"hidden:8\",\"eye:CUR-001-E0-mirror:ray:4:green\"]",
+            "[\"ih\",\"hidden:8\",\"eye:CUR-001-E0:ray:4:blue\"]"
+          ]
+        },
+        "mode_transitions": [
+          {
+            "time": 0.004166666666666667,
+            "organism": "ORG-kpnvjn-17iqand",
+            "joint": 0,
+            "from": "direct",
+            "to": "oscillator",
+            "signal": 0.33929950124865765,
+            "command": -0.08638526896741464
+          }
+        ],
+        "target_decisions": [
+          {
+            "interval": 0,
+            "time": 0,
+            "stop": true,
+            "offset": -0.29839314662085015,
+            "heading": 0.028692680493456302,
+            "x": 2530.7263180445843,
+            "y": 1543.19583047594,
+            "com": {
+              "x": 2376.2106151492135,
+              "y": 1490.7729739779263,
+              "totalMass": 12.4,
+              "vxCOM": 0,
+              "vyCOM": 0
+            }
+          },
+          {
+            "interval": 1,
+            "time": 1.5,
+            "stop": false,
+            "offset": -0.97316624142301,
+            "heading": -0.6446930487060099,
+            "x": 2530.7263180445843,
+            "y": 1543.19583047594,
+            "com": {
+              "x": 2383.1518389693124,
+              "y": 1492.899522997707,
+              "totalMass": 12.4,
+              "vxCOM": 14.793042266101539,
+              "vyCOM": 6.760589784494358
+            }
+          },
+          {
+            "interval": 2,
+            "time": 3,
+            "stop": false,
+            "offset": -1.173050960383873,
+            "heading": -1.0269413137233487,
+            "x": 2557.1026988863778,
+            "y": 1523.3643773348258,
+            "com": {
+              "x": 2396.8075305325724,
+              "y": 1499.7756096451267,
+              "totalMass": 12.4,
+              "vxCOM": 6.605369609414059,
+              "vyCOM": 6.883233961901732
+            }
+          },
+          {
+            "interval": 3,
+            "time": 4.5,
+            "stop": true,
+            "offset": -0.32405287602300403,
+            "heading": -0.36779498300370694,
+            "x": 2574.178174050179,
+            "y": 1495.1256070370773,
+            "com": {
+              "x": 2401.527964684329,
+              "y": 1502.682511303122,
+              "totalMass": 12.4,
+              "vxCOM": -2.3133840020134557,
+              "vyCOM": -2.5725321215278125
+            }
+          },
+          {
+            "interval": 4,
+            "time": 6,
+            "stop": false,
+            "offset": 0.2860478413493327,
+            "heading": 0.234074791250134,
+            "x": 2574.178174050179,
+            "y": 1495.1256070370773,
+            "com": {
+              "x": 2402.957068941197,
+              "y": 1504.032511326013,
+              "totalMass": 12.4,
+              "vxCOM": -3.875019446206616,
+              "vyCOM": -5.648063745454486
+            }
+          },
+          {
+            "interval": 5,
+            "time": 7.5,
+            "stop": false,
+            "offset": -0.5161185575181433,
+            "heading": -0.49036380069500923,
+            "x": 2606.278242713346,
+            "y": 1502.7797295748196,
+            "com": {
+              "x": 2390.4141503343853,
+              "y": 1497.2189728171613,
+              "totalMass": 12.4,
+              "vxCOM": -12.561090603204006,
+              "vyCOM": -9.487809743662394
+            }
+          },
+          {
+            "interval": 6,
+            "time": 9,
+            "stop": true,
+            "offset": -1.1782268018527313,
+            "heading": -1.1918016646053102,
+            "x": 2635.3895750579286,
+            "y": 1487.2384835139992,
+            "com": {
+              "x": 2374.0340951638823,
+              "y": 1490.7865662290992,
+              "totalMass": 12.4,
+              "vxCOM": -10.942182998004307,
+              "vyCOM": -8.685869963338877
+            }
+          },
+          {
+            "interval": 7,
+            "time": 10.5,
+            "stop": false,
+            "offset": 0.6894420991507852,
+            "heading": 0.6888818073506232,
+            "x": 2635.3895750579286,
+            "y": 1487.2384835139992,
+            "com": {
+              "x": 2361.9819049115963,
+              "y": 1487.3916716057136,
+              "totalMass": 12.4,
+              "vxCOM": -6.40255495282456,
+              "vyCOM": -2.6000746797441727
+            }
+          },
+          {
+            "interval": 8,
+            "time": 12,
+            "stop": false,
+            "offset": -0.8190378593000949,
+            "heading": -0.7467486694517249,
+            "x": 2660.864166086052,
+            "y": 1508.215738147307,
+            "com": {
+              "x": 2343.0636802377544,
+              "y": 1485.2020968504876,
+              "totalMass": 12.4,
+              "vxCOM": -6.596932394453613,
+              "vyCOM": 1.316541225566687
+            }
+          },
+          {
+            "interval": 9,
+            "time": 13.5,
+            "stop": false,
+            "offset": -0.00190252715646406,
+            "heading": 0.0006126487597439458,
+            "x": 2685.0829066924634,
+            "y": 1485.8002835805355,
+            "com": {
+              "x": 2336.4632627681644,
+              "y": 1484.9234419992206,
+              "totalMass": 12.4,
+              "vxCOM": 2.8958299858917957,
+              "vyCOM": 1.4440819720520284
+            }
+          }
+        ],
+        "target_events": []
+      },
+      "final_J": 0.17309004905395575,
+      "final_physical_contact_J": 0,
+      "final_proximity_J": 0.17309004905395575,
+      "unchanged_founder": false,
+      "selected_at": "g4/o6",
+      "feeding_offspring": 2,
+      "offspring_min_gap_px": 89.62051025167045,
+      "improvements": [
+        {
+          "generation": 4,
+          "offspring": 6,
+          "J": 0.17309004905395575
+        }
+      ]
+    }
+  ]
+}

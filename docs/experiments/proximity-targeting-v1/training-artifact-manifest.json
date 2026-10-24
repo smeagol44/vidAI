@@ -1,0 +1,133 @@
+{
+  "experimentComplete": false,
+  "verifiedTrainingTrials": 505,
+  "heldOutUnresolved": 15,
+  "analysisCommit": "481da436e0f08ff91bc4f4a3cc2cd61e2f97377d",
+  "files": [
+    {
+      "path": "docs/experiments/proximity-targeting-v1/scores.csv",
+      "bytes": 1361,
+      "sha256": "73e46078bccd165205b3fc81822d8d6110771dc8ba5ccdafc3ff1d5e88bf0584"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/curves.json",
+      "bytes": 124958,
+      "sha256": "142466b969fb9ed4b0966e61e3c2a31c56264f35c1457ed2f8162847098495ea"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/finals.csv",
+      "bytes": 763,
+      "sha256": "d7e31605a45ae413ca1d63487e1fac1206030b940d49a0ab6c5f823f4be4f246"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/trials.csv",
+      "bytes": 116327,
+      "sha256": "d4d72825b1e075166bbdad632a02ef9339226cacedfac3278053ff6ffeea5cd9"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/summary.json.gz",
+      "bytes": 934444,
+      "sha256": "df1180f21ab3e4c3be976ac8a02e19ca996c6754340a871784997e7d93ffe66a"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/trajectories.json.gz",
+      "bytes": 16803050,
+      "sha256": "d313add7978ff30c05bd0cb7aa592c0f03ef293a4ace60dfcf7953d40e639f20"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/training-ledger.json.gz",
+      "bytes": 375487,
+      "sha256": "cbc130b484220142d2ccde3a05d844cb7ae67d464e40423d0fd636a9689af9e2"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/training-completion.json",
+      "bytes": 237013,
+      "sha256": "d7aa236c78ea64926ed2269be333105df8b1ded16e9978761e62bc7ea7599533"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/training-verification.json",
+      "bytes": 3328,
+      "sha256": "7a5172848d7b3beee9bdd2713a4bc09e716b597b1b55bfae67133335cdc8e68a"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/training-export-verification.json",
+      "bytes": 599,
+      "sha256": "0da955a870f7ce3320143976f1b9c8640a267b14db6005649b29feee4968ac5a"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/training-report.md",
+      "bytes": 15092,
+      "sha256": "9e91140813d4166114a0d0d3eb1c7cd07dbf190797d43c2496ce69c45e9f51e1"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/training-graph-data.zip",
+      "bytes": 7829345,
+      "sha256": "2121c567bee7e2809cbea3d81869a446a595932bb4b97c69abd40435307c653f"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/mutation-statistics.csv",
+      "bytes": 5491365,
+      "sha256": "b2d5b0742ae62308a8c659dbd25f49b4f4e5082be6aa00d7d3a72ad56c385d96"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/mutation-statistics.json",
+      "bytes": 9322038,
+      "sha256": "2f74854bfd30f19e64c7b0c63475ef59163ba32fd4d82d4298669af57c8d7e76"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/mutation-events.csv",
+      "bytes": 1218277,
+      "sha256": "0d767e9c3d9573ca0655e3257ac864ebdbbbe3c1a36af9325723ec19ef7abf63"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/ancestry-reuse.json",
+      "bytes": 2225,
+      "sha256": "5d406431c1169c0442816cd524dfb4f1f5cbf62efa4f5ea3e676f1cbf573eeeb"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/held-out-status.json",
+      "bytes": 2946,
+      "sha256": "8b770950b96da995030594c581132f74f4b5079889489b8f03c1f5842f9be438"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/all-trajectories-index.csv",
+      "bytes": 117829,
+      "sha256": "6b071237e9d9d7dbb47c729a7774f5faa7024fbc09106b4a2efae058302053f1"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/all-trajectories-index.json",
+      "bytes": 217284,
+      "sha256": "46ab78982a581e85e357b5d5efcb20b082d07e4858a5967ed0b5840c42b7b02f"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/evidence-index.json",
+      "bytes": 109911,
+      "sha256": "0d2bc9c3ad9feef8905ac001120522cbd2b4105ee58c1b1ee4bc849b5530c345"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/former-cap-exceedances.json",
+      "bytes": 1983,
+      "sha256": "1e7983d0a0222d8d1f4d1df7cfefa32475bcef747dfd9a757d1ef22490ace4dd"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/analysis-links.json",
+      "bytes": 6902,
+      "sha256": "8c645990980d911ed25e8b73e0b7351c02003b8e6497d0df0180783509bdc34a"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/evolution-curves.png",
+      "bytes": 198595,
+      "sha256": "2ee2d05104791297bc1908973bfbc20104df4160997feac6d2cc729a3e5bba11"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/evolution-curves.svg",
+      "bytes": 126771,
+      "sha256": "1de24ddb16a71d2e2817d7927a8a0b3216494a74482eb3a6971a7c180b3d1a5e"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/frozen.json.gz",
+      "bytes": 1034458,
+      "sha256": "5d5455d3a2730977b0e193bc4103281bf83d56559744a500725b4e5411c0aaea"
+    }
+  ]
+}

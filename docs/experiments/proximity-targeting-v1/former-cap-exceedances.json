@@ -1,0 +1,90 @@
+{
+  "scope": "Part/stage samples,not distinct organisms or selection exclusions",
+  "runs": [
+    {
+      "controller": "legacy",
+      "seed": 17,
+      "trialCount": 101,
+      "stages": {
+        "forces": {
+          "samples": 1090800,
+          "linearExceedances": 0,
+          "angularExceedances": 0
+        },
+        "contact": {
+          "samples": 1090800,
+          "linearExceedances": 0,
+          "angularExceedances": 0
+        }
+      }
+    },
+    {
+      "controller": "mutable",
+      "seed": 17,
+      "trialCount": 101,
+      "stages": {
+        "forces": {
+          "samples": 1090800,
+          "linearExceedances": 0,
+          "angularExceedances": 485
+        },
+        "contact": {
+          "samples": 1090800,
+          "linearExceedances": 0,
+          "angularExceedances": 91
+        }
+      }
+    },
+    {
+      "controller": "mutable",
+      "seed": 71,
+      "trialCount": 101,
+      "stages": {
+        "forces": {
+          "samples": 1090800,
+          "linearExceedances": 3,
+          "angularExceedances": 2762
+        },
+        "contact": {
+          "samples": 1090800,
+          "linearExceedances": 3,
+          "angularExceedances": 1864
+        }
+      }
+    },
+    {
+      "controller": "mutable",
+      "seed": 1901,
+      "trialCount": 101,
+      "stages": {
+        "forces": {
+          "samples": 1090800,
+          "linearExceedances": 19,
+          "angularExceedances": 11778
+        },
+        "contact": {
+          "samples": 1090800,
+          "linearExceedances": 21,
+          "angularExceedances": 8590
+        }
+      }
+    },
+    {
+      "controller": "mutable",
+      "seed": 4099,
+      "trialCount": 101,
+      "stages": {
+        "forces": {
+          "samples": 1090800,
+          "linearExceedances": 0,
+          "angularExceedances": 36412
+        },
+        "contact": {
+          "samples": 1090800,
+          "linearExceedances": 0,
+          "angularExceedances": 29761
+        }
+      }
+    }
+  ]
+}
