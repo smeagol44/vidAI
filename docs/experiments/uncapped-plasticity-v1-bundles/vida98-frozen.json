@@ -1,0 +1,38 @@
+{
+  "action": "frozen",
+  "c": "off",
+  "seed": 0,
+  "g": 0,
+  "label": "vida98-frozen",
+  "archiveName": "vida98-frozen.zip",
+  "bytes": 2382119,
+  "sha256": "4560f59700f06db0c8d3a233f9595d165e1a88797db2bf974b7e2e221efea933",
+  "parts": [
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-frozen.zip.part000",
+      "bytes": 600000,
+      "gitSha": "314f06897d8a7faa4b2fe1d1933a6efee8d7ee2a",
+      "sha256": "aa81bd0b2598b2db4024a669a65864fef7befd5cb98f413629902994773eb1a5"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-frozen.zip.part001",
+      "bytes": 600000,
+      "gitSha": "aca40f9e43dc0c40ddbc1a504653701119d3d75f",
+      "sha256": "a304ec7ef05f6d6eb92fe5fb26e89f9ea64bef098121a1bb456e43e9f6816ea4"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-frozen.zip.part002",
+      "bytes": 600000,
+      "gitSha": "05c2f12e8bda7a02ff10374cf3ea13376a1cfbb5",
+      "sha256": "399ebfde89bb108540c0814e3f23d9923551a493b0cb7d53162b0660e2c35ab2"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-frozen.zip.part003",
+      "bytes": 582119,
+      "gitSha": "c83dba476d17524ad11ce515bd8b0f66ec490d92",
+      "sha256": "d03dae4a94e3a1f52f6ff096500308c1d27a3412511ae839c5e875470299565a"
+    }
+  ],
+  "scientificImplementation": "1d805c9a45ee97be32af4e4e74214f27d6aff07c",
+  "note": "Concatenate ordered parts;verify full SHA256/bytes then extract immutable ZIP. Existing completed units reused without simulation."
+}
