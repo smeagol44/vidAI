@@ -1,0 +1,44 @@
+{
+  "action": "post",
+  "c": "off",
+  "seed": 0,
+  "g": 0,
+  "label": "vida98-off-post",
+  "archiveName": "vida98-off-post.zip",
+  "bytes": 2919652,
+  "sha256": "f5137ee56cb60621725dfc6d7ea22fc010b6171801ed7ffb96dcc86926db9fd3",
+  "parts": [
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-off-post.zip.part000",
+      "bytes": 600000,
+      "gitSha": "a1375d11ef0e8f23d5b44d37f00620fcd58a5525",
+      "sha256": "6346f8ee43f4060ae97fe53b4c24606959e5ef03aac09d4cb86aa7b7a3663315"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-off-post.zip.part001",
+      "bytes": 600000,
+      "gitSha": "b19cd403da10e66a08fa9dae0f43219c4c683c9c",
+      "sha256": "81a00636b9116f389ad82316058c7fd74b581ac11398f6b2d6d8818b8c0a12fe"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-off-post.zip.part002",
+      "bytes": 600000,
+      "gitSha": "bd4f7fb0f321885ae5a934a607cc24d1d01112a5",
+      "sha256": "d5ca59857ebe45bd54d4eb6e0d8c2c501a40c68f60b366c4f6e7ee3fd4da3d38"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-off-post.zip.part003",
+      "bytes": 600000,
+      "gitSha": "811964e8dfaf3381b7d5a60436fdf6483914c0e9",
+      "sha256": "17b11d6fad6c042dc71ef8f238392f61cfec281d51216558eff15e431e6c2b50"
+    },
+    {
+      "path": "docs/experiments/uncapped-plasticity-v1-bundles/vida98-off-post.zip.part004",
+      "bytes": 519652,
+      "gitSha": "882616cc26012d84f0ea088958c54a6ee833002d",
+      "sha256": "16718db4f80d1dffec798c852dc0bf905f8d9fc8b4a94a9b606b198df747af76"
+    }
+  ],
+  "scientificImplementation": "1d805c9a45ee97be32af4e4e74214f27d6aff07c",
+  "note": "Concatenate ordered parts;verify full SHA256/bytes then extract immutable ZIP. Existing completed units reused without simulation."
+}
