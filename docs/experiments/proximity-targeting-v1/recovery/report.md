@@ -8,6 +8,8 @@ Scientific implementation f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187 and exact Wor
 
 ## Held-out recovery outcomes
 
+The legacy17 selected specimen absorbs energy in all three held-outs, including genuine physical-contact intake in each and nonzero last5s intake. Every one of the12 MUTABLE held-outs absorbs0J: the small71/4099 training gains and1901 training feeding do not carry over to these three conditions. This is a descriptive outcome for these specimens, not an architecture-wide or causal learning/targeting advantage.
+
 | Controller | Brain seed | Environment seed | Absorbed J | Physical contact J | Noncontact J | Moving J | Paused J | Frozen J |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | legacy | 17 | 811 | 20922.752247 | 10128 | 10794.752247 | 20464.861698 | 457.890549 | 0 |
