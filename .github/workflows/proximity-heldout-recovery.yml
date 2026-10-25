@@ -45,3 +45,26 @@ jobs:
         env:
           VIDA103_HEAD_REF: ${{ github.head_ref }}
         run: python scripts/execute-proximity-heldout-recovery.py
+  finalize-report-only:
+    if: github.head_ref == 'experiment/proximity-targeting-103' && github.event.pull_request.head.repo.full_name == 'smeagol44/vidAI'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+      - id: gate
+        run: |
+          if git log -1 --format=%s | grep -q '^Finalize #103 recovery report'; then
+            echo 'run=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'run=false' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Finalize only report,CSV and graphs from saved results
+        if: steps.gate.outputs.run == 'true'
+        env:
+          VIDA103_HEAD_REF: ${{ github.head_ref }}
+        run: |
+          python -m pip install matplotlib
+          python scripts/publish-proximity-heldout-recovery-report.py

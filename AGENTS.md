@@ -1,3 +1,13 @@
+# #103 COMPLETE with owner-authorized held-out recovery — STOP owner review
+
+- Completed520 logical conditions:500 original offspring+5 original founders+15 explicitly labelled recovery held-outs. Original pre-disconnect held-out execution history remains UNKNOWN;recovery does not establish original exact-once execution. Original unresolved ledger/runtime-loss provenance preserved.
+- Owner authorization:docs/experiments/proximity-targeting-v1/owner-recovery-authorization.md. Recovery reused0 original held-outs because none was recoverable. No founder/offspring/generation/selection was re-executed or replaced. No changes to frozen scientific source/controllers/mutations/coefficients/feeding/genomes/lineages.
+- Held-out recovered J in environment order811/977/2301:legacy17 20922.752247/25066.510197/13953.923912;all12 MUTABLE held-outs0J. Legacy has genuine physical-contact intake in all3. No causal architecture/learning/mutation advantage claim;unmatched seeds and design confounds remain.
+- 15 request/received/packet/log ZIP checkpoints independently saved before advancing;data ref experiment/proximity-heldout-recovery-evidence-103 at384188b38c110ca33b5d7df630ba87cd781a71f2. Original evidence48f7567/training5cefc73/trainingnormalized481da43 unchanged.
+- Recovery audit CI40188996644 SUCCESS:15packets,13500ticks,54000body/source substeps,333033 emitted somatic records;15full canonical Worker replays and5split450+450 reset continuations exact. Replays verification only. All original training-artifact/scientific/prior hashes unchanged. Prior505-packet audit retained;do not repeat training audit or scientific outcomes.
+- Final additive report/CSV/JSON/graphZIP/31graph trajectories/520fulltrajectory index/manifest/audit under docs/experiments/proximity-targeting-v1/recovery/. Original training exports remain immutable in parent folder. See#103/#57/draft#104 for final source/CI readbacks.
+- STOP owner review. No further execution,experiment,merge,deployment,Wiki,production/testing release,VIDA3D or#78 work. Productionmain194d70d/v0.37.0;testingd7a6814/T1.1 unchanged.
+
 # #103 owner-authorized bounded held-out recovery — 2026-10-25
 
 - Owner explicitly authorized the original15 unresolved held-outs as recovery evaluations, possibly previously executed. See docs/experiments/proximity-targeting-v1/owner-recovery-authorization.md for the verbatim scope and final receipt search.
