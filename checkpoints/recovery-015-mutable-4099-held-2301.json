@@ -1,0 +1,21 @@
+{
+  "label": "recovery-015-mutable-4099-held-2301",
+  "key": "mutable-4099-held-2301",
+  "kind": "owner-authorized-held-out-recovery",
+  "evaluationClass": "recovery-evaluation",
+  "possiblePriorExecution": true,
+  "logicalTrials": 1,
+  "bytes": 2300323,
+  "sha256": "d2c660910556e7c019dd20233285652bd2a184047fe60d72fb1a93ad94a5c31c",
+  "parts": [
+    {
+      "path": "checkpoints/recovery-015-mutable-4099-held-2301.zip.part000",
+      "bytes": 2300323,
+      "sha256": "d2c660910556e7c019dd20233285652bd2a184047fe60d72fb1a93ad94a5c31c",
+      "gitSha": "e455961c2118528d38a420e4e3559df137a7676e"
+    }
+  ],
+  "intentHead": "2f7857674993524857b37f985129ad8a0e9f7b37",
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04"
+}
