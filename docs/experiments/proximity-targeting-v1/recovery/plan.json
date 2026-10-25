@@ -1,0 +1,186 @@
+{
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+  "slots": [
+    {
+      "key": "legacy-17-held-811",
+      "controller": "legacy",
+      "brainSeed": 17,
+      "environment": {
+        "seed": 811,
+        "heading": -0.7
+      },
+      "genomeSha": "d053eced25d8638e726cf4465822b1ed5558710772c3aece7530bc5b0f1c3ed7",
+      "sourceSha": "e879b7568f21a04839e482cf74ab1211725b9ee512ce2261067ff3c8594f86c1",
+      "selectedAt": "g10/o3"
+    },
+    {
+      "key": "legacy-17-held-977",
+      "controller": "legacy",
+      "brainSeed": 17,
+      "environment": {
+        "seed": 977,
+        "heading": 2.3
+      },
+      "genomeSha": "d053eced25d8638e726cf4465822b1ed5558710772c3aece7530bc5b0f1c3ed7",
+      "sourceSha": "29b0c8549accb6c3f9decb6decde3a8ee910c23385e37dbf5bf3c9feb9239a7b",
+      "selectedAt": "g10/o3"
+    },
+    {
+      "key": "legacy-17-held-2301",
+      "controller": "legacy",
+      "brainSeed": 17,
+      "environment": {
+        "seed": 2301,
+        "heading": 1.5707963267948966
+      },
+      "genomeSha": "d053eced25d8638e726cf4465822b1ed5558710772c3aece7530bc5b0f1c3ed7",
+      "sourceSha": "319d5c6158b1ddcbbed2d9dca83c5ce076d850e75db6fe7452e9665d5aa11850",
+      "selectedAt": "g10/o3"
+    },
+    {
+      "key": "mutable-17-held-811",
+      "controller": "mutable",
+      "brainSeed": 17,
+      "environment": {
+        "seed": 811,
+        "heading": -0.7
+      },
+      "genomeSha": "99ca5265d4aebbe921c5cd7e77f49dcd45df30441cf1e045e86530ece703818c",
+      "sourceSha": "110eed8521106b9f8e9f832a44a6fd590dcab2055478732b093380df18229fc9",
+      "selectedAt": "initial"
+    },
+    {
+      "key": "mutable-17-held-977",
+      "controller": "mutable",
+      "brainSeed": 17,
+      "environment": {
+        "seed": 977,
+        "heading": 2.3
+      },
+      "genomeSha": "99ca5265d4aebbe921c5cd7e77f49dcd45df30441cf1e045e86530ece703818c",
+      "sourceSha": "82f8f527b3c02bf6e518834e7c6607147dd2388f745b6917833704ffb889d88b",
+      "selectedAt": "initial"
+    },
+    {
+      "key": "mutable-17-held-2301",
+      "controller": "mutable",
+      "brainSeed": 17,
+      "environment": {
+        "seed": 2301,
+        "heading": 1.5707963267948966
+      },
+      "genomeSha": "99ca5265d4aebbe921c5cd7e77f49dcd45df30441cf1e045e86530ece703818c",
+      "sourceSha": "5704526f8c674447c268cde9c2dbd54505cc8e297f874aa3f53c424c0b0d0039",
+      "selectedAt": "initial"
+    },
+    {
+      "key": "mutable-71-held-811",
+      "controller": "mutable",
+      "brainSeed": 71,
+      "environment": {
+        "seed": 811,
+        "heading": -0.7
+      },
+      "genomeSha": "c1b9b624faa4ceb6c5745cef7c32af847db146ba1c73f0e89e281c1f4f195dba",
+      "sourceSha": "efac4c355ca108f7086ba28e0f8fe591510bafebc11dd0d577d81ef4125b9ba4",
+      "selectedAt": "g9/o9"
+    },
+    {
+      "key": "mutable-71-held-977",
+      "controller": "mutable",
+      "brainSeed": 71,
+      "environment": {
+        "seed": 977,
+        "heading": 2.3
+      },
+      "genomeSha": "c1b9b624faa4ceb6c5745cef7c32af847db146ba1c73f0e89e281c1f4f195dba",
+      "sourceSha": "98f66168b4301a3ca744d0f2e70edf7864c37e81d23f8a42b96b3e1081ed40ca",
+      "selectedAt": "g9/o9"
+    },
+    {
+      "key": "mutable-71-held-2301",
+      "controller": "mutable",
+      "brainSeed": 71,
+      "environment": {
+        "seed": 2301,
+        "heading": 1.5707963267948966
+      },
+      "genomeSha": "c1b9b624faa4ceb6c5745cef7c32af847db146ba1c73f0e89e281c1f4f195dba",
+      "sourceSha": "77da7127c5c4bd969a8dc4118e338f9a74383931d378535a87ab47516c541e64",
+      "selectedAt": "g9/o9"
+    },
+    {
+      "key": "mutable-1901-held-811",
+      "controller": "mutable",
+      "brainSeed": 1901,
+      "environment": {
+        "seed": 811,
+        "heading": -0.7
+      },
+      "genomeSha": "af8afb82a60df63ea6999dfe55b6f1642a24bcb14edce5d7878ce94ba60bad27",
+      "sourceSha": "d85960339cbec17d04bf7f4303e1feffce27133f4ddb0ab29acfc6fe4491ea0b",
+      "selectedAt": "g6/o3"
+    },
+    {
+      "key": "mutable-1901-held-977",
+      "controller": "mutable",
+      "brainSeed": 1901,
+      "environment": {
+        "seed": 977,
+        "heading": 2.3
+      },
+      "genomeSha": "af8afb82a60df63ea6999dfe55b6f1642a24bcb14edce5d7878ce94ba60bad27",
+      "sourceSha": "04b1aeec3e23238c8336f88093338f23ed85fdcde1ba95ce833b29b7c3e08889",
+      "selectedAt": "g6/o3"
+    },
+    {
+      "key": "mutable-1901-held-2301",
+      "controller": "mutable",
+      "brainSeed": 1901,
+      "environment": {
+        "seed": 2301,
+        "heading": 1.5707963267948966
+      },
+      "genomeSha": "af8afb82a60df63ea6999dfe55b6f1642a24bcb14edce5d7878ce94ba60bad27",
+      "sourceSha": "77d1c4f9112901037ff5438854e8a5f242a9873abfcadec943281c8fb1cfb143",
+      "selectedAt": "g6/o3"
+    },
+    {
+      "key": "mutable-4099-held-811",
+      "controller": "mutable",
+      "brainSeed": 4099,
+      "environment": {
+        "seed": 811,
+        "heading": -0.7
+      },
+      "genomeSha": "946e685e903ccbd3e7f55b6e005e48bd55a3028caa9965dc8386c59ff1301b2d",
+      "sourceSha": "cbc5748911fd549369331161aaf0a50e3b5e4bc397e866cc33470c3c9f01c2ca",
+      "selectedAt": "g4/o6"
+    },
+    {
+      "key": "mutable-4099-held-977",
+      "controller": "mutable",
+      "brainSeed": 4099,
+      "environment": {
+        "seed": 977,
+        "heading": 2.3
+      },
+      "genomeSha": "946e685e903ccbd3e7f55b6e005e48bd55a3028caa9965dc8386c59ff1301b2d",
+      "sourceSha": "d114f89a8dcb2b8f6047b5bcddc264228df6d0c70319ca2de08fd797cddce136",
+      "selectedAt": "g4/o6"
+    },
+    {
+      "key": "mutable-4099-held-2301",
+      "controller": "mutable",
+      "brainSeed": 4099,
+      "environment": {
+        "seed": 2301,
+        "heading": 1.5707963267948966
+      },
+      "genomeSha": "946e685e903ccbd3e7f55b6e005e48bd55a3028caa9965dc8386c59ff1301b2d",
+      "sourceSha": "89920a908c5b76a5f6bb661cafd4cb356f3fb5aa20a28209790d46e26ba47122",
+      "selectedAt": "g4/o6"
+    }
+  ]
+}

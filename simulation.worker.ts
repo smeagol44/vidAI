@@ -38,6 +38,7 @@ port.onmessage = ({data}: MessageEvent) => {
         throw new Error('Ecology regime can change only by resetting the world');
       if (data.settings.motorExperiment !== host.settings.motorExperiment)
         throw new Error('Motor experiment can change only by resetting the world');
+      if(data.settings.experimentalFeedingMode !== host.settings.experimentalFeedingMode)throw new Error('Feeding mode can change only by reset');
       if(data.settings.experimentalVelocityMode !== host.settings.experimentalVelocityMode)throw new Error('Velocity mode can change only by reset');
       if (data.settings.mouthContactModel !== host.settings.mouthContactModel)
         throw new Error('Mouth contact model can change only by resetting the world');

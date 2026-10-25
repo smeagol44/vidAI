@@ -1,3 +1,27 @@
+## #103 / draft #104 — completed with bounded held-out recovery exception
+
+500 original offspring+5 original founders+15 labelled recovery held-outs=520 verified logical conditions. Original held-out execution history remains unknown:the same logical trials may have executed before runtime loss. Original held-out-status.json/runtime-loss provenance and every training artifact remain unchanged. Owner authorization dated2026-10-25 allowed this precise recovery;no founder,offspring,generation or selection was re-executed.
+
+Recovery held-out J in811/977/2301 order:legacy17 20922.752247/25066.510197/13953.923912 (physical-contact intake in all3);all12 MUTABLE held-outs0J. Custom-targeted training children never improved an incumbent;all earlier descriptive/seed confounds remain. No causal pursuit/learning/architecture/targeting superiority claim.
+
+Unchanged scientific source f669e09 and exact Worker SHA. All15 raw requests/immediate received packets/interpreted packets/logs separately checkpointed before advancing on experiment/proximity-heldout-recovery-evidence-103,head384188b38c110ca33b5d7df630ba87cd781a71f2. Recovery CI40188996644 SUCCESS:15full exact Worker packet replays+5split/reset snapshots/PRNG;13500ticks,54000body/source substeps,333033 emitted learning records and energy/geometry/mask/cost checks. All505 original training artifacts/hashes/audit preserved. Independent download/hash/ZIP/schema helper verifies all15 with zero simulation.
+
+Final report,15-row held-out CSV,520-row summary,all55 curve points/4000mutation events,31selected/founder/held-out graph trajectories,520fulltrajectory index,graphZIP,manifests and verification evidence:docs/experiments/proximity-targeting-v1/recovery/. Final source/CI readbacks in#103/#57/#104.
+
+STOP owner review. Draft unmerged;no deploy/Wiki/releases/VIDA3D/additional experiments. Productionmain194d70d/v0.37.0 andtestingd7a6814/T1.1 untouched.
+
+## #103 / draft #104 — training audited;15 held-out receipts unresolved
+
+All500 original offspring+5founders/50strict decisions are preserved and audited;no training outcome re-executed or replaced. Legacy17:200.598234→30805.749290J (10080contact,20725.749290proximity). MUTABLE17/71/1901/4099 finals0/2.267425/1150.740110/.173090J. Custom seeds71/4099 had10/60 eligible targeted children;none improved the incumbent. All custom selected improvements occurred during original founder fallback. Different seeds confound mutation algorithm.
+
+Full505-packet,500-genotype,454500tick,1818000-substep audit;five exact canonical training-final Worker packets and five reset continuations passed. Original source/historical hashes exact;all505 alive;clamp0J;chemical residual<=1.234e-9J. Curves,full lineage,learning/movement/feeding/energy results and selected trajectories:docs/experiments/proximity-targeting-v1/training-report.md. All505 normalized trajectories on analysis481da436;original56 primary checkpoints through5cefc73.
+
+Held-out intent48f7567 was published before runtime transport loss. No completed held-out archive is remote;0–15 may have started/completed locally. Replacement workspace has no original receipts. All15 are unresolved,not0J and not re-executed. Recover original requests/packets/received/log/ZIP;otherwise explicit owner recovery decision required. Experiment remains INCOMPLETE. No new scientific evaluation is authorized by this handoff.
+
+Scientific implementation f669e09;protocol d01d1fd;exact#101 basea44515e2. Recovery CI40134850893 audit/export/publication passed;redundant backup upload failed after Git saving and is removed. Final scoped CI verifies artifact hashes/portable ledger/all505 trajectory exports. See#103/#57/#104 for final heads/status. STOP for receipt recovery and owner review;no merge/deploy/Wiki/releases/VIDA3D. Productionv0.37.0/main194d70d,testingT1.1/d7a6814 unchanged.
+
+---
+
 # Complete #100 / draft #101 — STOP owner review
 
 - Fixed moving-resource study COMPLETE:500 unique offspring,5founders,

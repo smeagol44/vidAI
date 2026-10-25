@@ -1,3 +1,34 @@
+# #103 COMPLETE with owner-authorized held-out recovery — STOP owner review
+
+- Completed520 logical conditions:500 original offspring+5 original founders+15 explicitly labelled recovery held-outs. Original pre-disconnect held-out execution history remains UNKNOWN;recovery does not establish original exact-once execution. Original unresolved ledger/runtime-loss provenance preserved.
+- Owner authorization:docs/experiments/proximity-targeting-v1/owner-recovery-authorization.md. Recovery reused0 original held-outs because none was recoverable. No founder/offspring/generation/selection was re-executed or replaced. No changes to frozen scientific source/controllers/mutations/coefficients/feeding/genomes/lineages.
+- Held-out recovered J in environment order811/977/2301:legacy17 20922.752247/25066.510197/13953.923912;all12 MUTABLE held-outs0J. Legacy has genuine physical-contact intake in all3. No causal architecture/learning/mutation advantage claim;unmatched seeds and design confounds remain.
+- 15 request/received/packet/log ZIP checkpoints independently saved before advancing;data ref experiment/proximity-heldout-recovery-evidence-103 at384188b38c110ca33b5d7df630ba87cd781a71f2. Original evidence48f7567/training5cefc73/trainingnormalized481da43 unchanged.
+- Recovery audit CI40188996644 SUCCESS:15packets,13500ticks,54000body/source substeps,333033 emitted somatic records;15full canonical Worker replays and5split450+450 reset continuations exact. Replays verification only. All original training-artifact/scientific/prior hashes unchanged. Prior505-packet audit retained;do not repeat training audit or scientific outcomes.
+- Final additive report/CSV/JSON/graphZIP/31graph trajectories/520fulltrajectory index/manifest/audit under docs/experiments/proximity-targeting-v1/recovery/. Original training exports remain immutable in parent folder. See#103/#57/draft#104 for final source/CI readbacks.
+- STOP owner review. No further execution,experiment,merge,deployment,Wiki,production/testing release,VIDA3D or#78 work. Productionmain194d70d/v0.37.0;testingd7a6814/T1.1 unchanged.
+
+# #103 owner-authorized bounded held-out recovery — 2026-10-25
+
+- Owner explicitly authorized the original15 unresolved held-outs as recovery evaluations, possibly previously executed. See docs/experiments/proximity-targeting-v1/owner-recovery-authorization.md for the verbatim scope and final receipt search.
+- Exact frozen five selected genetic genomes, environment seeds811/977/2301 and original headings; unchanged f669e09 scientific source and Worker SHA. No founders, offspring, generations or selection may be re-executed.
+- New additive evidence only under proximity-targeting-v1/recovery/ and experiment/proximity-heldout-recovery-evidence-103. Preserve all original unresolved ledgers/provenance and training artifacts byte-for-byte. Persist each slot before advancing. Reuse verified packets; an uncertain new recovery request must never be automatically repeated.
+- Deterministic full held-out replay and five split continuations are verification only, never independent dataset rows. Disable the former full training audit workflow to avoid needless training replay.
+- Complete the report, graph inputs and integrity audit; update#103/#57/draft#104;STOP owner review. No merge/deploy/Wiki/production/testing/VIDA3D/additional experiment.
+
+# #103 training audited — STOP for original held-out receipt recovery
+
+- All500 unique offspring+5founders,50 strict choices and55 curve points are preserved and fully audited. Never rerun these outcomes.
+- Frozen scientific source f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187;preregistration d01d1fd1359b27ee4b8df6bd39356d0071717fb1;exact#101 base a44515e2. No scientific source changes after freeze.
+- Training final J:legacy17 30805.749290241907;MUTABLE17 0;71 2.2674251375328573;1901 1150.7401104316946;4099 .17309004905395575. Legacy contact10080J/proximity20725.749290241907J. All hybrid intake is noncontact.
+- Custom71/4099 have10/60 eligible targeted children,56/316 targeted events. None beat the incumbent;their only selected improvements were original-random founder children. Seeds and algorithm confounded,no causal ranking.
+- Full505-packet audit/500 genotype histories/50choices/454500tick receipts/1818000 body+target substeps passed. Five full training-final Worker packets and five450+450 reset continuations exact;all old source/data hashes match.382 old-flagged offspring remained eligible;all505 alive,clamp0J,chemical error<=1.234e-9J.
+- Original56 ZIP checkpoints through5cefc73c3eecc22c0412319c620717be4d4ec3c7. All505 normalized trajectories on analysis481da436e0f08ff91bc4f4a3cc2cd61e2f97377d. Source/training exports2552e1f;final CI/head in#103/#57/#104.
+- CRITICAL:held-out intent48f75676257297be155f71454c7d2b6cfea47992 exists,but no completed held-out archive is remote. Runtime disconnected;the active command is unknown.0–15may have started/completed. Fresh replacement workspace lacked original receipts. Do not claim unstarted,impute0 or repeat any uncertain held-out.
+- Exact next action:recover original runtime requests/packets/received/champions and056-held-outs log/ZIP. If unrecoverable,obtain an explicit owner recovery decision before any uncertain slot is executed. Full experiment remains INCOMPLETE;15 held-out outcomes unresolved. Current source has all training reports/CSV/JSON/plot/lineage/selected trajectories and restore helpers.
+- Recovery CI40134850893 audit/export/Git publication passed;only redundant backup artifact upload failed on an invalid parent-directory glob. Backup removed. Final CI verifies published artifacts/500-slot/50-choice ledger/all505 normalized exports without simulation. No further full raw replay campaign is needed.
+- STOP for recovery/owner review. No merge,deployment,Wiki,production/testing release,extra experiment,VIDA3D or#78 work. Productionmain194d70d/v0.37.0 andtestingd7a6814/T1.1 untouched.
+
 # Complete #100 / draft #101 — STOP owner review
 
 - Fixed moving-resource study COMPLETE:500 unique offspring,5founders,

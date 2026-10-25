@@ -1,0 +1,22 @@
+{
+  "experimentComplete": false,
+  "trainingOriginalPackets": 505,
+  "offspring": 500,
+  "heldOutUnresolved": 15,
+  "curvePoints": 55,
+  "mutationEvents": 4000,
+  "trajectoryConditions": 16,
+  "zipCRCAndMembersExact": true,
+  "rows": {
+    "scores.csv": 55,
+    "finals.csv": 5,
+    "trials.csv": 505,
+    "mutation-statistics.csv": 500,
+    "mutation-events.csv": 4000,
+    "target-timelines.csv": 57616,
+    "feeding-timelines.csv": 14400,
+    "all-trajectories-index.csv": 505
+  },
+  "zipSHA256": "2121c567bee7e2809cbea3d81869a446a595932bb4b97c69abd40435307c653f",
+  "simulationEvaluations": 0
+}

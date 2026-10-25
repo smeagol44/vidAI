@@ -1,0 +1,15 @@
+{
+  "completedWithRecoveryException": true,
+  "logicalConditions": 520,
+  "originalTrainingUnchanged": 505,
+  "heldOutRecoveryEvaluations": 15,
+  "fullWorkerPacketReplays": 15,
+  "splitResetForks": 5,
+  "graphTrajectoryConditions": 31,
+  "completeTrajectoryIndex": 520,
+  "manifestFilesVerified": 15,
+  "trainingArtifactFilesVerified": 25,
+  "ZIPCRCAndMembersExact": true,
+  "simulationEvaluations": 0,
+  "graphZIPsha256": "e43d48338d18ae385cb982959821c3ecd9ec4f236eb7e2aba7494443e724e249"
+}

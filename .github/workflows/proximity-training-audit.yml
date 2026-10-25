@@ -1,0 +1,70 @@
+name: Audit preserved VIDA103 training only
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/proximity-training-audit.yml'
+      - 'scripts/audit-proximity-training.mjs'
+      - 'scripts/report-proximity-training.mjs'
+      - 'scripts/write-proximity-training-report.py'
+      - 'scripts/verify-proximity-training-exports.py'
+      - 'scripts/publish-proximity-training-analysis.py'
+      - 'scripts/export-proximity-training-trajectories.py'
+permissions:
+  contents: write
+concurrency:
+  group: vida103-training-recovery
+  cancel-in-progress: false
+jobs:
+  audit-preserved-training:
+    if: github.head_ref == 'experiment/proximity-targeting-103' && github.event.pull_request.head.repo.full_name == 'smeagol44/vidAI'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      VIDA103_HEAD_REF: ${{ github.head_ref }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - id: gate
+        shell: bash
+        run: |
+          if [ -f docs/experiments/proximity-targeting-v1/owner-recovery-authorization.md ] || git log -1 --format=%s | grep -q '^Record audited #103 training'; then
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.gate.outputs.run == 'true'
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Restore immutable original505 packets without simulation
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          git fetch origin experiment/proximity-targeting-evidence-103
+          python scripts/restore-proximity-targeting-evidence.py --ref 48f75676257297be155f71454c7d2b6cfea47992
+      - name: Compile unchanged scientific Worker and audit original training data
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          npm ci
+          npm run build
+          node --check scripts/audit-proximity-training.mjs
+          node --check scripts/report-proximity-training.mjs
+          python -m py_compile scripts/write-proximity-training-report.py scripts/verify-proximity-training-exports.py scripts/export-proximity-training-trajectories.py scripts/publish-proximity-training-analysis.py
+          node --import tsx scripts/audit-proximity-training.mjs
+          node --import tsx scripts/check-proximity-training-ledger.mjs
+      - name: Derive curves,lineage and all505 original trajectories
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          node --import tsx scripts/report-proximity-training.mjs
+          python scripts/export-proximity-training-trajectories.py
+          python scripts/write-proximity-training-report.py
+          python -m pip install matplotlib
+          python scripts/plot-proximity-curves.py
+          python scripts/verify-proximity-training-exports.py
+      - name: Publish verified derivatives to the two bounded experimental refs
+        if: steps.gate.outputs.run == 'true'
+        run: python scripts/publish-proximity-training-analysis.py
+      # Verified derivatives are preserved in the two explicit Git refs.
+      # The redundant backup upload rejected a parent-directory glob and is removed.

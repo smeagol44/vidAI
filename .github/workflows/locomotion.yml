@@ -20,7 +20,7 @@ permissions:
   contents: read
 jobs:
   calibration:
-    if: github.head_ref != 'experiment/uncapped-plasticity-98' && github.head_ref != 'experiment/moving-nutrient-pursuit-100'
+    if: github.head_ref != 'experiment/uncapped-plasticity-98' && github.head_ref != 'experiment/moving-nutrient-pursuit-100' && github.head_ref != 'experiment/proximity-targeting-103'
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
