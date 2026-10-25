@@ -1,0 +1,21 @@
+{
+  "label": "recovery-003-legacy-17-held-2301",
+  "key": "legacy-17-held-2301",
+  "kind": "owner-authorized-held-out-recovery",
+  "evaluationClass": "recovery-evaluation",
+  "possiblePriorExecution": true,
+  "logicalTrials": 1,
+  "bytes": 5955680,
+  "sha256": "220eb41e6ca7319edfbb80c6505113e5e69af785e51178c43ec635f8c415b541",
+  "parts": [
+    {
+      "path": "checkpoints/recovery-003-legacy-17-held-2301.zip.part000",
+      "bytes": 5955680,
+      "sha256": "220eb41e6ca7319edfbb80c6505113e5e69af785e51178c43ec635f8c415b541",
+      "gitSha": "f526b3758f2a76beb7ec1ccc52b0e93130bb9463"
+    }
+  ],
+  "intentHead": "7d290939bcb0b7415ce3a2fdd3a737c2fce0d1f7",
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04"
+}
