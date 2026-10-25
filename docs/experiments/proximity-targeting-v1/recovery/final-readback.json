@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-25",
+  "completionBasis": "owner-authorized bounded held-out recovery exception",
+  "dataPublicationCommit": "9876746f8cda7a1177757abe3afd295a2ad578d7",
+  "primaryRecoveryEvidenceHead": "384188b38c110ca33b5d7df630ba87cd781a71f2",
+  "recoveryExecutionCI": 40188996644,
+  "recoveryReportOnlyCI": 40189650100,
+  "independentlyDownloadedRecoveryPackets": 15,
+  "partHashesZIPCRCMemberHashesAndSchemaExact": true,
+  "trainingOriginalOutcomesUnchanged": 505,
+  "heldOutRecoveryEvaluations": 15,
+  "originalExactOnceHeldOutsEstablished": false,
+  "originalStarted": null,
+  "originalCompleted": null,
+  "fullRecoveryWorkerPacketReplays": 15,
+  "splitResetForks": 5,
+  "graphZIPsha256": "e43d48338d18ae385cb982959821c3ecd9ec4f236eb7e2aba7494443e724e249",
+  "graphVisuallyInspected": true,
+  "originalUncertaintyLedgerAndRuntimeLossBytesUnchanged": true,
+  "trainingArtifactHashesExact": 25,
+  "noScientificTSFilesChanged": true,
+  "unchangedRefs": {
+    "main": "194d70d1de2c4a31825e5f57d1d890a698fe4a5d",
+    "testing": "d7a68144b02225db37bb6a9583b057458ff47d52",
+    "experiment/uncapped-plasticity-98": "bb39f30806b7852d9e042ca9b91cac1051f6a5d9",
+    "experiment/moving-nutrient-pursuit-100": "a44515e27cc82294fcb55cbadf523351e545b09d",
+    "experiment/proximity-targeting-evidence-103": "48f75676257297be155f71454c7d2b6cfea47992",
+    "experiment/proximity-analysis-103": "481da436e0f08ff91bc4f4a3cc2cd61e2f97377d"
+  },
+  "simulationEvaluationsInThisReadback": 0,
+  "stoppingPoint": "Owner review; no more evaluation,merge,deployment,Wiki,release,additional experiment or VIDA3D changes"
+}
