@@ -1,0 +1,18 @@
+{
+  "key": "mutable-4099-held-811",
+  "controller": "mutable",
+  "brainSeed": 4099,
+  "environment": {
+    "seed": 811,
+    "heading": -0.7
+  },
+  "genomeSha": "946e685e903ccbd3e7f55b6e005e48bd55a3028caa9965dc8386c59ff1301b2d",
+  "sourceSha": "cbc5748911fd549369331161aaf0a50e3b5e4bc397e866cc33470c3c9f01c2ca",
+  "selectedAt": "g4/o6",
+  "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "evaluationClass": "recovery-evaluation",
+  "possiblePriorExecution": true,
+  "authorizationSourceCommit": "dedf983e329ee79ac038b4dd7cd34122960a6677",
+  "authorizationSha256": "959492dbc220053398d96d9b616668125a418523128307dc41a3e854f0d1a9dd"
+}
