@@ -1,0 +1,8 @@
+{
+  "sourceAuthorizationCommit": "dedf983e329ee79ac038b4dd7cd34122960a6677",
+  "primaryRecoveryEvidenceHead": "384188b38c110ca33b5d7df630ba87cd781a71f2",
+  "checkpointHead": "1fd8447d1aeaae23e24f12f3007a637655dca497",
+  "trainingEvidenceHead": "5cefc73c3eecc22c0412319c620717be4d4ec3c7",
+  "originalUnresolvedEvidenceHead": "48f75676257297be155f71454c7d2b6cfea47992",
+  "trainingNormalizedTrajectoryHead": "481da436e0f08ff91bc4f4a3cc2cd61e2f97377d"
+}

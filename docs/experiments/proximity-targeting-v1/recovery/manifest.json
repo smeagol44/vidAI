@@ -1,0 +1,83 @@
+{
+  "completedWithRecoveryException": true,
+  "originalTrainingTrials": 505,
+  "heldOutRecoveryEvaluations": 15,
+  "originalExactOnceHeldOutsEstablished": false,
+  "files": [
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/plan.json",
+      "bytes": 5999,
+      "sha256": "033ac2341df4d5eabcde3c6a919a4c8e0c9b061ed0daae9f084345af3058f816"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/evidence-index.json",
+      "bytes": 15917,
+      "sha256": "fe60503acfa0419ea37b9e44426de9d1ee94dc6cd6abce7c9a6aa320426a67ce"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/verification.json",
+      "bytes": 617440,
+      "sha256": "47acedaa3d8e4cd32edf7a6fcfb7c06560a099934e768260c513adbc6f532b6a"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/held-out-summary.json",
+      "bytes": 318090,
+      "sha256": "dd73744deb789c8ad0deb55f65fa43064f0e9799b66c4b19ab7b2d4bcc1ab45d"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/summary.json.gz",
+      "bytes": 1005612,
+      "sha256": "fa3ef9f153b6c4ca4f723d404ed387b4c63604114d92b0c9f5a98e2898433a5f"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/trajectories.json.gz",
+      "bytes": 32029866,
+      "sha256": "a86c0150e58f5e9ac2581d5c61300fa418fdae8cadfa95bed075467c421599a6"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/held-out.csv",
+      "bytes": 21451,
+      "sha256": "3ed09d58722e413d3ae5ae6c79d8ffc37907cfbb63b68d2ff36f89410b4d45e4"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/held-out-target-timelines.csv",
+      "bytes": 17248335,
+      "sha256": "2ea56694d5e0beb3d04d9defc8a35a7b1b8b6fd127a8cda0c22bcbafee75f12b"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/held-out-feeding-timelines.csv",
+      "bytes": 1788264,
+      "sha256": "0429055f0be926f50c0a60b6273c12a41671241a4fc9c60a0ed988d38d64ed38"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/trials.csv",
+      "bytes": 612650,
+      "sha256": "37037341507475ca458838c3024f764593df7041c2ca1393ae4440ca5354dfac"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/all-trajectories-index.json",
+      "bytes": 228976,
+      "sha256": "fbdd93d44878cc4434b44b08aa471b8d5c172a05f42b5c6741e277e841e9bace"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/report.md",
+      "bytes": 22217,
+      "sha256": "23e751048208f1eb139ab13fdb64b00d79f7142fee399039acc58a3447b34585"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/held-out.png",
+      "bytes": 123015,
+      "sha256": "71c3133d45688530dd82e938af11aacc376b3a3f1db05e7372f531c47b5272fb"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/held-out.svg",
+      "bytes": 81790,
+      "sha256": "5ac093d7a5ddcab3138a48ac7c13fe8196939a849c1f4fb10778bac09b7743a9"
+    },
+    {
+      "path": "docs/experiments/proximity-targeting-v1/recovery/graph-data.zip",
+      "bytes": 40816584,
+      "sha256": "ddefb5d276cf481fa3f940a3cd852d7589d0625cb45e5b0d2c8affceb42ce01d"
+    }
+  ]
+}
