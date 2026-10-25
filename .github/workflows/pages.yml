@@ -80,6 +80,8 @@ jobs:
         if: github.head_ref == 'experiment/proximity-targeting-103' && hashFiles('docs/experiments/proximity-targeting-v1/training-ledger.json.gz') != ''
       - run: python scripts/verify-proximity-training-exports.py
         if: github.head_ref == 'experiment/proximity-targeting-103' && hashFiles('docs/experiments/proximity-targeting-v1/training-graph-data.zip') != ''
+      - run: python scripts/verify-proximity-heldout-recovery.py
+        if: github.head_ref == 'experiment/proximity-targeting-103' && hashFiles('docs/experiments/proximity-targeting-v1/recovery/complete.json') != ''
       - name: Independently verify all505 published trajectory exports
         if: github.head_ref == 'experiment/proximity-targeting-103' && hashFiles('docs/experiments/proximity-targeting-v1/analysis-links.json') != ''
         run: |

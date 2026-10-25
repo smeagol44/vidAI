@@ -1,3 +1,11 @@
+# #103 owner-authorized bounded held-out recovery — 2026-10-25
+
+- Owner explicitly authorized the original15 unresolved held-outs as recovery evaluations, possibly previously executed. See docs/experiments/proximity-targeting-v1/owner-recovery-authorization.md for the verbatim scope and final receipt search.
+- Exact frozen five selected genetic genomes, environment seeds811/977/2301 and original headings; unchanged f669e09 scientific source and Worker SHA. No founders, offspring, generations or selection may be re-executed.
+- New additive evidence only under proximity-targeting-v1/recovery/ and experiment/proximity-heldout-recovery-evidence-103. Preserve all original unresolved ledgers/provenance and training artifacts byte-for-byte. Persist each slot before advancing. Reuse verified packets; an uncertain new recovery request must never be automatically repeated.
+- Deterministic full held-out replay and five split continuations are verification only, never independent dataset rows. Disable the former full training audit workflow to avoid needless training replay.
+- Complete the report, graph inputs and integrity audit; update#103/#57/draft#104;STOP owner review. No merge/deploy/Wiki/production/testing/VIDA3D/additional experiment.
+
 # #103 training audited — STOP for original held-out receipt recovery
 
 - All500 unique offspring+5founders,50 strict choices and55 curve points are preserved and fully audited. Never rerun these outcomes.

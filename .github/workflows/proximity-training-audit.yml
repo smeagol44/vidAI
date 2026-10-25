@@ -29,7 +29,7 @@ jobs:
       - id: gate
         shell: bash
         run: |
-          if git log -1 --format=%s | grep -q '^Record audited #103 training'; then
+          if [ -f docs/experiments/proximity-targeting-v1/owner-recovery-authorization.md ] || git log -1 --format=%s | grep -q '^Record audited #103 training'; then
             echo "run=false" >> "$GITHUB_OUTPUT"
           else
             echo "run=true" >> "$GITHUB_OUTPUT"

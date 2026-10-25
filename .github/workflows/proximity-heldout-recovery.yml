@@ -1,0 +1,47 @@
+name: Bounded VIDA103 held-out recovery
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/proximity-heldout-recovery.yml'
+      - 'scripts/*proximity-heldout-recovery*'
+      - 'docs/experiments/proximity-targeting-v1/owner-recovery-authorization.md'
+permissions:
+  contents: write
+concurrency:
+  group: vida103-heldout-recovery
+  cancel-in-progress: false
+jobs:
+  recover-exact-15:
+    if: github.head_ref == 'experiment/proximity-targeting-103' && github.event.pull_request.head.repo.full_name == 'smeagol44/vidAI'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - id: gate
+        run: |
+          if git log -1 --format=%s | grep -q '^Authorize bounded #103 held-out recovery'; then
+            echo 'run=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'run=false' >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.gate.outputs.run == 'true'
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Build unchanged frozen scientific Worker
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          npm ci
+          npm run build
+          python -m pip install matplotlib
+          node --import tsx scripts/check-proximity-training-ledger.mjs
+          node --import tsx scripts/run-proximity-heldout-recovery.mjs plan
+      - name: Execute only unresolved held-outs with per-slot durable checkpoints
+        if: steps.gate.outputs.run == 'true'
+        env:
+          VIDA103_HEAD_REF: ${{ github.head_ref }}
+        run: python scripts/execute-proximity-heldout-recovery.py
