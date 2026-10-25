@@ -1,0 +1,356 @@
+{
+  "evidenceBranch": "experiment/proximity-heldout-recovery-evidence-103",
+  "evidenceHead": "1fd8447d1aeaae23e24f12f3007a637655dca497",
+  "sourceAuthorizationCommit": "dedf983e329ee79ac038b4dd7cd34122960a6677",
+  "originalUnresolvedEvidenceHead": "48f75676257297be155f71454c7d2b6cfea47992",
+  "recoveryEvaluations": 15,
+  "reusedOriginalOutcomes": 0,
+  "possiblePriorExecution": true,
+  "checkpoints": [
+    {
+      "label": "recovery-001-legacy-17-held-811",
+      "key": "legacy-17-held-811",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 5950670,
+      "sha256": "217242d3d69de80f8b5feafe13c7d3e4713ed17ff30835924b92d91781431682",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-001-legacy-17-held-811.zip.part000",
+          "bytes": 5950670,
+          "sha256": "217242d3d69de80f8b5feafe13c7d3e4713ed17ff30835924b92d91781431682",
+          "gitSha": "32788dbfd2821f3653f2c6eb7b0ea988b6b6b3bc"
+        }
+      ],
+      "intentHead": "d0e9bef922115081a351bd5a6099ee1a2ec72cca",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-001-legacy-17-held-811.json",
+      "commit": "cc09d8a03c894a3a41c96c1609fe16ac39fd7b87"
+    },
+    {
+      "label": "recovery-002-legacy-17-held-977",
+      "key": "legacy-17-held-977",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 6570412,
+      "sha256": "efa0710408b5e4dc4678240e8a5acebd5a8c0e555dd4c40cf49ac9255396c512",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-002-legacy-17-held-977.zip.part000",
+          "bytes": 6570412,
+          "sha256": "efa0710408b5e4dc4678240e8a5acebd5a8c0e555dd4c40cf49ac9255396c512",
+          "gitSha": "43c89f153c8f8d9ec0ebeb1d1a0d6cd7cab07b16"
+        }
+      ],
+      "intentHead": "0feea5467de1ad07fc74ba5bb502e2113ee3c8e0",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-002-legacy-17-held-977.json",
+      "commit": "64c1e3d2267de69d0aa3f59e7824a7f7f474b515"
+    },
+    {
+      "label": "recovery-003-legacy-17-held-2301",
+      "key": "legacy-17-held-2301",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 5955680,
+      "sha256": "220eb41e6ca7319edfbb80c6505113e5e69af785e51178c43ec635f8c415b541",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-003-legacy-17-held-2301.zip.part000",
+          "bytes": 5955680,
+          "sha256": "220eb41e6ca7319edfbb80c6505113e5e69af785e51178c43ec635f8c415b541",
+          "gitSha": "f526b3758f2a76beb7ec1ccc52b0e93130bb9463"
+        }
+      ],
+      "intentHead": "7d290939bcb0b7415ce3a2fdd3a737c2fce0d1f7",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-003-legacy-17-held-2301.json",
+      "commit": "782c8e6923bd83076e530aa125eefb3e4fdf9323"
+    },
+    {
+      "label": "recovery-004-mutable-17-held-811",
+      "key": "mutable-17-held-811",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 2125196,
+      "sha256": "6cdb11cf6ca9cd14a81277462ebd3f8c528bf212839648f81d9f14d469dedefb",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-004-mutable-17-held-811.zip.part000",
+          "bytes": 2125196,
+          "sha256": "6cdb11cf6ca9cd14a81277462ebd3f8c528bf212839648f81d9f14d469dedefb",
+          "gitSha": "cab516885dca442d4832f2c87384c36473442ef4"
+        }
+      ],
+      "intentHead": "3f0e52f97ada88cd9b5134e9c2d9b3e357511c8d",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-004-mutable-17-held-811.json",
+      "commit": "a761bd1fbf056592b5a52a9bfed35fb845b815a2"
+    },
+    {
+      "label": "recovery-005-mutable-17-held-977",
+      "key": "mutable-17-held-977",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 2230168,
+      "sha256": "cdc58591cff3be459a1f722c5977d9a1fcf874b32b46443f6fbab983a73b3cbb",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-005-mutable-17-held-977.zip.part000",
+          "bytes": 2230168,
+          "sha256": "cdc58591cff3be459a1f722c5977d9a1fcf874b32b46443f6fbab983a73b3cbb",
+          "gitSha": "5fc95f27a7b1b73c95ab6d7fda3a4736d07235d2"
+        }
+      ],
+      "intentHead": "07a7501827f0ac4243e7c9ef8beb06848ff89dd6",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-005-mutable-17-held-977.json",
+      "commit": "5f7a7f668e10510cc29646366ffb1c940f24f9e6"
+    },
+    {
+      "label": "recovery-006-mutable-17-held-2301",
+      "key": "mutable-17-held-2301",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 2152373,
+      "sha256": "ee20db4b94345e92f0c45d41d571c9bd8ff71ba8b9dca89e40e054f3985f9f72",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-006-mutable-17-held-2301.zip.part000",
+          "bytes": 2152373,
+          "sha256": "ee20db4b94345e92f0c45d41d571c9bd8ff71ba8b9dca89e40e054f3985f9f72",
+          "gitSha": "b0d53d4c0515aff92a97aa8d09fa68fc6d79ef44"
+        }
+      ],
+      "intentHead": "9fc6ced2e16083f5e7cb999abcff6f67536a0fd3",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-006-mutable-17-held-2301.json",
+      "commit": "d60669c7de2a16028c84a25ee4bab60da9c61608"
+    },
+    {
+      "label": "recovery-007-mutable-71-held-811",
+      "key": "mutable-71-held-811",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 2205449,
+      "sha256": "33bcc76c57187d9582fd6a41d8703eb2cc119f6f63f6a7eaaff7a481eada6b32",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-007-mutable-71-held-811.zip.part000",
+          "bytes": 2205449,
+          "sha256": "33bcc76c57187d9582fd6a41d8703eb2cc119f6f63f6a7eaaff7a481eada6b32",
+          "gitSha": "372a327eaa70ac89603fe27404db3544792266c4"
+        }
+      ],
+      "intentHead": "08a2181a623dd56342a5195cb0c2111d6e6fc571",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-007-mutable-71-held-811.json",
+      "commit": "eb83271df47340a10ca917e29ce7eb8ff4a7e955"
+    },
+    {
+      "label": "recovery-008-mutable-71-held-977",
+      "key": "mutable-71-held-977",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 2254989,
+      "sha256": "4b7f619e7de22163a8384ebb35236c3029cdf5494eddccd4f98bb6cd84167d0c",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-008-mutable-71-held-977.zip.part000",
+          "bytes": 2254989,
+          "sha256": "4b7f619e7de22163a8384ebb35236c3029cdf5494eddccd4f98bb6cd84167d0c",
+          "gitSha": "02f9945e71cd77b6bbca89ed7e8ff87b852281ec"
+        }
+      ],
+      "intentHead": "bdc557baa737b457254ee1aaed5f2a74a23da3a5",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-008-mutable-71-held-977.json",
+      "commit": "9d9a165d0e9277ae6d09978d27151d78086cf69f"
+    },
+    {
+      "label": "recovery-009-mutable-71-held-2301",
+      "key": "mutable-71-held-2301",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 2193474,
+      "sha256": "5dd5a937f6f70ccde9768f16f9996147cb42da9529a50e2adec4654b442529ff",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-009-mutable-71-held-2301.zip.part000",
+          "bytes": 2193474,
+          "sha256": "5dd5a937f6f70ccde9768f16f9996147cb42da9529a50e2adec4654b442529ff",
+          "gitSha": "9d4f0f93c280029b4ec3282220c1b236b1d6aafa"
+        }
+      ],
+      "intentHead": "e69b03495a92e51bf76af789526667bcf5c459f4",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-009-mutable-71-held-2301.json",
+      "commit": "09bbcdd2c2a419ae5a3b647b5497b6ad96e3531a"
+    },
+    {
+      "label": "recovery-010-mutable-1901-held-811",
+      "key": "mutable-1901-held-811",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 2324891,
+      "sha256": "4ab6dbb88920882d2a6f23c0c82ebcf15b562f73f32a2f4aabdda7b369ec29b4",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-010-mutable-1901-held-811.zip.part000",
+          "bytes": 2324891,
+          "sha256": "4ab6dbb88920882d2a6f23c0c82ebcf15b562f73f32a2f4aabdda7b369ec29b4",
+          "gitSha": "a301d1ba8218f6546acbf82d1889029173a77a54"
+        }
+      ],
+      "intentHead": "07dc659f6b06c3e2d4346f44fe38192c6fc299be",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-010-mutable-1901-held-811.json",
+      "commit": "57ce563964101763b75345e9f111969a64422812"
+    },
+    {
+      "label": "recovery-011-mutable-1901-held-977",
+      "key": "mutable-1901-held-977",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 2317494,
+      "sha256": "dfcb47f14d2e13c45ee21db19e9ead058691d364cce42f5a7c0a8179f3c147be",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-011-mutable-1901-held-977.zip.part000",
+          "bytes": 2317494,
+          "sha256": "dfcb47f14d2e13c45ee21db19e9ead058691d364cce42f5a7c0a8179f3c147be",
+          "gitSha": "38565469e458038fa213f80cf71e4b8b234ed96f"
+        }
+      ],
+      "intentHead": "9a12eba4f6f41079ed01e3b7017979aeb46e71a1",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-011-mutable-1901-held-977.json",
+      "commit": "2d96ef2acd4d268128788673f8b2e04244046b6a"
+    },
+    {
+      "label": "recovery-012-mutable-1901-held-2301",
+      "key": "mutable-1901-held-2301",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 2323406,
+      "sha256": "4a39613b81feb9e076bebd671b94462b09b6b58f9f4db11e09eb9f2a222aeff6",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-012-mutable-1901-held-2301.zip.part000",
+          "bytes": 2323406,
+          "sha256": "4a39613b81feb9e076bebd671b94462b09b6b58f9f4db11e09eb9f2a222aeff6",
+          "gitSha": "c8993cfc40736d2e88dea86ec9ca5da6f6286f8f"
+        }
+      ],
+      "intentHead": "b4ba586177f17655a8c8f30c628282003c450ba2",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-012-mutable-1901-held-2301.json",
+      "commit": "ec5af6dcd67c85f60ab360c910ba8a54af2e7c97"
+    },
+    {
+      "label": "recovery-013-mutable-4099-held-811",
+      "key": "mutable-4099-held-811",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 2278382,
+      "sha256": "ab087c5d9f52f15fc424f4e37977104c7ac10e713acdc58e43a1f19f09d14872",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-013-mutable-4099-held-811.zip.part000",
+          "bytes": 2278382,
+          "sha256": "ab087c5d9f52f15fc424f4e37977104c7ac10e713acdc58e43a1f19f09d14872",
+          "gitSha": "c43d5b61ce072980020ff4771416b74beb7dc65e"
+        }
+      ],
+      "intentHead": "c9e93d1778f166210044d4dc88ca5f8913229e2d",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-013-mutable-4099-held-811.json",
+      "commit": "6af9dc6d2fa2bf19de43c5415db5e5f54e063f56"
+    },
+    {
+      "label": "recovery-014-mutable-4099-held-977",
+      "key": "mutable-4099-held-977",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 2302062,
+      "sha256": "46f12e386d7ca63e63d05ec46888a646870651af0fe2edfdeee846e8faab3742",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-014-mutable-4099-held-977.zip.part000",
+          "bytes": 2302062,
+          "sha256": "46f12e386d7ca63e63d05ec46888a646870651af0fe2edfdeee846e8faab3742",
+          "gitSha": "afa8efeb13550cef19341a02976833f1e7389915"
+        }
+      ],
+      "intentHead": "087680976c6315f441cad596d17c9a492566ffa8",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-014-mutable-4099-held-977.json",
+      "commit": "fc0061902ba405d2ada9264a186dfa9fa7ff9b9d"
+    },
+    {
+      "label": "recovery-015-mutable-4099-held-2301",
+      "key": "mutable-4099-held-2301",
+      "kind": "owner-authorized-held-out-recovery",
+      "evaluationClass": "recovery-evaluation",
+      "possiblePriorExecution": true,
+      "logicalTrials": 1,
+      "bytes": 2300323,
+      "sha256": "d2c660910556e7c019dd20233285652bd2a184047fe60d72fb1a93ad94a5c31c",
+      "parts": [
+        {
+          "path": "checkpoints/recovery-015-mutable-4099-held-2301.zip.part000",
+          "bytes": 2300323,
+          "sha256": "d2c660910556e7c019dd20233285652bd2a184047fe60d72fb1a93ad94a5c31c",
+          "gitSha": "e455961c2118528d38a420e4e3559df137a7676e"
+        }
+      ],
+      "intentHead": "2f7857674993524857b37f985129ad8a0e9f7b37",
+      "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+      "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+      "descriptorPath": "checkpoints/recovery-015-mutable-4099-held-2301.json",
+      "commit": "1fd8447d1aeaae23e24f12f3007a637655dca497"
+    }
+  ]
+}

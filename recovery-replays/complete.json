@@ -1,0 +1,12 @@
+{
+  "completed": true,
+  "completionBasis": "owner-authorized bounded held-out recovery exception",
+  "originalTrainingTrials": 505,
+  "heldOutRecoveryEvaluations": 15,
+  "reusedOriginalHeldOuts": 0,
+  "totalLogicalConditions": 520,
+  "possiblePriorExecution": true,
+  "originalHeldOutExecutionsStarted": null,
+  "originalHeldOutExecutionsCompleted": null,
+  "trainingOutcomesReexecuted": 0
+}
