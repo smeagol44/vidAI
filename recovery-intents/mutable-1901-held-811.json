@@ -1,0 +1,18 @@
+{
+  "key": "mutable-1901-held-811",
+  "controller": "mutable",
+  "brainSeed": 1901,
+  "environment": {
+    "seed": 811,
+    "heading": -0.7
+  },
+  "genomeSha": "af8afb82a60df63ea6999dfe55b6f1642a24bcb14edce5d7878ce94ba60bad27",
+  "sourceSha": "d85960339cbec17d04bf7f4303e1feffce27133f4ddb0ab29acfc6fe4491ea0b",
+  "selectedAt": "g6/o3",
+  "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04",
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "evaluationClass": "recovery-evaluation",
+  "possiblePriorExecution": true,
+  "authorizationSourceCommit": "dedf983e329ee79ac038b4dd7cd34122960a6677",
+  "authorizationSha256": "959492dbc220053398d96d9b616668125a418523128307dc41a3e854f0d1a9dd"
+}
