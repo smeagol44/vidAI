@@ -1,0 +1,21 @@
+{
+  "label": "recovery-004-mutable-17-held-811",
+  "key": "mutable-17-held-811",
+  "kind": "owner-authorized-held-out-recovery",
+  "evaluationClass": "recovery-evaluation",
+  "possiblePriorExecution": true,
+  "logicalTrials": 1,
+  "bytes": 2125196,
+  "sha256": "6cdb11cf6ca9cd14a81277462ebd3f8c528bf212839648f81d9f14d469dedefb",
+  "parts": [
+    {
+      "path": "checkpoints/recovery-004-mutable-17-held-811.zip.part000",
+      "bytes": 2125196,
+      "sha256": "6cdb11cf6ca9cd14a81277462ebd3f8c528bf212839648f81d9f14d469dedefb",
+      "gitSha": "cab516885dca442d4832f2c87384c36473442ef4"
+    }
+  ],
+  "intentHead": "3f0e52f97ada88cd9b5134e9c2d9b3e357511c8d",
+  "implementation": "f669e09a56e41a1b1c87ff5b8c6aaa5ec266d187",
+  "workerSha": "b41bce5b1edaf1ca4c016c613e36a21740dd31724fb6c9b19026b556f07e0c04"
+}
