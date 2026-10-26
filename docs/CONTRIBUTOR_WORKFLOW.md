@@ -1,64 +1,65 @@
 # VIDA 2D — Contributor Project Instructions
 
-Develop VIDA 2D through fork https://github.com/hernansgarro/vidAI and upstream PRs.
-
+Contributor/fork: hernansgarro / https://github.com/hernansgarro/vidAI
 Upstream: https://github.com/smeagol44/vidAI
 Roadmap/handoffs: https://github.com/smeagol44/vidAI/issues/57
-Shared board: https://github.com/users/smeagol44/projects/1/views/1
+Board: https://github.com/users/smeagol44/projects/1/views/1
 Wiki: https://github.com/smeagol44/vidAI/wiki
-Production: https://smeagol44.github.io/vidAI/
-Testing: https://smeagol44.github.io/vidAI/testing/
+
+## Mandatory language boundary
+
+- ALWAYS use Latin American Spanish with Hernan: questions, explanations, progress, approvals, summaries, final answers and chat handoffs, regardless of source language.
+- ALWAYS write GitHub/repository content in ENGLISH in both fork and upstream: issues, PR titles/bodies, comments/reviews, commits, branch names, docs/reports, saved handoffs, new code comments and upstream-bound UI text. Keep fork commits English so their history can go upstream.
+- Introduce GitHub-ready drafts in Spanish; clearly separate the ENGLISH artifact. Preserve exact commands, identifiers, status options, proper names/necessary quotations and existing localization.
+- Before every message, check audience: conversation=Spanish; GitHub/artifact=English. Before commits/pushes/GitHub writes, inspect all authored text and correct language mistakes. Never paste Spanish chat into GitHub unchanged or silently rewrite shared history. Tools/files follow the same rule.
 
 ## Authority and startup
 
-- Upstream is canonical; the fork is a contribution workspace. Verify fork URL/account and remotes before writes. Normally origin is the fork; upstream is smeagol44/vidAI. Never invent identities.
-- At startup/resumption, read upstream AGENTS.md, #57's latest checkpoint, active issue/PR/discussion, docs/FEATURE_ROADMAP.md, docs/PROJECT_STATUS.md and relevant Wiki pages. Read applicable base/branch rules; verify relevant heads/publication.
-- Code/tests establish implementation; issues/PRs hold decisions; the board tracks work; the Wiki describes features. Prefer current evidence and owner decisions. Surface conflicts.
-- Contributor requests authorize scoped fork work/proposals, not upstream merges/deployments or reversed owner decisions. Ask about consequential unresolved design choices; handle routine choices autonomously. Respect task stop gates; continue the recorded next action.
-- Do not modify smeagol44/vidAI3D.
+- Upstream is canonical; fork/main is Hernan's integration branch. Verify account/remotes: origin normally=fork; upstream=smeagol44/vidAI.
+- At startup/resumption read upstream AGENTS.md, #57, active issue/PR/discussion, docs/FEATURE_ROADMAP.md, docs/PROJECT_STATUS.md and relevant Wiki/branch rules. Verify heads/publication.
+- Fork work does not authorize upstream merges/releases or reversed owner decisions. Clarify consequential choices; handle routine work autonomously. Respect stops/recorded next action. Never modify VIDA 3D.
 
 ## Simulation principles
 
-- Live evolution uses inherited genetics, mutation, physical environments, survival and asexual reproduction through funded eggs. No live fitness scores. Offline selection requires a scoped protocol.
-- Movement emerges from articulated bodies, hinges, forces and water resistance. No artificial propulsion, teleportation or scripted locomotion. Mutable starter bodies/brains/motor priors are allowed; preserve independent joints and non-rhythmic potential.
-- Preserve energy conservation, physical feeding, ecological interactions, historical saves and deterministic continuation where supported. Never silently reinterpret genes, neural outputs, schemas or physics.
-- Separate inherited genetics from lifetime learning. Reinforcement comes from actual feeding, injury or physically sensed experience; no hidden targets, calorie subsidies or guaranteed survival.
-- Preserve authoritative Worker state, recurrent brains, lifetime learning, fixed ticks and render/simulation separation. Off-camera simulation continues. Exact snapshots, exports and mutations come from authoritative state.
-- Respect current starter/body/brain/diet freezes and accepted physics unless upstream task authorization permits changes. Experiments never become production defaults implicitly.
-- Fix causes without hiding failures through tuning, changed baselines or removed safeguards. Papers inform investigation; they do not establish VIDA's coefficients.
+- Preserve inherited genetics, mutation, physical selection, energy conservation, physical feeding/ecology and asexual funded eggs. No live fitness scores; offline selection needs an authorized bounded protocol.
+- Movement emerges from articulated bodies, hinges, forces and water resistance. No artificial propulsion/teleportation/scripted locomotion. Mutable starters/brains/motor priors are allowed; preserve independent joints/non-rhythmic potential.
+- Preserve historical saves, deterministic continuation and gene/output/physics meanings. Genetics and lifetime learning stay distinct; reinforcement uses physically sensed experience, not hidden targets/subsidies/guaranteed survival.
+- Keep Worker authority, recurrent brains/learning, fixed ticks and render separation. Off-camera simulation continues; exact snapshots/exports/mutations use authoritative state.
+- Respect freezes on starter/body/brain/diet tuning and accepted physics unless task authorization permits changes. Never mask failures through tuning, removed safeguards or refreshed baselines. Papers do not establish coefficients.
 
-## Shared issues and coordination
+## Shared tracking
 
-- Use upstream issues/PRs. Search before creating one issue per bounded outcome. Do not mirror the backlog, duplicate cards or create a competing fork board. Fork issues/Wiki are not authoritative.
-- Coordinate scope/ownership in the upstream issue. Record decisions, acceptance criteria, environment, base/head, fork branch, PR, blockers and evidence. Link work from #57; comment if its body cannot be edited.
-- Record task/branch/base before implementation; link a draft cross-fork PR once a nonempty diff permits. Register experimental protocols/budgets/frozen controls before execution. Preserve evidence/uncertainty; no unauthorized lost-trial reruns.
-- Preserve others' records/#57 checkpoints. Edit authorized sections only; otherwise add a dated handoff comment for owner integration.
+- Keep issues/decisions upstream. Search before creating one issue per bounded outcome; coordinate scope/ownership. No mirrored backlog, duplicate cards or competing board.
+- Before coding, record scope/decisions, acceptance, environment/base and fork branch in the issue. Link a fork-internal PR when available; no early upstream PR.
+- Register experimental protocols/budgets/controls before execution; preserve evidence/uncertainty. No unauthorized lost-trial reruns.
+- Preserve others' records/#57 checkpoints. Edit authorized sections only; otherwise add an English dated comment. State access limits.
+- Fork completion is not upstream completion: keep upstream issues open until upstream acceptance.
 
-## Branches and pull requests
+## Fork-first development and upstream submission
 
-- Fetch upstream first. Production work starts on bounded topic branches from current upstream/main. Use testing/stacked experimental bases only when explicitly recorded for the task.
-- Push to the fork's topic branch. Open the PR in smeagol44/vidAI with the intended upstream base and head CONTRIBUTOR:topic-branch. Verify repositories, SHAs and diff. A fork-internal PR is not an upstream submission.
-- Keep fork/main for synchronization; use topic branches for work. Fetch upstream updates as needed. Preserve shared commits; no destructive resets/force-pushes of shared branches without authorization.
-- Main owns production; testing owns experiments. Main may merge into testing with its overlay preserved. Never merge testing wholesale into main, even indirectly. Promote selected approved changes/dependencies through a clean main-based PR.
-- Keep testing-baseline.json, testing labels and cycle metadata out of main PRs. Ordinary sync does not reset pinned baseline/cycle. Deliberate rebaselining requires coordination and preserved experiments.
-- PRs explain problem, resulting behavior, issue, target/base, validation, measured effects and limitations. Distinguish proposed/experimental/rejected/shipped. Use closing keywords only for appropriate upstream completion.
-- Stop at a reviewable PR. Upstream merge/auto-merge/release/deployment/promotion remain with the owner/authorized maintainer. Fork merges grant no upstream release authority.
+1. Fetch upstream; sync needed main updates without discarding fork work. Branch from updated fork/main; experimental bases require recorded authorization.
+2. Implement/document/test in the fork. Use a fork PR targeting hernansgarro/vidAI main; under Hernan's merge authorization/branch rules, merge the finished feature into HIS main. Verify remote merge/head; this is not an upstream release.
+3. ONLY AFTER verifying the fork-main merge, ask in Latin American Spanish whether he wants an upstream PR. Wait for explicit approval: feature completion, fork merge and generic "continue" are not consent. No upstream PR, including drafts, before this gate.
+4. If declined/postponed, preserve fork work, record the decision and stop submission. Do not repeat the offer without a relevant new request/change.
+5. If approved, fetch upstream and create a clean submission branch IN THE FORK from upstream/main (or an explicitly approved experimental base). Copy only the selected feature/dependencies. Review diff/history; exclude unrelated features, testing overlays and Spanish artifact text. Resolve dependencies openly; never submit fork/main wholesale. Verify against the target base.
+6. Open the approved PR in smeagol44/vidAI with head hernansgarro:submission-branch. English title/body/commits/docs/comments; link issue and explain behavior, target/base, checks, effects/limits. Report to Hernan in Spanish.
+7. Stop at upstream review. Owner/authorized-maintainer approval governs upstream merge/auto-merge/promotion/release/deployment. A fork merge never closes the upstream issue.
+
+- Preserve shared commits; no destructive resets/force-pushes without authorization. Respect experimental stops.
+- Upstream main owns production; testing owns experiments. Main may merge into testing with its overlay retained. Never merge testing wholesale into main, even indirectly.
+- Keep testing-baseline.json/testing labels out of production. Sync never resets cycles; rebaselining needs coordination and preserved experiments.
 
 ## Verification and documentation
 
-- Run npm run test:fast and npm run build; use npm ci for installation. Include npm run test:worker for simulation/Worker changes and focused automated browser smoke for relevant UI integration.
-- Keep release gates/target checks. Avoid repeated full suites, long searches/manual browser campaigns without a concrete concern or explicit request. Docs-only work needs no simulation tests.
-- Compare established baselines for physics/feeding/brain/energy changes. Disclose material positive/negative movement/ecology/performance effects before promotion. Equations/ledger/CI alone cannot approve release. Never refresh baselines or retune organisms to mask regressions.
-- Fork PR CI may await maintainer approval or lack upstream secrets. Report blocked/skipped checks accurately; do not bypass workflow protections or claim they passed.
-- Edit docs/wiki/ in the scoped PR; preserve diagrams, Home and Sidebar. Describe implemented behavior, distinguishing testing-only features. Keep plans/history/experimental reports in issues/PRs and status records.
-- The published Wiki is separate. Upstream main's publish-wiki workflow publishes docs/wiki/ after acceptance. Do not publish fork experiments upstream or claim actual publication without verification.
-- Preserve dual Pages: independent main/testing builds, one complete site, publication through main/github-pages. Fork previews are not upstream releases. No incidental hosting/secrets/automation/release-identity changes.
+- Run npm run test:fast and npm run build; install via npm ci. Use npm run test:worker for simulation/Worker changes and focused automated browser smoke for relevant UI changes.
+- Keep release gates; no repeated full suites/long searches/manual browser campaigns without a concrete concern/request. Docs-only edits need no simulation tests. Report blocked/skipped CI.
+- Compare established baselines for physics/feeding/brain/energy changes; disclose material positive/negative movement/ecology/performance effects before promotion. Equations/ledger/CI alone cannot approve release.
+- Update docs/wiki/ with the feature; preserve diagrams/Home/Sidebar. Clearly label fork-only/testing behavior; plans/history belong in issues/PRs/reports. Fork implementation is not shipped upstream. Verify actual Wiki publication after upstream acceptance.
+- Preserve dual Pages: separate main/testing builds, one artifact, main/github-pages publication. Fork previews are not upstream releases. No incidental hosting/secrets/automation/version changes.
 
-## Project fields and handoffs
+## Project and handoffs
 
-- Keep statuses: Backlog, Needs decision, Ready, In progress, In review, Testing, Done. Discussion/investigation is In progress; Done requires verified completion. Blocked work retains its stage and cites the blocker.
-- Preserve Priority, Track, Environment (Both/Main/Testing), Target cycle and four views. Existing intake covers upstream issues/PRs only. Verify changes; avoid duplicates.
-- Project/repo permissions are separate. Update actual fields only with suitable access/tools; otherwise record pending sync. Issue prose sets no fields. Use /vida status after upstream main authorizes your actual comment account; verify Actions/readback.
-- On handoff/migration, stop safely, commit/push fork work, update upstream issue/PR and authorized #57 checkpoint/comment. Record objective, decisions, fork/base/head SHA, PR, main/testing state, checks/results, publication/Wiki, blockers, unpushed work and exact next action.
-- Return a summary and continuation prompt linking #57, issue/PR and fork branch. Preserve work beyond chat/temporary files; identify access limitations.
-- Be concise and rigorous. State what changed, why, validation, remaining work and review/deployment state. Never invent success or progress percentages.
+- Preserve Backlog, Needs decision, Ready, In progress, In review, Testing, Done; Priority, Track, Environment (Both/Main/Testing), Target cycle and four views. Discussion counts as In progress; Done needs upstream acceptance. Blocked work keeps its stage/blocker.
+- Intake covers upstream issues/PRs. Verify fields; prose sets none. Use /vida status after upstream main authorizes the actual author; verify Actions/readback. Project/repo access differs; never share owner tokens.
+- On migration, stop safely, commit/push work and update the upstream issue/authorized #57 comment IN ENGLISH: objective, decisions, fork/base/head/PRs, fork-main merge, explicit submission approval or pending question, checks/results, publication/Wiki, blockers, unpushed work and next action.
+- Give Hernan the summary/continuation in Spanish; durable GitHub handoff stays English. Link #57, issue and fork branch/PR; preserve work beyond chat. Identify access limits; never invent success/progress percentages.

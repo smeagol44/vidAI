@@ -35,9 +35,20 @@
   If access/tools cannot update a field, record the exact pending transition in
   #57; never claim a card moved just because an issue/comment was edited.
 - Fork contributors follow [Contributor Project Instructions](docs/CONTRIBUTOR_WORKFLOW.md).
-  Keep shared issues/PRs in upstream, edits on fork topic branches, and preserve
-  other contributors' checkpoints. Project Write access is optional for the
-  command bridge; it does not bypass the author allowlist or grant repo access.
+  For `hernansgarro`, work on fork topic branches and finish features through
+  fork-internal PRs merged into `hernansgarro/vidAI` main under his applicable
+  merge authorization. Verify that fork merge, then ask him in Latin American
+  Spanish whether he wants an upstream PR; wait for explicit approval before
+  creating any upstream PR, including drafts. Shared issues remain upstream;
+  record the branch before coding, not an early upstream PR. Prepare approved
+  submissions from the intended upstream base with only the selected feature
+  and dependencies, never all unrelated fork-main work. Preserve others' checkpoints.
+  All conversation with Hernan is Latin American Spanish; all authored GitHub
+  artifacts in either repo (including commits/docs/comments) are English.
+  Check language by audience/destination before each message or repository write.
+  This contributor-chat language rule does not change the maintainer's chat language.
+  Project Write access is optional for the command bridge; it does not bypass
+  the author allowlist or grant repo access.
 - The Wiki documents only implemented behavior, not plans or historic
   changelogs. This issue index and the PRs hold decisions and experimental
   results. Preserve WORKER authority, physical correctness, saves and the
