@@ -16,7 +16,7 @@ documents the **verified** issue/PR import, intake, closure and reopening
 workflows (including verification #71). Substantive discussion starts
 **In progress** even before coding. The Project has separate Backlog, Needs
 decision, Ready (queued), In progress, In review, Testing and Done (verified)
-statuses. A scoped GitHub Actions comment bridge for changing the native Project Status field is tracked by [#75](https://github.com/smeagol44/vidAI/issues/75) and documented in [Project Status Automation](PROJECT_STATUS_AUTOMATION.md). It requires one owner-created Projects token secret and a live verification before activation. Other custom fields still require Projects UI/API. 
+statuses. The scoped GitHub Actions Status bridge ([#75](https://github.com/smeagol44/vidAI/issues/75)) uses the owner-managed Projects secret; [#105](https://github.com/smeagol44/vidAI/issues/105) extends its author checks to `smeagol44` and `hernansgarro`. Contributor activation requires accepted changes on upstream main and an authentic contributor-command field readback; PR tests alone are insufficient. See [Project Status Automation](PROJECT_STATUS_AUTOMATION.md) and [Contributor workflow](CONTRIBUTOR_WORKFLOW.md). Other custom fields still require Projects UI/API.
 repository issue text and comments do not automatically transition a card
 to In progress. #57 tracks any needed synchronization. The GitHub Wiki remains limited to current
 implemented features. No speculative refactor is marked as shipped.

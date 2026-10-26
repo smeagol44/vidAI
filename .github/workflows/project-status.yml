@@ -1,6 +1,6 @@
 name: VIDA Project Status
 
-# Owner-only status commands on issues or PRs: /vida status in-progress
+# Allowlisted contributor status commands on issues or PRs: /vida status in-progress
 # Runs only from main, never from contributor PR code.
 on:
   issue_comment:
@@ -13,7 +13,10 @@ jobs:
   update-project-status:
     if: >-
       github.repository == 'smeagol44/vidAI' &&
-      github.event.comment.user.login == 'smeagol44' &&
+      (
+        github.event.comment.user.login == 'smeagol44' ||
+        github.event.comment.user.login == 'hernansgarro'
+      ) &&
       startsWith(github.event.comment.body, '/vida status ')
     runs-on: ubuntu-latest
     timeout-minutes: 5

@@ -1,6 +1,8 @@
-/** Owner-only VIDA Project #1 Status updater, for GitHub Actions (#75). */
+/** Allowlisted VIDA Project #1 Status updater, for GitHub Actions (#75, #105). */
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
+
+export const authorizedAuthors = Object.freeze(['smeagol44', 'hernansgarro']);
 
 export const statuses = Object.freeze({
   backlog:'Backlog', 'needs-decision':'Needs decision', ready:'Ready',
@@ -12,8 +14,9 @@ export function parseStatusCommand(comment) {
   return match ? (statuses[match[1].toLowerCase()] ?? null) : null;
 }
 export function validateRequest(env) {
-  if (env.VIDA_COMMENT_AUTHOR !== 'smeagol44' || env.GITHUB_REPOSITORY !== 'smeagol44/vidAI') {
-    throw new Error('Only the VIDA repository and its owner can change Project Status');
+  const author = typeof env.VIDA_COMMENT_AUTHOR === 'string' ? env.VIDA_COMMENT_AUTHOR.toLowerCase() : '';
+  if (!authorizedAuthors.includes(author) || env.GITHUB_REPOSITORY !== 'smeagol44/vidAI') {
+    throw new Error('Only authorized contributors in the VIDA repository can change Project Status');
   }
   const status = parseStatusCommand(env.VIDA_COMMENT_BODY);
   if (!status) throw new Error('Invalid VIDA status command');

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {parseStatusCommand, validateRequest, setProjectStatus, createClient} from '../scripts/project-status-bridge.mjs';
+import {readFileSync} from 'node:fs';
+import {authorizedAuthors, parseStatusCommand, validateRequest, setProjectStatus, createClient} from '../scripts/project-status-bridge.mjs';
 
 const opts=(command,state='open')=>({
   VIDA_COMMENT_AUTHOR:'smeagol44',GITHUB_REPOSITORY:'smeagol44/vidAI',
@@ -14,14 +15,45 @@ test('parse exactly seven statuses, never arbitrary comment instructions',()=>{
     assert.equal(parseStatusCommand(text),null);
   }
 });
-test('only owner/repo commands; active status needs open item, Done needs closed',()=>{
-  assert.equal(validateRequest(opts('/vida status in-progress')),'In progress');
-  assert.equal(validateRequest(opts('/vida status done','closed')),'Done');
-  assert.throws(()=>validateRequest({...opts('/vida status ready'),VIDA_COMMENT_AUTHOR:'someone'}),/owner/);
-  assert.throws(()=>validateRequest({...opts('/vida status ready'),GITHUB_REPOSITORY:'smeagol44/vidAI3D'}),/owner/);
-  assert.throws(()=>validateRequest(opts('/vida status done')),/closed/);
-  assert.throws(()=>validateRequest(opts('/vida status ready','closed')),/Reopen/);
+test('owner and named contributor retain command and item-state restrictions',()=>{
+  for (const author of ['smeagol44', 'hernansgarro', 'HernansGarro']) {
+    const request=(command,state)=>({...opts(command,state),VIDA_COMMENT_AUTHOR:author});
+    for (const [slug,status] of Object.entries({backlog:'Backlog','needs-decision':'Needs decision',ready:'Ready','in-progress':'In progress','in-review':'In review',testing:'Testing'})) {
+      assert.equal(validateRequest(request('/vida status '+slug)),status);
+    }
+    assert.equal(validateRequest(request('/vida status done','closed')),'Done');
+    assert.throws(()=>validateRequest(request('/vida status done')),/closed/);
+    assert.throws(()=>validateRequest(request('/vida status ready','closed')),/Reopen/);
+    assert.throws(()=>validateRequest(request('/vida status invalid')),/Invalid VIDA status/);
+    assert.throws(()=>validateRequest(request('/vida status ready\nanother command')),/Invalid VIDA status/);
+    assert.throws(()=>validateRequest({...request('/vida status ready'),VIDA_CONTENT_ID:''}),/node ID/);
+    assert.throws(()=>validateRequest({...request('/vida status ready'),VIDA_CONTENT_STATE:'merged'}),/Invalid item state/);
+  }
   assert.throws(()=>createClient(''),/VIDA_PROJECT_TOKEN/);
+});
+test('unlisted accounts and all other repositories remain rejected',()=>{
+  for (const author of ['someone','hernansgarro-bot','hernansgarro[bot]','hernansgarro ', '',undefined,null,42]) {
+    assert.throws(()=>validateRequest({...opts('/vida status ready'),VIDA_COMMENT_AUTHOR:author}),/authorized contributors/);
+  }
+  for (const author of authorizedAuthors) {
+    for (const repo of ['hernansgarro/vidAI','smeagol44/vidAI3D','someone/vidAI','',undefined]) {
+      assert.throws(()=>validateRequest({...opts('/vida status ready'),VIDA_COMMENT_AUTHOR:author,GITHUB_REPOSITORY:repo}),/authorized contributors/);
+    }
+  }
+});
+test('workflow and script author gates agree and keep trusted upstream execution',()=>{
+  const workflow=readFileSync(new URL('../.github/workflows/project-status.yml',import.meta.url),'utf8');
+  const gate=workflow.match(/    if: >-\n([\s\S]*?)    runs-on:/)?.[1];
+  assert.ok(gate,'workflow must retain an authorization gate');
+  const authors=[...gate.matchAll(/github\.event\.comment\.user\.login == '([^']+)'/g)].map(m=>m[1]);
+  assert.deepEqual(authors,authorizedAuthors);
+  assert.match(gate,/github\.repository == 'smeagol44\/vidAI' &&/);
+  assert.match(gate,/\(\s*github\.event\.comment\.user\.login == 'smeagol44' \|\|\s*github\.event\.comment\.user\.login == 'hernansgarro'\s*\) &&/);
+  assert.match(gate,/startsWith\(github\.event\.comment\.body, '\/vida status '\)/);
+  assert.match(workflow,/issue_comment:\s*types: \[created\]/);
+  assert.match(workflow,/VIDA_COMMENT_AUTHOR: \$\{\{ github\.event\.comment\.user\.login \}\}/);
+  assert.match(workflow,/persist-credentials: false/);
+  assert.doesNotMatch(workflow,/head\.sha|head\.ref|pull_request_target/);
 });
 function client({exists=true,paginated=false,verify=true}={}){
   const calls=[];

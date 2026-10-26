@@ -21,14 +21,23 @@
   useful. Project Status custom-field transitions need Projects UI/API,
   whereas closure, PR merge, reopening and automatic intake are handled by
   built-in workflows.
-- Native intermediate Project Status updates are delegated through the owner-only
+- Native intermediate Project Status updates are delegated through the allowlisted
   comment-command bridge documented in [Project Status Automation](docs/PROJECT_STATUS_AUTOMATION.md)
-  (issue #75). Once the owner adds the secret `VIDA_PROJECT_TOKEN` and a real
-  update is verified, emit `/vida status in-progress` as an exact issue/PR
-  comment at the start of active discussion, and verify Actions and the field.
-  Until activation, log pending board synchronization in #57; never claim a
-  field changed merely because the issue text was edited. When unable to update the Project, log the precise
-  field transition needed in #57, never claim the card moved.
+  (issues #75/#105). The workflow and script accept GitHub comment authors
+  `smeagol44` and `hernansgarro`; both checks must agree. ChatGPT uses the
+  authenticated account behind its GitHub connection, not a separate GPT role.
+  After confirming the allowlist is on upstream main, emit `/vida status in-progress`
+  as an exact issue/PR comment when discussion starts, then verify Actions and
+  native field readback. A PR alone does not activate contributor access; the
+  first real contributor-authored command must be verified after merge.
+  Keep the existing owner-managed `VIDA_PROJECT_TOKEN` secret; never copy it to
+  the fork or grant upstream code-write/merge rights merely for status commands.
+  If access/tools cannot update a field, record the exact pending transition in
+  #57; never claim a card moved just because an issue/comment was edited.
+- Fork contributors follow [Contributor Project Instructions](docs/CONTRIBUTOR_WORKFLOW.md).
+  Keep shared issues/PRs in upstream, edits on fork topic branches, and preserve
+  other contributors' checkpoints. Project Write access is optional for the
+  command bridge; it does not bypass the author allowlist or grant repo access.
 - The Wiki documents only implemented behavior, not plans or historic
   changelogs. This issue index and the PRs hold decisions and experimental
   results. Preserve WORKER authority, physical correctness, saves and the
