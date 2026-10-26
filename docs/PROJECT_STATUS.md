@@ -1,13 +1,4 @@
-Warning: truncated output (original token count: 35610)
-Total output lines: 2251
-
 # Project status — 2026-10-21
-
-## Contributor ChatGPT status access — proposed (#105)
-
-- Owner authorized `hernansgarro` to use the shared issue/PR status workflow through his own GitHub-connected ChatGPT. Verified contribution fork: `hernansgarro/vidAI`.
-- Scope: extend both workflow and script author checks to the two named accounts; preserve trusted-main execution, repository/project/state restrictions, existing intake and native field readback. Tests and contributor instructions are in progress.
-- This branch is a proposal only. Activation requires an accepted upstream-main merge and an authentic contributor-authored command with verified Project Status readback. No merge, deployment, Wiki or simulation change is part of this task.
 
 ## Coherent fluid drag and anatomical muscle trial — rejected without runtime changes
 
@@ -651,7 +642,888 @@ Total output lines: 2251
   deferred Worker milestone. Branch starts from main d3d7465/v0.30.0;
   all newer ecology/contact fixes are retained. No 3D files are involved.
 - Cached numeric neural masks/plastic indices and in-place acquired records
-  eliminate inner-loop JSON edge creation and repeated learning all…13610 tokens truncated… dense-24 edge count. Thus legacy 24-node dense
+  eliminate inner-loop JSON edge creation and repeated learning allocations.
+  Four 120-tick complete-state hashes match the unoptimized v0.30 kernel
+  exactly (plain, masked, learning and masked+learning).
+- Presentation uses three cached food/carrion glow images. New corpses
+  produce one circle carrying all remaining energy; old saved fragments
+  remain valid. This explicit corpse change alters future geometry/PRNG
+  at death, while keeping chemical accounting intact.
+- Authoritative simulation runs on a Worker. Commands own all world edits;
+  exports/forks/diagnostics use exact Worker snapshots. Render replication
+  sends genomes once, changed lineage and selected inspector state, with
+  30Hz maximum and one message in flight. Pause/reset epochs and command
+  order are covered by bounded host and real-thread production checks.
+- Local masked/learning 15-creature/78-food/221-remains comparison,
+  120 measured ticks after warm-up: baseline 4992 and 4207 ms,
+  optimized 971 and 1459 ms. Final states match. These are noisy server
+  kernel timings (roughly 3–5x improvement), NOT user-browser FPS claims.
+- Local browser installation returned a truncated archive, so direct local
+  browser validation was unavailable. The dedicated CI browser smoke passed;
+  PR #34 merged and Pages/Wiki publishing succeeded.
+
+
+## Featured founder acquisition pipeline — v0.30.0
+
+- Added an **opt-in, read-only** survey for all nine curated starting
+  genotypes in a naturally initialized 400-nutrient world. It measures
+  separate steps of real food acquisition: retinal intersection with
+  an edible category, genetically filtered visible RGB, proximity of
+  food circles to the actual mouth segment, physical oral contact,
+  genuinely transferred nutrient/prey energy and reserve change.
+  It also records actual net displacement and egg affordability.
+- Herbivores cannot count carnivorous prey/carrion as edible; carnivores
+  cannot count green nutrients as edible. The diagnostic exposes
+  physically intersected but spectrally invisible objects separately.
+  Prey/egg sight and actual bites are included in carnivore signals;
+  mouth-to-*free-food* surface gaps intentionally exclude moving prey.
+- The observer is never called by the normal game loop. It only reads
+  snapshots following ordinary native physics; its data never reaches
+  brains, genetics, collision checks, reproduction, saved state,
+  world energy, environment placement or PRNG.
+- **Measured seed 17, 400 natural nutrients, 2 seconds, nine CUR animals:**
+  all nine registered spectrally visible edible-eye hits at least once.
+  CUR-001 physically absorbed **96 J**, CUR-002 **1,488 J**, CUR-006
+  **1,008 J**. The other six absorbed zero. CUR-003, CUR-005 and CUR-007
+  had **no free edible food within 24px of their mouths** during the
+  trial, despite their eye detections. CUR-004 registered nearby food
+  throughout, but **never contacted or absorbed any**. CUR-008 and
+  CUR-009 were able to see potential animal prey in some ticks but
+  never made bite contact. Net COM travel ranged roughly **2–18px**.
+  This isolates where acquisition breaks down without pretending that
+  all founders have a demonstrated foraging skill.
+- None of the nine laid eggs in the two juvenile seconds. All were
+  **3,055–21,588 J below** the threshold for one egg, including the
+  parental safety reserve (these are observed initial-state deficits,
+  not suggestions to hand out energy). Long-term affordable
+  reproduction and predator pursuit remain unproven.
+- A bounded free-roaming regression and optional
+  `npm run benchmark:ecology` report distinguish **seen but not reached**
+  from **reached but not eaten**; no survival or natural selection claim.
+  The next bounded correction should target physically demonstrated
+  ineffective locomotion/orientation or oral approach; do not add scripted
+  food targeting or endlessly retune the whole founder bank.
+- **Physics/render separation remains deferred milestone P**, after
+  ecological acquisition and naturally funded eggs/hatching. No 3D edits.
+
+
+## Physical predator feeding: enclosed-mouth contact — v0.29.0
+
+- **Corrected a physically possible contact miss.** The old predator
+  mouth-vs-prey rectangle test only checked aperture-edge intersections or
+  small mouth-to-edge distances. A fully enclosed mouth could therefore
+  be deep inside prey tissue without counting a bite. The contact test
+  now also recognizes the mouth center inside the real rotated rectangle.
+  The cheap broadphase uses actual prey half-diagonal and aperture extent
+  rather than a fixed 70px assumption.
+- This changes no sensor values, motor scripts, learned synapses, age,
+  prey diet permissions, per-mouth transfer limits, reserve costs,
+  predator targeting or reproductive thresholds. Actual prey reserve/
+  tissue still funds every bite, with assimilation losses sent to heat.
+- Compact tests check deep overlap for rotated prey, false positives
+  outside the surface, ordinary crossing/near-edge contact and real
+  paid bites with conserved total world energy.
+- **What remains unproven:** natural catches of independently moving
+  prey, ordinary food acquisition by all nine starters, affordable
+  hatching and self-sustaining generations. This is a physical-contact
+  bug fix, **not** a hunter-performance guarantee.
+- **Scope control:** the planned physics/render separation is added as
+  *deferred milestone P* after current ecological acquisition/reproduction
+  work. No Worker port, native packaging or VIDA 3D edits.
+
+
+## First browser-performance pass — v0.28.0
+
+- User-reported slowdown: approximately **20 live creatures, 200 green nutrients
+  and 180 carrion/remains**, even though this is a modest population.
+  Existing kernel previously scanned *every* nutrient for *every* visual
+  ray. With roughly two to four eyes and five rays per eye, this creates
+  many redundant checks at each of 60 native physics ticks per second.
+- **Implemented:** ephemeral per-step 128px spatial food broadphase.
+  Ray segments select only candidate nutrient cells expanded by
+  the largest actual nutrient radius, then process candidates in the
+  original array-index order. This preserves closest-hit strict tie
+  behavior, RGB attenuation, occlusion, predator perception of carrion,
+  and all sensory/neural inputs. Index is discarded after stepping;
+  it does not enter the genome, PRNG, snapshot or energy ledger.
+  Dissolving bodies may create carrion during the organism pass, so
+  any change in food-array length forces the eye index to rebuild.
+- **Presentation-only:** nutrients, eggs, and caustic effects outside the
+  camera's world-space viewport are not drawn. They still exist,
+  are seen by nearby off-camera creatures, collide/feed, age and
+  participate in energy accounting normally.
+- **Validation:** a deterministic 380-food candidate-versus-exhaustive
+  raycast comparison, boundary/oversized circle cases and a short
+  20-creature + 200 nutrient + 180 carrion native-physics scenario,
+  with exact save/load continuation and conserved joules. The usual
+  fast suite and TypeScript production build remain the merge gate.
+- **Limit:** this is a bounded CPU/render optimization, not yet
+  a measured browser FPS improvement. Physics still executes on
+  the main thread, joint solving remains iterative, and visible
+  nutrient glow gradients are still drawn on each frame.
+  Next only if observed slowdown remains: browser profiling,
+  sprite-cache/renderer batching, indexed creature sight and
+  Worker or native/WASM simulation-kernel isolation.
+- **Native desktop assessment:** wrapping the unchanged site in
+  Electron/Tauri would still use a web view and largely the same
+  JavaScript computation. A genuine compiled native/WASM kernel or
+  threaded Worker approach may help CPU-bound simulations, but
+  should follow profiling to avoid a high-risk rewrite. No desktop
+  packaging or VIDA 3D changes in this increment.
+
+
+## Abiotic nutrient blooms and ecological founder comparison — v0.27.0
+
+- **Ecological change:** 2D worlds retain **Uniform** as the default,
+  with an optional, displayed **Blooms** distribution. Sixty-five percent of abiotic nutrient spawns
+  cluster around twelve reproducible sites, and the remaining 35 percent
+  stay uniformly dispersed. Sites are determined only by world seed and
+  tank size; they never track organisms or respond to mouths/health/diet.
+  Spawns use the existing 400-nutrient default target, 15-per-second inflow,
+  cap, per-particle joules and fully accounted external energy.
+  The **Uniform** option reproduces the previous random stream; importing
+  snapshots without this setting defaults to Uniform. The active selection
+  is saved and precisely restored in the existing schema v11.
+- **Observation:** `EcologyIntakeObserver.perOrganismTotals` can now attribute
+  genuine incrementally absorbed joules to each animal without modifying
+  the simulation. An optional `npm run benchmark:ecology` report compares
+  **all nine CUR founders** in seeded 400-food uniform and bloom worlds,
+  recording per-founder intake, final energy, egg laying, survival and
+  whole-world conservation. The two conditions start with the same
+  featured genotypes and creature positions, before food is distributed.
+- Focused fast checks cover clustered versus uniform food placement,
+  stable bloom-center seed derivation, exact save continuation,
+  old uniform snapshots, manual Feed patch precedence, strict import
+  validation, short native-physics founder cohorts and conservation.
+- **Measured short unassisted comparison (seed 17, 2 seconds):** all nine CUR
+  starters with normal 400-food densities physically absorbed **2,592 J**
+  under Uniform (three feeding founders: CUR-001 96 J, CUR-002 1,488 J,
+  CUR-006 1,008 J); Blooms yielded **864 J** total (CUR-005 only).
+  Thus *this* trial favored Uniform, and selecting Blooms as the new
+  default would have been unsupported. Uniform remains the default.
+  A separate 4-founder/70-food two-second control had **zero** intake
+  in both configurations. All experiments kept reserves and heat
+  conserved and did not manually reposition food near mouths.
+- **Not established:** blooms have NOT been shown to improve natural
+  multigeneration survival, hunter success, or ecosystem sustainability.
+  A short pair is a descriptive observation, not optimized founder tuning.
+  Further experiments should use the measured outcomes to distinguish
+  nutrient accessibility from poor movement/sensing/reproduction. Phase 6
+  remains optional/unimplemented; 3D is untouched.
+
+
+## Curated starting bank — v0.26.0
+
+- Added **nine featured inherited genotypes** (CUR-001–CUR-009), selected
+  from nine distinct, already swimming legacy anatomy families: four
+  herbivores, three omnivores and two carnivores.
+- Their nine *source* FND blueprints stay unchanged, as do all 55 legacy
+  genomes and old world snapshots. CUR variants have new stable part/eye/
+  mouth identities, ordinary inherited RGB receptor gains (including
+  suppressed or zero green sensitivity in the two predators), and optional
+  small inherited waking-learning rates. They keep the source's actual
+  mouth position, muscle geometry, oscillation/phase, neural steering prior,
+  finite metabolism and reproduction funding. No behavior scripts, oracle
+  signals, locomotion bonuses or free food were introduced.
+- Bank collections now distinguish **Featured / Legacy / Saved / All**,
+  sharing existing search, family/diet filters, previews and spawn controls.
+  Fresh default worlds still seed 18 organisms from at most five randomly
+  selected **featured** designs; the nine-design showcase remains opt-in.
+- Added fast checks for curated anatomy, brain/save validation, diet
+  permissions at real mouth contacts, finite active swimming and energy
+  conservation. These are short mechanical validation checks **only**.
+- **Unproven:** successful unassisted foraging for every starter, real
+  moving-prey catches for the predators, funded multigenerational breeding,
+  population sustainability, and whether these new sensory/learning
+  alleles confer measurable fitness advantage. Those are the next
+  ecological milestones. Existing founders were not empirically tuned
+  to guarantee success.
+
+
+## Original Phase 5 — bounded waking-learning implementation complete (v0.25.0)
+
+- The production 2D neural kernel now supports genetically evolvable
+  waking sensory and motor plasticity, physical-reward/pain eligibility,
+  genetically adjustable forgetting, repeated-feedback consolidation,
+  finite energy upkeep/rewrites, and per-individual saved learned state.
+  Learning changes subsequent neural outputs and physically actuated
+  body trajectories without touching inherited weights. All
+  55 founders and old save/brain layouts remain compatible.
+- **New post-experience physical result:** a regular articulated,
+  independently swimming FND-001 with *experimental optional learning
+  alleles* travels through a **finite static food patch**, truly absorbs
+  nutrient energy and develops individual motor/retinal weight changes.
+  Its exact resulting position, body state, neural memory, baseline
+  genome, and PRNG are cloned for four short second-food encounters.
+  Only one clone's acquired synaptic weights/eligibility/consolidation
+  are cleared; both retain identical inherited learning capacities,
+  and each sees the same new physical nutrient at the same initial
+  position. Feeding is measured by **actual nutrient resource removal**,
+  not by the separate `foodEaten` object counter.
+- Across four bounded 5-second second-food encounters,
+  **learned vs. learned-erased intake** was:
+  centered 120 px **3,000 vs 3,000 J (tie)**;
+  lateral -34 px at 130 px **3,000 vs 2,820 J (+180 gross J learned)**;
+  lateral +34 px **2,580 vs 3,000 J (-420 gross J learned)**;
+  centered 130 px **3,000 vs 3,000 J (tie)**.
+  Both twins physically swam; each result conserved full world energy.
+  The positive case also retained about **143 J more organism energy**
+  after the different oral intake and neural/physical upkeep.
+  This establishes that learned experience CAN improve an
+  actual later feeding outcome, and CAN worsen one; the response
+  is **context-dependent and unreliable**, not a broadly
+  successful foraging policy.
+- The final bounded integration gate exercises the existing
+  full fast suite, build and 100 independently positioned
+  learning-capable articulated animals for six native physics
+  ticks with strict neural/energy bounds. This is a
+  **functional 100-organism smoke check, not a measured FPS
+  guarantee or a 1000-part long-run benchmark**.
+- **Phase decision:** original Phase 5 is **complete as a
+  bounded, energy-conserving waking-learning FEATURE SET**.
+  The remaining open problem is **robust learned ecological
+  competence**, including repeated improvement in natural
+  nutrient search, predators and whole populations. That is a
+  future behavioral/evolutionary evaluation objective rather
+  than a claim proved by this closure. No long tuning survey,
+  hardcoded navigation, free memory or automatic founder
+  modifications were added.
+  Original Phase 6 sleeping/replay is **optional and
+  not implemented**. VIDA 3D is entirely untouched.
+
+
+## Original Phase 5: selective long-lasting memory — v0.24.0
+
+- New optional, ordinarily mutable and inherited
+  `memoryConsolidationRate` (0–2/s) applies to existing somatic
+  RGB eye-to-hidden and hidden-to-motor connections. A prior
+  learned weight is selectively stabilized only when later,
+  same-direction *genuine feeding or bite* reinforcement
+  agrees with that personal synaptic adjustment; contradictory
+  feedback undoes consolidation, and no-reward periods
+  slowly erode it. There is no new object recognizer,
+  target oracle, scripted behavior or neural activity bonus.
+- Stabilization (0–1 per eligible learned edge) reduces
+  forgetting by at most 95%, while memories eventually decay.
+  It pays proportional extra upkeep of 0.004 J/s per fully
+  consolidated synapse, additionally to v0.23 learning costs,
+  debited from creature energy to metabolic heat. Eligible
+  edge budgets remain 96 sensory + 96 motor. The original
+  55 founders and any saves with no retention allele preserve
+  old exact numerical learning behavior and schema v11.
+  Consolidation belongs only to the live organism, not
+  its genome or offspring; saved state is strictly bounded.
+- **Observed comparison:** real compatible-mouth feeding
+  conditioned an individual, then its exact-state counterpart
+  had only the retention gene/strength removed (acquired
+  sensory and motor weights preserved identically).
+  After **4 seconds with no further food**, the acquired
+  learned weight magnitude remained **0.5673** with selective
+  consolidation versus **0.3869** without, or about **47%
+  more retained weight**. Consolidated memory still
+  decayed, was energy-accounted and resumed exactly
+  from saved states. Three short added tests cover this,
+  uneventful old founders, ordinary allele mutation,
+  strict validation and conservation.
+- This validates **retention of personal learning**, not
+  learned fitness, generalization across distant contexts,
+  natural multigeneration ecological viability or
+  improved future food intake. Original Phase 5 remains
+  open for a targeted functional-acquisition benefit
+  and end-to-end scope review. Original Phase 6 rest/
+  replay remains unimplemented, not a prerequisite
+  to the existing waking plasticity.
+
+
+## Original Phase 5: retained visual-context associations — v0.23.0
+
+- **Added:** optional, inherited and mutable `sensoryPlasticityRate`
+  (0–0.8/s) unlocks a personal set of up to 96 enabled eye
+  RGB-to-hidden synapse changes. Real spectral ray inputs and recent
+  hidden activity establish eligibility; physical compatible-mouth
+  intake is positive reinforcement, actual bite damage optional
+  negative reinforcement. The only information originates from
+  the creature's existing sensors, never debugging labels or a
+  predefined food/predator category.
+- **Personal, funded state:** `learnedSensoryWeights` stores bounded
+  individual IH synapse adjustments and eligibility traces.
+  They alter future brain evaluation, cost real organism energy
+  at 0.002 J per eligible synapse per second and 0.4 J
+  per absolute weight unit rewritten, decay with inherited
+  forgetting, survive exact schema-v11 save/load, and never
+  transfer as acquired experience to offspring.
+- **Causal short result:** real oral contact absorbed **1,440 J**
+  and produced retinal associations. Under identical later
+  sensory inputs, a paired clone retaining the acquired retina
+  differed in hidden response by max **0.2546** and had changed
+  motor output compared with a clone with only retinal deltas
+  cleared. An unfed comparator did not rewrite sensory weights.
+  Three targeted tests also check the 55 legacy founders,
+  energy conservation, trait mutation, strict validation and
+  saved continuation. No long sweep or founder tuning.
+- **Limits:** perceptual plasticity does not establish learned
+  food/prey category discrimination, generalized recognition,
+  reliable food approach or population fitness. Phase 5 remains
+  in progress; Phase 6 sleep/replay remains future work.
+  Brain v7, save schema v11, 55 founders and the entire
+  separate 3D project remain unchanged.
+
+
+## Original Phase 5: full-body motor learning and injury aversion — v0.22.0
+
+- Two optional heritable, ordinarily mutable additions expand waking
+  learning without any new control reflex: `plasticMotorScope: 'all'`
+  lets a creature learn on all six neural output channels of all its
+  existing physical joints. Stable enabled connections are sampled
+  across joints, keeping the existing 96-edge cap and genetic identity.
+  Absence of the allele preserves v0.21's exact Angle-only policy.
+- `injuryAversionRate` (0–1/s) permits negative reinforcement
+  by **actual** `body:injury` energy taken during physical predator
+  mouth contact; real compatible oral nutrient/food absorption remains
+  positive reinforcement. Colors, diagnostic creature types, harmless
+  collisions, target coordinates, or natural energy expenditure do
+  not produce punishment. Creature-defined circuit responses may
+  remain ineffective or even harmful.
+- Learned motor offsets, eligibility traces, forgetting, and all
+  energy charges remain individual somatic state: eggs/newborns receive
+  genetic capabilities but never parent's acquired weights. Existing
+  memory, organ placement, locomotion physics, energy conservation,
+  brain v7, schema v11 and 55 founders remain unchanged. Current-save
+  validators reject invalid genes and unapproved learned edge IDs.
+- A few short physically grounded tests exercise multi-channel
+  learning during genuine food intake and pain aversion during
+  genuine bites with harmless-mouth controls. These validate
+  working pathways **not general survival, learned hunger navigation,
+  or proven escape benefits**. Phase 5 continues; Phase 6 remains
+  optional and not implemented. No extended founder tuning or
+  long seed sweeps.
+
+
+## Original Phase 5, waking within-life plasticity — v0.21.0, first bounded slice
+
+- **What now works:** optional inherited `plasticityRate` (0–0.8/s)
+  and `forgettingRate` (0–1/s) enable a live animal to change up to
+  96 of its existing enabled hidden-to-`Angle` synaptic weights.
+  A 0.6-second eligibility trace captures recent hidden neuron and
+  motor activity. The *previous tick's actual compatible-mouth absorbed
+  intake* is the sole reinforcement signal. Genetic matrices are
+  never edited by this somatic update; newly laid eggs and children
+  inherit capability, not learned weights or eligibility. Disabled
+  edges remain disabled. Rare ordinary mutation can introduce the
+  trait into a previously nonplastic lineage, while the 55 original
+  founder phenotypes retain identical controller behavior.
+- **Energy and bounds:** changing learned weights and normal plastic
+  upkeep consume the animal's existing usable energy, crediting
+  metabolic dissipation. Upkeep is 0.002 J per candidate plastic
+  motor synapse per second, rewriting costs 0.4 J per unit changed
+  weight, and learned offsets are clipped to ±0.8. Unrewarded
+  somatic changes decay at an inherited rate. The existing torque,
+  water drag, reserves and feeding systems are unchanged.
+- **Actual within-life learning evidence:** in a fixed one-neuron
+  policy trial supplied a finite nutrient by legitimate mouth
+  contact, the animal absorbed **2,400 J** and its rewarded neural
+  `Angle` output increased **0.6420 → 0.6912**, against a
+  same-genotype unfed control at **0.6420**. The genetic output
+  synapse stayed exactly **1.0** and its somatic state held an
+  aggregate **0.1203** absolute learned weight difference across
+  48 eligible synapses. When food was removed, learned differences
+  faded. We also test exact save/load PRNG and neural-state
+  continuation, proper newborn zero acquired state, ordinary allele
+  mutation, disabled edge protections, strict malformed-save
+  rejection, and complete energy accounting.
+- **Scope limitation:** this trial intentionally disabled physical
+  joint force to isolate reward-specific neural updates. It did
+  **not** show improved swimming, reaching food, long-term
+  survival, predator response, or reproduction *caused by lifetime
+  learning*. This is **Phase 5 started, not finished**.
+  The next priority is a genuinely motor-active paired post-training
+  comparison with same-genotype learning-off controls, including
+  negative outcomes. No sleeping/replay was added (original Phase 6).
+- **Compatibility:** brain v7, save schema v11 remain unchanged;
+  somatic acquired synapses are optional validated organism state
+  in the current schema; founders and legacy saves without optional
+  learning alleles keep their exact previous dynamics. Brain
+  inspector and diagnostics report personal live motor adjustments
+  separately from inherited weights. The present Wiki is maintained
+  under `docs/wiki/Waking-Learning.md` and actually published
+  after merging via the Wiki workflow.
+
+
+## B-D: compact ecological measurement baseline — v0.20.0
+
+- **Implemented:** `ecologyAudit.ts` reads actual living/dissolving populations,
+  seeded/hatch births, separately counted laid eggs, funded egg reserves and
+  structural biomass, lineage-confirmed completed deaths by cause, food and
+  carrion stores, organism reserves, and full energy ledger discrepancy.
+  `EcologyIntakeObserver` collects *increments* of VIDA's coalescing mouth
+  feeding receipts without double counting the growing historical event.
+  All diagnostics are observational: no changed biology, PRNG, reserve,
+  founder anatomy or persistent world state.
+- **Three unassisted 3-second seed worlds** (seeds 17, 29, 41) started
+  with four ordinary balanced founders and 60 randomly placed nutrients.
+  Matched exact-state controls had all those nutrients removed and
+  conservatively recorded as losses. All 12 animals survived but **all
+  six worlds registered zero actual nutrient intake**; no natural
+  hatching, deaths, or eggs occurred during these short juvenile trials.
+  A short life without eating is **not ecological sustainability**.
+  The 12 food-world survivors ended with aggregate reserves of about
+  39.57–39.61 kJ per four-creature world. Foodless comparisons had
+  similar reserves, with small neural/physical differences attributable
+  to presence/absence of retinal stimulus, not nutrition.
+- **Controlled physically swimming visual foraging:** eight six-second
+  trials over seeds 17, 29, both sides and food distances 135/160px
+  used one balanced Three-link Darter and exactly one finite particle.
+  Each sighted trial absorbed **816–1,680 J** from actual mouth transfer;
+  identical retinally disconnected controls absorbed **0 J**. Both
+  seeds produce identical trajectories in this controlled setup;
+  they are repeated deterministic controls, not eight biologically
+  independent genotype successes. The energy removed from nutrient
+  resources matches absorption at the existing 80% rate.
+- **Mature adult egg funding, *not* natural energy acquisition:** three
+  warm-start adult founders were explicitly initialized with sufficient
+  reserves, and each laid one true funded egg at an ordinary kernel
+  reproduction step. Egg usable reserve was **3,500 J**, and valid
+  mutated offspring structural costs were **4,740, 4,980 and 5,460 J**;
+  matched parents initialized **200 J below the first-egg barrier** did
+  not reproduce. No initial-funding adjustment occurred after t=0.
+  Eggs are not counted as successful hatchlings; background reproduction
+  and multigeneration population viability were not shown.
+- **Mortality and carrion:** three explicitly low-reserve (1 J)
+  juvenile animals starved, dissolved, and produced **4,980 J** carrion
+  each without energy creation. This is an edge-case mechanism test,
+  not a measured natural mortality rate.
+- Every sampled scenario checked the conserved ledger; current v11 saves
+  still round-trip unchanged, and the full fast suite and TypeScript/Vite
+  build gate the merge. No full ecosystem, browser or overnight trials.
+  Known limitation: the per-tick receipt observer can miss events if
+  an organism exceeds its eight exposed historical receipt slots
+  *within one step*, so it is not a high-density lifetime event archive.
+  `npm run benchmark:ecology` emits a machine-readable reproducible
+  report; the GitHub Wiki maintains the current capability reference.
+- **B-A–B-D bounded development sequence: CLOSED AS AN INSTRUMENTED
+  PROTOTYPE, NOT AS SELF-SUSTAINING ARTIFICIAL LIFE.** The free-roaming
+  baseline is *negative* for demonstrated foraging. Predator pursuit,
+  multigeneration viability, relative survival and natural selection
+  remain unproven. Preserve those as explicit limitations; do not
+  reopen unbounded early-brain tuning. Next substantial milestone is
+  **original Phase 5, waking lifetime learning**; original Phase 6
+  optional sleep/replay follows only after demonstrated learning.
+
+
+## B-C: inherited lateral retinal turning toward moving prey — v0.19.0
+
+- Added a rare `wire-retinal-turn` **offspring topology mutation**.
+  It starts an isolated inherited hidden neuron, wires a stochastic
+  wavelength and left-right ray contrast from one physical eye to
+  the organism's existing joint Angle motors, and uses ordinary
+  recurrent evaluation, torque-limited hinges and hydrodynamic drag.
+  Both sensory and motor sign/gain may help or harm. Empty black water
+  produces no activation. No target coordinates, prey identity labels,
+  forced heading, new locomotor forces, or dynamic speed bonuses exist.
+- A five-second **24-pair** deterministic test used twelve inherited
+  circuit draws times two off-axis placements, with two self-propelled
+  articulated organisms in each run. Spectral input-connected and
+  identically constructed retinal-disconnected hunters were paired.
+  **Four** sighted configurations physically bit moving prey after its
+  COM had already travelled approximately **29.6, 38.6, 77.7 or 90.4 px**
+  from encounter start. Corresponding controls never bit. Actual bite
+  transfers were 180, 960, 360 and 420 J. Energy conservation was
+  checked in all comparisons. Another 20 pairs did not establish
+  successful hunting.
+- Importantly, **zero** of these 24 sighted trials improved closest
+  hunter/prey COM separation relative to the disconnected control,
+  despite four demonstrated post-motion bites. Physical mouth/tail
+  contact does **not** imply broadly better pursuit or steering.
+  This result establishes a possible heritable visual attack on moving
+  prey, **not reliable chases**, predator recognition, general
+  fitness or lifetime learning.
+- Tests also exercise exact current-save continuation, stable brain IDs,
+  independent positive and negative mutations, reversible ordinary
+  offspring access to the new topology, and previously shipped founder
+  baselines. Genome save schema stays v11 / brain v7. The 55 founders,
+  prior saves and the actual mechanical physics are unchanged.
+- B-C has a **bounded evolutionary implementation milestone** now,
+  with pursuit reliability explicitly unresolved. Next: compact B-D
+  ecological metrics of feeding, survival, deaths and funded eggs,
+  *not* several more Darter/brain-tuning releases. Original Phase 5
+  waking learning and Phase 6 optional sleep/replay remain separate
+  pending work.
+
+
+## Inherited spectral sensitivity — v0.18.0
+
+- Per-eye optional red/green/blue receptor gains, each 0–1, now multiply
+  physically attenuated ray RGB. An undetectable surface cannot leak its
+  range through the neural distance channel. Physical occlusion and
+  read-only diagnostic hit types remain; no classification oracle or
+  hidden prey guidance is added.
+- All 55 founders and imported genomes missing the trait retain exactly
+  their previous visual signals and metabolic rates. Descendants can
+  independently lose, weaken and re-evolve receptors; sensory upkeep
+  falls with mean receptor sensitivity but never below 25% of an eye's
+  original neural sensory cost. Actual energy leaves the conserved ledger.
+- Green-only organism pigment can be invisible to an eye with its green
+  receptor absent. Plant nutrients also reflect red/blue, so that same
+  eye is **not** necessarily blind to real food. No guaranteed camouflage,
+  hunting or survival outcomes are claimed.
+- Save schema remains v11 / brain v7 with an optional strictly validated
+  eye allele; current and historical saves retain exact continuation.
+  New fast tests cover realistic retinal controls, inheritance, mutation,
+  save exactness, metabolic trade-offs and strict invalid-input rejection.
+  Wiki reference is maintained in place and published after merging.
+- Roadmap now separates supplemental behavior work B-A–B-D from **original
+  Phase 5 lifetime learning** and **original Phase 6 optional sleep/replay**.
+  Mobile retinal pursuit and B-D ecological survival/funded-reproduction
+  measurement remain for subsequent bounded releases.
+
+
+## Phase 5C: moving hunters and morphology dependence — v0.17.0 (CI verified)
+
+- Controlled, deterministic, short physical trials paired identical
+  inherited injury-to-motor genes with their **disconnected injury**
+  counterfactual, using a self-propelled articulated omnivore as
+  hunter. The hunter moves via its own joint torque and water drag;
+  there is NO target-coordinate guidance or artificial movement. It
+  swims at a fixed inherited gait/heading and **does not actively
+  turn to pursue fleeing prey**. Energy conservation is checked on
+  every scenario.
+- For the Three-link Darter, 15 paired starts sampled hunter frequency
+  factors 1, 1.5 and 2.2 × separations 82, 94, 106, 118, 130 px.
+  In **nine truly biting** setups the same injury-linked circuit
+  reduced stolen energy in **six**, tied in **two** and increased it
+  in **one**. The other six had no bite at all, so cannot establish
+  escape. One condition (speed factor 1, gap 106) showed 360 versus
+  2,490 J, but another (factor 1.5, gap 106) showed **270 versus
+  210 J**: genetic benefit is context-dependent.
+- In a separate 2-second probe, the predator was positioned by the
+  actual **rear body surface** of five prey body plans—Three-link
+  Darter, Twin Oar, Fourway Fan, Barrelfin and Moonbell Jellyfish.
+  All 15 matched starts involved real bites. Outcome counts:
+  **five reduced damage, six increased damage and four ties**,
+  despite identical input wiring policy. Morphology-specific
+  coordination and selection, not a guaranteed reflex, are needed.
+- In some mobile encounters a reduction in damage did *not*
+  coincide with increased final separation; both outcomes are
+  reported independently. Unobserved pursuit behavior, population
+  survival, predator recognition, ecological selection, and long-term
+  reproduction remain unproven. Phase 5C is still in progress.
+- The selected creature's Brain inspector now displays actual
+  neural injury signal (0–1), queued energy from physical bites,
+  and enabled hidden-neuron injury synapses. Read-only telemetry
+  cannot change creature state, behavior or energy accounting.
+- The current-state feature page `docs/wiki/Sensory-Behavior.md`
+  is synchronized into the real GitHub Wiki by Actions when merged.
+  `tests/moving-hunter.test.ts` adds paired, contact-validated,
+  energy-conserving fast checks, with no long ecosystem/browser run.
+- GitHub Actions PR workflow **#39416455376** on commit
+  `585a5d10` passed **138/138 fast tests**, TypeScript checking and
+  the production Vite build. Tests cover real hunter displacement,
+  bite-contact gating, paired somatic wiring, five body shapes,
+  energy conservation and the pre-existing brain/save invariants.
+  No long ecosystem runs or browser tests were performed.
+
+
+## Phase 5C: inherited motor-escape innovation — v0.16.0 (CI verified)
+
+- Real-physics paired tests used identical FND-001 Three-link Darters
+  exposed to a **stationary omnivore biting behind the tail**. Only
+  heritable injury-to-motor connections differed between controls;
+  neither controller was given target coordinates, a danger flag or
+  scripted impulses. Each test ran 2.5 simulated seconds with real hinge
+  torque, water drag, mouth transfers, metabolism and conserved energy.
+- Across **seven** physically contacting rear-mouth placements (gap
+  8,9,10,11,12,14,16 px), a response increasing wave amplitude reduced
+  measured energy stolen from the victim from **420–450 J** in disconnected
+  controls to **270–330 J**, while separation from the hunter increased.
+  Inverting the same response *worsened* contact: **2,130–4,500 J** stolen.
+  Non-biting placements were deliberately excluded rather than counted
+  as escaped. This shows a possible defensive phenotype, not universal
+  fear/escape or successful predator recognition.
+- Added a rare inherited `wire-injury-motor` brain topology operation to
+  **offspring mutation only**. Within hidden-neuron and enabled-edge
+  budgets it introduces an isolated silent-at-rest neuron, connects the
+  real `body:injury` sensory input, and connects one randomly chosen
+  existing neural motor channel across the physical joints. Input gain,
+  motor gain and their signs are independently stochastic; outcomes can
+  increase or reduce attacks. The new neuron consumes real brain upkeep,
+  receives no retina/body-type oracle, and changes no existing founder
+  or historical save baseline.
+- Tests enumerate six motor channels and both beneficial/harmful signs;
+  verify a real `mutateGenome` offspring can generate the composite
+  innovation without changing the parent; verify the connected
+  **seed-13** `Amp` genotype takes **330 J** vs **450 J** with its
+  injury connection disabled in one directly paired geometry, with
+  more real separation. Bounded deterministic current-schema save/load
+  and conservation are verified for the evolved network.
+- This is **controlled reduction in repeated biting by a stationary
+  predator**. Predator chasing/turning, broader anatomy coverage,
+  free-roaming selection, multigeneration fitness, mortality outcomes,
+  and sensory anticipation remain **unproven**; Phase 5C is not closed.
+- The live GitHub Wiki source `docs/wiki/Sensory-Behavior.md` is
+  updated in place; Actions publishes its current-state explanation
+  and schematics to the actual Wiki on merge.
+- On PR branch commit `c7ec3cee`, GitHub Actions run **#39414409443**
+  passed **136/136 fast tests**, TypeScript checks and the Vite production
+  build. The genetically generated seed-13 `Amp` response lowered bite
+  transfer at gaps **8, 10, 16 px** from **450, 450, 420 J** to
+  **330, 330, 270 J**, while increasing physical predator separation by
+  **9.9, 9.9, 8.4 px**. Tests remain short, reproducible and conservative;
+  no long ecology runs or browser tests were performed.
+
+
+## Phase 5C: physically grounded bite awareness — v0.15.0 (CI verified)
+
+- Predation previously transferred energy from victim to hunter but gave the
+  victim's neural network no distinct direct bite feedback. The new
+  `body:injury` sensory key reports **only joules actually taken by a
+  physically contacting predator mouth**. A victim accumulates bite
+  transfers during the feeding phase and samples
+  `clamp(previousTickBiteJ / 60, 0, 1)` during its following neural tick;
+  the buffer then resets. Standing near another organism, optical pigment,
+  touching without feeding and ordinary metabolism are not injury cues.
+- The recurrent network remains fully evolvable. The new input's synapses
+  start **zero on all 55 founders**, preserving identical previous retinal,
+  oral and motor initialization and local PRNG draws; descendants may mutate
+  and inherit them. No direct target coordinate, threat category, scripted
+  escape force, guaranteed survival, or extra metabolism is added.
+- Save **schema v11 / brain v7** adds one trailing identity-stable neural input
+  and a validated nonnegative pending bite buffer. Imported schemas v3–v10
+  are migrated by key with old weights, activation values, output channels
+  and PRNG preserved; v10 brain v6 inputs get a zeroed new synapse column,
+  zero activation and no retroactive harm. Lineage and egg genomes are
+  upgraded by the same strict genome validator.
+- Focused tests compare real carnivore contact against non-predatory contact,
+  show the victim's next-tick neural response, check metabolic losses cannot
+  impersonate attacks, verify both energy ledgers, queued feedback snapshot
+  continuation, authentic v10 migration, and reject malformed sensor state.
+  They establish **sensory availability and neural responsiveness**, not
+  directional flight, predator classification, reduced bite exposure, or
+  ecological improvements.
+- The actual GitHub Wiki is synchronized from
+  `docs/wiki/Sensory-Behavior.md` by GitHub Actions. Its content is
+  latest-state only; research and historical evidence stay here.
+- Verified on PR branch GitHub Actions run **#39410190409**, commit
+  `5ce3b401`: **132/132 fast tests passed**, TypeScript and Vite build
+  passed. An extra physical articulated-body control shows that a real bite
+  can drive a genetically connected Angle motor command versus a blind
+  (disconnected) comparator with identical physical contact; this is
+  **motor responsiveness**, not demonstrated displacement-based escape.
+  No browser tests or long ecological runs were performed.
+
+
+## Phase 5C: causal visual approach for the balanced Darter — v0.14.0 (CI verified)
+
+- The prior FND-001 sensory experiment established weak, sometimes
+  incorrectly directed retinal-to-muscle weights. A controlled sweep across
+  actual seeded articulated-physics runs varied only neural weight
+  magnitudes/signs while holding mouth, eyes, body, food and drag fixed.
+- The **balanced-mode FND-001 founder** now inherits a stronger retinal
+  green-contrast prior: input gain **1.5** (was 0.2) and its two hidden
+  steering nodes connect to joint Angle with weights **−0.5/+0.5**
+  (previously +0.04/−0.04). The weights live inside the ordinary mutable
+  recurrent network, with no new input/output channels or target-coordinate
+  steering. Unbiased FND-001, the other 54 founders and all existing saved
+  genomes keep their existing weights. Offspring may mutate and inherit them.
+- In **eight** six-second physical-contact scenarios (±0.5 radians from
+  heading, range 110, 135, 160 or 190 px), actual mouth intake occurred
+  in **7/8** calibrated sighted runs versus **0/8** for the old weak
+  prior and **0/8** for retinally disconnected controllers. The
+  calibrated organism approached closer to each food target than the
+  disconnected-vision comparison. All eye hit locations came from true
+  raycast geometry, all food energy came from finite physical nutrients
+  and each trial retained a conserved energy ledger.
+- Visual creature-body controls are logged without a predator-avoidance
+  success assertion: **RGB body pigmentation does not indicate predator
+  intent or vulnerability**. Avoidance, predictive pursuit, multi-genome
+  generalization and sustained population viability remain unknown.
+- `tests/visual-steering-survey.test.ts` is now a bounded, reproducible
+  regression suite rather than a parameter search. It checks true RGB
+  neural inputs, physical approach/ingestion, sight-disabled comparators,
+  old-world snapshot exact continuation and no silent founder-wide
+  retuning. The preceding Phase 5A gait test is explicitly unbiased-mode
+  to keep locomotion results independent of newer retinal priors.
+- The latest-only feature reference is `docs/wiki/Sensory-Behavior.md`,
+  alongside `Motor-Control.md`. The GitHub connector's Contents API cannot
+  directly write the special Wiki repository; the current publication route
+  is instead `.github/workflows/publish-wiki.yml`, which pushes the maintained
+  pages using GitHub Actions with `contents: write`.
+- **CI verified:** GitHub Actions PR workflow #39398654973 on
+  commit `e15f6c1f` passed **126/126 fast tests**, TypeScript checks
+  and the production build. Calibrated total food ingestion in the eight
+  scenarios was **11,580 J**, versus **0 J** for each matched comparator.
+  These are paired short trials, not independent long-life ecosystems.
+  This is a focused improvement in food approach; Phase 5C's predator
+  escape objective is not complete. No full ecosystem/browser tests were run.
+
+
+## Optional, genetically evolvable articulated locomotion — v0.13.0 (CI verified)
+
+- Phase 5B expands the existing six-output-per-joint controller without
+  changing its hidden circuit, body morphology, torque solver, water drag or
+  cost accounting. New optional per-joint `oscillatorMix` (0–1) permits
+  fully non-rhythmic Angle positioning at zero and smooth rhythmic/direct
+  mixes otherwise; the brain's Amp output can turn off the oscillator of
+  an evolved joint without turning off its muscle. Joints can act independently.
+- An optional four-coefficient `waveHarmonics` genotype modulates the
+  second through fifth harmonics of the base sine wave. The waveform is
+  normalized and smooth; abrupt sawtooth impulses, scripted paddling,
+  world-space steering and artificial propulsion are deliberately absent.
+  Mix and harmonics are inheritable and mutate independently in offspring.
+- Old founders and saved genomes **without** new alleles use the exact
+  original sine/Angle formula; no migration or randomness is added to their
+  controller. Snapshot schema remains **v10**; optional motor fields are
+  strictly validated. Newly born descendants may evolve new alleles.
+- Creature Brain inspector displays each joint's current inherited rhythm
+  fraction and harmonics. Wiki-ready, current-only documentation and
+  Mermaid diagrams live in `docs/wiki/Motor-Control.md` and synchronize
+  to the actual GitHub Wiki via the dedicated publishing workflow.
+- GitHub Actions PR run #39396177088 (commit `44fedc37`) passed
+  **122/122 fast tests**, TypeScript checks and production build. Ten new
+  controlled actuation tests cover unchanged original motor formula,
+  oscillator-off direct positioning, harmonic periodicity and bounds,
+  independent joints, neural amplitude silencing, zero-force passive physics,
+  mutation inheritance/determinism, current and legacy snapshot continuation,
+  and invalid motor gene rejection. No extended ecosystem suite or manual
+  browser tests were run; improved evolutionary fitness is not established.
+
+
+## Phase 5A: causal sensory baseline and forward feeding gait — v0.12.0 (CI verified)
+
+- Controlled baseline trials compare exactly matching FND-001 genomes with
+  retinal synapses enabled or disconnected (preserving dark-water baseline
+  biases), same target and seed, actual retina, neural outputs, hydrodynamic
+  motion, feeding, and conserved energy. Each trial is 3–6 simulated seconds,
+  not an ecology or lifetime fitness benchmark.
+- With the v0.11 gait, eyes and mouth on FND-001 faced EAST but the
+  undulating body moved **50.04 px WEST in 3 s**. Directly ahead, it moved
+  **166.6 px backward in 6 s and ate 0 J** from the test nutrient.
+  A reversed joint-phase progression (same parts, mass, torque, drag,
+  controller and food) moved **249 px forward and ate 2,520 J** in 6 s.
+  A blinded corrected control also ate 2,520 J: the demonstrated benefit is
+  correcting food access, *not* learning or visually guided foraging.
+- Consequently *only new FND-001 founder genotypes* are calibrated in
+  `createFounderGenome` by reversing each child joint's inherited
+  `cpgPhaseOffset`. This is ordinary physics, with no artificial thrust,
+  target position oracle, energy creation, or genome/snapshot migration.
+  The corrected phase genes are heritable and mutable. Existing snapshot
+  genotypes keep their exact original motion. FND-051 already moved
+  **47.14 px forward** in the three-second control and must not be reversed.
+- Other 3 s founder displacements for context: FND-006 (-1.31, +3.27),
+  FND-021 (-5.99, +2.86), FND-031 (-27.58, +7.30) px. Their poor or backward
+  progress is recorded as a *lead*, not a justified blanket correction.
+- Four paired target trials (food/threat at +/-0.5 rad, eyes physically hit
+  targets) changed the original neural turn-command output by about
+  0.00087–0.00422 compared with retinally blind controls. With corrected
+  FND-001 gait, all four moved substantially toward the initially visible
+  off-axis target over three seconds, but none ate off-axis food, and
+  sighted-versus-blind differences remained tiny. Reliable visual tracking,
+  predator avoidance and long-term reproductive survival are **not proved**.
+  Note that the short trial's “creature threat” is an observed foreign body,
+  not an evolved recognition of predator danger.
+- GitHub Actions PR run #39391692071 on commit `99fba308` passed
+  **112/112 fast tests**, TypeScript checking and production Vite build.
+  `tests/behavior-baseline.test.ts` preserves the meaningful paired
+  measures, founder locomotion check, accessible-food regression, and exact
+  old-gait snapshot continuation. Existing founder integrity checks permit
+  precisely this calibrated phase exception, not arbitrary blueprint drift.
+  No long behavioral/ecosystem suite or browser execution was performed.
+
+
+
+## Genetic neural memory timescales — version 0.11.0 (CI verified)
+
+- Each hidden neuron can inherit a leaky activation-response time constant
+  τ in seconds (bounded 0–4 s). At zero, the original per-tick tanh response
+  remains exactly unchanged; positive τ blends the previous activation and
+  current tanh target with α = 1 − exp(−dt/τ). Slow responses store short-lived
+  activation traces without rewriting weights. This is *not* lifetime
+  plasticity, learning, episodic memory, or a sleep/dream system.
+- All 55 calibrated founders and imported v3–v9 saves receive τ=0 for every
+  existing neuron, without extra founder random draws or changes to their
+  default swimming. New neuron identities start at τ=0; remapping follows
+  stable hidden IDs rather than matrix order, retaining surviving tau values.
+- Rare inherited timescale mutations occur separately from topology/weight
+  changes, scaled by the existing world mutation-severity setting, and can
+  evolve positive and zero time constants. The parent genome is not modified;
+  neural activation contents are personal and are not inherited.
+- Memory upkeep adds 0.08 J/s per accumulated τ-second of hidden neurons
+  to the normal conserved energy budget, so old dense-24 controllers remain
+  exactly at their previous metabolism.
+- Brain inspector exposes each neuron's current τ in its tooltip, plus the
+  count of memory-enabled neurons, maximum τ and memory upkeep. New brain
+  version v6/save schema v10 validate exact arrays, bounds and active
+  neural state; earlier schemas remain supported.
+- GitHub Actions PR run #39385723158 on commit `a77f4bb4` passed
+  **108/108 fast tests**, TypeScript checking and the production build.
+  Eight new focused tests cover founder baseline, physical-time low-pass
+  responses, remapping, deterministic mutations, v9 migration, exact v10
+  continuation, malformed genes and conserved energy. Older v3–v8
+  compatibility checks remain in the fast suite. No manual browser,
+  long ecosystem, or behavioral learning benchmarks were run.
+
+
+
+## Reproduction, feeding and egg inspection — version 0.10.0 (CI verified)
+
+- Reproduction was genuinely difficult because an adult needed 20% of its
+  maximum capacity as protected reserve **plus** full baby body construction
+  and a fixed 10,000 J funded reserve. The inherited `eggReserveFraction`
+  gene was mutating without affecting allocation.
+- Per-mouth gross specialist transfer rises 2,400 → 3,600 J/s, and omnivore
+  transfer 1,200 → 1,800 J/s. The shared per-mouth budget, 80% assimilation,
+  carrion digestion factor, energy storage cap and environmental supply
+  remain unchanged. Faster eating does not create nutrients or grant new
+  energy to creatures without physical food contact.
+- An egg now receives exactly its offspring body cost and a reserve of
+  `10,000 J × clamp(parent.eggReserveFraction, 0.2, 0.55)` (3,500 J default),
+  both fully debited from the parent. The parent's survival floor drops from
+  20% to 12% of storage capacity (never below 2,000 J). Higher fractions
+  increase hatchling starting energy but delay parental reproduction.
+  E.g., body 6,000 J and capacity 100,000 J: first-egg threshold falls from
+  36,000 J to 21,500 J. Existing saved eggs retain their original funding;
+  no retroactive rewrite, refill or accelerated maturation.
+- Eggs can be clicked and examined in a bounded draggable panel. The panel
+  reads real kernel egg funding, incubation, parent identity and hatching
+  conditions. The status helper shares the hatching geometry/clearance test,
+  distinguishes incubation, nonviability, population cap, tank boundary,
+  collision blocking and pending randomized orientation without consuming PRNG.
+  It is UI telemetry, not an independently simulated egg stage.
+- No changes to natural selection, body/brain locomotion, sensory steering,
+  inheritance mechanics or overall food supply. Reliable survival and higher
+  birth rates across seeds remain unproven until deliberate ecological tests.
+  Additional life-history trade-offs, especially the still-unused
+  `reproductionThreshold` trait, remain a follow-up.
+- GitHub Actions PR run #39384359696 at commit `162e207d` passed
+  **100/100 fast tests**, TypeScript type checking and production build.
+  Tests cover actual gross transfer, conserved energy, inherited reserve costs,
+  affordability, current snapshot continuation and truthful hatch-blocker
+  reporting. The earlier run's two stale test expectations were corrected.
+  Long ecosystem and manual browser suites were intentionally not run.
+
+
+
+## Inherited structural brain evolution — version 0.9.0 (CI verified)
+
+- Phase 2 introduces low-probability genetic topology events, separate from
+  inherited weight changes: neuron insertion/removal, connection enabling,
+  disabling, permanent pruning (zero plus mask) and rewiring. Existing 55
+  founders still spawn with unchanged dense 24-neuron networks and calibrated
+  steering/gaits. No forced learning, fitness selection, invisible target
+  knowledge or guaranteed survival is added.
+- New neurons receive stable unique IDs, zero initial bias/state and two
+  weak enabled sensory-to-neuron-to-motor pathways (each weight capped at
+  ±0.04). All their other inbound/outbound connections are disabled.
+  Removal targets the weakest estimated outgoing influence; this is a
+  heuristic, not a function-preserving guarantee.
+- Removed neurons and pruned organs drop only invalid connections. Survivor
+  weights, biases, identities and baseline neural state remain aligned;
+  inherited disabled weights do not mutate while dormant. Genetic mutation
+  copies the parent before migration, never rewrites it in place.
+- The world mutation-severity slider sets event chance 0–16% per birth;
+  failed operations are safe no-ops. A dense founder with severity 0 is
+  unchanged except for child identity, generation and parent IDs.
+- Neural upkeep includes 0.00025 J/s per enabled edge relative to the
+  anatomy-specific legacy dense-24 edge count. Thus legacy 24-node dense
   controllers keep *exactly* their prior metabolic rate; extra enabled
   edges cost energy, disabled/pruned ones save it. Metabolic accounting
   remains in the same conserved reservoir/heat ledger.
