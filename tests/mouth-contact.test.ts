@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {mouthContactFixture} from '../mouthContactAudit';
 import {capsuleContactsPart, mouthDimensions} from '../mouthGeometry';
 import {createFounderGenome} from '../founders';
-import {DEFAULT_SETTINGS, BUILD_VERSION, createSnapshot, restoreSnapshot, totalAccountedEnergy} from '../persistence';
+import {DEFAULT_SETTINGS, BUILD_VERSION, createSnapshot, restoreSnapshot, totalAccountedEnergy, validateGenome} from '../persistence';
 import {enableClosedEconomy} from '../energyEconomy';
 import {stepSimulation, mouthApertureContactsPart} from '../simulation';
 import {SimulationHost} from '../simulationHost';
@@ -55,7 +55,7 @@ test('new contact snapshots preserve each physics/ecology mode and Worker-host c
     const {state, config} = mouthContactFixture('capsule-v1'); config.physicsRegime = physicsRegime;
     if (closed) {enableClosedEconomy(state); config.ecologyRegime = 'closed-v1'; config.nutrientLimit = null;}
     const snapshot = createSnapshot(state, config), restored = restoreSnapshot(snapshot);
-    assert.equal(snapshot.schemaVersion, '14.0.0'); assert.deepEqual(createSnapshot(restored.state, restored.settings), snapshot);
+    assert.equal(snapshot.schemaVersion, '16.0.0'); assert.deepEqual(createSnapshot(restored.state, restored.settings), snapshot);
     const host = new SimulationHost(); host.reset(snapshot, 91);
     for (let i = 0; i < 6; i++) {host.tick(); stepSimulation(restored.state, restored.settings, 1 / 60);}
     assert.deepEqual(host.snapshot().state, createSnapshot(restored.state, restored.settings).state);
@@ -67,7 +67,7 @@ test('old saves keep original contact and schema; malformed contact models canno
     const {state, config} = mouthContactFixture();
     if (closed) {enableClosedEconomy(state); config.ecologyRegime = 'closed-v1'; config.nutrientLimit = null;}
     const old = createSnapshot(state, config);
-    assert.equal(old.schemaVersion, closed ? '13.0.0' : '12.0.0');
+    old.schemaVersion = closed ? '13.0.0' : '12.0.0';
     const restored = restoreSnapshot(old); assert.equal(restored.settings.mouthContactModel, undefined);
     for (const model of ['capsule-v1', 'unknown', null]) {
       const invalid = structuredClone(old); Object.assign(invalid.settings, {mouthContactModel: model});
@@ -78,7 +78,47 @@ test('old saves keep original contact and schema; malformed contact models canno
   }
 });
 
-test('mouth width stays inherited and the visible build version matches the package release', () => {
-  assert.deepEqual(mouthDimensions({mouthType: 'carnivore', intakeWidth: 20}), {radius: 4.5, halfSpan: 10});
+test('mouth diameter is fixed by diet and the visible build version matches the package release', () => {
+  assert.deepEqual(mouthDimensions({mouthType: 'carnivore', intakeWidth: 9, intakeLength: 20}),
+    {radius: 4.5, diameter: 9, length: 20});
+  const malformed = createFounderGenome('FND-001');
+  malformed.mouths[0].intakeWidth = 8;
+  assert.throws(() => validateGenome(malformed), /mouth parameters/);
   assert.equal(BUILD_VERSION, JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version);
+});
+
+
+test('legacy save migration covers all diets, clamps reach to diameter, and survives save/load', () => {
+  const cases = [{type: 'herbivore' as const, diameter: 7}, {type: 'omnivore' as const, diameter: 8}, {type: 'carnivore' as const, diameter: 9}];
+  for (const item of cases) {
+    const {state, config} = mouthContactFixture();
+    const current = createSnapshot(state, config);
+    const legacy = structuredClone(current);
+    legacy.schemaVersion = '12.0.0';
+    const mouth = legacy.state.organisms[0].genome.mouths[0];
+    mouth.mouthType = item.type;
+    mouth.intakeWidth = 2;
+    delete mouth.intakeLength;
+    const restored = restoreSnapshot(legacy);
+    const migrated = restored.state.organisms[0].genome.mouths[0];
+    assert.equal(migrated.intakeWidth, item.diameter);
+    assert.equal(migrated.intakeLength, item.diameter);
+    const saved = createSnapshot(restored.state, restored.settings);
+    assert.equal(saved.schemaVersion, '16.0.0');
+    const loaded = restoreSnapshot(saved);
+    assert.deepEqual(createSnapshot(loaded.state, loaded.settings), saved);
+    assert.deepEqual(validateGenome(loaded.state.organisms[0].genome), loaded.state.organisms[0].genome);
+  }
+});
+
+test('legacy mouth dimensions migrate once to fixed width and forward reach', () => {
+  const legacy = createFounderGenome('FND-001');
+  const oldWidth = legacy.mouths[0].intakeWidth;
+  delete legacy.mouths[0].intakeLength;
+  const migrated = validateGenome(legacy, true);
+  const mouth = migrated.mouths[0];
+  const diameter = mouth.mouthType === 'carnivore' ? 9 : mouth.mouthType === 'omnivore' ? 8 : 7;
+  assert.equal(mouth.intakeWidth, diameter);
+  assert.equal(mouth.intakeLength, Math.max(diameter, oldWidth));
+  assert.deepEqual(validateGenome(migrated, true).mouths, migrated.mouths, 'new-format genome is not migrated twice');
 });

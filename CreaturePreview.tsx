@@ -7,10 +7,10 @@ export default function CreaturePreview({genome: g}: {genome: Genome}) {
   const mouths = g.mouths.map(mouth => {
     const p = g.parts[mouth.partIndex], s = segments[mouth.partIndex];
     const a = getOrganAnchor(mouth, p.width, p.height), n = getCardinalOutwardNormal(mouth.direction);
-    const c = Math.cos(s.angle), sn = Math.sin(s.angle), {radius, halfSpan} = mouthDimensions(mouth);
+    const c = Math.cos(s.angle), sn = Math.sin(s.angle), {radius, length} = mouthDimensions(mouth);
     const x = s.x + c * a.x - sn * a.y, y = s.y + sn * a.x + c * a.y;
-    const tx = -c * n.y - sn * n.x, ty = -sn * n.y + c * n.x;
-    return {id: mouth.id, radius, x1: x - tx * halfSpan, y1: y - ty * halfSpan, x2: x + tx * halfSpan, y2: y + ty * halfSpan};
+    const nx = c * n.x - sn * n.y, ny = sn * n.x + c * n.y;
+    return {id: mouth.id, radius, x1: x, y1: y, x2: x + nx * length, y2: y + ny * length};
   });
   const flat = [...points.flat(), ...mouths.flatMap(m => [
     {x: Math.min(m.x1, m.x2) - m.radius, y: Math.min(m.y1, m.y2) - m.radius},

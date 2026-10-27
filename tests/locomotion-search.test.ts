@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {test} from 'node:test';
+import {legacyMouthState} from './support/legacy-mouth-state';
 import {auditLocomotionPhysics} from '../locomotionPhysicsAudit';
 import {evaluateSwimmer, searchSwimmer, scoreSwimTrial, mutateSwimmer, acceptSwimmer} from '../locomotionSearch';
 import {FEATURED_BLUEPRINTS, FOUNDER_BLUEPRINTS, createFounderGenome} from '../founders';
@@ -83,6 +84,6 @@ test('stored pre-calibration CUR-003 genome resumes the exact v0.32.1 cold conti
   for (let i = 0; i < 40; i++) stepSimulation(state, config, 1 / 60);
   const restored = restoreSnapshot(createSnapshot(state, config)).state;
   for (let i = 0; i < 80; i++) stepSimulation(restored, config, 1 / 60);
-  const hash = createHash('sha256').update(JSON.stringify(createSnapshot(restored, config).state)).digest('hex');
+  const hash = createHash('sha256').update(JSON.stringify(legacyMouthState(createSnapshot(restored, config).state))).digest('hex');
   assert.equal(hash, '1bf8f42ab1dd15f60fce7cd8209785dffb9acc927b4317ab28893a9beb400b33');
 });
