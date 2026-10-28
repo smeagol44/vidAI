@@ -27,7 +27,11 @@ for (const viewport of [{width: 1920, height: 900}, {width: 520, height: 900}, {
       await expect(page.getByRole('button', {name, exact: true})).toHaveCount(0);
     const area = page.getByTestId('tank-viewport'), canvas = page.getByLabel('Aquatic simulation');
     const assertFilled = async () => {
-      const a = (await area.boundingBox())!, c = (await canvas.boundingBox())!;
+      // Read both rectangles in the same browser frame while resizing.
+      const [a,c] = await page.evaluate(() => ['[data-testid=tank-viewport]','canvas'].map(selector => {
+        const r=document.querySelector(selector)!.getBoundingClientRect();
+        return {x:r.x,y:r.y,width:r.width,height:r.height};
+      }));
       for (const key of ['x', 'y', 'width', 'height'] as const) expect(Math.abs(a[key] - c[key])).toBeLessThan(1);
       await expect.poll(() => canvas.evaluate(node => {
         const c = node as HTMLCanvasElement;
@@ -66,7 +70,7 @@ for (const viewport of [{width: 1920, height: 900}, {width: 520, height: 900}, {
     await page.getByTitle('Close specimen bank (✕)').click();
     await page.getByTitle('Inspect Specimen Brain & Vision Rays').click();
     await contained('creature-inspector'); await contained('badge-window');
-    await page.setViewportSize({width: 700, height: 500});
+    await page.setViewportSize({width: 700, height: 500}); await settleToolbarLayout(page);
     await assertFilled(); await contained('creature-inspector'); await contained('badge-window');
     await page.getByTitle('Ecosystem Telemetry Graph').click();
     await contained('ledger-window');
@@ -206,3 +210,320 @@ test('white eggs render white and actual feeding animates the mouth', async ({pa
 });
 
 });
+
+// Valid imported worlds exercise React/Worker updates without an expensive ecosystem.
+function toolbarWorld(time: number, generation: number) {
+  const state = emptyWorld(109);
+  state.simTime = time;
+  const genome = sim.createReferenceNematodeGenome(state.prng);
+  genome.parts = [genome.parts[0]]; genome.eyes = []; genome.mouths = []; genome.motorForce = 0;
+  genome.generation = generation; sim.ensureBrainLayout(genome);
+  genome.bodyCost = sim.calculateBodyCost(genome.parts, genome.eyes, genome.mouths);
+  const org = sim.spawnOrganism(genome, 1200, 750, 0, undefined, undefined, state.prng);
+  state.organisms.push(org); state.totalBirths = 1;
+  state.ledger.externalInflow = org.energy + org.structuralBiomass;
+  return createSnapshot(state, {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, gravity: 0});
+}
+
+// ResizeObserver-based presentation decisions settle after the resize frame.
+// Statistic-only checks below keep their immediate, unchanged geometry tolerance.
+async function settleToolbarLayout(page: import('@playwright/test').Page) {
+  await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+}
+
+test('toolbar stays top-right with priority-ordered controls across widths', async ({page}) => {
+  await page.goto('./?autoplay');
+  const widths = [1920, 1600, 1536, 1512, 1511, 1500, 1366, 1280, 1152, 1151, 1024, 768, 640, 520, 390, 320];
+  let at1512: {height: number; counterY: number; speedY: number; menuY: number} | undefined;
+
+  for (const width of widths) {
+    await page.setViewportSize({width, height: 900}); await settleToolbarLayout(page);
+    const layout = await page.getByTestId('simulation-toolbar').evaluate(header => {
+      const box = (element: Element) => {
+        const r = element.getBoundingClientRect();
+        return {x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom};
+      };
+      const controls = header.querySelector('.toolbar-controls')!;
+      const action = (index: number) => box(controls.children[index]);
+      const nodes = Array.from(controls.children).map(box);
+      const collisions: string[] = [];
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j];
+          if (Math.min(a.right, b.right) - Math.max(a.x, b.x) > 1 &&
+              Math.min(a.bottom, b.bottom) - Math.max(a.y, b.y) > 1) collisions.push(i + ':' + j);
+        }
+      }
+      return {
+        header: box(header),
+        general: box(header.querySelector('.toolbar-general')!),
+        counters: box(header.querySelector('.toolbar-counters')!),
+        controls: box(controls),
+        add: action(0), speed: action(1), bank: action(2),
+        inspector: action(3), settings: action(4), ledger: action(5), menu: action(6),
+        collisions, overflow: header.scrollWidth - header.clientWidth,
+      };
+    });
+
+    expect(layout.collisions, 'overlapping controls at ' + width).toEqual([]);
+    expect(layout.overflow, 'horizontal toolbar overflow at ' + width).toBeLessThan(2);
+    expect(layout.menu.right, 'Menu must touch right padding at ' + width).toBeCloseTo(width - 12, 0);
+    expect(layout.menu.y, 'Menu must remain in the first row at ' + width).toBeLessThan(layout.counters.y);
+    if (width >= 640) {
+      expect(layout.general.right, 'left and right regions intersect at ' + width)
+        .toBeLessThanOrEqual(layout.controls.x + 1);
+    }
+    if (width >= 1600) {
+      expect(Math.abs(layout.speed.y - layout.menu.y)).toBeLessThan(4);
+      expect(Math.abs(layout.add.y - layout.menu.y)).toBeLessThan(4);
+    } else if (width >= 1152) {
+      expect(Math.abs(layout.bank.y - layout.menu.y)).toBeLessThan(4);
+      expect(layout.add.y).toBeGreaterThan(layout.menu.y + 12);
+      expect(Math.abs(layout.speed.y - layout.add.y)).toBeLessThan(4);
+    } else if (width >= 640) {
+      expect(Math.abs(layout.settings.y - layout.menu.y)).toBeLessThan(4);
+      expect(layout.add.y).toBeGreaterThan(layout.menu.y + 12);
+      expect(layout.speed.y).toBeGreaterThan(layout.add.y + 12);
+    } else {
+      expect(layout.menu.y).toBeLessThan(layout.settings.y);
+      expect(layout.speed.y).toBeGreaterThan(layout.add.y + 12);
+    }
+    if (width === 1512) {
+      at1512 = {height: layout.header.height, counterY: layout.counters.y,
+        speedY: layout.speed.y, menuY: layout.menu.y};
+    } else if (width === 1511) {
+      expect(at1512).toBeDefined();
+      expect(Math.abs(layout.header.height - at1512!.height)).toBeLessThan(1);
+      expect(Math.abs(layout.counters.y - at1512!.counterY)).toBeLessThan(1);
+      expect(Math.abs(layout.speed.y - at1512!.speedY)).toBeLessThan(1);
+      expect(Math.abs(layout.menu.y - at1512!.menuY)).toBeLessThan(1);
+    }
+  }
+});
+
+test('toolbar stays grouped and hides credits only to avoid an extra row', async ({page}) => {
+  await page.goto('./?autoplay');
+  await page.getByTitle('Ecology & Physical Settings').click();
+  await page.locator('input[type=file]').setInputFiles({name: 'grouped.json', mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(toolbarWorld(0, 1)))});
+  await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
+  await page.getByTitle('Close settings (✕)').click();
+  const header = page.getByTestId('simulation-toolbar');
+  let hidden = 0, visible = 0;
+  for (const width of [1920,1600,1536,1512,1511,1366,1280,1200,1152,1100,1024,900,768,700,640,639,520,390,375,320,700,768,700,768]) {
+    await page.setViewportSize({width, height: 900}); await settleToolbarLayout(page);
+    await expect.poll(() => header.locator('.toolbar-general').evaluate(g => {
+      const metrics = g.querySelector('.toolbar-metrics')!;
+      const gap = parseFloat(getComputedStyle(metrics).columnGap);
+      const required = [...metrics.children].reduce((n, el) => n + el.getBoundingClientRect().width, gap * 2);
+      return (g.getAttribute('data-compact-metrics') === 'true') === (required > g.getBoundingClientRect().width);
+    })).toBe(true);
+    const geometry = await header.evaluate(h => {
+      const g = h.querySelector<HTMLElement>('.toolbar-general')!;
+      const m = h.querySelector<HTMLElement>('.toolbar-metrics')!;
+      const c = h.querySelector<HTMLElement>('.toolbar-credits')!;
+      const rect = (n: Element) => {const r=n.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
+      return {general:rect(g), metrics:rect(m), credits:rect(c), height:g.getBoundingClientRect().height,
+        shown:getComputedStyle(c).visibility !== 'hidden', compact:g.dataset.compactMetrics === 'true',
+        chips:[...m.children].map(rect), overflow:h.scrollWidth-h.clientWidth,
+        menu:rect(h.querySelector('.toolbar-controls')!.lastElementChild!),
+        parents:[...m.children].every(n=>n.parentElement === m)};
+    });
+    expect(geometry.overflow, 'toolbar overflow at '+width).toBeLessThan(2);
+    expect(geometry.parents).toBe(true);
+    for (const chip of geometry.chips) {
+      expect(chip.x).toBeGreaterThanOrEqual(geometry.metrics.x - 1);
+      expect(chip.right).toBeLessThanOrEqual(geometry.metrics.right + 1);
+      expect(chip.y).toBeGreaterThanOrEqual(geometry.metrics.y - 1);
+      expect(chip.bottom).toBeLessThanOrEqual(geometry.metrics.bottom + 1);
+    }
+    if (!geometry.compact) {
+      for (const chip of geometry.chips) expect(Math.abs(chip.y-geometry.chips[0].y)).toBeLessThan(4);
+    } else {
+      expect(Math.abs(geometry.chips[0].y-geometry.chips[2].y)).toBeLessThan(4);
+      expect(geometry.chips[1].y).toBeGreaterThan(geometry.chips[0].y);
+    }
+    if (geometry.shown) {
+      visible++;
+      expect(geometry.credits.right).toBeLessThanOrEqual(geometry.general.right+1);
+      expect(Math.min(geometry.credits.right,geometry.menu.right)-Math.max(geometry.credits.x,geometry.menu.x)<=0
+        || Math.min(geometry.credits.bottom,geometry.menu.bottom)-Math.max(geometry.credits.y,geometry.menu.y)<=0).toBe(true);
+    } else hidden++;
+    // Counterfactual layout proof: displaying hidden credits must add a row;
+    // hiding visible credits must not reduce the already minimal height.
+    const alternateHeight = await header.evaluate((h, shown) => {
+      const c = h.querySelector<HTMLElement>('.toolbar-credits')!;
+      const original = c.getAttribute('style');
+      c.style.position = shown ? 'absolute' : 'static';
+      c.style.visibility = shown ? 'hidden' : 'visible';
+      const height = h.querySelector('.toolbar-general')!.getBoundingClientRect().height;
+      if (original === null) c.removeAttribute('style'); else c.setAttribute('style', original);
+      return height;
+    }, geometry.shown);
+    if (geometry.shown) expect(alternateHeight, 'credits add an unnecessary row at '+width).toBeGreaterThanOrEqual(geometry.height-1);
+    else expect(alternateHeight, 'credits hidden without saving a row at '+width).toBeGreaterThan(geometry.height+1);
+    if (width <= 639) {
+      const mobile = await header.evaluate(h => {
+        const controls=h.querySelector('.toolbar-controls')!;
+        const indices=[0,2,3,4,5];
+        const actions=indices.map(i=>controls.children[i].getBoundingClientRect());
+        const speed=controls.children[1].getBoundingClientRect();
+        return {actions:actions.map(r=>({y:r.y,width:r.width,bottom:r.bottom})),speed:{y:speed.y,width:speed.width},
+          controlsWidth:controls.getBoundingClientRect().width,
+          icons:h.querySelectorAll('.toolbar-counter-mobile-icon').length === 5 && [...h.querySelectorAll('.toolbar-counter-mobile-icon')].every(n=>n.getBoundingClientRect().width === 13 && getComputedStyle(n).display !== 'none'),
+          labels:[...h.querySelectorAll('.toolbar-counter-label,.toolbar-food-limit')].every(n=>getComputedStyle(n).display === 'none'),
+          names:[...h.querySelector('.toolbar-counters')!.children].every(n=>n.getAttribute('role') === 'group' && !!n.getAttribute('aria-label') && !!n.getAttribute('title'))};
+      });
+      expect(mobile.icons).toBe(true); expect(mobile.labels).toBe(true); expect(mobile.names).toBe(true);
+      for (const action of mobile.actions) {
+        expect(Math.abs(action.y-mobile.actions[0].y)).toBeLessThan(1);
+        expect(Math.abs(action.width-mobile.actions[0].width)).toBeLessThan(1);
+        expect(action.bottom).toBeLessThan(mobile.speed.y);
+      }
+      expect(Math.abs(mobile.speed.width-mobile.controlsWidth)).toBeLessThan(1);
+    }
+  }
+  expect(hidden).toBeGreaterThan(0); expect(visible).toBeGreaterThan(0);
+});
+
+test('toolbar stays stable with naturally packed performance text', async ({page}) => {
+  await page.setViewportSize({width:1920,height:1080}); await page.goto('./?autoplay');
+  await page.getByTitle('Ecology & Physical Settings').click();
+  await page.locator('input[type=file]').setInputFiles({name:'packed.json',mimeType:'application/json',
+    buffer:Buffer.from(JSON.stringify(toolbarWorld(0,1)))});
+  await expect(page.getByRole('button',{name:'RESUME SIMULATION',exact:true})).toBeVisible();
+  await page.getByTitle('Close settings (✕)').click();
+  const performance = page.locator('.toolbar-performance');
+  await expect(performance.locator('.toolbar-value')).toHaveCount(0);
+  const box=(await performance.boundingBox())!;
+  const tank=(await page.getByTestId('tank-viewport').boundingBox())!;
+  for (const text of ['0x (1 FPS · 0 Steps/s)','50x (144 FPS · 3000 Steps/s)','999999x (999999 FPS · 999999 Steps/s)']) {
+    const measured=await performance.evaluate((node,text)=>{
+      node.querySelector('.toolbar-performance-text')!.textContent=text;
+      const range=document.createRange();range.selectNodeContents(node.querySelector('.toolbar-performance-text')!);
+      const r=node.getBoundingClientRect(),t=range.getBoundingClientRect();
+      return {x:r.x,y:r.y,width:r.width,height:r.height,text:t.width,available:node.clientWidth-12};
+    },text);
+    for (const key of ['x','y','width','height'] as const) expect(Math.abs(measured[key]-box[key])).toBeLessThan(.5);
+    expect(measured.text).toBeLessThanOrEqual(measured.available+1);
+    expect(text).not.toMatch(/ {2,}/);
+    expect(await page.getByTestId('tank-viewport').boundingBox()).toEqual(tank);
+  }
+});
+
+for (const viewport of [
+  {width: 1920, height: 1080}, {width: 1536, height: 864}, {width: 1366, height: 768},
+  {width: 1280, height: 720}, {width: 1152, height: 768}, {width: 1151, height: 768},
+  {width: 1024, height: 768}, {width: 1023, height: 768},
+  {width: 768, height: 768}, {width: 640, height: 768}, {width: 520, height: 900},
+  {width: 390, height: 844}, {width: 320, height: 720},
+]) {
+  test(`toolbar stays fixed across statistics and interactions at ${viewport.width}x${viewport.height}`, async ({page}, info) => {
+    const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+    await page.setViewportSize(viewport); await page.goto('./?autoplay');
+    const toolbar = page.locator('header');
+    const settings = page.getByTitle('Ecology & Physical Settings');
+    const load = async (time: number, generation: number) => {
+      await settings.click();
+      await page.locator('input[type=file]').setInputFiles({name: 'toolbar.json', mimeType: 'application/json',
+        buffer: Buffer.from(JSON.stringify(toolbarWorld(time, generation)))});
+      await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
+      await page.getByTitle('Close settings (✕)').click();
+    };
+    const measure = () => page.evaluate(() => {
+      const rect = (node: Element) => {
+        const r = node.getBoundingClientRect(); return {x: r.x, y: r.y, width: r.width, height: r.height};
+      };
+      const h = document.querySelector('header')!;
+      return [h, document.querySelector('[data-testid=tank-viewport]')!, document.querySelector('canvas')!,
+        ...h.querySelectorAll('button'), ...h.children[1].children, ...Array.from(h.children[0].children).slice(1)].map(rect);
+    });
+    const stable = async (before: Awaited<ReturnType<typeof measure>>) => {
+      const after = await measure(); expect(after.length).toBe(before.length);
+      after.forEach((r, i) => {
+        for (const key of ['x', 'y', 'width', 'height'] as const)
+          expect(Math.abs(r[key] - before[i][key]), `element ${i} ${key}`).toBeLessThan(.5);
+      });
+    };
+    const reachable = async () => {
+      const problems = await toolbar.evaluate(h => {
+        const failures: string[] = [], bounds = h.getBoundingClientRect();
+        const nodes = [...h.querySelectorAll('button'), ...h.children[1].children, ...h.children[0].children]
+          .filter(n => n.getBoundingClientRect().width > 0);
+        const rectangles = nodes.map(n => ({n, r: n.getBoundingClientRect()}));
+        for (const {n, r} of rectangles) {
+          if (r.left < 0 || r.right > innerWidth + 1 || r.top < bounds.top || r.bottom > bounds.bottom + 1)
+            failures.push(`outside: ${n.textContent || n.getAttribute('title')} (${r.left}..${r.right})`);
+          if (n.scrollWidth > n.clientWidth + 1) failures.push(`overflow: ${n.textContent}`);
+          const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+          if (!hit || !n.contains(hit)) failures.push(`occluded: ${n.textContent || n.getAttribute('title')}`);
+        }
+        for (let i = 0; i < rectangles.length; i++) for (let j = i + 1; j < rectangles.length; j++) {
+          const a = rectangles[i].r, b = rectangles[j].r;
+          if (Math.min(a.right, b.right) - Math.max(a.left, b.left) > .5
+            && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > .5) failures.push('overlap');
+        }
+        for (const n of h.querySelectorAll('.toolbar-value')) {
+          if (n.scrollWidth > n.clientWidth + 1) failures.push(`numeric overflow: ${n.textContent}`);
+        }
+        return failures;
+      });
+      expect(problems).toEqual([]);
+    };
+    await load(0, 1); const small = await measure();
+    // Both imports go through normal application state, including large generation/time.
+    await load(9999999999.9, 999999); await stable(small); await reachable();
+    await expect(toolbar.locator('.toolbar-generation .toolbar-value')).toHaveText('999999');
+    await expect(toolbar.locator('.toolbar-time .toolbar-value')).toHaveText('9999999999.9');
+    await load(1e20, 1e9); await stable(small); await reachable();
+    await expect(toolbar.locator('.toolbar-generation .toolbar-value')).toHaveText('1e+9');
+    await expect(toolbar.locator('.toolbar-time .toolbar-value')).toHaveText('1e+20');
+    await expect(toolbar.locator('.toolbar-time .toolbar-value')).toHaveAttribute('title', String(1e20));
+    // Stress all reserved slots, including FPS/rate/count extremes, without simulating
+    // hundreds of organisms or changing production data/Worker behavior for the test.
+    for (let iteration = 0; iteration < 12; iteration++) {
+      await toolbar.locator('.toolbar-value').evaluateAll((nodes, i) => {
+        for (const node of nodes) node.textContent = i % 2 ? '0' : '9'.repeat(parseInt((node as HTMLElement).style.width));
+      }, iteration);
+      await stable(small); await reachable();
+    }
+    await toolbar.locator('.toolbar-value').evaluateAll(nodes => {
+      for (const node of nodes) node.textContent = (node as HTMLElement).title;
+    });
+    await load(0, 1);
+    // Real advancing telemetry must also leave the toolbar and the hit target fixed.
+    await page.getByRole('button', {name: 'RESUME SIMULATION', exact: true}).click();
+    const time = toolbar.locator('.toolbar-time .toolbar-value');
+    await expect.poll(async () => Number(await time.textContent())).toBeGreaterThan(0);
+    for (let sample = 0; sample < 8; sample++) {
+      await page.waitForTimeout(150); await stable(small); await reachable();
+    }
+    const canvas = page.getByLabel('Aquatic simulation'), c = (await canvas.boundingBox())!;
+    await page.mouse.click(c.x + c.width / 2, c.y + c.height / 2);
+    await expect(page.getByTestId('badge-window')).toBeVisible();
+    await toolbar.getByTitle('Inspect Specimen Brain & Vision Rays').click();
+    await expect(page.getByTestId('creature-inspector')).toBeVisible();
+    await page.getByTitle('Close Diagnostics Window (✕)').click();
+    await toolbar.getByTitle('Specimen Bank (Save & Spawn Custom Genomes)').click();
+    await expect(page.getByTestId('bank-window')).toBeVisible();
+    await page.getByTitle('Close specimen bank (✕)').click();
+    await toolbar.getByTitle('Ecosystem Telemetry Graph').click();
+    await expect(page.getByTestId('ledger-window')).toBeVisible();
+    await toolbar.getByTitle('Ecosystem Telemetry Graph').click();
+    for (const speed of ['MAX', '1x']) {
+      await toolbar.getByRole('button', {name: speed, exact: true}).click();
+      await expect(toolbar.getByRole('button', {name: speed, exact: true})).toHaveClass(/bg-cyan-500/);
+    }
+    await toolbar.getByTitle('Seed Primordial Specimen').click();
+    await expect.poll(async () => Number(await toolbar.locator('.toolbar-counters .toolbar-value').first().textContent())).toBe(2);
+    await toolbar.getByTitle('Game Menu').click();
+    await expect(page.getByRole('button', {name: 'RESUME', exact: true})).toBeVisible();
+    await page.getByRole('button', {name: 'RESUME', exact: true}).click();
+    await stable(small); await reachable();
+    await page.screenshot({path: info.outputPath('stable-toolbar.png')});
+    // Resize away and back: row changes must follow the viewport and be reversible.
+    await page.setViewportSize({width: 520, height: 900}); await settleToolbarLayout(page); await reachable();
+    await page.setViewportSize(viewport); await settleToolbarLayout(page); await stable(small); await reachable();
+    expect(errors).toEqual([]);
+  });
+}

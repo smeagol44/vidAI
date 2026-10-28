@@ -4,7 +4,7 @@ import {enableClosedEconomy, occupiedPopulation, setWorldEnergy, EGG_LIFETIME_MU
   embodiedEnergy} from './energyEconomy';
 // tslint:disable
 /* eslint-disable */
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react';
 import {
   Play,
   Pause,
@@ -17,6 +17,7 @@ import {
   VolumeX,
   Compass,
   Activity,
+  Leaf, Beef, Blend, Bone, Egg as EggIcon,
   Plus,
   Sparkles,
   Sliders,
@@ -120,6 +121,53 @@ import {BUILD_VERSION, CREDITS, createSnapshot, restoreSnapshot, validateGenome,
   clearFreeNutrients, resizeWorld, diagnosticReport} from './persistence';
 export * from './simulation';
 
+// Keep presentation slots bounded even for unusually old/imported worlds.
+function formatToolbarValue(value: number | string, characters = 6) {
+  const full = String(value);
+  return typeof value === 'number' && full.length > characters ? value.toExponential(0) : full;
+}
+function ToolbarValue({value, characters = 6}: {value: number | string; characters?: number}) {
+  const full = String(value);
+  const text = formatToolbarValue(value, characters);
+  return <span className="toolbar-value" style={{width: `${characters}ch`}} title={full}>{text}</span>;
+}
+
+// Presentation measurements use reserved chip widths, never changing statistics.
+function useToolbarLayout() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [layout, setLayout] = useState({credits: true, compact: false, menuSpace: 0});
+  useLayoutEffect(() => {
+    const general = ref.current;
+    if (!general) return;
+    const brand = general.querySelector<HTMLElement>('.toolbar-brand')!;
+    const credits = general.querySelector<HTMLElement>('.toolbar-credits')!;
+    const metrics = general.querySelector<HTMLElement>('.toolbar-metrics')!;
+    const menu = general.closest('header')!.querySelector<HTMLElement>('.toolbar-controls > :last-child')!;
+    const chips = [...metrics.children] as HTMLElement[];
+    const measure = () => {
+      const gap = parseFloat(getComputedStyle(general).columnGap);
+      const metricsGap = parseFloat(getComputedStyle(metrics).columnGap);
+      const available = general.getBoundingClientRect().width;
+      const menuSpace = getComputedStyle(menu).position === 'absolute' ? menu.getBoundingClientRect().width + gap : 0;
+      const identitySpace = available - menuSpace;
+      const brandWidth = brand.getBoundingClientRect().width;
+      const creditsWidth = credits.getBoundingClientRect().width;
+      const metricsWidth = chips.reduce((total, chip) => total + chip.getBoundingClientRect().width, metricsGap * 2);
+      const needsMetricRow = brandWidth + gap + metricsWidth > identitySpace;
+      const showCredits = needsMetricRow ? brandWidth + gap + creditsWidth <= identitySpace
+        : brandWidth + creditsWidth + metricsWidth + gap * 2 <= identitySpace;
+      const next = {credits: showCredits, compact: metricsWidth > available, menuSpace};
+      setLayout(current => current.credits === next.credits && current.compact === next.compact
+        && current.menuSpace === next.menuSpace ? current : next);
+    };
+    const observer = new ResizeObserver(measure);
+    for (const node of [general, brand, credits, menu, ...chips]) observer.observe(node);
+    measure();
+    return () => observer.disconnect();
+  }, []);
+  return {ref, ...layout};
+}
+
 // Bound floating windows to the visible tank area, including after resizing.
 function useDraggableModal(initialX: number, initialY: number) {
   const [pos, setPos] = useState({x: initialX, y: initialY});
@@ -221,6 +269,7 @@ function AudioControls({sfxVolume, musicVolume, sfxMuted, musicMuted,
 }
 
 export default function App() {
+  const toolbarLayout = useToolbarLayout();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const workerClientRef = useRef<SimulationClient | null>(null);
   const workerSettingsRef = useRef<SimulationSettings | null>(null);
@@ -1523,59 +1572,67 @@ export default function App() {
       <BackgroundMusic key={musicTrack} url={musicTrack === 'track2' ? alternateMusicUrl : ambientMusicUrl} isPlaying={isMusicPlaying} isMuted={musicMuted} volume={musicVolume} />
 
       {/* TOP DEDICATED TELEMETRY HUD BAR */}
-      <header className="w-full bg-slate-900/95 border-b border-cyan-500/20 backdrop-blur-md px-3 py-2 flex flex-wrap items-center justify-between gap-2 z-20 shrink-0">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-emerald-400 animate-ping" />
+      <header data-testid="simulation-toolbar" className="simulation-toolbar w-full bg-slate-900/95 border-b border-cyan-500/20 backdrop-blur-md px-3 py-2 z-20 shrink-0">
+        <div ref={toolbarLayout.ref} className="toolbar-general font-mono"
+          data-credits={toolbarLayout.credits} data-compact-metrics={toolbarLayout.compact}
+          style={{'--toolbar-menu-space': `${toolbarLayout.menuSpace}px`} as React.CSSProperties}>
+          <div className="toolbar-identity">
+          <div className="toolbar-brand flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-emerald-400 animate-ping shrink-0" />
           <span className="font-mono font-black text-xs md:text-sm tracking-wider text-cyan-300">
             VIDA
+          </span></div>
+          <span aria-hidden={!toolbarLayout.credits} className="toolbar-credits text-[9px] text-slate-400">{CREDITS}</span>
+          </div>
+          <div className="toolbar-metrics">
+          <span className="toolbar-generation px-1.5 py-0.5 text-[10px] rounded bg-cyan-950/80 border border-cyan-500/30 text-cyan-400">
+            GEN <ToolbarValue value={ecoStats.maxGeneration} />
           </span>
-          <span className="hidden lg:inline text-[9px] text-slate-400">{CREDITS}</span>
-          <span className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] rounded bg-cyan-950/80 border border-cyan-500/30 text-cyan-400">
-            GEN {ecoStats.maxGeneration}
+          <span className="toolbar-performance px-1.5 py-0.5 text-[10px] rounded bg-purple-950/80 border border-purple-500/30 text-purple-300 font-mono" title="Simulation-to-Real Time Ratio & FPS">
+            <span className="toolbar-performance-text" title={`${ecoStats.simTimeRatio}x (${ecoStats.renderFPS} FPS · ${ecoStats.physicsStepsPerSec} Steps/s)`}>
+              {formatToolbarValue(ecoStats.simTimeRatio)}x ({formatToolbarValue(ecoStats.renderFPS)} FPS · {formatToolbarValue(ecoStats.physicsStepsPerSec)} Steps/s)
+            </span>
           </span>
-          <span className="px-1.5 py-0.5 text-[10px] rounded bg-purple-950/80 border border-purple-500/30 text-purple-300 font-mono" title="Simulation-to-Real Time Ratio & FPS">
-            {ecoStats.simTimeRatio}x ({ecoStats.renderFPS} FPS · {ecoStats.physicsStepsPerSec} Steps/s)
+          <span className="toolbar-time px-1.5 py-0.5 text-[10px] rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono">
+            t = <ToolbarValue value={ecoStats.simTime} characters={12} />s
           </span>
-          <span className="hidden md:inline-block px-1.5 py-0.5 text-[10px] rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono">
-            t = {ecoStats.simTime}s
-          </span>
+          </div>
         </div>
 
-        {/* Live Counters with Fixed Stable Widths (Zero Layout Jitter) */}
-        <div className="flex items-center gap-1.5 md:gap-2 text-[11px] md:text-xs font-mono flex-wrap">
-          <div className="flex items-center gap-1 text-emerald-400 bg-slate-950/60 px-2 py-0.5 rounded border border-slate-800">
-            <Activity size={13} />
-            <span>Alive: <strong className="text-white">{ecoStats.livingCount}</strong></span>
+        {/* Viewport-driven counter columns with reserved numeric slots */}
+        <div className="toolbar-counters text-[11px] md:text-xs font-mono">
+          <div role="group" title={`Alive: ${ecoStats.livingCount}`} aria-label={`Alive: ${ecoStats.livingCount}`} className="flex items-center gap-1 text-emerald-400 bg-slate-950/60 px-2 py-0.5 rounded border border-slate-800">
+            <Activity size={13} aria-hidden="true" />
+            <span><span className="toolbar-counter-label">Alive: </span><strong className="text-white"><ToolbarValue value={ecoStats.livingCount} /></strong></span>
           </div>
 
-          <div className="flex items-center gap-1 text-emerald-300 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-500/30">
-            <span>🌿 Herb: <strong className="text-white">{ecoStats.herbivoreCount}</strong></span>
+          <div role="group" title={`Herbivores: ${ecoStats.herbivoreCount}`} aria-label={`Herbivores: ${ecoStats.herbivoreCount}`} className="flex items-center gap-1 text-emerald-300 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-500/30">
+            <span className="toolbar-counter-icon" aria-hidden="true"><span className="toolbar-counter-emoji">🌿</span><Leaf className="toolbar-counter-mobile-icon" size={13} /></span><span><span className="toolbar-counter-label">Herb: </span><strong className="text-white"><ToolbarValue value={ecoStats.herbivoreCount} /></strong></span>
           </div>
 
-          <div className="flex items-center gap-1 text-rose-300 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-500/30">
-            <span>🥩 Carn: <strong className="text-white">{ecoStats.carnivoreCount}</strong></span>
+          <div role="group" title={`Carnivores: ${ecoStats.carnivoreCount}`} aria-label={`Carnivores: ${ecoStats.carnivoreCount}`} className="flex items-center gap-1 text-rose-300 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-500/30">
+            <span className="toolbar-counter-icon" aria-hidden="true"><span className="toolbar-counter-emoji">🥩</span><Beef className="toolbar-counter-mobile-icon" size={13} /></span><span><span className="toolbar-counter-label">Carn: </span><strong className="text-white"><ToolbarValue value={ecoStats.carnivoreCount} /></strong></span>
           </div>
 
-          <div className="flex items-center gap-1 text-purple-300 bg-purple-950/40 px-2 py-0.5 rounded border border-purple-500/30">
-            <span>🟣 Omni: <strong className="text-white">{ecoStats.omnivoreCount}</strong></span>
+          <div role="group" title={`Omnivores: ${ecoStats.omnivoreCount}`} aria-label={`Omnivores: ${ecoStats.omnivoreCount}`} className="flex items-center gap-1 text-purple-300 bg-purple-950/40 px-2 py-0.5 rounded border border-purple-500/30">
+            <span className="toolbar-counter-icon" aria-hidden="true"><span className="toolbar-counter-emoji">🟣</span><Blend className="toolbar-counter-mobile-icon" size={13} /></span><span><span className="toolbar-counter-label">Omni: </span><strong className="text-white"><ToolbarValue value={ecoStats.omnivoreCount} /></strong></span>
           </div>
 
-          <div className="hidden sm:flex items-center gap-1 text-amber-300 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-500/30">
-            <span>🥩 Remains: <strong className="text-white">{ecoStats.carrionCount}</strong></span>
+          <div role="group" title={`Remains: ${ecoStats.carrionCount}`} aria-label={`Remains: ${ecoStats.carrionCount}`} className="flex items-center gap-1 text-amber-300 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-500/30">
+            <span className="toolbar-counter-icon" aria-hidden="true"><span className="toolbar-counter-emoji">🦴</span><Bone className="toolbar-counter-mobile-icon" size={13} /></span><span><span className="toolbar-counter-label">Remains: </span><strong className="text-white"><ToolbarValue value={ecoStats.carrionCount} /></strong></span>
           </div>
 
-          <div className="flex items-center gap-1 text-cyan-300 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-500/30">
-            <span>🥚 Eggs: <strong className="text-white">{ecoStats.eggCount}</strong></span>
+          <div role="group" title={`Eggs: ${ecoStats.eggCount}`} aria-label={`Eggs: ${ecoStats.eggCount}`} className="flex items-center gap-1 text-cyan-300 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-500/30">
+            <span className="toolbar-counter-icon" aria-hidden="true"><span className="toolbar-counter-emoji">🥚</span><EggIcon className="toolbar-counter-mobile-icon" size={13} /></span><span><span className="toolbar-counter-label">Eggs: </span><strong className="text-white"><ToolbarValue value={ecoStats.eggCount} /></strong></span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
+          <div role="group" title={`Food: ${ecoStats.nutrientCount} / ${energyPool ? nutrientLimit ?? '∞' : ecoStats.targetNutrients}`} aria-label={`Food: ${ecoStats.nutrientCount} / ${energyPool ? nutrientLimit ?? '∞' : ecoStats.targetNutrients}`} className="flex items-center gap-1.5 text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Food: <strong className="text-white">{ecoStats.nutrientCount}</strong><span className="text-emerald-300/60"> / {energyPool ? nutrientLimit ?? '∞' : ecoStats.targetNutrients}</span></span>
+            <span><span className="toolbar-counter-label">Food: </span><strong className="text-white"><ToolbarValue value={ecoStats.nutrientCount} /></strong><span className="toolbar-food-limit text-emerald-300/60"> / <ToolbarValue value={energyPool ? nutrientLimit ?? '∞' : ecoStats.targetNutrients} /></span></span>
           </div>
         </div>
 
         {/* Speed Controls & Action Buttons */}
-        <div className="flex items-center gap-1.5">
+        <div className="toolbar-controls">
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -1692,6 +1749,7 @@ export default function App() {
               setIsGameMenuOpen(true);
               gameAudio.playCrispClick();
             }}
+            title="Game Menu"
             className="p-1.5 rounded-lg bg-slate-800 border border-slate-700 text-cyan-400 hover:bg-slate-700 flex items-center gap-1 text-xs">
             <Menu size={16} />
             <span className="hidden md:inline">Menu</span>
