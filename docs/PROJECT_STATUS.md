@@ -1,3 +1,30 @@
+## Egg reserve display — selected upstream submission (2026-10-28)
+
+Refs #116/#57. The observer-only counterclockwise white/pink reserve-loss sector
+was implemented, tested and merged through contributor fork PR #29/main d5218b4.
+Hernan explicitly approved upstream submission after visually accepting that delivery.
+This branch starts directly from canonical main 6f8f80c and carries only this feature.
+Original mouth geometry, founders, version 0.37.0, v12–v15 save meanings,
+paused/running controls, Worker protocol, Pages and stopped experiments are preserved.
+No dependency on the separate #113 or #115 submissions is introduced.
+
+Original usable reserve is stored at laying as optional observer metadata, never
+as an energy stock. Old eggs missing it receive known current reserve once and
+legacy provenance; historical loss cannot be recovered. White sensing, neural
+inputs, all energy/reproduction/uptake/hatch/expiry/physics rules remain unchanged.
+Wiki/source documentation describes the implemented fork behavior with upstream
+acceptance/publication pending. Contributor-only design notes are excluded.
+
+On this exact target: 306 fast tests and build/typecheck passed. Eight pre-change
+comparisons matched complete state at each of 120 ticks across all four physics
+regimes and both economies, excluding only the two observer metadata fields.
+Laying/hatching occurred in all eight, expiry in the four closed cases. Committed
+results identify the canonical baseline; no golden refresh or ecological/FPS claim.
+Production Worker and bounded Chromium/Firefox validation are recorded in #116/#57
+and the PR. The local browser archive is unavailable; remote CI supplies browser
+verification. No upstream merge, release, deployment or actual Wiki publication is
+part of the submission authorization. Keep the issue open for upstream review.
+
 # Project status — 2026-10-21
 
 ## Coherent fluid drag and anatomical muscle trial — rejected without runtime changes

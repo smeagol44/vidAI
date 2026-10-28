@@ -67,6 +67,7 @@ import {
 } from './utils/helper';
 import neuralNodeIconUrl from './assets/images/neural_node_icon.png';
 import organismEggUrl from './assets/images/organism_egg.png';
+import {drawEggReserveLoss} from './eggReserve';
 import nutrientParticleUrl from './assets/images/nutrient_particle.png';
 import dnaHelixIconUrl from './assets/images/dna_helix_icon.png';
 import ambientMusicUrl from './assets/audio/ambient_deep_water_bgm.mp3';
@@ -1209,6 +1210,8 @@ export default function App() {
 
       ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI * 2);
       ctx.fillStyle = '#ffffff'; ctx.fill();
+      drawEggReserveLoss(ctx, egg);
+      ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI * 2);
       ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1.5; ctx.stroke();
       if (eggImg?.complete && eggImg.naturalWidth > 0) {
         ctx.save(); ctx.filter = 'grayscale(1) brightness(1.8)'; ctx.globalAlpha = .14;

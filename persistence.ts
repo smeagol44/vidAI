@@ -1,4 +1,5 @@
 import {embodiedEnergy, FOOD_SAFETY_LIMIT} from './energyEconomy';
+import {eggReserveReference} from './eggReserve';
 import {
   XoshiroPRNG, migrateOrganismBrain, ensureBrainLayout, calculateBodyCost,
   calculateMaxEnergyCapacity, clampVal, getPartCornerVertices,
@@ -62,7 +63,7 @@ export function createSnapshot(s: SimulationState, settings: SimulationSettings,
   const snapshot = {schemaVersion: settings.physicsRegime === 'passive-work-v3' ? '15.0.0' : settings.mouthContactModel === 'capsule-v1' ? '14.0.0' : s.energyPool ? '13.0.0' : '12.0.0', build: BUILD_VERSION, metadata, settings: {...settings,
     ...(s.energyPool ? {ecologyRegime: 'closed-v1' as const, nutrientLimit: settings.nutrientLimit ?? null} : {}),
     physicsRegime: settings.physicsRegime ?? 'legacy-v0'},
-    state: {...data, prngState: prng.getState(), lineage: [...lineage]}};
+    state: {...data, eggs: data.eggs.map(egg => ({...egg, ...eggReserveReference(egg)})), prngState: prng.getState(), lineage: [...lineage]}};
   // Canonical JSON representation also drops optional undefined fields in memory.
   return JSON.parse(JSON.stringify(snapshot)) as typeof snapshot;
 }
@@ -342,6 +343,11 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     assert([egg.x, egg.y, egg.vx, egg.vy, egg.fundedReserve, egg.fundedStructural, egg.incubationProgress, egg.totalIncubationTime].every(Number.isFinite)
       && (egg.hatchHeading === undefined || Number.isFinite(egg.hatchHeading))
       && egg.fundedReserve >= 0 && egg.fundedStructural >= 0 && egg.totalIncubationTime > 0, 'egg state');
+    assert(egg.initialFundedReserve === undefined || (Number.isFinite(egg.initialFundedReserve)
+      && egg.initialFundedReserve >= 0), 'initial egg reserve');
+    assert(egg.initialReserveIsLegacy === undefined || typeof egg.initialReserveIsLegacy === 'boolean',
+      'egg reserve reference provenance');
+    Object.assign(egg, eggReserveReference(egg));
     if (closed) assert(Number.isFinite(egg.ageSeconds) && egg.ageSeconds >= 0
       && Number.isFinite(egg.hatchReserveTarget) && egg.hatchReserveTarget >= 0
       && egg.hatchReserveTarget <= egg.genome.maxEnergyCapacity

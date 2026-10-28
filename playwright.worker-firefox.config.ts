@@ -5,6 +5,6 @@ import base from './playwright.config';
 // Chromium gate and use its existing server/startup/command assertions.
 export default defineConfig({
   ...base,
-  testMatch: 'performance-worker.spec.ts',
+  testMatch: ['performance-worker.spec.ts', 'egg-reserve.spec.ts'],
   use: {...base.use, browserName: 'firefox', launchOptions: {}},
 });
