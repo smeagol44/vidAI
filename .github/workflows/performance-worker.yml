@@ -4,6 +4,10 @@ on:
     paths:
       - 'simulation.worker.ts'
       - 'energyEconomy.ts'
+      - 'energyActivity.ts'
+      - 'tests/energy-activity.test.ts'
+      - 'tests/support/energy-activity.ts'
+      - 'e2e/energy-activity.spec.ts'
       - 'tests/closed-energy.test.ts'
       - 'mouthGeometry.ts'
       - 'mouthContactAudit.ts'
@@ -43,5 +47,5 @@ jobs:
       - run: npx playwright install --with-deps chromium firefox
       - run: npm run build
       - run: npm run test:worker
-      - run: npx playwright test e2e/performance-worker.spec.ts --workers=1
+      - run: npx playwright test e2e/performance-worker.spec.ts e2e/energy-activity.spec.ts --workers=1
       - run: npx playwright test --config=playwright.worker-firefox.config.ts --workers=1

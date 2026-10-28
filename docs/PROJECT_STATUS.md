@@ -1,5 +1,34 @@
 # Project status — 2026-10-21
 
+## Observer-only energy activity submission — 2026-10-28
+
+Approved submission for #114 from `submission/energy-activity`, directly based on
+upstream main `6f8f80c`. The final wider translucent glow was accepted visually by
+Hernan after fork PRs25–27, merged into fork main `017ea675`. Actual absorption and
+predation extraction drive independent transient signals, with a 250ms relative
+window, 0.5%/0.35% hysteresis and a safe stock floor. Green covers the body; red
+uses existing authoritative contacted segments. No contact/feeding arithmetic,
+optical sensing, neural decisions, genetics, physics or persistent schemas change.
+
+A 400ms presentation cycle staggers peaks by 200ms, with at most 100ms fade after
+activity ends. Five translucent contours reach 10.5 CSS pixels outward, independent
+of zoom, underneath the original body fill/outline. No blur/filter/body scaling.
+Five strokes per active color add drawing cost; no FPS or zero-overhead claim.
+Nearby halos can overlap. Death/removal/reset clears transient signals.
+
+The upstream submission preserves this target's pause overlay, numeric speed
+controls and Worker protocol. Its existing paused/running state freezes phase and
+decay; late metadata waits for resume. #113's interactive x0/MAX/toolbar change is
+separate and unmerged. On that integration, the same pause-aware clock must follow
+its canonical zero-speed state; no new independent pause mechanism is introduced.
+Test fixtures use upstream's unchanged mouth geometry, not fork oral dimensions.
+
+Fast/build, exact observer-free full snapshots and actual Worker/browser results
+are tracked in #114 and the submission PR. Current Wiki source is included with
+pending-upstream labeling; acceptance and actual Wiki publication remain pending.
+No unrelated fork changes, version bump, hosting changes or VIDA 3D work.
+
+
 ## Coherent fluid drag and anatomical muscle trial — rejected without runtime changes
 
 - A bounded experiment compared two proposed replacements independently and

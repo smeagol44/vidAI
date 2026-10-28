@@ -93,3 +93,5 @@ history. Detailed experiments stay in
 [project status](https://github.com/smeagol44/vidAI/blob/main/docs/PROJECT_STATUS.md);
 priorities stay in the [roadmap](https://github.com/smeagol44/vidAI/blob/main/docs/FEATURE_ROADMAP.md).
 The maintained source is `docs/wiki/`, automatically published to this Wiki.
+
+Observer-only energy activity is documented in [Energy Activity](Energy-Activity).
