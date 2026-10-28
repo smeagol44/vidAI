@@ -1,3 +1,45 @@
+# Initial environmental scenarios — upstream submission (2026-10-28)
+
+Refs #119 / #57. Explicitly approved after verified fork delivery PR
+hernansgarro/vidAI#31 and fork merge71f6f584. Clean branch
+`hernansgarro:submission/environment-scenarios` is based directly on canonical
+upstream/main `6f8f80c4cf771fa394fc12d2954380ea11365ade`. Only the selected
+scenario feature is submitted; unrelated fork pause/activity/egg/forward-mouth
+work, contributor journal, testing overlays and stopped experiments are excluded.
+This submission does not authorize upstream merge, release or publication.
+
+Default preserves configured initial settings and exact initialization. Harsh
+applies requested larger tank/gravity/viscosity/cap/recycling settings and calls
+existing Clear Free Nutrients synchronously before publication or the first tick.
+Matching founder populations receive the same global budget; 825,000 J of initial
+nutrient energy remains in reserve. Factory code is identical to the verified
+fork delivery. Founder selection, later controls and exact imports remain
+independent. The canonical pause/running UI and Worker protocol are preserved,
+as are saved schemas 12–15, original mouth geometry, founders and version0.37.0.
+No simulation kernel, energy law, physics, feeding, reproduction or genetic
+change is submitted. Details and reset boundaries: ENVIRONMENT_SCENARIOS.md.
+
+Exact-target local npm ci, 292 fast tests, build/typecheck and actual production
+Worker passed. Against unchanged canonical6f8f80c, 16 seed/brain/preset
+combinations match complete Default and manually configured Harsh+Clear initial
+snapshots plus 30 ticks per world: 960 exact continuation comparisons, with no
+excluded fields or baseline refresh. Matching budgets are equal; maximum stock
+error9.32e-10 J. Raw evidence: experiments/environment-scenarios-v1.json;
+reproduce with scripts/check-environment-scenarios-baseline.ts BASE_CHECKOUT.
+These deliberately harsher settings preserve existing manual behavior; this is
+not a survival, sustained ecology or FPS improvement claim.
+
+Local browser archive was unavailable after a truncated/non-ZIP download during
+fork delivery. Exact-target Chromium/Firefox Worker/fallback coverage is included
+in the existing bounded smoke CI and will be verified through a temporary
+internal validation PR closed unmerged. That PR does not alter fork main/testing
+or publish. Remote results and the eventual upstream PR are recorded in #119/#57.
+Wiki source is marked pending acceptance; actual upstream Wiki/publication must
+be verified only after upstream acceptance. Fractional recycling and named
+profiles remain deferred; their contributor-only journal is excluded.
+
+---
+
 # Project status — 2026-10-21
 
 ## Coherent fluid drag and anatomical muscle trial — rejected without runtime changes

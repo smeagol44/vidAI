@@ -2,6 +2,9 @@ name: Worker integration smoke
 on:
   pull_request:
     paths:
+      - 'environmentScenarios.ts'
+      - 'tests/environment-scenarios.test.ts'
+      - 'e2e/environment-scenarios.spec.ts'
       - 'simulation.worker.ts'
       - 'energyEconomy.ts'
       - 'tests/closed-energy.test.ts'
@@ -43,5 +46,5 @@ jobs:
       - run: npx playwright install --with-deps chromium firefox
       - run: npm run build
       - run: npm run test:worker
-      - run: npx playwright test e2e/performance-worker.spec.ts --workers=1
+      - run: npx playwright test e2e/performance-worker.spec.ts e2e/environment-scenarios.spec.ts --workers=1
       - run: npx playwright test --config=playwright.worker-firefox.config.ts --workers=1

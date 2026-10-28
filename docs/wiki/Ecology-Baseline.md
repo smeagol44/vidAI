@@ -4,6 +4,26 @@ Physical feeding, finite reserves, funded eggs, hatching and death exist.
 Reliable unassisted food acquisition and self-sustaining populations across
 generations remain open outcomes. Startup survival alone does not show viability.
 
+## Initial environmental scenarios
+
+**Submission pending upstream acceptance; verified in hernansgarro/vidAI.**
+The start-menu Environment dropdown offers world-icon **Default** (preselected)
+and mountain-icon **Harsh World**, independently of founder population/brain mode.
+Default retains configured initialization. Harsh starts a 4800 × 3000 px tank,
+20 px/s² gravity, viscosity 0.40, a combined creature/egg cap of 50 and 1 nutrient/s
+recycling with a finite 200-nutrient cap. Initial population stays preset-dependent
+(normally 18). All other settings use configured defaults.
+
+Harsh has **zero free nutrients before the first tick**. The normal initial
+nutrient grant is returned to the existing reserve using Clear Free Nutrients
+during creation, retaining the same global budget as Default for the same
+seed/population (currently 825,000 J of food energy banked). Recycling and all
+feeding, egg and energy rules remain unchanged; extinction remains valid.
+Controls remain editable. Imports keep exact saved conditions and never reapply
+a scenario. Returning to the start menu can select a fresh Default; existing
+in-world reseed controls keep their current-settings semantics. No custom profiles
+or fractional-rate control is included.
+
 ## Closed world budget
 
 New application worlds use a finite recycled ecological energy budget. Its

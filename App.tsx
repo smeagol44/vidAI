@@ -53,7 +53,8 @@ import type {WorldAction} from './simulationHost';
 import {runProductionChecks} from './diagnostics';
 import CreaturePreview from './CreaturePreview';
 import {useNotification} from './utils/useNotification';
-import {createInitialWorld, addExternalOrganism, collectWorldStats} from './world';
+import {addExternalOrganism, collectWorldStats} from './world';
+import {createScenarioWorld, type EnvironmentScenario} from './environmentScenarios';
 import {
   createFixedStepper,
   drawAsset,
@@ -307,6 +308,7 @@ export default function App() {
   const [maxOrganisms, setMaxOrganisms] = useState(30);
   const [simulationSeed, setSimulationSeed] = useState(() => crypto.getRandomValues(new Uint32Array(1))[0]);
   const [founderMode, setFounderMode] = useState<FounderMode>('balanced');
+  const [environmentScenario, setEnvironmentScenario] = useState<EnvironmentScenario>('default');
   const [bankFamily, setBankFamily] = useState('All');
   const [bankDiet, setBankDiet] = useState('All');
   const [bankSearch, setBankSearch] = useState('');
@@ -551,6 +553,10 @@ export default function App() {
     mutationSeverity, gravity, maxOrganisms, physicsRegime, ecologyRegime, nutrientLimit, mouthContactModel}),
     [worldWidth, worldHeight, waterViscosity, targetNutrientAbundance, nutrientInflowRate, nutrientPattern, kinshipProtectionEnabled, gravity, maxOrganisms, mutationSeverity, physicsRegime, ecologyRegime, nutrientLimit, mouthContactModel]);
 
+  // Retain configured application defaults independently of live slider edits
+  // and imported worlds. Existing in-world reset controls keep their semantics.
+  const initialEnvironmentRef = useRef(currentSettings());
+
   workerSettingsRef.current = currentSettings();
   const workerAction = (action: WorldAction) => workerClientRef.current!.action(action)
     .catch(error => {setSaveNotification(String(error)); return undefined;});
@@ -688,25 +694,33 @@ export default function App() {
 
   // Initialize Simulation
   const initGame = useCallback(
-    (preset = 'standard') => {
-      const config = {...currentSettings(), physicsRegime: NEW_PHYSICS_REGIME,
+    (preset = 'standard', scenario?: EnvironmentScenario) => {
+      const defaults = {...(scenario ? initialEnvironmentRef.current : currentSettings()), physicsRegime: NEW_PHYSICS_REGIME,
         ecologyRegime: 'closed-v1' as const, nutrientLimit: null, mouthContactModel: 'capsule-v1' as const};
+      const {state, settings: config} = createScenarioWorld(defaults, scenario ?? 'default',
+        simulationSeed, founderMode, preset, getConfig('initialOrganisms'));
       setMouthContactModel('capsule-v1');
       setPhysicsRegime(NEW_PHYSICS_REGIME);
-      setEcologyRegime('closed-v1'); setNutrientLimit(null);
-      replaceWorld(createInitialWorld(config, simulationSeed, founderMode, preset, getConfig('initialOrganisms')), config);
+      setEcologyRegime('closed-v1'); setNutrientLimit(config.nutrientLimit ?? null);
+      setWorldWidth(config.worldWidth); setWorldHeight(config.worldHeight);
+      setWaterViscosity(config.waterViscosity); setGravity(config.gravity ?? 0);
+      setNutrientInflowRate(config.inflowRate); setTargetNutrientAbundance(config.targetNutrients);
+      setNutrientPattern(config.nutrientPattern ?? 'uniform');
+      setKinshipProtectionEnabled(config.kinshipProtection); setMutationSeverity(config.mutationSeverity);
+      setMaxOrganisms(config.maxOrganisms ?? 30);
+      replaceWorld(state, config);
       popHistoryRef.current = [simStateRef.current.organisms.length];
-      setEcoStats(prev => ({...prev, ...collectWorldStats(simStateRef.current, targetNutrientAbundance)}));
+      setEcoStats(prev => ({...prev, ...collectWorldStats(state, config.targetNutrients)}));
 
       setSelectedOrgId(null);
       setSelectedSpecimen(null);
       setSelectedEggId(null);
       setIsBrainInspectorOpen(false);
       setIsAutoTracking(false);
-      cameraRef.current.x = worldWidth / 2;
-      cameraRef.current.y = worldHeight / 2;
-      cameraRef.current.targetX = worldWidth / 2;
-      cameraRef.current.targetY = worldHeight / 2;
+      cameraRef.current.x = config.worldWidth / 2;
+      cameraRef.current.y = config.worldHeight / 2;
+      cameraRef.current.targetX = config.worldWidth / 2;
+      cameraRef.current.targetY = config.worldHeight / 2;
       cameraRef.current.zoom = 0.85;
 
       setGameState({
@@ -2017,6 +2031,7 @@ export default function App() {
                   </span>
                 </div>
                 <input
+                  aria-label={energyPool ? 'Nutrient recycling rate' : 'Nutrient inflow rate'}
                   type="range"
                   min="0"
                   max="150"
@@ -2150,6 +2165,7 @@ export default function App() {
                   <span className="text-cyan-300 font-bold">{waterViscosity.toFixed(2)}</span>
                 </div>
                 <input
+                  aria-label="Water viscosity"
                   type="range"
                   min="0.00"
                   max="0.6"
@@ -3059,8 +3075,17 @@ export default function App() {
             </p>
 
             <div className="w-full flex flex-col gap-3">
+              <label className="text-left text-xs text-slate-300 flex flex-col gap-1.5">
+                Environment
+                <select aria-label="Environment scenario" value={environmentScenario}
+                  onChange={e => setEnvironmentScenario(e.target.value as EnvironmentScenario)}
+                  className="w-full min-w-0 bg-slate-950 border border-cyan-500/40 rounded-xl px-3 py-2 text-sm text-cyan-100">
+                  <option value="default">🌎 Default</option>
+                  <option value="harsh-world">⛰ Harsh World</option>
+                </select>
+              </label>
               <button
-                onClick={() => initGame('standard')}
+                onClick={() => initGame('standard', environmentScenario)}
                 autoFocus
                 className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 px-6 py-3.5 rounded-2xl font-black text-lg shadow-lg hover:shadow-cyan-500/25 transition-all flex items-center justify-center gap-2">
                 <Play size={22} />
@@ -3076,13 +3101,13 @@ export default function App() {
 
               <div className="grid grid-cols-2 gap-2">
                 <button
-                  onClick={() => initGame('predator_cove')}
+                  onClick={() => initGame('predator_cove', environmentScenario)}
                   className="bg-slate-800/80 hover:bg-slate-750 text-rose-300 border border-rose-500/30 px-3 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-colors">
                   <Flame size={16} />
                   Predator Cove
                 </button>
                 <button
-                  onClick={() => initGame('megafauna')}
+                  onClick={() => initGame('megafauna', environmentScenario)}
                   className="bg-slate-800/80 hover:bg-slate-750 text-purple-300 border border-purple-500/30 px-3 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-colors">
                   <Zap size={16} />
                   Megafauna
