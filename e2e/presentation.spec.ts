@@ -20,7 +20,7 @@ for (const viewport of [{width: 1920, height: 900}, {width: 520, height: 900}, {
     await page.getByTitle('Ecology & Physical Settings').click();
     await page.locator('input[type=file]').setInputFiles({name: 'layout.json', mimeType: 'application/json',
       buffer: Buffer.from(JSON.stringify(createSnapshot(emptyWorld(11), quiet)))});
-    await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
+    await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
     await page.getByTitle('Close settings (✕)').click();
     await expect(page.getByTestId('build-version')).toHaveText(`v${BUILD_VERSION}`);
     for (const name of ['Eel', 'Predator', 'Flapper', 'Tadpole', 'Glider', 'Random'])
@@ -86,7 +86,7 @@ test('manual food buttons respect zero and saturated limits through the actual U
   const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0};
   const state = emptyWorld(33);
   await page.locator('input[type=file]').setInputFiles({name: 'empty.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(createSnapshot(state, settings)))});
-  await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
+  await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
   for (const name of ['Feed (F)', 'Feed All']) await page.getByRole('button', {name, exact: true}).click();
   expect((await read()).population.nutrients).toBe(0);
   const fullSettings = {...settings, targetNutrients: 3};
@@ -121,13 +121,13 @@ test('import keeps the exact snapshot paused while replacing a fast-running worl
     await setRange('Nutrient target', 800); await setRange(null, 150);
     await page.getByRole('button', {name: 'MAX', exact: true}).click();
     await page.locator('input[type=file]').setInputFiles({name: 'atomic.json', mimeType: 'application/json', buffer: snapshot});
-    await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
+    await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
     await page.getByRole('button', {name: 'Copy Diagnostic Report', exact: true}).click();
     const report = JSON.parse(await page.getByLabel('Diagnostic report', {exact: true}).inputValue());
     expect(report.simTime).toBe(42); expect(report.population.nutrients).toBe(0);
     expect(report.settings.targetNutrients).toBe(0); expect(report.settings.inflowRate).toBe(0);
     expect(Math.abs(report.energy.errorJ)).toBeLessThan(.001);
-    await page.getByRole('button', {name: 'RESUME SIMULATION', exact: true}).click();
+    await page.getByRole('button', {name: 'Resume', exact: true}).click();
   }
 });
 
@@ -167,7 +167,7 @@ test('white eggs render white and actual feeding animates the mouth', async ({pa
   await page.setViewportSize({width: 1360, height: 900}); await page.goto('./?autoplay');
   await page.getByTitle('Ecology & Physical Settings').click();
   await page.locator('input[type=file]').setInputFiles({name: 'visuals.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(createSnapshot(state, settings)))});
-  await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
+  await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
   const readPixel = () => page.getByLabel('Aquatic simulation').evaluate(node => {
     const c = node as HTMLCanvasElement;
     const rect = c.getBoundingClientRect(), dpr = c.width / rect.width;
@@ -179,7 +179,7 @@ test('white eggs render white and actual feeding animates the mouth', async ({pa
   const pixel = await readPixel();
   expect(Math.max(...pixel.slice(0, 3)) - Math.min(...pixel.slice(0, 3))).toBeLessThan(12);
   await page.getByTitle('Close settings (✕)').click();
-  await page.getByRole('button', {name: 'RESUME SIMULATION', exact: true}).click();
+  await page.getByRole('button', {name: 'Resume', exact: true}).click();
   await page.evaluate(() => { (window as any).mouthOpenings = []; });
   await page.setViewportSize({width: 700, height: 500});
   const canvas = page.getByLabel('Aquatic simulation');

@@ -1,3 +1,4 @@
+import type {SimulationSpeed} from './simulationSpeed';
 import {RenderReplica, type RenderFrame, type WorldSnapshot, type WorldAction} from './simulationHost';
 import type {SimulationState, SimulationSettings} from './simulation';
 
@@ -37,8 +38,8 @@ export class SimulationClient {
     this.pending.clear(); this.epoch = epoch;
     this.worker.postMessage({type: 'reset', snapshot, epoch});
   }
-  control(settings: SimulationSettings, running: boolean, speed: number, selected: string | null): void {
-    this.worker.postMessage({type: 'control', epoch: this.epoch, settings, running, speed, selected});
+  control(settings: SimulationSettings, speed: SimulationSpeed, selected: string | null): void {
+    this.worker.postMessage({type: 'control', epoch: this.epoch, settings, speed, selected});
   }
   private request(type: string, extra: Record<string, unknown>): Promise<unknown> {
     const id = this.nextId++;

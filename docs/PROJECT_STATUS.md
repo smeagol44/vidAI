@@ -1,5 +1,26 @@
 # Project status — 2026-10-21
 
+## Proposed x0 pause and measured performance indicator — 2026-10-28
+
+Upstream submission for #111/#112, explicitly approved after fork PRs21–24 were
+merged and published. This branch starts directly from upstream main6f8f80c and
+ports only unified interactive x0 pause, measured phase-preserving performance
+presentation and unlimited MAX. The circle expands to 2.5 times its normal radius
+while fading, retaining a fixed 12px layout box and no tooltip. Existing upstream
+layout, v0.37.0, physics, mouth contact, saves and frozen baselines are preserved.
+Unrelated fork geometry, test recovery, toolbar and Pages changes are excluded.
+
+MAX can age a world faster in wall time without changing a fixed-tick result.
+No new per-frame JavaScript, particle, blur or shadow work is introduced. Existing
+fork verification is recorded in #111/#112. On this upstream-based branch,
+npm ci, 295 fast tests (0 failed/skipped), build, the production Worker and eight
+focused Chromium cases passed. The Worker covers frozen funded edits, exact
+saved-state continuation and uncapped empty/populated MAX. UI cases cover both
+execution modes, controls, inspection/camera/manual edits, pulse geometry/fade,
+exact pause/resume, reduced motion and absent tooltip. Upstream CI and review
+remain pending. This is a proposal, not upstream acceptance or publication.
+
+
 ## Coherent fluid drag and anatomical muscle trial — rejected without runtime changes
 
 - A bounded experiment compared two proposed replacements independently and
