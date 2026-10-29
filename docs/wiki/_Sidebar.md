@@ -10,3 +10,5 @@
 - [[Simulation Performance|Simulation-Performance]]
 
 [Play VIDA](https://smeagol44.github.io/vidAI/)
+
+- [Self-Linked Windows and Physical Tubes](Side-Windows) — contributor fork implementation; upstream review pending.

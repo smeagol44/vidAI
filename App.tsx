@@ -1,3 +1,6 @@
+import {tubeGeometry, setSelfTubes, type SelfTubes} from './selfTubes';
+import {WorldSceneLayer} from './worldScene';
+import SideWindowDemo, {type SideWindowDemoHandle} from './SideWindowDemo';
 import {mouthDimensions} from './mouthGeometry';
 import {NEW_PHYSICS_REGIME, type PhysicsRegime} from './foundationPhysics';
 import {enableClosedEconomy, occupiedPopulation, setWorldEnergy, EGG_LIFETIME_MULTIPLIER,
@@ -222,9 +225,11 @@ function AudioControls({sfxVolume, musicVolume, sfxMuted, musicMuted,
 
 export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const sideWindowDemoRef = useRef<SideWindowDemoHandle>(null);
   const workerClientRef = useRef<SimulationClient | null>(null);
   const workerSettingsRef = useRef<SimulationSettings | null>(null);
   const workerStepsRef = useRef(0);
+  const worldSceneRef = useRef<WorldSceneLayer | null>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const [{width: canvasWidth, height: canvasHeight}, setViewportSize] = useState({width: 1280, height: 720});
   useEffect(() => {
@@ -557,6 +562,15 @@ export default function App() {
   const authoritativeSnapshot = async (metadata: Record<string, unknown> = {}) =>
     workerClientRef.current ? workerClientRef.current.snapshot(metadata)
       : createSnapshot(simStateRef.current, currentSettings(), metadata);
+
+  const changeSelfTubes = async (topology: SelfTubes, epoch: number): Promise<boolean> => {
+    if (epoch !== worldEpochRef.current) return false;
+    try {
+      if (workerClientRef.current) await workerClientRef.current.action({kind: 'self-tubes', topology});
+      else {setSelfTubes(simStateRef.current, currentSettings(), topology); setEcoStats(prev => ({...prev, ...collectWorldStats(simStateRef.current, targetNutrientAbundance)}));}
+      return epoch === worldEpochRef.current;
+    } catch (error) {setSaveNotification(`Tube change failed: ${String(error)}`); return false;}
+  };
 
   const convertWorldEnergy = async () => {
     try {
@@ -918,7 +932,15 @@ export default function App() {
 
   // Update Loop
   const update = (deltaTime: number) => {
-    if (worldEpoch !== worldEpochRef.current || gameState.status !== 'PLAYING' || isGameMenuOpen) return;
+    if (worldEpoch !== worldEpochRef.current || isGameMenuOpen) return;
+    if (gameState.status === 'PAUSED') {
+      // Observer camera motion must remain available without advancing a tick.
+      const cam = cameraRef.current;
+      cam.x += (cam.targetX - cam.x) * Math.min(1, deltaTime * 5);
+      cam.y += (cam.targetY - cam.y) * Math.min(1, deltaTime * 5);
+      return;
+    }
+    if (gameState.status !== 'PLAYING') return;
 
     const multiplier = timeMultiplierRef.current;
     const fixedDt = 1 / 60;
@@ -1074,8 +1096,16 @@ export default function App() {
     const cam = cameraRef.current;
     const zoom = cam.zoom;
 
+    // One reusable observer surface contains decorations, glow, bodies and HUD
+    // annotations. Its final mask never participates in simulation or input.
+    const sceneTarget = ctx;
+    sceneTarget.save();
+    sceneTarget.fillStyle = '#020610';
+    sceneTarget.fillRect(0, 0, canvasWidth, canvasHeight);
+    worldSceneRef.current ??= new WorldSceneLayer();
+    ctx = worldSceneRef.current.begin(sceneTarget);
+
     // Deep water background
-    ctx.save();
     const bgGrad = ctx.createRadialGradient(
       canvasWidth / 2, canvasHeight / 2, 80,
       canvasWidth / 2, canvasHeight / 2, canvasWidth,
@@ -1097,11 +1127,7 @@ export default function App() {
     const viewLeft = cam.x - viewHalfWidth, viewRight = cam.x + viewHalfWidth;
     const viewTop = cam.y - viewHalfHeight, viewBottom = cam.y + viewHalfHeight;
 
-    // Tank Boundaries & Grid
-    ctx.strokeStyle = 'rgba(6, 182, 212, 0.25)';
-    ctx.lineWidth = 4 / zoom;
-    ctx.strokeRect(0, 0, worldWidth, worldHeight);
-
+    const physicalChannels = tubeGeometry(currentSettings(), s.selfTubes);
     ctx.strokeStyle = 'rgba(6, 182, 212, 0.05)';
     ctx.lineWidth = 1;
     for (let gx = 0; gx <= worldWidth; gx += 200) {
@@ -1131,24 +1157,34 @@ export default function App() {
       ctx.restore();
     }
 
-    // Movement Traces
-    if (showTraces) {
-      for (const org of s.organisms) {
-        if (!org.traceHistory || org.traceHistory.length < 2) continue;
-        ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(org.traceHistory[0].x, org.traceHistory[0].y);
-        for (let i = 1; i < org.traceHistory.length; i++) {
-          ctx.lineTo(org.traceHistory[i].x, org.traceHistory[i].y);
-        }
-        ctx.strokeStyle = `hsla(${org.genome.hue}, 90%, 65%, 0.35)`;
-        ctx.lineWidth = 2 / zoom;
-        ctx.stroke();
-        ctx.restore();
-      }
+    // Glow pass: every halo is behind every physical entity.
+    for (const nut of s.nutrients) {
+      const baseRadius = Math.max(6, nut.radius);
+      const pulse = 1 + Math.sin(nut.pulseTimer || 0) * .12;
+      const radius = Math.max(14, baseRadius * 2.6) * pulse;
+      if (nut.x + radius < viewLeft || nut.x - radius > viewRight
+        || nut.y + radius < viewTop || nut.y - radius > viewBottom) continue;
+      ctx.save(); ctx.translate(nut.x, nut.y);
+      drawFoodGlow(ctx, radius, nut.kind === 'carrion' ? 'carrion'
+        : nut.isSuper || nut.energyValue > NUTRIENT_ENERGY_VALUE * 1.25 ? 'super' : 'nutrient');
+      ctx.restore();
     }
+    for (const egg of s.eggs) {
+      if (egg.x + 30 < viewLeft || egg.x - 30 > viewRight
+        || egg.y + 30 < viewTop || egg.y - 30 > viewBottom) continue;
+      const pulse = 1 + Math.sin(egg.pulseTimer) * .08;
+      ctx.save(); ctx.translate(egg.x, egg.y);
+      const eggGlow = ctx.createRadialGradient(0, 0, 6, 0, 0, 24 * pulse);
+      eggGlow.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+      eggGlow.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = eggGlow;
+      ctx.beginPath();
+      ctx.arc(0, 0, 24 * pulse, 0, Math.PI * 2);
+      ctx.fill();
 
-    // Nutrients
+      ctx.restore();
+    }
+    // Entities: nutrients
     const nutImg = assets['nutrientParticle'];
     const nutAspect = (getConfig('assetNutrientParticleAspectRatio') as number) || 1.0;
     for (const nut of s.nutrients) {
@@ -1162,8 +1198,6 @@ export default function App() {
 
       ctx.save();
       ctx.translate(nut.x, nut.y);
-      const auraRad = Math.max(14, baseRadius * 2.6) * pulse;
-      drawFoodGlow(ctx, auraRad, carrion ? 'carrion' : isSuper ? 'super' : 'nutrient');
       ctx.beginPath();
       ctx.arc(0, 0, baseRadius, 0, Math.PI * 2);
       const rgb = getFoodRGB(nut).map(c => Math.round(c * 255));
@@ -1189,34 +1223,16 @@ export default function App() {
         || egg.y + 30 < viewTop || egg.y - 30 > viewBottom) continue;
       const eggHeight = 32;
       const eggWidth = eggHeight * eggAspect;
-      const pulse = 1 + Math.sin(egg.pulseTimer) * 0.08;
 
       ctx.save();
       ctx.translate(egg.x, egg.y);
-      const eggGlow = ctx.createRadialGradient(0, 0, 6, 0, 0, 24 * pulse);
-      eggGlow.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
-      eggGlow.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      ctx.fillStyle = eggGlow;
-      ctx.beginPath();
-      ctx.arc(0, 0, 24 * pulse, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(0, 0, eggHeight * 0.7, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * egg.incubationProgress);
-      ctx.strokeStyle = egg.readyToHatch ? '#a7f3d0' : '#ffffff';
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-
       ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI * 2);
       ctx.fillStyle = '#ffffff'; ctx.fill();
+      ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI * 2);
       ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1.5; ctx.stroke();
       if (eggImg?.complete && eggImg.naturalWidth > 0) {
         ctx.save(); ctx.filter = 'grayscale(1) brightness(1.8)'; ctx.globalAlpha = .14;
         ctx.drawImage(eggImg, -eggWidth / 2, -eggHeight / 2, eggWidth, eggHeight); ctx.restore();
-      }
-      if (egg.id === selectedEggId) {
-        ctx.beginPath(); ctx.arc(0, 0, 21, 0, Math.PI * 2);
-        ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2; ctx.stroke();
       }
       ctx.restore();
     }
@@ -1232,42 +1248,9 @@ export default function App() {
     // Organisms
     for (const org of s.organisms) {
       const g = org.genome;
-      const isSelected = org.id === selectedOrgId;
       const alpha = org.dissolving ? org.dissolveAlpha : 1.0;
 
-      // Selection Aura & Multi-Ray Radar
-      if (isSelected) {
-        ctx.save();
-        const root = org.segments[0];
-        ctx.beginPath();
-        ctx.arc(root.x, root.y, g.parts[0].width * 1.5 + Math.sin(org.glowPulse) * 4, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(245, 158, 11, 0.85)';
-        ctx.lineWidth = 2.5 / zoom;
-        ctx.setLineDash([6 / zoom, 6 / zoom]);
-        ctx.stroke();
-
-        for (const ray of org.rayHits) {
-          const eye = g.eyes.find(e => e.id === ray.eyeId);
-          const host = eye ? org.segments[eye.partIndex] : org.segments[0];
-          const anchor = eye ? getOrganAnchor(eye, g.parts[eye.partIndex].width, g.parts[eye.partIndex].height) : {x: 0, y: 0};
-          ctx.beginPath();
-          ctx.moveTo(host.x + Math.cos(host.angle) * anchor.x - Math.sin(host.angle) * anchor.y,
-            host.y + Math.sin(host.angle) * anchor.x + Math.cos(host.angle) * anchor.y);
-          ctx.lineTo(ray.pointX, ray.pointY);
-          ctx.strokeStyle = `rgba(${Math.round(ray.r * 255)}, ${Math.round(ray.g * 255)}, ${Math.round(ray.b * 255)}, 0.45)`;
-          ctx.lineWidth = 1.2 / zoom;
-          ctx.stroke();
-
-          if (ray.hit) {
-            ctx.beginPath();
-            ctx.arc(ray.pointX, ray.pointY, 3 / zoom, 0, Math.PI * 2);
-            ctx.fillStyle = `rgb(${Math.round(ray.r * 255)}, ${Math.round(ray.g * 255)}, ${Math.round(ray.b * 255)})`;
-            ctx.fill();
-          }
-        }
-        ctx.restore();
-      }
-
+      ctx.save(); ctx.globalAlpha = alpha;
       // Render Segments with Discrete NxM grid lines
       for (let sIdx = org.segments.length - 1; sIdx >= 0; sIdx--) {
         const seg = org.segments[sIdx];
@@ -1338,55 +1321,10 @@ export default function App() {
           const isCarn = mouth.mouthType === 'carnivore';
           const isOmni = mouth.mouthType === 'omnivore';
 
-          const {radius: mouthRadius, halfSpan: halfAperture} = mouthDimensions(mouth);
           const lastBite = org.recentFeedings?.filter(event => event.mouthId === mouth.id).at(-1);
           const activity = Math.max(org.mouthFeedback?.[mouth.id]?.intake ?? 0,
             lastBite ? clampVal(1 - (s.simTime - lastBite.timestamp) / .3, 0, 1) : 0);
           const opening = activity * (.5 + .5 * Math.sin(s.simTime * 28));
-
-          // Physical Feeding Aperture Slot Indicator (Visible under HUD toggle or selection)
-          if (showMouthApertures || isSelected) {
-            ctx.save();
-            const normDir = getCardinalOutwardNormal(mouth.direction);
-            const tanX = -normDir.y;
-            const tanY = normDir.x;
-            const a1x = mouthLoc.x - tanX * halfAperture;
-            const a1y = mouthLoc.y - tanY * halfAperture;
-            const a2x = mouthLoc.x + tanX * halfAperture;
-            const a2y = mouthLoc.y + tanY * halfAperture;
-
-            if (mouthContactModel === 'capsule-v1') {
-              // Same rounded span and radius as nutrient, egg and prey contact.
-              ctx.translate(mouthLoc.x, mouthLoc.y);
-              ctx.rotate(Math.atan2(tanY, tanX));
-              ctx.beginPath();
-              ctx.roundRect(-halfAperture - mouthRadius, -mouthRadius,
-                2 * (halfAperture + mouthRadius), 2 * mouthRadius, mouthRadius);
-              ctx.fillStyle = isCarn ? 'rgba(244,63,94,.35)' : isOmni ? 'rgba(192,132,252,.35)' : 'rgba(52,211,153,.35)';
-              ctx.strokeStyle = isCarn ? '#f43f5e' : isOmni ? '#c084fc' : '#34d399';
-              ctx.lineWidth = Math.max(.5, 1 / zoom);
-              ctx.fill(); ctx.stroke();
-            } else {
-              // Aperture span line
-              ctx.beginPath();
-              ctx.moveTo(a1x, a1y);
-              ctx.lineTo(a2x, a2y);
-              ctx.strokeStyle = isCarn ? '#f43f5e' : isOmni ? '#c084fc' : '#34d399';
-              ctx.lineWidth = Math.max(1.5, 2.5 / zoom);
-              ctx.stroke();
-
-              // Geometric contact halo
-              ctx.beginPath();
-              ctx.arc(mouthLoc.x, mouthLoc.y, mouthRadius, 0, Math.PI * 2);
-              ctx.fillStyle = isCarn
-                ? 'rgba(244, 63, 94, 0.35)'
-                : isOmni
-                ? 'rgba(192, 132, 252, 0.35)'
-                : 'rgba(52, 211, 153, 0.35)';
-              ctx.fill();
-            }
-            ctx.restore();
-          }
 
           const markerScale = mouth.slot === undefined ? 1 : Math.min(1, (mouth.direction === 'NORTH' || mouth.direction === 'SOUTH' ? w : h) / 42);
           ctx.save(); ctx.translate(mouthLoc.x, mouthLoc.y); ctx.scale(markerScale, markerScale); ctx.translate(-mouthLoc.x, -mouthLoc.y);
@@ -1439,6 +1377,135 @@ export default function App() {
         ctx.restore();
       }
 
+      ctx.restore();
+    }
+
+    // Human-only annotations are above bodies, still below the opacity mask.
+    // Movement Traces
+    if (showTraces) {
+      for (const org of s.organisms) {
+        if (!org.traceHistory || org.traceHistory.length < 2) continue;
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(org.traceHistory[0].x, org.traceHistory[0].y);
+        for (let i = 1; i < org.traceHistory.length; i++) {
+          ctx.lineTo(org.traceHistory[i].x, org.traceHistory[i].y);
+        }
+        ctx.strokeStyle = `hsla(${org.genome.hue}, 90%, 65%, 0.35)`;
+        ctx.lineWidth = 2 / zoom;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    for (const egg of s.eggs) {
+      if (egg.x + 30 < viewLeft || egg.x - 30 > viewRight
+        || egg.y + 30 < viewTop || egg.y - 30 > viewBottom) continue;
+      const eggHeight = 32;
+      ctx.save(); ctx.translate(egg.x, egg.y);
+      ctx.beginPath();
+      ctx.arc(0, 0, eggHeight * 0.7, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * egg.incubationProgress);
+      ctx.strokeStyle = egg.readyToHatch ? '#a7f3d0' : '#ffffff';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      if (egg.id === selectedEggId) {
+        ctx.beginPath(); ctx.arc(0, 0, 21, 0, Math.PI * 2);
+        ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2; ctx.stroke();
+      }
+      ctx.restore();
+    }
+    for (const org of s.organisms) {
+      const g = org.genome, isSelected = org.id === selectedOrgId;
+      ctx.save(); ctx.globalAlpha = org.dissolving ? org.dissolveAlpha : 1;
+      // Selection Aura & Multi-Ray Radar
+      if (isSelected) {
+        ctx.save();
+        const root = org.segments[0];
+        ctx.beginPath();
+        ctx.arc(root.x, root.y, g.parts[0].width * 1.5 + Math.sin(org.glowPulse) * 4, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.85)';
+        ctx.lineWidth = 2.5 / zoom;
+        ctx.setLineDash([6 / zoom, 6 / zoom]);
+        ctx.stroke();
+
+        for (const ray of org.rayHits) {
+          const eye = g.eyes.find(e => e.id === ray.eyeId);
+          const host = eye ? org.segments[eye.partIndex] : org.segments[0];
+          const anchor = eye ? getOrganAnchor(eye, g.parts[eye.partIndex].width, g.parts[eye.partIndex].height) : {x: 0, y: 0};
+          ctx.beginPath();
+          ctx.moveTo(host.x + Math.cos(host.angle) * anchor.x - Math.sin(host.angle) * anchor.y,
+            host.y + Math.sin(host.angle) * anchor.x + Math.cos(host.angle) * anchor.y);
+          ctx.lineTo(ray.pointX, ray.pointY);
+          ctx.strokeStyle = `rgba(${Math.round(ray.r * 255)}, ${Math.round(ray.g * 255)}, ${Math.round(ray.b * 255)}, 0.45)`;
+          ctx.lineWidth = 1.2 / zoom;
+          ctx.stroke();
+
+          if (ray.hit) {
+            ctx.beginPath();
+            ctx.arc(ray.pointX, ray.pointY, 3 / zoom, 0, Math.PI * 2);
+            ctx.fillStyle = `rgb(${Math.round(ray.r * 255)}, ${Math.round(ray.g * 255)}, ${Math.round(ray.b * 255)})`;
+            ctx.fill();
+          }
+        }
+        ctx.restore();
+      }
+
+      if (showMouthApertures || isSelected) for (let sIdx = org.segments.length - 1; sIdx >= 0; sIdx--) {
+        const seg = org.segments[sIdx], {width: w, height: h} = g.parts[sIdx];
+        ctx.save(); ctx.translate(seg.x, seg.y); ctx.rotate(seg.angle);
+        for (const mouth of g.mouths.filter(m => m.partIndex === sIdx)) {
+          const mouthLoc = getOrganAnchor(mouth, w, h);
+          const isCarn = mouth.mouthType === 'carnivore', isOmni = mouth.mouthType === 'omnivore';
+          const {radius: mouthRadius, halfSpan: halfAperture} = mouthDimensions(mouth);
+          // Physical Feeding Aperture Slot Indicator (Visible under HUD toggle or selection)
+          if (showMouthApertures || isSelected) {
+            ctx.save();
+            const normDir = getCardinalOutwardNormal(mouth.direction);
+            const tanX = -normDir.y;
+            const tanY = normDir.x;
+            const a1x = mouthLoc.x - tanX * halfAperture;
+            const a1y = mouthLoc.y - tanY * halfAperture;
+            const a2x = mouthLoc.x + tanX * halfAperture;
+            const a2y = mouthLoc.y + tanY * halfAperture;
+
+            if (mouthContactModel === 'capsule-v1') {
+              // Same rounded span and radius as nutrient, egg and prey contact.
+              ctx.translate(mouthLoc.x, mouthLoc.y);
+              ctx.rotate(Math.atan2(tanY, tanX));
+              ctx.beginPath();
+              ctx.roundRect(-halfAperture - mouthRadius, -mouthRadius,
+                2 * (halfAperture + mouthRadius), 2 * mouthRadius, mouthRadius);
+              ctx.fillStyle = isCarn ? 'rgba(244,63,94,.35)' : isOmni ? 'rgba(192,132,252,.35)' : 'rgba(52,211,153,.35)';
+              ctx.strokeStyle = isCarn ? '#f43f5e' : isOmni ? '#c084fc' : '#34d399';
+              ctx.lineWidth = Math.max(.5, 1 / zoom);
+              ctx.fill(); ctx.stroke();
+            } else {
+              // Aperture span line
+              ctx.beginPath();
+              ctx.moveTo(a1x, a1y);
+              ctx.lineTo(a2x, a2y);
+              ctx.strokeStyle = isCarn ? '#f43f5e' : isOmni ? '#c084fc' : '#34d399';
+              ctx.lineWidth = Math.max(1.5, 2.5 / zoom);
+              ctx.stroke();
+
+              // Geometric contact halo
+              ctx.beginPath();
+              ctx.arc(mouthLoc.x, mouthLoc.y, mouthRadius, 0, Math.PI * 2);
+              ctx.fillStyle = isCarn
+                ? 'rgba(244, 63, 94, 0.35)'
+                : isOmni
+                ? 'rgba(192, 132, 252, 0.35)'
+                : 'rgba(52, 211, 153, 0.35)';
+              ctx.fill();
+            }
+            ctx.restore();
+          }
+
+
+        }
+        ctx.restore();
+      }
       // Gravid Aura
       if (org.isGravid) {
         ctx.save();
@@ -1449,9 +1516,33 @@ export default function App() {
         ctx.stroke();
         ctx.restore();
       }
+      ctx.restore();
     }
 
+    const worldTransform = ctx.getTransform();
+    worldSceneRef.current.finish(sceneTarget, worldWidth, worldHeight, viewLeft, viewRight, viewTop, viewBottom);
+    ctx = sceneTarget; ctx.setTransform(worldTransform);
+    // Upper decorative layer: glass remains above the observer mask.
+    ctx.strokeStyle = 'rgba(6, 182, 212, 0.25)';
+    ctx.lineWidth = 4 / zoom;
+    if (!physicalChannels) ctx.strokeRect(0, 0, worldWidth, worldHeight);
+    else {
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(worldWidth, 0);
+      ctx.moveTo(0, worldHeight); ctx.lineTo(worldWidth, worldHeight);
+      for (const wall of [0, worldWidth]) {
+        let previous = 0;
+        for (const run of [...physicalChannels.runs].sort((a, b) => a.top - b.top)) {
+          if (run.top > previous) {ctx.moveTo(wall, previous); ctx.lineTo(wall, run.top);}
+          previous = run.bottom;
+        }
+        if (previous < worldHeight) {ctx.moveTo(wall, previous); ctx.lineTo(wall, worldHeight);}
+      }
+      ctx.stroke();
+    }
+
+    sideWindowDemoRef.current?.paint(ctx, zoom);
     ctx.restore();
+    sideWindowDemoRef.current?.sync();
   };
 
   useEffect(() => {
@@ -1700,16 +1791,20 @@ export default function App() {
       </header>
 
       {/* MAIN SIMULATION CANVAS */}
-      <div ref={viewportRef} data-testid="tank-viewport" className="flex-1 w-full min-h-0 relative bg-slate-950 overflow-hidden">
+      <div ref={viewportRef} data-testid="tank-viewport" className="flex-1 w-full min-h-0 relative bg-slate-950 overflow-clip">
         <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight}
           onPointerDown={handleCanvasDown} onPointerMove={handleCanvasMove}
           onPointerUp={e => handleCanvasUp(e)} onPointerCancel={e => handleCanvasUp(e, true)}
           onLostPointerCapture={() => { pointerDownStateRef.current.active = false; cameraRef.current.isDragging = false; }}
           aria-label="Aquatic simulation" data-world-epoch={worldEpoch} className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing block" />
 
+        <SideWindowDemo ref={sideWindowDemoRef} width={worldWidth} height={worldHeight} camera={cameraRef}
+          viewportWidth={canvasWidth} viewportHeight={canvasHeight} worldEpoch={worldEpoch}
+          topology={simStateRef.current.selfTubes} onTopologyChange={changeSelfTubes}/>
+
         {/* EGG INSPECTOR — same kernel clearance and funded values used for hatching. */}
         {selectedEgg && (() => {
-          const status = evaluateEggHatchStatus(selectedEgg, currentSettings(), simStateRef.current.organisms, energyPool);
+          const status = evaluateEggHatchStatus(selectedEgg, currentSettings(), simStateRef.current.organisms, energyPool, simStateRef.current.selfTubes);
           const parent = simStateRef.current.organisms.find(org => org.id === selectedEgg.parentOrgId);
           const parentName = parent?.genome.name ?? simStateRef.current.lineage.get(selectedEgg.parentOrgId)?.name;
           const progress = Math.round(Math.min(1, selectedEgg.incubationProgress) * 100);
@@ -3104,15 +3199,13 @@ export default function App() {
         />
       )}
 
+      {/* Pause keeps the tank and local connection controls interactive. The
+          existing PAUSED state, Space shortcut and footer Resume remain. */}
       {gameState.status === 'PAUSED' && !isGameMenuOpen && (
-        <Overlay
-          title="SIMULATION PAUSED"
-          description="Ecosystem paused. Press space or resume to continue observing."
-          actionLabel="RESUME SIMULATION"
-          onAction={() => setGameState((prev) => ({...prev, status: 'PLAYING'}))}
-          icon={<Play size={24} />}
-          tone="neutral"
-        />
+        <button type="button" onClick={() => setGameState(prev => ({...prev, status: 'PLAYING'}))}
+          className="absolute bottom-16 right-3 z-30 rounded-lg border border-slate-600 bg-slate-900/95 px-3 py-2 font-mono text-xs text-cyan-200">
+          RESUME SIMULATION
+        </button>
       )}
 
       {/* GAME MENU */}

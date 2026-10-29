@@ -1,3 +1,4 @@
+import {setSelfTubes, type SelfTubes} from './selfTubes';
 import {watchLineage} from './lineageChanges';
 import {occupiedPopulation, setWorldEnergy} from './energyEconomy';
 import {stepSimulation, addNutrients, nutrientSpawnSlots, createArchetypeGenome,
@@ -8,6 +9,7 @@ import {addExternalOrganism} from './world';
 
 export type WorldSnapshot = ReturnType<typeof createSnapshot>;
 export type WorldAction =
+  | {kind: 'self-tubes'; topology: SelfTubes}
   | {kind: 'energy-budget'; joules: number}
   | {kind: 'feed'; x: number; y: number; count: number}
   | {kind: 'feed-all'} | {kind: 'clear-food'}
@@ -52,6 +54,7 @@ export class SimulationHost {
   }
   action(action: WorldAction): string | number | null {
     const s = this.state, config = this.settings;
+    if (action.kind === 'self-tubes') {setSelfTubes(s, config, action.topology); return null;}
     if (action.kind === 'energy-budget') {setWorldEnergy(s, action.joules); return s.energyPool!.reserve;}
     if (action.kind === 'feed') return addNutrients(s, config, action.count,
       {x: action.x, y: action.y, spread: 80});
