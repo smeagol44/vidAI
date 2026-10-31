@@ -44,6 +44,34 @@ flowchart TD
 Painting does not advance simulation time. The main-thread fallback retains
 fixed-tick behavior when the Worker is unavailable or explicitly disabled.
 
+## Stable toolbar layout (fork)
+
+The fork uses right-anchored desktop controls, with Menu kept
+at the top-right. General telemetry uses the horizontal space left by controls.
+Generation, achieved speed/FPS/steps and elapsed time move together as one group;
+only a container narrower than the group requires its compact internal layout.
+
+Author credits are optional when space is scarce. Measured item widths keep them
+visible whenever they do not add a row. They can hide to retain a single general
+row, and fit alongside the identity again when the metrics already need their
+own row. The decision uses reserved geometry, never changing statistic values.
+
+Six monospace characters are reserved per count/generation and twelve for elapsed
+seconds. The performance chip reserves the whole readout while its text remains
+naturally packed, without individual numeric padding. Oversized numbers use
+scientific notation with their full values in hover titles. These are display
+rules only; simulation values, controls, Worker behavior and saves are unchanged.
+
+Phones use five evenly spaced icon action buttons and one full-width speed row,
+with Menu pinned beside the identity. Counters show distinguishable icons and
+reserved values in two rows; names and the food target remain in accessible
+labels/tooltips. Desktop counters retain their text labels and food target.
+Changing statistics does not reflow the toolbar or alter tank bounds at a fixed
+viewport.
+
+This layout is implemented in Hernan's fork and was manually accepted in its
+testing environment. It is not an upstream release.
+
 ## Current optimizations
 
 | Area | Strategy |
