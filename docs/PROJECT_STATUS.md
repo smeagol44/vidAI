@@ -1,3 +1,35 @@
+## Maintainer integration — local tubes and complete feature stack (v0.39.0)
+
+Integrates selected #124 stages1–3 after the preceding contributor features.
+The owner-approved forward-mouth conversion works with schema17 tube worlds and
+schema16 ordinary worlds, including dormant egg/lineage genomes. Strict diet
+width/forward reach validation and historical topology rejection remain. The
+new semantic integration case verifies valid forward round trips, malformed
+records in all locations and accepted old-mouth conversion in tube saves.
+
+Current x0/MAX, throughput, start scenarios, observer halos, immutable egg
+references and stable toolbar are preserved. Mouth aperture annotations use the
+physical forward capsule in the post-body observer layer, below the mask. No
+extra pause overlay, old running protocol, remote stage4 or unrelated fork work
+is imported. Parallel CI retains the Worker gate, all16 toolbar cases, side-window
+scenarios and every accumulated Chromium/Firefox regression with a required
+aggregate. No assertion timeout, physics coefficient or baseline is relaxed.
+
+359 unaffected fast cases passed; all15 tube cases pass after replacing the
+superseded foreign-format rejection with combined-format validation. Clean build
+and actual production Worker pass, including all preceding feature checks,
+full-state L/R transfer, stock/identity, exact continuation, closure and stale
+commands. Sixteen no-topology comparisons against exact preceding integration
+6479db4 match every simulation snapshot at initialization and all960 ticks with
+zero stock difference. Only the separate release label is normalized. The new
+report is side-windows-integration-v1.json; original evidence is unchanged.
+Local repeated builds left stale generated Worker assets; a clean output build
+resolved the harness's old-bundle mismatch without changing any state assertion.
+No new ecology/evolution search or gameplay-FPS claim. See source PRs and #57
+for actual remote gates, merge and production/Wiki publication receipts.
+
+---
+
 ## Maintainer integration — interactive x0 and measured throughput (v0.38.4)
 
 Integrates #113/#111/#112 into the stable toolbar and cumulative feature stack.

@@ -1,3 +1,35 @@
+# Current integrated interfaces and formats (v0.39.0)
+
+- The owner explicitly accepts automatic saved-mouth conversion (#108, decision
+  6554984336). New/current mouths have fixed diet diameters7/8/9 and independent
+  inherited forward intakeLength. Loading historical organisms, eggs, lineage
+  and Bank entries converts their old aperture field once. Input files are not
+  mutated; future feeding uses the converted geometry. Preserve all other saved
+  neural/physics/energy semantics. Do not add an unrequested legacy-mode gate.
+- Current worlds without topology export schema16; self-linked tube topology
+  exports schema17. Both support forward mouths and immutable egg reserve
+  references. Historical schemas12–15 load through the accepted mouth migration;
+  they still reject smuggled topology. Do not reuse experimental controller
+  semantics or silently promote an experimental branch.
+- Playback uses canonical speed0 and finite1/2/5/10/20 or 'max'. Worker control
+  packets carry speed, settings and selected; the old running flag is retired.
+  At0x, authoritative commands/inspection can refresh frames without ticks.
+  Discard stopped pacing debt on resume. MAX yields complete fixed-tick batches.
+- Feed/predation halos are transient observer data from actual energy receipts;
+  they never affect saved state, optical RGB or learning. Pause them with the
+  same effective speed. Egg reserve reference fields are persisted observer
+  metadata, not energy stocks; organisms still see white eggs.
+- Side-window stages1–3 are local same-world self-links with explicit call and
+  per-window consent. Full living state crosses funded physical tubes with IDs,
+  lineage, learned state, PRNG and stock intact. Stage4 remote transport is absent.
+  Observer fade/mask layers do not change physics, senses or hit selection.
+- Keep every accumulated fast/Worker/browser case. The parallel Worker, toolbar,
+  side-window, Chromium and Firefox jobs feed a mandatory browser-smoke aggregate.
+  A changed test fixture/format must retain its actual causal/state guarantees;
+  never weaken a timeout/threshold or refresh a frozen reference to hide failure.
+- Production is v0.39.0 after integration. The independent testing branch and
+  T1.1 baseline remain untouched; retain all main/testing publication safeguards.
+
 # VIDA 2D issue-backed development and handoffs
 
 - Read [issue #57](https://github.com/smeagol44/vidAI/issues/57) for the

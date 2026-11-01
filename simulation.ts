@@ -1,4 +1,5 @@
 import type {EnergyTransferObserver} from './energyActivity';
+import {tubeGeometry, tubeWallContact, tubeContainsBox, sampleTubeWater, projectWaterPoint, moveTubeParticle, transferSelfOrganisms, type SelfTubes, type TubeGeometry} from './selfTubes';
 import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
 import {partKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
 import {passiveConstraintScale, paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
@@ -470,6 +471,7 @@ export interface SimulationSettings {
 }
 
 export interface SimulationState {
+  selfTubes?: SelfTubes;
   energyPool?: EnergyPool;
   initialSeed?: number;
   simTime: number;
@@ -858,6 +860,7 @@ export function addNutrients(state: SimulationState, settings: SimulationSetting
   patch?: {x: number; y: number; spread: number}): number {
   const count = Math.min(Math.max(0, Math.floor(requested)), nutrientSpawnSlots(state, settings));
   const prng = state.prng;
+  const channels = tubeGeometry(settings, state.selfTubes);
   // In bloom mode, 65% of abiotic input is clustered around twelve stable
   // sites, while 35% remains dispersed. No sources track organism locations,
   // energy, diets, deaths or reproductive needs. The manual Feed patch
@@ -870,6 +873,16 @@ export function addNutrients(state: SimulationState, settings: SimulationSetting
     const bloom = bloomCenters && prng.nextFloat() < .65
       ? bloomCenters[prng.rangeInt(0, bloomCenters.length - 1)] : undefined;
     const center = patch ?? (bloom && {x: bloom.x, y: bloom.y, spread});
+    if (channels) {
+      const point = center ? projectWaterPoint(channels, center.x + prng.range(-center.spread, center.spread),
+        center.y + prng.range(-center.spread, center.spread), 40) : sampleTubeWater(channels, () => prng.nextFloat());
+      state.nutrients.push({id: `NUT-${prng.nextUint32().toString(36)}`, ...point, vx: 0, vy: 0,
+        energyValue: NUTRIENT_ENERGY_VALUE, radius: getNutrientRadius(NUTRIENT_ENERGY_VALUE), bottomTimer: 0,
+        pulseTimer: prng.range(0, Math.PI * 2)});
+      if (state.energyPool) state.energyPool.reserve -= NUTRIENT_ENERGY_VALUE;
+      else state.ledger.externalInflow += NUTRIENT_ENERGY_VALUE;
+      continue;
+    }
     state.nutrients.push({id: `NUT-${prng.nextUint32().toString(36)}`,
       x: center ? clampVal(center.x + prng.range(-center.spread, center.spread), 40, settings.worldWidth - 40) : prng.range(40, settings.worldWidth - 40),
       y: center ? clampVal(center.y + prng.range(-center.spread, center.spread), 40, settings.worldHeight - 40) : prng.range(40, settings.worldHeight - 40),
@@ -2977,7 +2990,7 @@ export function calculateJointMotorTarget(def: PartDef, phase: number, amplitude
   return clampVal((oscillation + angleCommand * directRange) * def.maxAngle, -def.maxAngle, def.maxAngle);
 }
 
-function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number, observe?: MechanicalObserver): number {
+function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number, observe?: MechanicalObserver, channels?: TubeGeometry): number {
   const g = org.genome, numJoints = org.joints.length;
   const corrected = usesPaidActuation(settings.physicsRegime);
   const surfaceModel = settings.physicsRegime === 'surface-work-v1';
@@ -3113,6 +3126,16 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       const vPtX = seg.vx - seg.angVel * ry;
       const vPtY = seg.vy + seg.angVel * rx;
 
+      if (channels) {
+        const contact = tubeWallContact(channels, pt.x, pt.y);
+        if (contact) {
+          const normalSpeed = vPtX * contact.nx + vPtY * contact.ny;
+          const fx = contact.dx * kWallRepel - normalSpeed * contact.nx * kWallDamping;
+          const fy = contact.dy * kWallRepel - normalSpeed * contact.ny * kWallDamping;
+          scratchFx[i] += fx; scratchFy[i] += fy; scratchTorque[i] += rx * fy - ry * fx;
+        }
+        continue;
+      }
       if (pt.x < 0) {
         const pen = -pt.x;
         const fx = pen * kWallRepel - vPtX * kWallDamping;
@@ -3328,7 +3351,7 @@ function hatchObstacles(organisms: Organism[]): HatchBounds[] {
 /** Authoritative dry-run of the same eight-orientation clearance test used for hatching.
  * Does not consume PRNG or move the egg or adults.
  */
-function hatchPlacement(egg: Egg, settings: SimulationSettings, organisms: Organism[], sharedObstacles?: HatchBounds[]) {
+function hatchPlacement(egg: Egg, settings: SimulationSettings, organisms: Organism[], sharedObstacles?: HatchBounds[], topology?: SelfTubes) {
   const pose = restSegments(egg.genome.parts);
   const obstacles = sharedObstacles ?? hatchObstacles(organisms);
   let containedOrientation = false;
@@ -3336,7 +3359,9 @@ function hatchPlacement(egg: Egg, settings: SimulationSettings, organisms: Organ
     const heading = (egg.hatchHeading ?? 0) + attempt * Math.PI / 4, c = Math.cos(heading), s = Math.sin(heading);
     const segments = pose.map(p => ({...p, x: egg.x + c * p.x - s * p.y, y: egg.y + s * p.x + c * p.y, angle: p.angle + heading}));
     const b = bodyBounds(egg.genome.parts, segments), margin = 2;
-    if (b.left < margin || b.top < margin || b.right > settings.worldWidth - margin || b.bottom > settings.worldHeight - margin) continue;
+    const channels = tubeGeometry(settings, topology);
+    if (channels ? !tubeContainsBox(channels, b, margin)
+      : b.left < margin || b.top < margin || b.right > settings.worldWidth - margin || b.bottom > settings.worldHeight - margin) continue;
     containedOrientation = true;
     if (obstacles.some(a => a.left < b.right + margin && a.right > b.left - margin
       && a.top < b.bottom + margin && a.bottom > b.top - margin)) continue;
@@ -3353,7 +3378,7 @@ export type EggHatchStatus = 'incubating' | 'nonviable' | 'population-cap' |
   'orientation-pending' | 'space-blocked' | 'tank-boundary' | 'clear' | 'world-debt' | 'funding' | 'expired';
 
 /** Kernel-derived inspection, not a second, approximate hatching algorithm. */
-export function evaluateEggHatchStatus(egg: Egg, settings: SimulationSettings, organisms: Organism[], pool?: EnergyPool): {
+export function evaluateEggHatchStatus(egg: Egg, settings: SimulationSettings, organisms: Organism[], pool?: EnergyPool, topology?: SelfTubes): {
   status: EggHatchStatus; message: string; clearHeading: number | null;
 } {
   if (pool && (egg.ageSeconds ?? 0) >= EGG_LIFETIME_MULTIPLIER * egg.totalIncubationTime)
@@ -3371,7 +3396,7 @@ export function evaluateEggHatchStatus(egg: Egg, settings: SimulationSettings, o
     status: 'population-cap', message: 'Ready, blocked by living population cap', clearHeading: null};
   if (egg.hatchHeading === undefined) return {
     status: 'orientation-pending', message: 'Ready; orientation will be chosen on the next tick', clearHeading: null};
-  const placement = hatchPlacement(egg, settings, organisms);
+  const placement = hatchPlacement(egg, settings, organisms, undefined, topology);
   if (placement.heading !== null) return {status: 'clear',
     message: 'Ready; full-body hatch space is clear', clearHeading: placement.heading};
   if (placement.reason === 'tank-boundary') return {
@@ -3485,6 +3510,8 @@ export function stepSimulation(
   observeMechanics?: MechanicalObserver,
   observeEnergy?: EnergyTransferObserver,
 ): void {
+  const channels = tubeGeometry(settings, state.selfTubes);
+  const transitBefore = channels ? new Map(state.organisms.map(o => [o.id, o.segments[0].x])) : undefined;
   const mu = settings.waterViscosity ?? 0.22;
   const worldWidth = settings.worldWidth;
   const worldHeight = settings.worldHeight;
@@ -3543,10 +3570,13 @@ export function stepSimulation(
     nut.y += nut.vy * dt;
     nut.pulseTimer = (nut.pulseTimer || 0) + dt * (nut.isSuper ? 4.0 : 2.5);
 
+    if (channels) moveTubeParticle(nut, channels);
+    else {
     if (nut.x < 35) { nut.x = 35; nut.vx = 0; }
     if (nut.x > worldWidth - 35) { nut.x = worldWidth - 35; nut.vx = 0; }
     if (nut.y < 35) { nut.y = 35; nut.vy = 0; }
     if (nut.y > worldHeight - 35) { nut.y = worldHeight - 35; nut.vy = 0; }
+    }
   }
 
   // 3. Caustics
@@ -3583,10 +3613,13 @@ export function stepSimulation(
     egg.x += egg.vx * dt;
     egg.y += egg.vy * dt;
 
+    if (channels) moveTubeParticle(egg, channels);
+    else {
     if (egg.x < 35) { egg.x = 35; egg.vx = 0; }
     if (egg.x > worldWidth - 35) { egg.x = worldWidth - 35; egg.vx = 0; }
     if (egg.y < 35) { egg.y = 35; egg.vy = 0; }
     if (egg.y > worldHeight - 35) { egg.y = worldHeight - 35; egg.vy = 0; }
+    }
 
     const remainingEggEnergy = egg.fundedStructural + egg.fundedReserve;
 
@@ -3627,7 +3660,7 @@ export function stepSimulation(
       if (state.energyPool || organisms.filter(o => !o.dissolving).length < (settings.maxOrganisms ?? 50)) {
         egg.hatchHeading ??= prng.range(0, Math.PI * 2);
         sharedHatchObstacles ??= hatchObstacles(organisms);
-        const heading = hatchPlacement(egg, settings, organisms, sharedHatchObstacles).heading;
+        const heading = hatchPlacement(egg, settings, organisms, sharedHatchObstacles, state.selfTubes).heading;
         if (heading === null) continue; // Remain funded, edible and ready until a full body fits.
         const startingUsableReserve = remainingEggEnergy - requiredBodyCost;
         const baby = spawnOrganism(
@@ -3692,15 +3725,16 @@ export function stepSimulation(
       if (org.dissolveAlpha <= 0) {
         const deadPos = org.segments[0];
         const totalRemainingEnergy = Math.max(0, org.structuralBiomass) + Math.max(0, org.energy);
+        const deathPoint = channels ? projectWaterPoint(channels, deadPos.x, deadPos.y, 40)
+          : {x: clampVal(deadPos.x, 40, worldWidth - 40), y: clampVal(deadPos.y, 40, worldHeight - 40)};
         if (state.energyPool) {
-          closedCarrion(state, clampVal(deadPos.x, 40, worldWidth - 40),
-            clampVal(deadPos.y, 40, worldHeight - 40), totalRemainingEnergy);
+          closedCarrion(state, deathPoint.x, deathPoint.y, totalRemainingEnergy);
         } else if (totalRemainingEnergy > 0 && nutrients.length < 2200) {
           nutrients.push({
             id: `REM-${prng.nextUint32().toString(36)}`,
             kind: 'carrion', decayTimeRemaining: CARRION_DECAY_SECONDS,
-            x: clampVal(deadPos.x, 40, worldWidth - 40),
-            y: clampVal(deadPos.y, 40, worldHeight - 40), vx: 0, vy: 0,
+            x: deathPoint.x,
+            y: deathPoint.y, vx: 0, vy: 0,
             energyValue: totalRemainingEnergy, radius: getNutrientRadius(totalRemainingEnergy),
             bottomTimer: 0, pulseTimer: prng.range(0, Math.PI * 2),
           });
@@ -3932,7 +3966,7 @@ export function stepSimulation(
   const work = new Map(active.map(org => [org, 0]));
   const substeps = Math.max(NUM_SUBSTEPS, Math.ceil(dt * 240));
   for (let sub = 0; sub < substeps; sub++) {
-    for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics));
+    for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics, channels));
     resolveBodyContacts(active, BASE_PART_DENSITY, projectBodyJoints, observeMechanics);
   }
   for (let index = active.length - 1; index >= 0; index--) {
@@ -4232,6 +4266,7 @@ export function stepSimulation(
   if (bubbles.length > 60) {
     bubbles.splice(0, bubbles.length - 60);
   }
+  if (transitBefore) transferSelfOrganisms(state, settings, transitBefore);
   if (state.energyPool) state.energyPool.reserve += returnedEnergy;
 }
 
