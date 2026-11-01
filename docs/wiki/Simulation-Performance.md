@@ -188,15 +188,20 @@ Historical timing tables are in
 
 ## Economy state and capacity
 
-Current passive-solver worlds use schema v15 with either economy and mouth model.
-Explicit solver stabilization changes only physics on an authoritative snapshot.
-Older worlds with full capsule mouth contact use schema v14, independently of their stored physics
-or open/closed ecology. Historical contact worlds retain v13 when closed and v12
-when open, with exact continuation. Closed saves persist live reserve/budget and
-egg age/target. Explicit mouth upgrade obtains the authoritative snapshot and
-changes only the contact model; control packets cannot switch it. Budget edits are Worker
-actions between ticks. Imports and explicit conversion use authoritative state;
-control packets cannot switch physics or ecology regimes.
+Current exports use schema v16 without tube topology and v17 with self-linked
+tubes. Both retain the saved physics, economy and prey-contact model, forward
+mouth genomes and immutable egg reserve references. Schema v17 validates its
+physical topology; older formats reject topology fields. Historical formats,
+including v12–v15, remain importable through the accepted automatic mouth
+conversion described in [Ecology](Ecology-Baseline#physical-mouth-aperture).
+That migration changes future mouth geometry; it is not a promise of identical
+historical feeding. Other saved state and PRNG data are retained.
+
+Closed saves persist live reserve/budget and egg age/target. Explicit solver
+stabilization changes only physics on an authoritative snapshot; explicit mouth
+contact upgrade changes only the contact model. Budget edits are Worker actions
+between ticks. Imports and explicit conversion use authoritative state; control
+packets cannot switch physics or ecology regimes.
 
 Population remains bounded at 30 slots initially (living creatures plus eggs in
 closed worlds), adjustable to 150. The separate 75-egg computational limit is

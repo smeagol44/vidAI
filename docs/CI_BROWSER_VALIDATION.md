@@ -1,10 +1,10 @@
 # Browser CI validation
 
-Tracking: upstream issue #123. This selected proposal preserves every existing
-canonical Worker/Chromium/Firefox command and its assertions. It runs the
-production Worker independently and uses three browser groups on separate
-GitHub-hosted runners: side-window/tube controls, existing Chromium regressions,
-and existing Firefox regressions plus the new tube scenarios. Tube controls and
+Tracking: issue #123; integrated through #131 and #132. The workflow preserves
+every accumulated canonical Worker/Chromium/Firefox case and its assertions.
+It runs the production Worker independently and uses four browser groups on
+separate GitHub-hosted runners: toolbar geometry, side-window/tube controls,
+Chromium regressions, and Firefox regressions including tube scenarios. Tube controls and
 the observer mask are therefore exercised in both engines. Each runner keeps one Playwright worker to
 avoid software-rendering contention. `fail-fast: false` retains all results.
 
@@ -22,7 +22,9 @@ Do not repeat full campaigns after prose-only edits unless required checks or
 new concerns call for them. Never shorten assertions or refresh baselines to
 hide failures. Use recorded run links rather than repeatedly polling slow jobs.
 
-This source is pending upstream acceptance; successful contributor validation
-is not upstream merge/release authority. Independent toolbar and observer
-feature PRs may add their own groups when accepted; they are not dependencies
-of this selected port.
+The final v0.39.0 integration passed all 76 browser cases (16 toolbar, five
+side-window, 25 Chromium and 30 Firefox), the actual Worker gate and the required
+aggregate in run 41287349596. Fast/build and standing locomotion checks also
+passed. Exact candidate, merge and publication receipts are maintained in #57.
+Production main and independent testing remain separate checkouts; parallel CI
+does not authorize promoting testing features or resetting its baseline.

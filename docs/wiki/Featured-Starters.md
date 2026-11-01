@@ -4,14 +4,16 @@ The Bank has **Featured**, **Legacy**, **My saved specimens** and **All**
 collections, with text search, family/diet filters, previews and spawning.
 Nine featured genotypes coexist with all 55 original legacy designs.
 
-Bank previews draw mouths at their inherited aperture span and contact radius,
-including overhang, rather than shrinking every mouth to a small dot. This is a
-visualization change; catalogue anatomy and genes are unchanged.
+Bank previews draw the actual forward mouth capsule using its inherited
+`intakeLength` and fixed diet diameter: 7 px for herbivores, 8 px for omnivores
+and 9 px for carnivores. Loading a legacy saved specimen converts its old
+`intakeWidth` to forward reach and sets the fixed diameter; it does not replace
+the specimen with a catalogue founder. See [mouth geometry](Ecology-Baseline#physical-mouth-aperture).
 
-The submitted start-menu Default / Harsh World environment selection
+The start-menu Default / Harsh World environment selection
 is independent of these founder designs, brain modes and population presets.
 Harsh's 50-slot capacity does not request 50 founders; existing preset counts
-and genomes remain unchanged. This selector is pending upstream acceptance.
+and genomes remain unchanged.
 
 ## Featured designs
 

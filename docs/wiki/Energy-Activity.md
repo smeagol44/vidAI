@@ -39,10 +39,11 @@ a glass-like glow rather than a brighter hard edge. The normal body fill and
 outline are painted over the glow, retaining pigmentation and readable anatomy. No shadow blur, canvas filter or body scaling is used.
 An inactive signal fades for at most 100ms of unpaused presentation time.
 
-While the host is paused, phase and fade freeze. Late in-flight activity packets cannot start new
-signals while paused. Existing host pause controls and overlay are unchanged. The separate #113
-proposal supplies canonical interactive x0; this feature does not import it. Resume
-uses a new wall-clock baseline, so stopped wall time never becomes a burst.
+At canonical x0, phase and fade freeze. Late in-flight activity packets cannot
+start new signals while paused. Inspection, camera controls and accepted manual
+world edits remain available. Pause/Space restore the last nonzero speed, and
+selecting a nonzero speed resumes directly. Resume uses a new wall-clock baseline,
+so stopped wall time never becomes a burst.
 World replacement/reset clears all signals; death/removal clears the affected
 creature. Signals are transient and never exported or saved.
 
