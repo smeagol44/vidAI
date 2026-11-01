@@ -19,7 +19,9 @@ interface FounderBlueprint {
     storageTraitMultiplier: number};
 }
 
-/** Founder catalogue: original calibrated bodies plus compact hinged bell swimmers. */
+/** Canonical founder catalogue. Mouth geometry is stored directly in the current
+ * format: fixed diameter in intakeWidth and forward reach in intakeLength.
+ */
 export const FOUNDER_BLUEPRINTS = rawFounders as FounderBlueprint[];
 export const FOUNDER_FAMILIES = [...new Set(FOUNDER_BLUEPRINTS.map(f => f.family))];
 

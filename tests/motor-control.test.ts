@@ -165,7 +165,7 @@ test('current snapshots preserve motor ramps and oral feedback for exact continu
   const savedSettings = {...settings, worldWidth: 4800, worldHeight: 3000};
   org.segments.forEach(p => { p.x -= 3600; p.y -= 4500; });
   const saved = createSnapshot(s, savedSettings), restored = restoreSnapshot(saved);
-  assert.equal(saved.schemaVersion, '12.0.0');
+  assert.equal(saved.schemaVersion, '16.0.0');
   assert.deepEqual(createSnapshot(restored.state, restored.settings), saved);
   for (let i = 0; i < 120; i++) { sim.stepSimulation(s, savedSettings, 1 / 60); sim.stepSimulation(restored.state, savedSettings, 1 / 60); }
   assert.deepEqual(createSnapshot(s, savedSettings), createSnapshot(restored.state, savedSettings));

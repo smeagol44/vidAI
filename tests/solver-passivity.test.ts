@@ -74,14 +74,17 @@ test('v15 solver saves continue exactly across both ecology/contact choices; old
     f.org.genome.motorForce = 20;
     for (let i = 0; i < 4; i++) stepSimulation(f.state, f.config, 1 / 60);
     const saved = createSnapshot(f.state, f.config), restored = restoreSnapshot(saved), host = new SimulationHost();
-    assert.equal(saved.schemaVersion, '15.0.0'); assert.deepEqual(createSnapshot(restored.state, restored.settings), saved);
+    assert.equal(saved.schemaVersion, '16.0.0'); assert.deepEqual(createSnapshot(restored.state, restored.settings), saved);
     host.reset(saved, 1);
     for (let i = 0; i < 12; i++) {host.tick(); stepSimulation(restored.state, restored.settings, 1 / 60);}
     assert.deepEqual(host.snapshot().state, createSnapshot(restored.state, restored.settings).state);
     for (const schemaVersion of ['12.0.0', '13.0.0', '14.0.0']) {
       assert.throws(() => restoreSnapshot({...saved, schemaVersion}), /physics regime/);
     }
-    const bad = structuredClone(saved); bad.settings.physicsRegime = 'paid-work-v2';
+    // Schema 16 explicitly supports paid-work-v2; test the historical v15
+    // restriction against its actual schema rather than relabelling a v16 save.
+    const bad = structuredClone(saved); bad.schemaVersion = '15.0.0';
+    bad.settings.physicsRegime = 'paid-work-v2';
     assert.throws(() => restoreSnapshot(bad), /physics regime/);
   }
 });

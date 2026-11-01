@@ -137,7 +137,7 @@ test('plastic state is strictly saved and resumes bit-exact across subsequent ph
  tick(a.world,14);
  assert.ok(learnedTotal(a.org)>0);
  const snap=createSnapshot(a.world,settings);
- assert.equal(snap.schemaVersion,'12.0.0');
+ assert.equal(snap.schemaVersion,'16.0.0');
  const b=restoreSnapshot(snap);
  assert.deepEqual(createSnapshot(b.state,b.settings),snap);
  for(let t=0;t<15;t++) {

@@ -1,0 +1,20 @@
+diff --git a/simulation.ts b/simulation.ts
+index d4cde68..1978957 100644
+--- a/simulation.ts
++++ b/simulation.ts
+@@ -3994,11 +3994,13 @@ export function stepSimulation(
+       const cx = phys.x + cos * anchor.x - sin * anchor.y;
+       const cy = phys.y + sin * anchor.x + cos * anchor.y;
+       const {radius: mouthRadius, length: intakeLength} = mouthDimensions(mouth);
++      const halfAperture = Math.max(mouthRadius, intakeLength * .5);
+       const normal = getCardinalOutwardNormal(mouth.direction);
+       const nx = cos * normal.x - sin * normal.y;
+       const ny = sin * normal.x + cos * normal.y;
+-      const x1 = cx, y1 = cy;
+-      const x2 = cx + nx * intakeLength, y2 = cy + ny * intakeLength;
++      const tx = -ny, ty = nx;
++      const x1 = cx - tx * halfAperture, y1 = cy - ty * halfAperture;
++      const x2 = cx + tx * halfAperture, y2 = cy + ty * halfAperture;
+       const eatsMeat = mouth.mouthType !== 'herbivore';
+       const eatsPlants = mouth.mouthType !== 'carnivore';
+       const allowance = (mouth.mouthType === 'omnivore' ? OMNIVORE_EAT_RATE : CONTINUOUS_EAT_RATE) * dt;

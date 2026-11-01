@@ -73,9 +73,10 @@
           "id": "FND-001-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 242,
@@ -200,9 +201,10 @@
           "id": "FND-002-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 289,
@@ -341,9 +343,10 @@
           "id": "FND-003-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 336,
@@ -496,9 +499,10 @@
           "id": "FND-004-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 8,
           "mouthType": "omnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 23,
@@ -665,9 +669,10 @@
           "id": "FND-005-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 9,
           "mouthType": "carnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 180,
@@ -776,9 +781,10 @@
           "id": "FND-006-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 23.8,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 23.8
         }
       ],
       "hue": 227,
@@ -903,9 +909,10 @@
           "id": "FND-007-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 23.8,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 23.8
         }
       ],
       "hue": 164,
@@ -1044,9 +1051,10 @@
           "id": "FND-008-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 23.8,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 23.8
         }
       ],
       "hue": 211,
@@ -1185,9 +1193,10 @@
           "id": "FND-009-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 23.8,
+          "intakeWidth": 8,
           "mouthType": "omnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 23.8
         }
       ],
       "hue": 258,
@@ -1340,9 +1349,10 @@
           "id": "FND-010-M0",
           "partIndex": 5,
           "direction": "EAST",
-          "intakeWidth": 11.9,
+          "intakeWidth": 9,
           "mouthType": "carnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 11.9
         }
       ],
       "hue": 305,
@@ -1479,9 +1489,10 @@
           "id": "FND-011-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 352,
@@ -1634,9 +1645,10 @@
           "id": "FND-012-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 39,
@@ -1789,9 +1801,10 @@
           "id": "FND-013-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 196,
@@ -1958,9 +1971,10 @@
           "id": "FND-014-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 8,
           "mouthType": "omnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 243,
@@ -2127,9 +2141,10 @@
           "id": "FND-015-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 9,
           "mouthType": "carnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 180,
@@ -2238,9 +2253,10 @@
           "id": "FND-016-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 227,
@@ -2363,9 +2379,10 @@
           "id": "FND-017-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 274,
@@ -2504,9 +2521,10 @@
           "id": "FND-018-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 321,
@@ -2651,9 +2669,10 @@
           "id": "FND-019-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 8,
           "mouthType": "omnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 8,
@@ -2792,9 +2811,10 @@
           "id": "FND-020-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 9,
           "mouthType": "carnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 55,
@@ -2917,9 +2937,10 @@
           "id": "FND-021-M0",
           "partIndex": 4,
           "direction": "EAST",
-          "intakeWidth": 11.9,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 11.9
         }
       ],
       "hue": 212,
@@ -3058,9 +3079,10 @@
           "id": "FND-022-M0",
           "partIndex": 4,
           "direction": "EAST",
-          "intakeWidth": 11.9,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 11.9
         }
       ],
       "hue": 259,
@@ -3183,9 +3205,10 @@
           "id": "FND-023-M0",
           "partIndex": 4,
           "direction": "EAST",
-          "intakeWidth": 11.9,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 11.9
         }
       ],
       "hue": 196,
@@ -3344,9 +3367,10 @@
           "id": "FND-024-M0",
           "partIndex": 4,
           "direction": "EAST",
-          "intakeWidth": 11.9,
+          "intakeWidth": 8,
           "mouthType": "omnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 11.9
         }
       ],
       "hue": 243,
@@ -3505,9 +3529,10 @@
           "id": "FND-025-M0",
           "partIndex": 4,
           "direction": "EAST",
-          "intakeWidth": 11.9,
+          "intakeWidth": 9,
           "mouthType": "carnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 11.9
         }
       ],
       "hue": 290,
@@ -3630,9 +3655,10 @@
           "id": "FND-026-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 337,
@@ -3771,9 +3797,10 @@
           "id": "FND-027-M0",
           "partIndex": 1,
           "direction": "EAST",
-          "intakeWidth": 11.9,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 11.9
         }
       ],
       "hue": 24,
@@ -3912,9 +3939,10 @@
           "id": "FND-028-M0",
           "partIndex": 1,
           "direction": "EAST",
-          "intakeWidth": 11.9,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 11.9
         }
       ],
       "hue": 181,
@@ -4059,9 +4087,10 @@
           "id": "FND-029-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 8,
           "mouthType": "omnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 228,
@@ -4206,9 +4235,10 @@
           "id": "FND-030-M0",
           "partIndex": 1,
           "direction": "EAST",
-          "intakeWidth": 11.9,
+          "intakeWidth": 9,
           "mouthType": "carnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 11.9
         }
       ],
       "hue": 165,
@@ -4331,9 +4361,10 @@
           "id": "FND-031-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 29.75,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 29.75
         }
       ],
       "hue": 212,
@@ -4472,9 +4503,10 @@
           "id": "FND-032-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 34,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 34
         }
       ],
       "hue": 259,
@@ -4613,9 +4645,10 @@
           "id": "FND-033-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 34,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 34
         }
       ],
       "hue": 306,
@@ -4782,9 +4815,10 @@
           "id": "FND-034-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 29.75,
+          "intakeWidth": 8,
           "mouthType": "omnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 29.75
         }
       ],
       "hue": 353,
@@ -4951,9 +4985,10 @@
           "id": "FND-035-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 34,
+          "intakeWidth": 9,
           "mouthType": "carnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 34
         }
       ],
       "hue": 40,
@@ -5054,9 +5089,10 @@
           "id": "FND-036-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 197,
@@ -5179,9 +5215,10 @@
           "id": "FND-037-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 244,
@@ -5304,9 +5341,10 @@
           "id": "FND-038-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 181,
@@ -5451,9 +5489,10 @@
           "id": "FND-039-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 8,
           "mouthType": "omnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 228,
@@ -5612,9 +5651,10 @@
           "id": "FND-040-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 9,
           "mouthType": "carnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 275,
@@ -5701,9 +5741,10 @@
           "id": "FND-041-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 322,
@@ -5812,9 +5853,10 @@
           "id": "FND-042-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 9,
@@ -5937,9 +5979,10 @@
           "id": "FND-043-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 56,
@@ -6084,9 +6127,10 @@
           "id": "FND-044-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 8,
           "mouthType": "omnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 213,
@@ -6245,9 +6289,10 @@
           "id": "FND-045-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 9,
           "mouthType": "carnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 260,
@@ -6348,9 +6393,10 @@
           "id": "FND-046-M0",
           "partIndex": 3,
           "direction": "EAST",
-          "intakeWidth": 29.75,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 29.75
         }
       ],
       "hue": 197,
@@ -6473,9 +6519,10 @@
           "id": "FND-047-M0",
           "partIndex": 4,
           "direction": "EAST",
-          "intakeWidth": 34,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 34
         }
       ],
       "hue": 244,
@@ -6612,9 +6659,10 @@
           "id": "FND-048-M0",
           "partIndex": 4,
           "direction": "EAST",
-          "intakeWidth": 34,
+          "intakeWidth": 7,
           "mouthType": "herbivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 34
         }
       ],
       "hue": 291,
@@ -6773,9 +6821,10 @@
           "id": "FND-049-M0",
           "partIndex": 3,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 8,
           "mouthType": "omnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 338,
@@ -6892,9 +6941,10 @@
           "id": "FND-050-M0",
           "partIndex": 0,
           "direction": "EAST",
-          "intakeWidth": 17.849999999999998,
+          "intakeWidth": 9,
           "mouthType": "carnivore",
-          "slot": 0
+          "slot": 0,
+          "intakeLength": 17.849999999999998
         }
       ],
       "hue": 25,
@@ -7018,8 +7068,9 @@
           "partIndex": 0,
           "direction": "EAST",
           "slot": 0,
-          "intakeWidth": 15,
-          "mouthType": "omnivore"
+          "intakeWidth": 8,
+          "mouthType": "omnivore",
+          "intakeLength": 15
         }
       ],
       "hue": 285,
@@ -7143,8 +7194,9 @@
           "partIndex": 0,
           "direction": "EAST",
           "slot": 0,
-          "intakeWidth": 10,
-          "mouthType": "herbivore"
+          "intakeWidth": 7,
+          "mouthType": "herbivore",
+          "intakeLength": 10
         }
       ],
       "hue": 175,
@@ -7153,7 +7205,7 @@
     },
     "locomotion": {
       "motorFrequency": 2.8,
-      "motorForce": 3.0
+      "motorForce": 3
     },
     "lifeHistory": {
       "targetClutchSize": 2,
@@ -7268,8 +7320,9 @@
           "partIndex": 0,
           "direction": "EAST",
           "slot": 0,
-          "intakeWidth": 18,
-          "mouthType": "herbivore"
+          "intakeWidth": 7,
+          "mouthType": "herbivore",
+          "intakeLength": 18
         }
       ],
       "hue": 38,
@@ -7278,7 +7331,7 @@
     },
     "locomotion": {
       "motorFrequency": 1.9,
-      "motorForce": 4.0
+      "motorForce": 4
     },
     "lifeHistory": {
       "targetClutchSize": 1,
@@ -7421,8 +7474,9 @@
           "partIndex": 0,
           "direction": "EAST",
           "slot": 0,
-          "intakeWidth": 15,
-          "mouthType": "omnivore"
+          "intakeWidth": 8,
+          "mouthType": "omnivore",
+          "intakeLength": 15
         }
       ],
       "hue": 220,
@@ -7574,8 +7628,9 @@
           "partIndex": 0,
           "direction": "EAST",
           "slot": 0,
-          "intakeWidth": 15,
-          "mouthType": "carnivore"
+          "intakeWidth": 9,
+          "mouthType": "carnivore",
+          "intakeLength": 15
         }
       ],
       "hue": 320,
@@ -7583,7 +7638,7 @@
       "lightness": 65
     },
     "locomotion": {
-      "motorFrequency": 2.0,
+      "motorFrequency": 2,
       "motorForce": 3.8
     },
     "lifeHistory": {

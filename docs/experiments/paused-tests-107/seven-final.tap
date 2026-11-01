@@ -1,0 +1,46 @@
+✔ physics audit measures dissipative rotated drag, passive spin, free momentum and actual size scaling (87.560295ms)
+✔ offline fitness rejects idle, startup-only, invalid and circular movement (0.431908ms)
+✔ search uses a deterministic bounded budget, keeps the parent, and edits only existing motor alleles (328.101456ms)
+✔ candidate adoption rejects reversed and less sustained motion despite higher distance (34.733761ms)
+✔ CUR-003: selected gait retains a longer held-out physical improvement without cap use (439.675128ms)
+✔ CUR-008: selected gait retains a longer held-out physical improvement without cap use (584.857285ms)
+✔ CUR-009: selected gait retains a longer held-out physical improvement without cap use (325.839178ms)
+✔ the other six featured and all 55 legacy genomes remain exactly unchanged (281.251734ms)
+✔ stored pre-calibration CUR-003 genome resumes the exact v0.32.1 cold continuation (56.447977ms)
+✔ cached runtime preserves v0.30 complete continuation: plain (62.747232ms)
+✔ cached runtime preserves v0.30 complete continuation: masked (39.781115ms)
+✔ cached runtime preserves v0.30 complete continuation: learned (57.56143ms)
+✔ cached runtime preserves v0.30 complete continuation: masked-learned (39.855778ms)
+✔ historical mouth projection preserves all other state and rejects invalid current diameters (21.28266ms)
+✔ topology edits invalidate masks; changing weights does not cache stale values (2.896846ms)
+✔ learning reuses ID-keyed records and exact saves do not depend on warm caches (36.099467ms)
+✔ one death leaves exactly one larger edible circle containing all remaining chemical energy (13.922667ms)
+✔ worker host and render transport preserve exact state while omitting repeated genomes (61.700456ms)
+✔ worker commands honor nutrient caps, accounting, resize and exact authoritative export (8.656226ms)
+✔ pooled collision clipping exactly matches v0.32 geometry across rotations and boundaries (33.210784ms)
+✔ sparse learning clears removed records and invalidates all old slots after topology edits (8.555125ms)
+✔ lineage transport tracks real spawning, laying, hatching, death and epoch reset (51.820771ms)
+✔ lineage subscriptions coalesce changes, detach and avoid scanning unchanged history (23.065946ms)
+✔ CUR-001: recovery preserves frozen starter swimming and bounded total energy cost (165.569561ms)
+✔ CUR-002: recovery preserves frozen starter swimming and bounded total energy cost (119.248614ms)
+✔ CUR-003: recovery preserves frozen starter swimming and bounded total energy cost (116.512003ms)
+✔ CUR-004: recovery preserves frozen starter swimming and bounded total energy cost (167.955525ms)
+✔ CUR-005: recovery preserves frozen starter swimming and bounded total energy cost (175.94847ms)
+✔ CUR-006: recovery preserves frozen starter swimming and bounded total energy cost (197.034487ms)
+✔ CUR-007: recovery preserves frozen starter swimming and bounded total energy cost (101.396177ms)
+✔ CUR-008: recovery preserves frozen starter swimming and bounded total energy cost (125.672213ms)
+✔ CUR-009: recovery preserves frozen starter swimming and bounded total energy cost (67.276239ms)
+✔ shared-part simultaneous work includes acceleration and charges positive work independently of braking (1.110976ms)
+✔ recovery reserves limit actuation before it acts, with zero unpaid motion or future-food borrowing (13.767007ms)
+✔ CUR-001: v0.34.0 saves retain exact surface-model continuation (31.801794ms)
+✔ CUR-006: v0.34.0 saves retain exact surface-model continuation (45.692727ms)
+✔ recovery snapshots fork and continue exactly in Worker host and direct kernel (86.353951ms)
+✔ recovery retains Darter and Twin Oar physical off-axis food acquisition (416.963272ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2451.684262
