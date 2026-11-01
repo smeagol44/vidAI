@@ -50,15 +50,15 @@ for (const fallback of [false, true]) test(`energy contour glows follow real bod
   const {state, config} = energyActivityFixture();
   await page.locator('input[type=file]').setInputFiles({name: 'activity.json', mimeType: 'application/json',
     buffer: Buffer.from(JSON.stringify(createSnapshot(state, config)))});
-  await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
+  await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
   await page.evaluate(() => {const c = (window as any).energyTintCapture; c.green.length = c.red.length = c.totals.green = c.totals.red = 0; c.armPause = true;});
   await page.getByRole('button', {name: '1x', exact: true}).dispatchEvent('click');
-  await page.getByRole('button', {name: 'RESUME SIMULATION', exact: true}).click();
+  await page.getByRole('button', {name: 'Resume', exact: true}).click();
   await expect.poll(() => page.evaluate(() => {
     const c = (window as any).energyTintCapture; return c.green.some((s: any) => s.alpha > .20) && c.red.some((s: any) => s.alpha > .25);
   })).toBe(true);
   // Freeze activity using the existing upstream pause control and overlay.
-  await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
+  await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
   const sample = () => page.evaluate(() => {
     const c = (window as any).energyTintCapture;
     return {green: c.green.at(-1), red: c.red.at(-1), counts: [c.totals.green, c.totals.red]};
@@ -102,7 +102,7 @@ for (const fallback of [false, true]) test(`energy contour glows follow real bod
   }
   await page.screenshot({path: info.outputPath('energy-pulses-paused.png')});
   await page.getByRole('button', {name: '5x', exact: true}).dispatchEvent('click');
-  await page.getByRole('button', {name: 'RESUME SIMULATION', exact: true}).click();
+  await page.getByRole('button', {name: 'Resume', exact: true}).click();
   await page.waitForTimeout(350);
   await page.getByRole('button', {name: 'Pause', exact: true}).click();
   // Replacing the paused world must clear all old activity without advancing time.

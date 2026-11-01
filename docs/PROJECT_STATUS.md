@@ -1,3 +1,21 @@
+## Maintainer integration — interactive x0 and measured throughput (v0.38.4)
+
+Integrates #113/#111/#112 into the stable toolbar and cumulative feature stack.
+The status/speed controls use canonical0x; the same effective speed freezes halo
+presentation. Measured throughput replaces the decorative pulse without changing
+reserved toolbar geometry. MAX runs yielding complete fixed-tick batches and
+retains exact continuation, responsive commands and finite-speed resume.
+
+All333 fast tests and build/typecheck pass. Actual production Worker checks pass
+for funded x0 edits without ticks, exact MAX continuation and resumed pacing,
+plus all prior mouth, energy, halo, egg and environmental scenarios. Tests use
+the actual Resume control and speed0 protocol while retaining their state,
+energy, optical/learning/PRNG and visual assertions. No timeout or baseline
+reference is loosened. Prior and new browser cases remain in both engines;
+toolbar geometry remains a mandatory gate. No physics/genetics/energy tuning.
+
+---
+
 ## Maintainer integration — environmental start scenarios (v0.38.3)
 
 Integrates selected #120/#119 after the preceding mouth/toolbar/observer work.
@@ -180,6 +198,26 @@ Fast/build, exact observer-free full snapshots and actual Worker/browser results
 are tracked in #114 and the submission PR. Current Wiki source is included with
 pending-upstream labeling; acceptance and actual Wiki publication remain pending.
 No unrelated fork changes, version bump, hosting changes or VIDA 3D work.
+
+## Proposed x0 pause and measured performance indicator — 2026-10-28
+
+Upstream submission for #111/#112, explicitly approved after fork PRs21–24 were
+merged and published. This branch starts directly from upstream main6f8f80c and
+ports only unified interactive x0 pause, measured phase-preserving performance
+presentation and unlimited MAX. The circle expands to 2.5 times its normal radius
+while fading, retaining a fixed 12px layout box and no tooltip. Existing upstream
+layout, v0.37.0, physics, mouth contact, saves and frozen baselines are preserved.
+Unrelated fork geometry, test recovery, toolbar and Pages changes are excluded.
+
+MAX can age a world faster in wall time without changing a fixed-tick result.
+No new per-frame JavaScript, particle, blur or shadow work is introduced. Existing
+fork verification is recorded in #111/#112. On this upstream-based branch,
+npm ci, 295 fast tests (0 failed/skipped), build, the production Worker and eight
+focused Chromium cases passed. The Worker covers frozen funded edits, exact
+saved-state continuation and uncapped empty/populated MAX. UI cases cover both
+execution modes, controls, inspection/camera/manual edits, pulse geometry/fade,
+exact pause/resume, reduced motion and absent tooltip. Upstream CI and review
+remain pending. This is a proposal, not upstream acceptance or publication.
 
 
 ## Coherent fluid drag and anatomical muscle trial — rejected without runtime changes

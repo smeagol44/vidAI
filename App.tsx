@@ -50,6 +50,8 @@ import {getConfig} from './constants';
 import BackgroundMusic from './utils/BackgroundMusic';
 import BrainGraph from './BrainGraph';
 import {drawFoodGlow} from './foodGlow';
+import {ThroughputMeter} from './simulationPerformance';
+import {SimulationPerformanceIndicator} from './SimulationPerformanceIndicator';
 import {SimulationClient} from './simulationClient';
 import type {WorldAction} from './simulationHost';
 import {runProductionChecks} from './diagnostics';
@@ -57,6 +59,7 @@ import CreaturePreview from './CreaturePreview';
 import {useNotification} from './utils/useNotification';
 import {addExternalOrganism, collectWorldStats} from './world';
 import {createScenarioWorld, type EnvironmentScenario} from './environmentScenarios';
+import {SIMULATION_SPEEDS, selectSimulationSpeed, toggleSimulationSpeed, type PlaybackSpeed, type SimulationSpeed} from './simulationSpeed';
 import {
   createFixedStepper,
   drawAsset,
@@ -279,6 +282,8 @@ export default function App() {
   const workerStepsRef = useRef(0);
   const energyCollectorRef = useRef(new EnergyActivityCollector());
   const energyPresentationRef = useRef(new EnergyActivityPresentation());
+  const throughputRef = useRef(new ThroughputMeter());
+  const statsWallRef = useRef(0);
   const viewportRef = useRef<HTMLDivElement>(null);
   const [{width: canvasWidth, height: canvasHeight}, setViewportSize] = useState({width: 1280, height: 720});
   useEffect(() => {
@@ -342,7 +347,10 @@ export default function App() {
   useEffect(() => {
     try { localStorage.setItem('vida:musicVolume', String(musicVolume)); } catch {}
   }, [musicVolume]);
-  const [timeMultiplier, setTimeMultiplier] = useState<1 | 2 | 5 | 10 | 20 | 50>(1);
+  const [playback, setPlayback] = useState<PlaybackSpeed>({speed: 1, lastNonzero: 1});
+  const selectSpeed = useCallback((speed: SimulationSpeed) => setPlayback(previous => selectSimulationSpeed(previous, speed)), []);
+  const togglePause = useCallback(() => setPlayback(toggleSimulationSpeed), []);
+  const effectiveSpeed = gameState.status === 'PLAYING' && !isGameMenuOpen ? playback.speed : 0;
 
   // Settings & Configuration Sliders
   const [waterViscosity, setWaterViscosity] = useState<number>((getConfig('waterViscosity') as number) ?? 0.22);
@@ -456,7 +464,7 @@ export default function App() {
     carnivoreCount: 0,
     omnivoreCount: 0,
     carrionCount: 0,
-    simTimeRatio: 1.0,
+    simTimeRatio: null as number | null,
     renderFPS: 60,
     physicsStepsPerSec: 60,
   });
@@ -466,7 +474,7 @@ export default function App() {
   const workerSelectionRef = useRef(selectedOrgId);
   workerSelectionRef.current = selectedOrgId;
   const workerPausedRef = useRef(true);
-  workerPausedRef.current = gameState.status !== 'PLAYING' || isGameMenuOpen;
+  workerPausedRef.current = effectiveSpeed === 0;
   const [selectedSpecimen, setSelectedSpecimen] = useState<Organism | null>(null);
   const [isAutoTracking, setIsAutoTracking] = useState(false);
 
@@ -502,10 +510,6 @@ export default function App() {
 
   // Telemetry Performance Tracker
   const realTimeTrackerRef = useRef({
-    lastRealTime: performance.now(),
-    simulatedSecsThisInterval: 0,
-    realSecsThisInterval: 0,
-    achievedRatio: 1.0,
     framesThisSec: 0,
     physicsStepsThisSec: 0,
     lastFPSUpdate: performance.now(),
@@ -545,8 +549,8 @@ export default function App() {
   }, []);
 
   const statsTimerRef = useRef(0);
-  const timeMultiplierRef = useRef(timeMultiplier);
-  timeMultiplierRef.current = timeMultiplier;
+  const timeMultiplierRef = useRef(effectiveSpeed);
+  timeMultiplierRef.current = effectiveSpeed;
 
   useEffect(() => {
     (window as any).canHandleBackKey = gameState.status !== 'START';
@@ -611,6 +615,12 @@ export default function App() {
   // Retain configured application defaults independently of live slider edits
   // and imported worlds. Existing in-world reset controls keep their semantics.
   const initialEnvironmentRef = useRef(currentSettings());
+  const refreshWorldView = () => {
+    const state = simStateRef.current;
+    setEcoStats(previous => ({...previous, ...collectWorldStats(state, currentSettings().targetNutrients),
+      ...(timeMultiplierRef.current === 0 ? {simTimeRatio: 0, physicsStepsPerSec: 0} : {})}));
+    setSelectedSpecimen(state.organisms.find(o => o.id === workerSelectionRef.current) ?? null);
+  };
 
   workerSettingsRef.current = currentSettings();
   const workerAction = (action: WorldAction) => workerClientRef.current!.action(action)
@@ -640,7 +650,7 @@ export default function App() {
       if (result === undefined && epoch === worldEpochRef.current)
         setEnergyBudgetDraft(current => current === joules ? null : current);
     });
-    else {setWorldEnergy(simStateRef.current, joules); setEcoStats(prev => ({...prev}));}
+    else {setWorldEnergy(simStateRef.current, joules); refreshWorldView();}
   };
 
   const updateMouthContact = async () => {
@@ -733,11 +743,12 @@ export default function App() {
       setSelectedOrgId(null); setSelectedSpecimen(null); setSelectedEggId(null); setIsAutoTracking(false);
       cameraRef.current.x = cameraRef.current.targetX = v.worldWidth / 2;
       cameraRef.current.y = cameraRef.current.targetY = v.worldHeight / 2;
-      setGameState(prev => ({...prev, status: 'PAUSED'}));
+      selectSpeed(0);
+      setGameState(prev => ({...prev, status: 'PLAYING'}));
       setSaveNotification('Snapshot restored. Resume when ready.');
       gameAudio.playLevelUpStinger();
     }).catch(error => setSaveNotification(error instanceof Error ? error.message : 'Invalid snapshot.'));
-  }, [replaceWorld]);
+  }, [replaceWorld, selectSpeed]);
 
   const [diagnosticsRunning, setDiagnosticsRunning] = useState(false);
   const runDiagnosticSuite = useCallback(async () => {
@@ -778,6 +789,7 @@ export default function App() {
       cameraRef.current.targetY = config.worldHeight / 2;
       cameraRef.current.zoom = 0.85;
 
+      setPlayback(previous => selectSimulationSpeed(previous, previous.lastNonzero));
       setGameState({
         status: 'PLAYING',
         score: simStateRef.current.organisms.length,
@@ -810,6 +822,7 @@ export default function App() {
     const oy = clampVal(cam.y + s.prng.range(-80, 80), 100, worldHeight - 100);
     const genome = customGenome ? structuredClone(customGenome) : createArchetypeGenome(archetype, 1, [], s.prng);
     const specimen = addExternalOrganism(s, genome, currentSettings(), ox, oy);
+    refreshWorldView();
     if (!specimen) {setSaveNotification('Insufficient world energy to fund this creature.'); return;}
 
     setSelectedOrgId(specimen.id);
@@ -848,6 +861,7 @@ export default function App() {
       if (nutrientSpawnSlots(s, currentSettings()) === 0) return;
       const cx = worldX ?? cameraRef.current.x, cy = worldY ?? cameraRef.current.y;
       if (addNutrients(s, currentSettings(), count, {x: cx, y: cy, spread: 80})) gameAudio.playPotionGulp();
+      refreshWorldView();
     }, [currentSettings],
   );
 
@@ -865,6 +879,7 @@ export default function App() {
       if (!nutrientSpawnSlots(s, currentSettings())) break;
     }
     if (added) gameAudio.playPotionGulp();
+    refreshWorldView();
   }, [worldWidth, worldHeight, currentSettings, spawnNutrientBurst]);
 
   // Keyboard Shortcuts
@@ -902,31 +917,28 @@ export default function App() {
         }
       } else if (e.key === ' ' || e.code === 'Space') {
         e.preventDefault();
-        setGameState((prev) =>
-          prev.status === 'PLAYING'
-            ? {...prev, status: 'PAUSED'}
-            : prev.status === 'PAUSED'
-            ? {...prev, status: 'PLAYING'}
-            : prev,
-        );
+        if (!e.repeat && gameState.status === 'PLAYING' && !isGameMenuOpen) togglePause();
       } else if (e.key.toLowerCase() === 'f') {
         spawnNutrientBurst();
       } else if (e.key.toLowerCase() === 'n') {
         addPrimordialSpecimen();
+      } else if (e.key === '0') {
+        selectSpeed(0);
+        gameAudio.playHoverMicroTone();
       } else if (e.key === '1') {
-        setTimeMultiplier(1);
+        selectSpeed(1);
         gameAudio.playHoverMicroTone();
       } else if (e.key === '2') {
-        setTimeMultiplier(2);
+        selectSpeed(2);
         gameAudio.playHoverMicroTone();
       } else if (e.key === '3') {
-        setTimeMultiplier(5);
+        selectSpeed(5);
         gameAudio.playHoverMicroTone();
       } else if (e.key === '4') {
-        setTimeMultiplier(10);
+        selectSpeed(10);
         gameAudio.playHoverMicroTone();
       } else if (e.key === '5') {
-        setTimeMultiplier(20);
+        selectSpeed(20);
         gameAudio.playHoverMicroTone();
       } else if (e.key.toLowerCase() === 'b') {
         setSynapsePruningThreshold(0.5); setIsBrainInspectorOpen((prev) => !prev);
@@ -938,7 +950,7 @@ export default function App() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [spawnNutrientBurst, addPrimordialSpecimen, isBrainInspectorOpen, selectedEggId, selectedOrgId, isSettingsOpen, isEcosystemGraphOpen, isSpecimenBankOpen, isArenaOpen, isHowToPlayOpen]);
+  }, [spawnNutrientBurst, addPrimordialSpecimen, isBrainInspectorOpen, selectedEggId, selectedOrgId, isSettingsOpen, isEcosystemGraphOpen, isSpecimenBankOpen, isArenaOpen, isHowToPlayOpen, gameState.status, isGameMenuOpen, togglePause, selectSpeed]);
 
   // Zoom handling
   useEffect(() => {
@@ -987,11 +999,27 @@ export default function App() {
 
   // Update Loop
   const update = (deltaTime: number) => {
-    if (worldEpoch !== worldEpochRef.current || gameState.status !== 'PLAYING' || isGameMenuOpen) return;
+    const s = simStateRef.current;
+    // Camera follow
+    const cam = cameraRef.current;
+    if (isAutoTracking && selectedOrgId) {
+      const tracked = s.organisms.find((o) => o.id === selectedOrgId);
+      if (tracked && !tracked.dissolving) {
+        cam.targetX = tracked.segments[0].x;
+        cam.targetY = tracked.segments[0].y;
+      } else {
+        setSelectedOrgId(null);
+        setSelectedSpecimen(null);
+        setIsAutoTracking(false);
+      }
+    }
+    cam.x += (cam.targetX - cam.x) * Math.min(1, deltaTime * 5);
+    cam.y += (cam.targetY - cam.y) * Math.min(1, deltaTime * 5);
+
+    if (worldEpoch !== worldEpochRef.current || timeMultiplierRef.current === 0) return;
 
     const multiplier = timeMultiplierRef.current;
     const fixedDt = 1 / 60;
-    const s = simStateRef.current;
 
     const settings: SimulationSettings = {
       ecologyRegime, nutrientLimit, mouthContactModel,
@@ -1014,7 +1042,8 @@ export default function App() {
     workerStepsRef.current = 0;
     if (workerClientRef.current) realTimeTrackerRef.current.physicsStepsThisSec += stepsRun;
 
-    for (let step = 0; !workerClientRef.current && step < multiplier; step++) {
+    const unlimited = multiplier === 'max';
+    for (let step = 0; !workerClientRef.current && step < (unlimited ? Infinity : multiplier); step++) {
       stepSimulation(s, settings, fixedDt, (evt) => {
         if (evt === 'clash') gameAudio.playSwordClash();
         else if (evt === 'eat') gameAudio.playCoinPickup();
@@ -1023,23 +1052,13 @@ export default function App() {
       energyCollectorRef.current.advance(s);
       realTimeTrackerRef.current.physicsStepsThisSec += 1;
       stepsRun++;
-      if (performance.now() - frameStartTime > 16.0 && multiplier > 20) break;
+      if (unlimited && performance.now() - frameStartTime >= 16) break;
     }
 
     if (!workerClientRef.current) energyPresentationRef.current.accept(energyCollectorRef.current.frame());
     const tracker = realTimeTrackerRef.current;
     const now = performance.now();
-    const realSecs = (now - tracker.lastRealTime) / 1000;
-    tracker.lastRealTime = now;
-    tracker.realSecsThisInterval += realSecs;
-    tracker.simulatedSecsThisInterval += fixedDt * stepsRun;
-
-    if (tracker.realSecsThisInterval >= 0.5) {
-      tracker.achievedRatio = tracker.simulatedSecsThisInterval / Math.max(0.001, tracker.realSecsThisInterval);
-      tracker.realSecsThisInterval = 0;
-      tracker.simulatedSecsThisInterval = 0;
-    }
-
+    if (!workerClientRef.current) throughputRef.current.observe(s.simTime, now);
     if (now - tracker.lastFPSUpdate >= 1000) {
       tracker.renderFPS = tracker.framesThisSec;
       tracker.physicsStepsPerSec = tracker.physicsStepsThisSec;
@@ -1048,36 +1067,23 @@ export default function App() {
       tracker.lastFPSUpdate = now;
     }
 
-    // Camera follow
-    const cam = cameraRef.current;
-    if (isAutoTracking && selectedOrgId) {
-      const tracked = s.organisms.find((o) => o.id === selectedOrgId);
-      if (tracked && !tracked.dissolving) {
-        cam.targetX = tracked.segments[0].x;
-        cam.targetY = tracked.segments[0].y;
-      } else {
-        setSelectedOrgId(null);
-        setSelectedSpecimen(null);
-        setIsAutoTracking(false);
-      }
-    }
-    cam.x += (cam.targetX - cam.x) * Math.min(1, deltaTime * 5);
-    cam.y += (cam.targetY - cam.y) * Math.min(1, deltaTime * 5);
-
     statsTimerRef.current += fixedDt * stepsRun;
-    if (statsTimerRef.current >= 0.25) {
-      statsTimerRef.current = 0;
+    if (now - statsWallRef.current >= 250) {
+      statsWallRef.current = now;
 
       const stats = collectWorldStats(s, targetNutrientAbundance);
       const maxGen = stats.maxGeneration;
-      setEcoStats({...stats, simTimeRatio: Math.round(tracker.achievedRatio * 10) / 10,
+      setEcoStats({...stats, simTimeRatio: throughputRef.current.read(now).speed,
         renderFPS: tracker.renderFPS, physicsStepsPerSec: tracker.physicsStepsPerSec});
 
       const selected = selectedOrgId ? s.organisms.find((o) => o.id === selectedOrgId) : null;
       setSelectedSpecimen(selected || null);
       if (selectedEggId && !s.eggs.some(egg => egg.id === selectedEggId)) setSelectedEggId(null);
 
-      popHistoryRef.current.push(s.organisms.filter(o => !o.dissolving).length);
+      if (statsTimerRef.current >= .25) {
+        statsTimerRef.current = 0;
+        popHistoryRef.current.push(s.organisms.filter(o => !o.dissolving).length);
+      }
       if (popHistoryRef.current.length > 60) popHistoryRef.current.shift();
 
       if (!s.energyPool && s.organisms.length === 0 && s.eggs.length === 0) {
@@ -1534,6 +1540,7 @@ export default function App() {
       simStateRef.current = state;
       energyPresentationRef.current.accept(frame.energyActivity);
       workerStepsRef.current += frame.steps;
+      throughputRef.current.observe(state.simTime, performance.now());
       if (workerPausedRef.current) {
         setEcoStats(previous => ({...previous, ...collectWorldStats(state, workerSettingsRef.current!.targetNutrients)}));
         setSelectedSpecimen(state.organisms.find(o => o.id === workerSelectionRef.current) ?? null);
@@ -1544,7 +1551,7 @@ export default function App() {
         else if (event === 'birth') gameAudio.playPowerupChime();
       }
     }, message => {
-      setGameState(previous => ({...previous, status: 'PAUSED'}));
+      selectSpeed(0);
       setSaveNotification(`Simulation paused: ${message}`);
     }); } catch {
       setSaveNotification('Worker unavailable; running simulation on the main thread.');
@@ -1555,12 +1562,25 @@ export default function App() {
     return () => {client.dispose(); workerClientRef.current = null;};
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     energyPresentationRef.current.setPaused(workerPausedRef.current || worldEpoch !== worldEpochRef.current, performance.now());
     workerClientRef.current?.control(currentSettings(),
-      worldEpoch === worldEpochRef.current && gameState.status === 'PLAYING' && !isGameMenuOpen,
-      timeMultiplier, isBrainInspectorOpen ? selectedOrgId : null);
-  }, [currentSettings, gameState.status, isGameMenuOpen, timeMultiplier, selectedOrgId, isBrainInspectorOpen, worldEpoch]);
+      worldEpoch === worldEpochRef.current ? effectiveSpeed : 0,
+      isBrainInspectorOpen ? selectedOrgId : null);
+  }, [currentSettings, effectiveSpeed, selectedOrgId, isBrainInspectorOpen, worldEpoch]);
+
+  useLayoutEffect(() => {
+    // Stop/resume starts a fresh wall-clock interval, including fallback mode.
+    stepperRef.current = createFixedStepper(getConfig('stepMs'), getConfig('maxSubSteps'));
+    throughputRef.current.configure(effectiveSpeed, worldEpoch);
+    const tracker = realTimeTrackerRef.current;
+    tracker.lastFPSUpdate = performance.now(); tracker.framesThisSec = 0; tracker.physicsStepsThisSec = 0;
+    setEcoStats(previous => ({...previous, simTimeRatio: effectiveSpeed === 0 ? 0 : null}));
+  }, [effectiveSpeed, worldEpoch]);
+
+  useEffect(() => {
+    if (effectiveSpeed === 0) refreshWorldView();
+  }, [effectiveSpeed, worldEpoch, currentSettings]);
 
   const updateRef = useRef(update);
   const drawRef = useRef(draw);
@@ -1570,7 +1590,8 @@ export default function App() {
   useEffect(() => {
     let raf = 0;
     const loop = (time: number) => {
-      stepperRef.current?.(time, (dt) => updateRef.current(dt));
+      if (timeMultiplierRef.current === 'max') updateRef.current(1 / 60);
+      else stepperRef.current?.(time, (dt) => updateRef.current(dt));
 
       const ctx = canvasRef.current?.getContext('2d');
       if (ctx) drawRef.current(ctx);
@@ -1582,7 +1603,7 @@ export default function App() {
     return () => cancelAnimationFrame(raf);
   }, [canvasWidth, canvasHeight]);
 
-  const isMusicPlaying = !musicMuted && gameState.status === 'PLAYING';
+  const isMusicPlaying = !musicMuted && effectiveSpeed !== 0;
 
   return (
     <div className="fixed inset-0 overflow-hidden touch-none flex flex-col items-center justify-between bg-slate-950 text-white select-none">
@@ -1603,7 +1624,7 @@ export default function App() {
           data-credits={toolbarLayout.credits} data-compact-metrics={toolbarLayout.compact}
           style={{'--toolbar-menu-space': `${toolbarLayout.menuSpace}px`} as React.CSSProperties}>
           <div className="toolbar-identity">
-          <div className="toolbar-brand flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-emerald-400 animate-ping shrink-0" />
+          <div className="toolbar-brand flex items-center gap-2"><SimulationPerformanceIndicator meter={throughputRef.current} requested={effectiveSpeed} epoch={worldEpoch} />
           <span className="font-mono font-black text-xs md:text-sm tracking-wider text-cyan-300">
             VIDA
           </span></div>
@@ -1615,7 +1636,7 @@ export default function App() {
           </span>
           <span className="toolbar-performance px-1.5 py-0.5 text-[10px] rounded bg-purple-950/80 border border-purple-500/30 text-purple-300 font-mono" title="Simulation-to-Real Time Ratio & FPS">
             <span className="toolbar-performance-text" title={`${ecoStats.simTimeRatio}x (${ecoStats.renderFPS} FPS · ${ecoStats.physicsStepsPerSec} Steps/s)`}>
-              {formatToolbarValue(ecoStats.simTimeRatio)}x ({formatToolbarValue(ecoStats.renderFPS)} FPS · {formatToolbarValue(ecoStats.physicsStepsPerSec)} Steps/s)
+              {(ecoStats.simTimeRatio === null ? '—' : formatToolbarValue(ecoStats.simTimeRatio))}x ({formatToolbarValue(ecoStats.renderFPS)} FPS · {formatToolbarValue(ecoStats.physicsStepsPerSec)} Steps/s)
             </span>
           </span>
           <span className="toolbar-time px-1.5 py-0.5 text-[10px] rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono">
@@ -1671,21 +1692,22 @@ export default function App() {
           </button>
 
           {/* Time Multiplier buttons */}
-          <div className="flex rounded-lg bg-slate-950 p-0.5 border border-slate-700">
-            {([1, 2, 5, 10, 20, 50] as const).map((spd) => (
+          <div role="group" aria-label="Simulation speed" className="flex rounded-lg bg-slate-950 p-0.5 border border-slate-700">
+            {SIMULATION_SPEEDS.map((spd) => (
               <button
                 key={spd}
+                aria-pressed={effectiveSpeed === spd}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setTimeMultiplier(spd);
+                  selectSpeed(spd);
                   gameAudio.playHoverMicroTone();
                 }}
                 className={`px-1.5 md:px-2 py-1 text-[11px] font-mono rounded font-bold transition-colors ${
-                  timeMultiplier === spd
+                  effectiveSpeed === spd
                     ? 'bg-cyan-500 text-slate-950 shadow-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}>
-                {spd === 50 ? 'MAX' : `${spd}x`}
+                {spd === 'max' ? 'MAX' : `${spd}x`}
               </button>
             ))}
           </div>
@@ -2189,7 +2211,7 @@ export default function App() {
               <button className="w-full py-1.5 bg-slate-800 border border-emerald-500/40 rounded-xl text-emerald-300 text-[11px]"
                 onClick={() => {
                   if (workerClientRef.current) void workerAction({kind: 'clear-food'});
-                  else clearFreeNutrients(simStateRef.current);
+                  else {clearFreeNutrients(simStateRef.current); refreshWorldView();}
                   setSaveNotification(energyPool ? 'Free nutrients returned to the world reserve.' : 'Free nutrients cleared; removed energy recorded.');
                 }}>Clear Free Nutrients</button>
               <div>
@@ -3077,15 +3099,12 @@ export default function App() {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setGameState((prev) => ({
-                ...prev,
-                status: prev.status === 'PLAYING' ? 'PAUSED' : 'PLAYING',
-              }));
+              togglePause();
               gameAudio.playCrispClick();
             }}
             className="min-w-[44px] min-h-[44px] px-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-md text-xs md:text-sm">
-            {gameState.status === 'PLAYING' ? <Pause size={16} /> : <Play size={16} />}
-            <span>{gameState.status === 'PLAYING' ? 'Pause' : 'Resume'}</span>
+            {effectiveSpeed !== 0 ? <Pause size={16} /> : <Play size={16} />}
+            <span>{effectiveSpeed !== 0 ? 'Pause' : 'Resume'}</span>
           </button>
 
           <button
@@ -3196,17 +3215,6 @@ export default function App() {
           onAction={() => initGame('standard')}
           icon={<RotateCw size={24} />}
           tone="danger"
-        />
-      )}
-
-      {gameState.status === 'PAUSED' && !isGameMenuOpen && (
-        <Overlay
-          title="SIMULATION PAUSED"
-          description="Ecosystem paused. Press space or resume to continue observing."
-          actionLabel="RESUME SIMULATION"
-          onAction={() => setGameState((prev) => ({...prev, status: 'PLAYING'}))}
-          icon={<Play size={24} />}
-          tone="neutral"
         />
       )}
 

@@ -28,6 +28,11 @@ on:
       - 'App.tsx'
       - 'styles.css'
       - 'e2e/presentation.spec.ts'
+
+      - 'SimulationPerformanceIndicator.tsx'
+      - 'simulationPerformance.ts'
+      - 'simulationSpeed.ts'
+      - 'tests/simulation-performance.test.ts'
       - 'BrainGraph.tsx'
       - 'persistence.ts'
       - 'constants.ts'
@@ -45,7 +50,8 @@ permissions:
 jobs:
   browser-smoke:
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    # The expanded serial Chromium/Firefox suite exceeds the former 12-minute job budget.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
