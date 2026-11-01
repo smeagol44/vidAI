@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
 import {Worker} from 'node:worker_threads';
 import {readdir} from 'node:fs/promises';
-import {createInitialWorld} from '../world.ts';
+import {createInitialWorld, addExternalOrganism} from '../world.ts';
+import {createFounderGenome} from '../founders.ts';
 import {DEFAULT_SETTINGS, createSnapshot, restoreSnapshot} from '../persistence.ts';
 import {enableClosedEconomy, setWorldEnergy} from '../energyEconomy.ts';
 import {totalAccountedEnergy} from '../persistence.ts';
 import {mouthContactFixture} from '../mouthContactAudit.ts';
+import {energyActivityFixture} from '../tests/support/energy-activity.ts';
 import {stepSimulation} from '../simulation.ts';
 import {eggReserveFixture} from '../tests/support/egg-reserve.ts';
 import {eggReserveLossFraction} from '../eggReserve.ts';
@@ -138,6 +140,32 @@ try {
     assert.match((await receive(value => value.id === -100 - epoch)).message, /Mouth contact model/);
     assert.deepEqual((await request('snapshot', {}, epoch)).state, after.state);
   }
+  // Actual cross-thread activity is render-only. Compare every authoritative
+  // optical ray/neural value and all other saved state against an observer-free run.
+  const activityProbe = energyActivityFixture();
+  addExternalOrganism(activityProbe.state, createFounderGenome('FND-001'), activityProbe.config, 1160, 750, 0);
+  const activitySource = createSnapshot(activityProbe.state, activityProbe.config);
+  send({type: 'reset', epoch: 103, snapshot: activitySource});
+  const cleanActivity = await receive(v => v.type === 'frame' && v.frame.epoch === 103);
+  assert.deepEqual(cleanActivity.frame.energyActivity, []);
+  send({type: 'ack', epoch: 103});
+  send({type: 'control', epoch: 103, settings: activityProbe.config, running: true, speed: 1, selected: null});
+  let concurrent = false;
+  for (let i = 0; i < 10 && !concurrent; i++) {
+    const packet = await receive(v => v.type === 'frame' && v.frame.epoch === 103);
+    concurrent = packet.frame.energyActivity.some(row => row.id === activityProbe.prey.id && row.gain && row.loss && row.parts.includes(0));
+    send({type: 'ack', epoch: 103});
+  }
+  send({type: 'control', epoch: 103, settings: activityProbe.config, running: false, speed: 1, selected: null});
+  const activityPaused = await request('snapshot', {}, 103);
+  assert.ok(concurrent, 'Actual Worker publishes independent concurrent activity and contacted segment');
+  const activityDirect = restoreSnapshot(activitySource).state;
+  for (let i = 0; i < Math.round(activityPaused.state.simTime * 60); i++) stepSimulation(activityDirect, activityProbe.config, 1 / 60);
+  assert.deepEqual(activityPaused.state, createSnapshot(activityDirect, activityProbe.config).state);
+  assert.ok(activityPaused.state.organisms.some(org => org.rayHits.length > 0));
+  await new Promise(resolve => setTimeout(resolve, 80));
+  assert.deepEqual((await request('snapshot', {}, 103)).state, activityPaused.state);
+  console.log('Energy activity Worker: concurrent real feeding/predation, contacted segment, exact observer-free optical/neural/PRNG/save continuation and paused freeze passed.');
   const eggProbe = eggReserveFixture(true);
   eggProbe.state.eggs[4].fundedStructural -= 100;
   // Match actual embodied stocks after constructing the damaged fixture.

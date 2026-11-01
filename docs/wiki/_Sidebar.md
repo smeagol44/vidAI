@@ -10,3 +10,5 @@
 - [[Simulation Performance|Simulation-Performance]]
 
 [Play VIDA](https://smeagol44.github.io/vidAI/)
+
+- [Energy Activity](Energy-Activity)

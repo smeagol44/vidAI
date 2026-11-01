@@ -4,7 +4,7 @@ VIDA is an aquatic artificial-life simulator. Articulated bodies, inherited
 neural controllers, individual experience and physical interactions determine
 behavior. Survival and reproduction depend on finite energy.
 
-**Implementation baseline: v0.38.1.** The core mechanisms exist; reliable
+**Implementation baseline: v0.38.2.** The core mechanisms exist; reliable
 foraging, predator pursuit and self-sustaining multigeneration ecosystems remain
 unproven. This reference covers VIDA 2D; the separate 3D project is independent.
 
@@ -15,7 +15,7 @@ replacing production. Its distinct release label identifies the pinned main
 version and commit, cycle and iteration (currently `T1.1` from
 `main v0.37.0 @ b2a05e5`). Each testing commit advances its iteration;
 resetting to an explicitly chosen newer main baseline begins the next cycle.
-Production uses its independent `v0.38.1` release and forward-mouth save format.
+Production uses its independent `v0.38.2` release and forward-mouth save format.
 The testing-only version code must never be merged to main.
 
 ## Simulation overview
@@ -93,3 +93,5 @@ history. Detailed experiments stay in
 [project status](https://github.com/smeagol44/vidAI/blob/main/docs/PROJECT_STATUS.md);
 priorities stay in the [roadmap](https://github.com/smeagol44/vidAI/blob/main/docs/FEATURE_ROADMAP.md).
 The maintained source is `docs/wiki/`, automatically published to this Wiki.
+
+Observer-only energy activity is documented in [Energy Activity](Energy-Activity).
