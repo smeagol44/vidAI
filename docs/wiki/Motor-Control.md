@@ -261,6 +261,13 @@ The controlled approach improvement was measured under legacy physics;
 scattered-food intake remains seed-dependent. Current physics changes do not
 rewrite those inherited genes. Equivalent corrected-world benefits are unproven.
 
+In the contributor fork's forward-mouth model, the finite-food approach check
+requires visually caused intake and a net reserve gain after normal costs.
+Contact ticks must explain absorbed joules at the existing specialist rate and
+assimilation. A successful approach need not consume the entire particle:
+aperture orientation and finite contact duration govern how much can enter.
+This is fork-only coverage; it does not describe an accepted upstream change.
+
 ## Developer entry points
 
 - `npm run audit:foraging`: Twin Oar finite-food controls and three short scattered-food pairs.

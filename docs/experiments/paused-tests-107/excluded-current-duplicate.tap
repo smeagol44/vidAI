@@ -1,0 +1,285 @@
+VIDA_PHASE5_POPULATION_SMOKE {"alive":100,"physicalParts":300,"maxIndividualSensoryEdges":96,"maxIndividualMotorEdges":96}
+✖ real learned experience is compared against its own erased-experience physical twin (2705.637664ms)
+✔ a populated tank can step 100 learning-capable articulated animals without unbounded synapse state (642.249465ms)
+✔ physics audit measures dissipative rotated drag, passive spin, free momentum and actual size scaling (211.554029ms)
+✔ offline fitness rejects idle, startup-only, invalid and circular movement (0.477696ms)
+✔ search uses a deterministic bounded budget, keeps the parent, and edits only existing motor alleles (767.344525ms)
+✔ candidate adoption rejects reversed and less sustained motion despite higher distance (89.952812ms)
+✔ CUR-003: selected gait retains a longer held-out physical improvement without cap use (590.493484ms)
+✔ CUR-008: selected gait retains a longer held-out physical improvement without cap use (785.866075ms)
+✔ CUR-009: selected gait retains a longer held-out physical improvement without cap use (325.973078ms)
+✔ the other six featured and all 55 legacy genomes remain exactly unchanged (342.811056ms)
+✖ stored pre-calibration CUR-003 genome resumes the exact v0.32.1 cold continuation (84.288451ms)
+✖ a mobile, swimming hunter exposes protective and harmful inherited bite responses (2061.378523ms)
+✖ five morphologies show both beneficial and harmful physical injury responses, not universal escape (262.542892ms)
+✖ cached runtime preserves v0.30 complete continuation: plain (342.859266ms)
+✖ cached runtime preserves v0.30 complete continuation: masked (94.065151ms)
+✖ cached runtime preserves v0.30 complete continuation: learned (109.195159ms)
+✖ cached runtime preserves v0.30 complete continuation: masked-learned (79.501368ms)
+✔ topology edits invalidate masks; changing weights does not cache stale values (20.662802ms)
+✔ learning reuses ID-keyed records and exact saves do not depend on warm caches (132.277279ms)
+✔ one death leaves exactly one larger edible circle containing all remaining chemical energy (35.841051ms)
+✔ worker host and render transport preserve exact state while omitting repeated genomes (157.786221ms)
+✔ worker commands honor nutrient caps, accounting, resize and exact authoritative export (28.321579ms)
+✔ pooled collision clipping exactly matches v0.32 geometry across rotations and boundaries (64.630347ms)
+✔ sparse learning clears removed records and invalidates all old slots after topology edits (15.372022ms)
+✔ lineage transport tracks real spawning, laying, hatching, death and epoch reset (106.017165ms)
+✔ lineage subscriptions coalesce changes, detach and avoid scanning unchanged history (17.547683ms)
+✔ CUR-001: recovery preserves frozen starter swimming and bounded total energy cost (552.58503ms)
+✔ CUR-002: recovery preserves frozen starter swimming and bounded total energy cost (337.683428ms)
+✔ CUR-003: recovery preserves frozen starter swimming and bounded total energy cost (238.598928ms)
+✔ CUR-004: recovery preserves frozen starter swimming and bounded total energy cost (336.385871ms)
+✔ CUR-005: recovery preserves frozen starter swimming and bounded total energy cost (265.228142ms)
+✔ CUR-006: recovery preserves frozen starter swimming and bounded total energy cost (333.962904ms)
+✔ CUR-007: recovery preserves frozen starter swimming and bounded total energy cost (180.452166ms)
+✔ CUR-008: recovery preserves frozen starter swimming and bounded total energy cost (245.65084ms)
+✔ CUR-009: recovery preserves frozen starter swimming and bounded total energy cost (108.212554ms)
+✔ shared-part simultaneous work includes acceleration and charges positive work independently of braking (6.403488ms)
+✔ recovery reserves limit actuation before it acts, with zero unpaid motion or future-food borrowing (16.452142ms)
+✖ CUR-001: v0.34.0 saves retain exact surface-model continuation (79.627533ms)
+✖ CUR-006: v0.34.0 saves retain exact surface-model continuation (67.30024ms)
+✔ recovery snapshots fork and continue exactly in Worker host and direct kernel (110.209106ms)
+✔ recovery retains Darter and Twin Oar physical off-axis food acquisition (606.355047ms)
+✖ Twin Oar reaches off-axis finite food through inherited visual steering and physical muscles (5072.892871ms)
+✔ calibration changes only new Twin Oar genes; old saves and the other 63 designs remain intact (314.534172ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 32
+ℹ fail 11
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6210.157809
+
+✖ failing tests:
+
+test at tests/learned-physical-outcome.test.ts:1:3536
+✖ real learned experience is compared against its own erased-experience physical twin (2705.637664ms)
+  AssertionError [ERR_ASSERTION]: experience must measurably change physical intake, and its benefit is not guaranteed
+      at TestContext.<anonymous> (/workspace/scratch/0249020fafe6/vidAI/tests/learned-physical-outcome.test.ts:81:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/locomotion-search.test.ts:1:4524
+✖ stored pre-calibration CUR-003 genome resumes the exact v0.32.1 cold continuation (84.288451ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'a4ddbfcf7ad1ae7603dda268a3323de85a4db10d4badfb081eb464375b932f52'
+  - '1bf8f42ab1dd15f60fce7cd8209785dffb9acc927b4317ab28893a9beb400b33'
+  
+      at TestContext.<anonymous> (/workspace/scratch/0249020fafe6/vidAI/tests/locomotion-search.test.ts:87:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'a4ddbfcf7ad1ae7603dda268a3323de85a4db10d4badfb081eb464375b932f52',
+    expected: '1bf8f42ab1dd15f60fce7cd8209785dffb9acc927b4317ab28893a9beb400b33',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/moving-hunter.test.ts:1:3415
+✖ a mobile, swimming hunter exposes protective and harmful inherited bite responses (2061.378523ms)
+  AssertionError [ERR_ASSERTION]: hunter must swim physically rather than being a stationary target
+      at TestContext.<anonymous> (/workspace/scratch/0249020fafe6/vidAI/tests/moving-hunter.test.ts:66:11)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/moving-hunter.test.ts:1:4795
+✖ five morphologies show both beneficial and harmful physical injury responses, not universal escape (262.542892ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Math.abs(connected.hunterDx)>1 && Math.abs(disconnected.hunterDx)>1)
+  
+      at TestContext.<anonymous> (/workspace/scratch/0249020fafe6/vidAI/tests/moving-hunter.test.ts:100:13)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/performance-runtime.test.ts:1:1854
+✖ cached runtime preserves v0.30 complete continuation: plain (342.859266ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'e901d34f57ac84c8616495f295c120b13bec7875410cdb5812f73d66de07040f'
+  - '2beee8151de15d2ea1210b79a19357963607a93e817fa54685fa9a05f4dec929'
+  
+      at TestContext.<anonymous> (/workspace/scratch/0249020fafe6/vidAI/tests/performance-runtime.test.ts:43:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'e901d34f57ac84c8616495f295c120b13bec7875410cdb5812f73d66de07040f',
+    expected: '2beee8151de15d2ea1210b79a19357963607a93e817fa54685fa9a05f4dec929',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/performance-runtime.test.ts:1:1854
+✖ cached runtime preserves v0.30 complete continuation: masked (94.065151ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'd880e84c9c1ff520b14bd931e8ca1f2d34aa2f8658e7466f3c66cf97f96935a3'
+  - '6372ca22403f848c5f0a0cf29acd9279327a46accf5c8d091a94b11c13465349'
+  
+      at TestContext.<anonymous> (/workspace/scratch/0249020fafe6/vidAI/tests/performance-runtime.test.ts:43:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'd880e84c9c1ff520b14bd931e8ca1f2d34aa2f8658e7466f3c66cf97f96935a3',
+    expected: '6372ca22403f848c5f0a0cf29acd9279327a46accf5c8d091a94b11c13465349',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/performance-runtime.test.ts:1:1854
+✖ cached runtime preserves v0.30 complete continuation: learned (109.195159ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '88472708a0f4c105d27b9af62085ebe2710d4f7935c32f2d33ba780a79bf626e'
+  - '4976dca352dd53a031b3e6ba8dfe4716cfa6cd264e1a8f06252afee1e929c7f2'
+  
+      at TestContext.<anonymous> (/workspace/scratch/0249020fafe6/vidAI/tests/performance-runtime.test.ts:43:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '88472708a0f4c105d27b9af62085ebe2710d4f7935c32f2d33ba780a79bf626e',
+    expected: '4976dca352dd53a031b3e6ba8dfe4716cfa6cd264e1a8f06252afee1e929c7f2',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/performance-runtime.test.ts:1:1854
+✖ cached runtime preserves v0.30 complete continuation: masked-learned (79.501368ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'adfdfa2d44b9ec8b9f8c387ec9a289d848e53a5863898d1dd16d174ca4743a98'
+  - '2aef53858afe0bb292dd70fe081707fdbbb85fe9dd7492652ebf03c6c28e3337'
+  
+      at TestContext.<anonymous> (/workspace/scratch/0249020fafe6/vidAI/tests/performance-runtime.test.ts:43:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'adfdfa2d44b9ec8b9f8c387ec9a289d848e53a5863898d1dd16d174ca4743a98',
+    expected: '2aef53858afe0bb292dd70fe081707fdbbb85fe9dd7492652ebf03c6c28e3337',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/swimming-recovery.test.ts:1:3966
+✖ CUR-001: v0.34.0 saves retain exact surface-model continuation (79.627533ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'c545f59b98edf68b5eb192d9852c3ce46995f08c833e554cc9060a35d3851908'
+  - '0c047eb7d77179a8416653908504ca302daaebf319f0ea4a173461f90be53a5f'
+  
+      at TestContext.<anonymous> (/workspace/scratch/0249020fafe6/vidAI/tests/swimming-recovery.test.ts:73:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'c545f59b98edf68b5eb192d9852c3ce46995f08c833e554cc9060a35d3851908',
+    expected: '0c047eb7d77179a8416653908504ca302daaebf319f0ea4a173461f90be53a5f',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/swimming-recovery.test.ts:1:3966
+✖ CUR-006: v0.34.0 saves retain exact surface-model continuation (67.30024ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '7b943237bd8934bc38d5dae97826dcc5bc74b23c777d47c25896dbba7a0bd142'
+  - '08a677b9922d03a0a06a494b50bd1ebe481492fa6b19a3d49a2e9c6c0bd50370'
+  
+      at TestContext.<anonymous> (/workspace/scratch/0249020fafe6/vidAI/tests/swimming-recovery.test.ts:73:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '7b943237bd8934bc38d5dae97826dcc5bc74b23c777d47c25896dbba7a0bd142',
+    expected: '08a677b9922d03a0a06a494b50bd1ebe481492fa6b19a3d49a2e9c6c0bd50370',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/twin-oar-foraging.test.ts:1:696
+✖ Twin Oar reaches off-axis finite food through inherited visual steering and physical muscles (5072.892871ms)
+  AssertionError [ERR_ASSERTION]: {"condition":"current","side":1,"distance":160,"heading":-1.2,"viscosity":0.22,"seconds":16,"visibleTicks":852,"capTicks":0,"absorbedJ":1440,"reserveDeltaJ":1009.3227122451026,"expenditureJ":430.6772877548974,"mouthContactTicks":30,"energyErrorJ":1.8189894035458565e-11,"valid":true}
+  
+  1440 !== 2400
+  
+      at TestContext.<anonymous> (/workspace/scratch/0249020fafe6/vidAI/tests/twin-oar-foraging.test.ts:17:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1440,
+    expected: 2400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

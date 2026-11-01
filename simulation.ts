@@ -191,7 +191,8 @@ export function eyeSensoryUpkeep(eyes: readonly SensoryEye[]): number {
 }
 
 export interface SensoryMouth extends SurfaceOrgan {
-  intakeWidth: number; // aperture contact width
+  intakeWidth: number; // visible mouth diameter
+  intakeLength?: number; // forward reach from the anatomical anchor; optional only for legacy data
   mouthType: MouthType;
 }
 
@@ -2409,7 +2410,8 @@ export function mutateGenome(parent: Genome, severity = 0.25, customPrng: Xoshir
     return {
       ...m,
       mouthType: mutatedType,
-      intakeWidth: mutate(m.intakeWidth, 2, 3, 38),
+      intakeLength: Math.max(mutatedType === 'carnivore' ? 9 : mutatedType === 'omnivore' ? 8 : 7, mutate(m.intakeLength ?? m.intakeWidth, 2, 3, 38)),
+      intakeWidth: mutatedType === 'carnivore' ? 9 : mutatedType === 'omnivore' ? 8 : 7,
     };
   });
 
@@ -2420,7 +2422,8 @@ export function mutateGenome(parent: Genome, severity = 0.25, customPrng: Xoshir
     if (placement) mouths.push({
       id: `mouth-${customPrng.nextUint32().toString(36)}`,
       ...placement,
-      intakeWidth: customPrng.range(14, 28),
+      intakeLength: customPrng.range(14, 28),
+      intakeWidth: chosenType === 'carnivore' ? 9 : chosenType === 'omnivore' ? 8 : 7,
       mouthType: chosenType,
     });
   } else if (customPrng.nextFloat() < mutChance * 0.12 && mouths.length > 1) {
@@ -3990,12 +3993,12 @@ export function stepSimulation(
       const cos = Math.cos(phys.angle), sin = Math.sin(phys.angle);
       const cx = phys.x + cos * anchor.x - sin * anchor.y;
       const cy = phys.y + sin * anchor.x + cos * anchor.y;
-      const {radius: mouthRadius, halfSpan: halfAperture} = mouthDimensions(mouth);
+      const {radius: mouthRadius, length: intakeLength} = mouthDimensions(mouth);
       const normal = getCardinalOutwardNormal(mouth.direction);
-      const tx = cos * -normal.y - sin * normal.x;
-      const ty = sin * -normal.y + cos * normal.x;
-      const x1 = cx - tx * halfAperture, y1 = cy - ty * halfAperture;
-      const x2 = cx + tx * halfAperture, y2 = cy + ty * halfAperture;
+      const nx = cos * normal.x - sin * normal.y;
+      const ny = sin * normal.x + cos * normal.y;
+      const x1 = cx, y1 = cy;
+      const x2 = cx + nx * intakeLength, y2 = cy + ny * intakeLength;
       const eatsMeat = mouth.mouthType !== 'herbivore';
       const eatsPlants = mouth.mouthType !== 'carnivore';
       const allowance = (mouth.mouthType === 'omnivore' ? OMNIVORE_EAT_RATE : CONTINUOUS_EAT_RATE) * dt;
@@ -4029,7 +4032,7 @@ export function stepSimulation(
             const pos = prey.segments[part], def = prey.genome.parts[part];
             // Conservative rectangle half-diagonal + mouth aperture bounds;
             // unlike a fixed 70px cutoff, this also handles large mutated parts.
-            const reach = Math.hypot(def.width, def.height) * .5 + halfAperture + mouthRadius;
+            const reach = Math.hypot(def.width, def.height) * .5 + intakeLength + mouthRadius;
             if (Math.abs(pos.x - cx) > reach || Math.abs(pos.y - cy) > reach) continue;
             contact = settings.mouthContactModel === 'capsule-v1'
               ? capsuleContactsPart(x1, y1, x2, y2, mouthRadius, pos, def)
@@ -4087,7 +4090,7 @@ export function stepSimulation(
         if (!(canEat() || !feedback.contact)) break;
         const food = nutrients[i], carrion = food.kind === 'carrion';
         if (carrion ? !eatsMeat : !eatsPlants) continue;
-        const reach = food.radius + halfAperture + mouthRadius;
+        const reach = food.radius + intakeLength + mouthRadius;
         if (Math.abs(food.x - cx) > reach || Math.abs(food.y - cy) > reach) continue;
         if (distPointToSegment(food.x, food.y, x1, y1, x2, y2) > food.radius + mouthRadius) continue;
         feedback.contact = 1;

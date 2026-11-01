@@ -1,5 +1,28 @@
 # Project status — 2026-10-21
 
+## Contributor fork: all eleven paused checks recovered — 2026-10-26
+
+Upstream tracking: #107. On `hernansgarro/vidAI:feature/restore-paused-regression-tests`,
+all eleven checks are active and pass. The owner authorized reviewing guarantees
+against original test intent and accepted forward-mouth geometry. Seven original
+hashes remain unchanged with a strictly oral representation projection; all other
+state is exact against the pre-mouth reference. Four behavioral contracts now
+protect actual causal feeding, conserved absorption, isolated acquired experience,
+funded articulated motion and real injury, rather than complete meals, end-X
+displacement or historical outcome quotas. No simulation/controller/physics,
+mouth behavior, release or save change was needed. One invalid omnivore fixture
+diameter was corrected to8 without changing its physical outcomes.
+
+Fast suite:291pass,0fail,0skip; npm ci, build and actual Worker pass. Twin Oar
+still absorbs1440J rather than2400J in one case; learned twins still show one
+benefit/three ties/no harm in four cases. Hunter response signs remain mixed.
+These measured facts are disclosed, not tuned away. See the
+[final intent review and validation](experiments/paused-tests-107/final/report.md)
+and the preserved [initial diagnosis/evidence](experiments/paused-tests-107/README.md).
+Integration is authorized only through a verified fork PR to testing, then owner
+practical review. This checkpoint claims neither a main merge nor upstream
+acceptance/Wiki publication; review actual PR/deployment evidence in #107.
+
 ## Coherent fluid drag and anatomical muscle trial — rejected without runtime changes
 
 - A bounded experiment compared two proposed replacements independently and

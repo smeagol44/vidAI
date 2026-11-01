@@ -1,7 +1,7 @@
 # Waking Synaptic Learning
 
 **Original Phase 5 is implemented as a bounded waking-learning feature set.**
-Learning can affect subsequent physical feeding helpfully or harmfully;
+Learning changes subsequent trajectories and can change physical feeding;
 reliable generalization and ecological benefit remain unproven. Optional
 sleep/rest, experience replay and world-model dreaming are not implemented.
 
@@ -89,9 +89,13 @@ effective inherited-plus-acquired weights, learning rates and costs.
 
 Focused tests establish within-life changes, forgetting, retained associations,
 energy charges, individual isolation, inheritance rules and exact continuation.
-Matched retained-versus-erased-experience swimmers have produced beneficial,
-harmful and tied later feeding outcomes. This demonstrates a functioning
-mechanism with context-dependent effects, not reliable learned survival.
+Matched retained-versus-erased-experience swimmers isolate changes in acquired
+synaptic state from inherited genes and initial physical conditions. Contributor
+fork coverage also checks exact retained-memory replays, real contact, absorbed
+receipts and energy accounting for subsequent physical feeding. Encounter
+geometry and finite meals can change or saturate the intake difference; a fixed
+mixture of helpful, harmful and tied outcomes is not guaranteed. These checks
+demonstrate a functioning mechanism, not reliable learned survival.
 
 Original Phase 6 remains optional future work. Any replay implementation would
 need bounded personal experience, real resting vulnerability/costs, no replayed

@@ -73,12 +73,12 @@ test('a bite does not report eye color, predator species, nearby body presence o
   assert.ok(Math.abs(totalAccountedEnergy(s) - before) < 1e-5);
 });
 
-test('queued real predation stimulus saves and continues exactly in schema 11', () => {
+test('queued real predation stimulus saves and continues exactly in the current schema', () => {
   const {s, prey, channel} = fixture();
   sim.stepSimulation(s, settings, dt);
   assert.ok(prey.biteFeedbackJ! > 0);
   const saved = createSnapshot(s, settings), restored = restoreSnapshot(saved);
-  assert.equal(saved.schemaVersion, '12.0.0');
+  assert.equal(saved.schemaVersion, '16.0.0');
   assert.equal(restored.state.organisms.find(o => o.id === prey.id)!.biteFeedbackJ, prey.biteFeedbackJ);
   assert.deepEqual(createSnapshot(restored.state, settings), saved);
   for (let i = 0; i < 3; i++) {

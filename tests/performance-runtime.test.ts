@@ -10,6 +10,7 @@ import {rectangleContact} from '../contacts';
 import {referenceContact} from './support/reference-contact';
 import {watchLineage, markLineageChanged} from '../lineageChanges';
 import {SimulationHost, RenderReplica} from '../simulationHost';
+import {legacyMouthState} from './support/legacy-mouth-state';
 
 const config = {...LEGACY_SETTINGS, targetNutrients: 0, inflowRate: 0, mutationSeverity: 0};
 function fixture(mode = 'masked-learned') {
@@ -39,8 +40,26 @@ const golden = {
 for (const [mode, expected] of Object.entries(golden)) test(`cached runtime preserves v0.30 complete continuation: ${mode}`, () => {
   const state = fixture(mode);
   for (let i = 0; i < 120; i++) sim.stepSimulation(state, config, 1 / 60);
-  const hash = createHash('sha256').update(JSON.stringify(createSnapshot(state, config).state)).digest('hex');
+  const hash = createHash('sha256').update(JSON.stringify(legacyMouthState(createSnapshot(state, config).state))).digest('hex');
   assert.equal(hash, expected);
+});
+
+test('historical mouth projection preserves all other state and rejects invalid current diameters', () => {
+  const snapshot = createSnapshot(fixture(), config).state;
+  const before = structuredClone(snapshot);
+  const projected = legacyMouthState(snapshot);
+  assert.deepEqual(snapshot, before, 'projection cannot modify the authoritative snapshot');
+  const roundTrip = structuredClone(projected);
+  for (const genome of [roundTrip.organisms[0].genome, roundTrip.lineage[0][1].genome]) {
+    for (const mouth of genome.mouths) {
+      mouth.intakeLength = mouth.intakeWidth;
+      mouth.intakeWidth = mouth.mouthType === 'carnivore' ? 9 : mouth.mouthType === 'omnivore' ? 8 : 7;
+    }
+  }
+  assert.deepEqual(roundTrip, snapshot, 'only the documented oral field representation may differ');
+  const malformed = structuredClone(snapshot);
+  malformed.organisms[0].genome.mouths[0].intakeWidth += 1;
+  assert.throws(() => legacyMouthState(malformed), /malformed current mouth diameter/);
 });
 
 test('topology edits invalidate masks; changing weights does not cache stale values', () => {

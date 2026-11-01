@@ -566,7 +566,7 @@ export default function App() {
       if (saved) {
         const items = JSON.parse(saved);
         if (Array.isArray(items)) setSpecimenBank(items.slice(0, 25).flatMap(item => {
-          try { return [{...item, genome: validateGenome(item.genome)}]; } catch { return []; }
+          try { return [{...item, genome: validateGenome(item.genome, true)}]; } catch { return []; }
         }));
       }
     } catch {
@@ -1387,7 +1387,7 @@ export default function App() {
           const isCarn = mouth.mouthType === 'carnivore';
           const isOmni = mouth.mouthType === 'omnivore';
 
-          const {radius: mouthRadius, halfSpan: halfAperture} = mouthDimensions(mouth);
+          const {radius: mouthRadius, length: intakeLength} = mouthDimensions(mouth);
           const lastBite = org.recentFeedings?.filter(event => event.mouthId === mouth.id).at(-1);
           const activity = Math.max(org.mouthFeedback?.[mouth.id]?.intake ?? 0,
             lastBite ? clampVal(1 - (s.simTime - lastBite.timestamp) / .3, 0, 1) : 0);
@@ -1397,20 +1397,18 @@ export default function App() {
           if (showMouthApertures || isSelected) {
             ctx.save();
             const normDir = getCardinalOutwardNormal(mouth.direction);
-            const tanX = -normDir.y;
-            const tanY = normDir.x;
-            const a1x = mouthLoc.x - tanX * halfAperture;
-            const a1y = mouthLoc.y - tanY * halfAperture;
-            const a2x = mouthLoc.x + tanX * halfAperture;
-            const a2y = mouthLoc.y + tanY * halfAperture;
+            const a1x = mouthLoc.x;
+            const a1y = mouthLoc.y;
+            const a2x = mouthLoc.x + normDir.x * intakeLength;
+            const a2y = mouthLoc.y + normDir.y * intakeLength;
 
             if (mouthContactModel === 'capsule-v1') {
-              // Same rounded span and radius as nutrient, egg and prey contact.
-              ctx.translate(mouthLoc.x, mouthLoc.y);
-              ctx.rotate(Math.atan2(tanY, tanX));
+              // Match the physical capsule: centerline starts at the anatomical anchor and extends outward.
+              ctx.translate((a1x + a2x) / 2, (a1y + a2y) / 2);
+              ctx.rotate(Math.atan2(normDir.y, normDir.x));
               ctx.beginPath();
-              ctx.roundRect(-halfAperture - mouthRadius, -mouthRadius,
-                2 * (halfAperture + mouthRadius), 2 * mouthRadius, mouthRadius);
+              ctx.roundRect(-intakeLength / 2 - mouthRadius, -mouthRadius,
+                intakeLength + 2 * mouthRadius, 2 * mouthRadius, mouthRadius);
               ctx.fillStyle = isCarn ? 'rgba(244,63,94,.35)' : isOmni ? 'rgba(192,132,252,.35)' : 'rgba(52,211,153,.35)';
               ctx.strokeStyle = isCarn ? '#f43f5e' : isOmni ? '#c084fc' : '#34d399';
               ctx.lineWidth = Math.max(.5, 1 / zoom);
@@ -2635,7 +2633,7 @@ export default function App() {
                               </span>
                             </div>
                             <div className="text-[9px] text-slate-400">
-                              Aperture Width: <strong className="text-cyan-300">{m.intakeWidth.toFixed(1)}px</strong> · Contact Radius: <strong className="text-cyan-300">{(isCarn ? 4.5 : isOmni ? 4.0 : 3.5).toFixed(1)}px</strong>
+                              Mouth Width: <strong className="text-cyan-300">{mouthDimensions(m).diameter.toFixed(1)}px</strong> · Reach: <strong className="text-cyan-300">{mouthDimensions(m).length.toFixed(1)}px</strong> · Contact Radius: <strong className="text-cyan-300">{(isCarn ? 4.5 : isOmni ? 4.0 : 3.5).toFixed(1)}px</strong>
                             </div>
                             <div className="text-[9px] text-slate-300 italic">
                               {rules}
