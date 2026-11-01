@@ -7,6 +7,8 @@ import {enableClosedEconomy, setWorldEnergy} from '../energyEconomy.ts';
 import {totalAccountedEnergy} from '../persistence.ts';
 import {mouthContactFixture} from '../mouthContactAudit.ts';
 import {stepSimulation} from '../simulation.ts';
+import {eggReserveFixture} from '../tests/support/egg-reserve.ts';
+import {eggReserveLossFraction} from '../eggReserve.ts';
 
 // Exercise the actual production-built Worker with real cross-thread cloning.
 // Only the browser's message port is adapted to node:worker_threads.
@@ -136,5 +138,42 @@ try {
     assert.match((await receive(value => value.id === -100 - epoch)).message, /Mouth contact model/);
     assert.deepEqual((await request('snapshot', {}, epoch)).state, after.state);
   }
+  const eggProbe = eggReserveFixture(true);
+  eggProbe.state.eggs[4].fundedStructural -= 100;
+  // Match actual embodied stocks after constructing the damaged fixture.
+  eggProbe.state.energyPool.budget -= 100;
+  const eggSource = createSnapshot(eggProbe.state, eggProbe.config);
+  send({type: 'reset', snapshot: eggSource, epoch: 104});
+  const eggFrame = await receive(value => value.type === 'frame' && value.frame.epoch === 104);
+  assert.equal(eggFrame.frame.state.eggs[1].initialFundedReserve, 1000);
+  assert.deepEqual((await request('snapshot', {}, 104)).state, eggSource.state);
+  await new Promise(resolve => setTimeout(resolve, 80));
+  assert.deepEqual((await request('snapshot', {}, 104)).state, eggSource.state);
+  await request('action', {action: {kind: 'energy-budget', joules: eggProbe.state.energyPool.budget + 10000}}, 104);
+  const eggFunded = await request('snapshot', {}, 104);
+  const eggDirect = restoreSnapshot(eggFunded).state;
+  send({type: 'ack', epoch: 104});
+  send({type: 'control', epoch: 104, settings: eggProbe.config, speed: 5, selected: null, running: true});
+  await new Promise(resolve => setTimeout(resolve, 120));
+  send({type: 'control', epoch: 104, settings: eggProbe.config, speed: 5, selected: null, running: false});
+  const eggAfter = await request('snapshot', {}, 104);
+  const eggTicks = Math.round(eggAfter.state.simTime * 60); assert.ok(eggTicks > 0);
+  for (let i = 0; i < eggTicks; i++) stepSimulation(eggDirect, eggProbe.config, 1 / 60);
+  assert.deepEqual(eggAfter.state, createSnapshot(eggDirect, eggProbe.config).state);
+  assert.deepEqual(eggAfter.state.eggs.map(e => e.initialFundedReserve), [1000, 1000, 1000, 1000, 1000]);
+  assert.ok(eggReserveLossFraction(eggAfter.state.eggs[1]) < .25, 'Existing funded recovery shrinks pink');
+  assert.equal(eggReserveLossFraction(eggAfter.state.eggs[0]), 0, 'Above-original reserves stay white');
+  assert.equal(eggReserveLossFraction(eggAfter.state.eggs[4]), 1, 'Structural repair alone stays pink');
+  const legacyEggs = structuredClone(eggAfter);
+  for (const e of legacyEggs.state.eggs) {delete e.initialFundedReserve; delete e.initialReserveIsLegacy;}
+  send({type: 'reset', snapshot: legacyEggs, epoch: 105});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 105);
+  const migratedEggs = await request('snapshot', {}, 105);
+  assert.ok(migratedEggs.state.eggs.every(e => e.initialReserveIsLegacy && e.initialFundedReserve === e.fundedReserve));
+  assert.deepEqual(migratedEggs.state.prngState, legacyEggs.state.prngState);
+  send({type: 'reset', snapshot: eggAfter, epoch: 106});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 106);
+  assert.deepEqual((await request('snapshot', {}, 106)).state, eggAfter.state);
+  console.log('Egg reserve Worker: original reference/frame/export/reset, legacy-current migration, exact 5x funded recovery, structure-only pink and paused freeze passed.');
   console.log('Production Worker: open/closed exact exports, funded commands, independent stepping, debt, direct equivalence, all physics regimes, mouth contact in all eight physics/ecology combinations, regime-switch and stale-world rejection passed.');
 } finally { await worker.terminate(); }

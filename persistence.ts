@@ -1,11 +1,12 @@
 import {embodiedEnergy, FOOD_SAFETY_LIMIT} from './energyEconomy';
+import {eggReserveReference} from './eggReserve';
 import {
   XoshiroPRNG, migrateOrganismBrain, ensureBrainLayout, calculateBodyCost,
   calculateMaxEnergyCapacity, clampVal, getPartCornerVertices,
   getBrainLayout, getDietClassification, brainEdgeKey, CARRION_DECAY_SECONDS, MAX_OUTPUTS, MAX_SURFACE_ORGANS, MAX_NEURAL_INPUTS, MAX_HIDDEN, MAX_ENABLED_BRAIN_EDGES, MAX_BRAIN_MEMORY_SECONDS, MAX_PLASTIC_MOTOR_SYNAPSES, MAX_PLASTIC_SENSORY_SYNAPSES, MAX_LEARNED_MOTOR_DELTA, plasticMotorEdges, plasticSensoryEdges, surfacePlacementProblems, morphologyProblems, type Genome, type SimulationSettings, type SimulationState, type Organism,
 } from './simulation';
 
-export const BUILD_VERSION = '0.38.0';
+export const BUILD_VERSION = '0.38.1';
 export const DEFAULT_SETTINGS: SimulationSettings = {
   // Historical kernel callers retain paid v2; the application selects NEW_PHYSICS_REGIME explicitly.
   physicsRegime: 'paid-work-v2',
@@ -72,7 +73,8 @@ export function createSnapshot(s: SimulationState, settings: SimulationSettings,
   const snapshot = {schemaVersion: '16.0.0', build: BUILD_VERSION, metadata, settings: {...settings,
     ...(s.energyPool ? {ecologyRegime: 'closed-v1' as const, nutrientLimit: settings.nutrientLimit ?? null} : {}),
     physicsRegime: settings.physicsRegime ?? 'legacy-v0'},
-    state: {...snapshotData, prngState: prng.getState(), lineage: snapshotLineage}};
+    state: {...snapshotData, eggs: snapshotData.eggs.map(egg => ({...egg, ...eggReserveReference(egg)})),
+      prngState: prng.getState(), lineage: snapshotLineage}};
   // Canonical JSON representation also drops optional undefined fields in memory.
   return JSON.parse(JSON.stringify(snapshot)) as typeof snapshot;
 }
@@ -364,6 +366,11 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     assert([egg.x, egg.y, egg.vx, egg.vy, egg.fundedReserve, egg.fundedStructural, egg.incubationProgress, egg.totalIncubationTime].every(Number.isFinite)
       && (egg.hatchHeading === undefined || Number.isFinite(egg.hatchHeading))
       && egg.fundedReserve >= 0 && egg.fundedStructural >= 0 && egg.totalIncubationTime > 0, 'egg state');
+    assert(egg.initialFundedReserve === undefined || (Number.isFinite(egg.initialFundedReserve)
+      && egg.initialFundedReserve >= 0), 'initial egg reserve');
+    assert(egg.initialReserveIsLegacy === undefined || typeof egg.initialReserveIsLegacy === 'boolean',
+      'egg reserve reference provenance');
+    Object.assign(egg, eggReserveReference(egg));
     if (closed) assert(Number.isFinite(egg.ageSeconds) && egg.ageSeconds >= 0
       && Number.isFinite(egg.hatchReserveTarget) && egg.hatchReserveTarget >= 0
       && egg.hatchReserveTarget <= egg.genome.maxEnergyCapacity

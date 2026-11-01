@@ -1,3 +1,54 @@
+## Maintainer integration — forward mouths and egg reserve display (v0.38.1)
+
+The owner accepts automatic conversion of historical saved mouths to fixed diet
+width and forward reach (#108, decision comment 6554984336). Saved organisms,
+eggs, lineage and Bank genomes convert on load; original files remain untouched.
+Future feeding uses the converted geometry. Physics, ecology, learned state and
+energy rules retain their saved meanings. This is an explicitly accepted mouth
+migration, not universal historical feeding continuation.
+
+The observer-only egg reserve display from #117/#116 is integrated with schema16
+and the stable toolbar from #110. Snapshot construction retains both the mouth
+migration and immutable egg-reserve reference. Browser CI includes toolbar,
+Worker regression and egg display checks in Chromium and Firefox.
+
+Local integration: 310 fast tests, build/typecheck and actual production Worker
+pass. Eight existing baseline comparisons (four physics regimes by two economies,
+120 ticks each) preserve complete simulation snapshots after excluding only the
+two observer fields; the distinct release build label is normalized separately.
+Original contributor evidence remains unchanged. This is bounded regression
+verification, not a new ecology/evolution search or an FPS claim. Remote CI,
+merge and publication receipts are recorded in the source PRs and #57.
+
+---
+
+## Egg reserve display — selected upstream submission (2026-10-28)
+
+Refs #116/#57. The observer-only counterclockwise white/pink reserve-loss sector
+was implemented, tested and merged through contributor fork PR #29/main d5218b4.
+Hernan explicitly approved upstream submission after visually accepting that delivery.
+This branch starts directly from canonical main 6f8f80c and carries only this feature.
+Original mouth geometry, founders, version 0.37.0, v12–v15 save meanings,
+paused/running controls, Worker protocol, Pages and stopped experiments are preserved.
+No dependency on the separate #113 or #115 submissions is introduced.
+
+Original usable reserve is stored at laying as optional observer metadata, never
+as an energy stock. Old eggs missing it receive known current reserve once and
+legacy provenance; historical loss cannot be recovered. White sensing, neural
+inputs, all energy/reproduction/uptake/hatch/expiry/physics rules remain unchanged.
+Wiki/source documentation describes the implemented fork behavior with upstream
+acceptance/publication pending. Contributor-only design notes are excluded.
+
+On this exact target: 306 fast tests and build/typecheck passed. Eight pre-change
+comparisons matched complete state at each of 120 ticks across all four physics
+regimes and both economies, excluding only the two observer metadata fields.
+Laying/hatching occurred in all eight, expiry in the four closed cases. Committed
+results identify the canonical baseline; no golden refresh or ecological/FPS claim.
+Production Worker and bounded Chromium/Firefox validation are recorded in #116/#57
+and the PR. The local browser archive is unavailable; remote CI supplies browser
+verification. No upstream merge, release, deployment or actual Wiki publication is
+part of the submission authorization. Keep the issue open for upstream review.
+
 # Project status — 2026-10-21
 
 ## Contributor fork: all eleven paused checks recovered — 2026-10-26

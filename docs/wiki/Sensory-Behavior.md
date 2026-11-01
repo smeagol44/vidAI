@@ -81,3 +81,9 @@ The Brain inspector exposes actual rays, neural activations, queued bite
 energy and inherited injury connections. Code is in `simulation.ts` and
 `founders.ts`; focused checks cover senses, spectral vision, injury and paired
 visible/disconnected movement in `tests/`.
+
+### Egg reserve display boundary
+
+The pink reserve-loss sector is observer-only. Eggs retain the same radius, occlusion, distance attenuation
+and white `EGG_RGB` in vision. Reserve percentage, incubation ring, selection and
+glow do not enter retinal channels or neural inputs.

@@ -44,9 +44,9 @@ flowchart TD
 Painting does not advance simulation time. The main-thread fallback retains
 fixed-tick behavior when the Worker is unavailable or explicitly disabled.
 
-## Stable toolbar layout (fork)
+## Stable toolbar layout
 
-The fork uses right-anchored desktop controls, with Menu kept
+The toolbar uses right-anchored desktop controls, with Menu kept
 at the top-right. General telemetry uses the horizontal space left by controls.
 Generation, achieved speed/FPS/steps and elapsed time move together as one group;
 only a container narrower than the group requires its compact internal layout.
@@ -69,8 +69,6 @@ labels/tooltips. Desktop counters retain their text labels and food target.
 Changing statistics does not reflow the toolbar or alter tank bounds at a fixed
 viewport.
 
-This layout is implemented in Hernan's fork and was manually accepted in its
-testing environment. It is not an upstream release.
 
 ## Current optimizations
 
