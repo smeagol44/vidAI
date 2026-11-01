@@ -45,6 +45,20 @@ on:
       - 'e2e/performance-worker.spec.ts'
       - '.github/workflows/performance-worker.yml'
       - 'simulation.ts'
+      - 'styles.css'
+      - 'selfTubes.ts'
+      - 'worldScene.ts'
+      - 'SideWindowDemo.tsx'
+      - 'sideWindowDemo.css'
+      - 'sideWindows.ts'
+      - 'windowDemo.ts'
+      - 'tests/self-tubes.test.ts'
+      - 'tests/side-windows.test.ts'
+      - 'tests/window-demo.test.ts'
+      - 'tests/support/self-tubes.ts'
+      - 'tests/support/self-tube-browser.ts'
+      - 'tests/support/tube-presentation.ts'
+      - 'e2e/side-windows.spec.ts'
       - 'playwright.config.ts'
       - 'package.json'
       - 'package-lock.json'
@@ -78,6 +92,9 @@ jobs:
           - suite: toolbar
             browser: chromium
             command: "npx playwright test e2e/presentation.spec.ts --grep 'toolbar stays' --workers=1"
+          - suite: side-windows
+            browser: chromium
+            command: "npx playwright test e2e/side-windows.spec.ts --workers=1"
           - suite: chromium-regressions
             browser: chromium
             command: "npx playwright test e2e/performance-worker.spec.ts e2e/egg-reserve.spec.ts e2e/energy-activity.spec.ts e2e/environment-scenarios.spec.ts --workers=1"

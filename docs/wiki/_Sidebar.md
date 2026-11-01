@@ -12,3 +12,4 @@
 [Play VIDA](https://smeagol44.github.io/vidAI/)
 
 - [Energy Activity](Energy-Activity)
+- [Self-Linked Windows and Physical Tubes](Side-Windows)

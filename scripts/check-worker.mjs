@@ -1,3 +1,4 @@
+import {selfTubeFixture} from '../tests/support/self-tubes.ts';
 import assert from 'node:assert/strict';
 import {Worker} from 'node:worker_threads';
 import {readdir} from 'node:fs/promises';
@@ -326,5 +327,39 @@ try {
   await receive(value => value.type === 'frame' && value.frame.epoch === 108);
   assert.deepEqual(await request('snapshot', {}, 108), harshPaused);
   console.log('Environment Worker: Harsh time-zero empty food/full Default grant, editable controls, exact direct continuation and snapshot reset passed.');
+
+  // Physical self-tubes use the actual built Worker and full-state snapshots.
+  for (const [index, side] of ['L', 'R'].entries()) {
+    const epoch = 200 + index, fixture = selfTubeFixture(side);
+    send({type: 'reset', snapshot: fixture.source, epoch});
+    await receive(value => value.type === 'frame' && value.frame.epoch === epoch);
+    assert.deepEqual(await request('snapshot', {}, epoch), fixture.source);
+    send({type: 'ack', epoch});
+    send({type: 'control', epoch, settings: fixture.settings, speed: 1, selected: null});
+    await new Promise(resolve => setTimeout(resolve, 160));
+    send({type: 'control', epoch, settings: fixture.settings, speed: 0, selected: null});
+    const crossed = await request('snapshot', {}, epoch), direct = restoreSnapshot(fixture.source);
+    const ticks = Math.round(crossed.state.simTime * 60); assert.ok(ticks > 0);
+    for (let tick = 0; tick < ticks; tick++) stepSimulation(direct.state, direct.settings, 1 / 60);
+    assert.deepEqual(crossed, createSnapshot(direct.state, direct.settings));
+    assert.equal(crossed.state.organisms[0].id, fixture.source.state.organisms[0].id);
+    assert.equal(crossed.state.organisms.length, 1);
+    assert.equal(crossed.state.totalBirths, fixture.source.state.totalBirths);
+    assert.ok(side === 'L' ? crossed.state.organisms[0].segments[0].x > fixture.settings.worldWidth
+      : crossed.state.organisms[0].segments[0].x < 0);
+    assert.ok(Math.abs(totalAccountedEnergy(restoreSnapshot(crossed).state) - fixture.source.state.energyPool.budget) < 1e-6);
+    await request('action', {action: {kind: 'self-tubes', topology: {version: 1, connected: false, accepted: [0]}}}, epoch);
+    const closedTube = await request('snapshot', {}, epoch);
+    assert.equal(closedTube.state.simTime, crossed.state.simTime);
+    assert.equal(closedTube.state.selfTubes.connected, false);
+    assert.equal(closedTube.state.organisms[0].energy, crossed.state.organisms[0].energy);
+    assert.ok(closedTube.state.organisms[0].segments[0].x > 0 && closedTube.state.organisms[0].segments[0].x < 1800);
+    assert.deepEqual(await request('snapshot', {}, epoch), closedTube);
+    send({type: 'reset', snapshot: crossed, epoch: epoch + 10});
+    await receive(value => value.type === 'frame' && value.frame.epoch === epoch + 10);
+    send({type: 'action', id: -201, epoch, action: {kind: 'self-tubes', topology: {version: 1, connected: false, accepted: []}}});
+    assert.deepEqual(await request('snapshot', {}, epoch + 10), crossed, 'stale topology command is ignored');
+  }
+  console.log('Self-tube Worker: schema-17 reset, full-state L/R transfer, exact direct continuation, unchanged IDs/births/stock, paused closure and stale-command rejection passed.');
   console.log('Production Worker: open/closed exact exports, funded commands, independent stepping, debt, direct equivalence, all physics regimes, mouth contact in all eight physics/ecology combinations, regime-switch and stale-world rejection passed.');
 } finally { await worker.terminate(); }
