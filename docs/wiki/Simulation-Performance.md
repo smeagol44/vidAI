@@ -70,6 +70,73 @@ Changing statistics does not reflow the toolbar or alter tank bounds at a fixed
 viewport.
 
 
+## Stopped time and manual interaction
+
+**0x is the paused simulation speed**. Pause and Space toggle
+between 0x and the last selected nonzero speed. Selecting another speed resumes
+immediately. Finite speeds remain 1x, 2x, 5x, 10x and 20x; MAX runs without a multiplier ceiling.
+Imports start at 0x. The speed selector shows the effective speed, including 0x
+while the application menu is open; closing that menu restores the prior state.
+
+At 0x, simulation time and all autonomous processes stop. The tank stays
+interactive: select and inspect creatures/eggs, open diagnostics and other
+panels, pan/zoom, add creatures/food, clear free nutrients, edit applicable
+settings and import/export exact worlds. The pause screen no longer covers
+these controls. Start, application-menu and extinction overlays retain their
+own behavior.
+
+Manual actions still use the authoritative Worker commands and existing
+validation, energy funding and population/food limits. Accepted edits refresh
+the rendered world without a simulation tick; added food is not eaten until
+time resumes. Stopped wall time and unfinished pacing debt are discarded when
+the speed changes. The main-thread fallback follows the same pause controls.
+Save schemas, physics, genetics, feeding and learning rules are unchanged.
+
+
+
+## Live performance circle
+
+The existing 12px header circle shows actual simulation throughput. Pulse frequency
+is `2.5 * log(1 + min(actualSpeed, 50)) / log(51)` Hz: about 0.44 at 1x,
+1.52 at 10x and 2.5 at 50x and above. Only the visual frequency saturates.
+
+Each pulse expands outward from its normal radius to 2.5 times that radius while
+fading from full opacity to transparent, then repeats. Its visual diameter grows
+from 12px to 30px; its layout box stays 12px square, so neighboring elements do not
+move. The existing animation changes only transform and opacity, without adding
+per-frame JavaScript, particles, blur or shadow effects.
+
+Finite speed colors show actual/requested achievement, capped at 100%:
+red at 10% or less, orange at 30%, yellow at 60% and green at 100% or more.
+MAX uses 50x as a **visual reference**, with the same anchors through green,
+then pure cyan at 65x and pure white at 75x and above. Colors interpolate
+continuously in Oklab. White never resets at higher throughput.
+
+MAX is an explicit unlimited mode, replacing the old paced 50x alias after
+contributor approval. Worker batches yield after 8ms or 256 ticks and immediately
+queue the next batch; fallback execution shares the UI thread with a 16ms batch
+budget. These are responsiveness budgets, not simulated-speed multipliers.
+Fixed 1/60-second ticks, finite-speed pacing, physics, ecology and saves are unchanged.
+A world can age much faster in wall time in MAX; this does not change its rules.
+
+The circle and existing speed readout share a constant-size sampler of authoritative
+simulation time divided by monotonic wall time. It uses 250ms windows and 350ms
+exponential smoothing. Mode/world changes establish a fresh baseline; missing
+measurements expire after 1.25s. No speed is inferred from selected multipliers,
+render FPS or CPU utilization. World-stat rendering is bounded to four updates/s.
+
+At 0x, the retained animation holds its exact current phase, opacity and scale.
+Any in-progress color transition is frozen at the displayed color. Manual world
+commands do not advance the pulse. Resume waits for fresh measurements and adjusts
+playback rate without resetting the animation timeline. Reduced-motion preferences
+hold the movement while keeping performance color available.
+
+There is **no tooltip, hover content, popover, visible explanatory text or new
+interaction**. Nonvisual screen-reader descriptions distinguish paused, measuring,
+unavailable, finite achievement and MAX's visual reference. During startup or a
+mode change, the pulse waits for fresh data; stale running data becomes neutral.
+
+
 ## Current optimizations
 
 | Area | Strategy |

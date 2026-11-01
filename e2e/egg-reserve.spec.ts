@@ -42,7 +42,7 @@ for (const fallback of [false, true]) test(`egg reserve sectors, rings, selectio
     await page.evaluate(() => {const c = (window as any).eggReserveCapture; c.pink.length = c.rings.length = c.selected.length = 0;});
     await page.locator('input[type=file]').setInputFiles({name: 'egg-reserves.json', mimeType: 'application/json',
       buffer: Buffer.from(JSON.stringify(snapshot))});
-    await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
+    await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
   };
   const read = async () => {
     const download = page.waitForEvent('download');
@@ -70,7 +70,7 @@ for (const fallback of [false, true]) test(`egg reserve sectors, rings, selectio
   await page.waitForTimeout(120);
   expect((await read()).state).toEqual(source.state);
   // Keep upstream's pause overlay intact; resume through its real control before selection.
-  await page.getByRole('button', {name: 'RESUME SIMULATION', exact: true}).click();
+  await page.getByRole('button', {name: 'Resume', exact: true}).click();
   // Close the settings window and select a painted egg using its actual transform.
   await page.getByTitle('Ecology & Physical Settings').click();
   const bounds = await canvas.boundingBox(); expect(bounds).not.toBeNull();
@@ -82,7 +82,7 @@ for (const fallback of [false, true]) test(`egg reserve sectors, rings, selectio
   await page.getByRole('button', {name: '5x', exact: true}).click();
   await expect.poll(async () => (await read()).state.simTime).toBeGreaterThan(0);
   await page.getByRole('button', {name: 'Pause', exact: true}).click();
-  await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
+  await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
   const advanced = await read();
   expect(advanced.state.eggs.map((e: any) => e.initialFundedReserve)).toEqual([1000, 1000, 1000, 1000, 1000]);
   expect(advanced.state.eggs.map((e: any) => e.fundedReserve)).toEqual([1000, 750, 500, 250, 0]);

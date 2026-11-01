@@ -1,4 +1,5 @@
 import {EnergyActivityCollector, type EnergyActivityFrame} from './energyActivity';
+import type {SimulationSpeed} from './simulationSpeed';
 import {watchLineage} from './lineageChanges';
 import {occupiedPopulation, setWorldEnergy} from './energyEconomy';
 import {stepSimulation, addNutrients, nutrientSpawnSlots, createArchetypeGenome,
@@ -30,7 +31,7 @@ export interface RenderFrame {
 export class SimulationHost {
   state!: SimulationState;
   settings!: SimulationSettings;
-  epoch = 0; running = false; speed = 1; selected: string | null = null;
+  epoch = 0; speed: SimulationSpeed = 0; selected: string | null = null;
   private genomeIds = new WeakMap<Genome, string>();
   private nextGenome = 0;
   private lineageChanges?: ReturnType<typeof watchLineage>;
@@ -43,7 +44,7 @@ export class SimulationHost {
     this.lineageChanges?.dispose();
     this.state = restored.state; this.settings = restored.settings; this.epoch = epoch;
     this.energyActivity.clear();
-    this.running = false; this.steps = 0; this.events.clear();
+    this.speed = 0; this.steps = 0; this.events.clear();
     this.genomeIds = new WeakMap(); this.nextGenome = 0;
     this.lineageChanges = watchLineage(this.state.lineage);
   }
