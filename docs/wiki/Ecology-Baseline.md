@@ -98,23 +98,29 @@ living-relative/related-egg feeding; carrion carries no kin protection.
 
 ### Physical mouth aperture
 
-New worlds use a **rounded capsule**: the inherited `intakeWidth` span (half-span
-at least the contact radius), thickened by 4.5 px for carnivores, 4 px for omnivores
-or 3.5 px for herbivores. Prey rectangles, nutrient circles and eggs all use that
-full aperture. Endpoint grazing, containment and rotated prey count only on
-physical overlap; tank body contacts still resolve before feeding. No steering,
-automatic feeding, new reach outside this capsule or increased transfer rate is
-provided. A narrow-host mouth can overhang its face; inherited widths are not
-silently clamped or resized.
+Current mouths extend from their anatomical anchor along the outward face
+normal. Their inherited `intakeLength` sets the forward centerline reach;
+`intakeWidth` stores the fixed diameter: 7 px for herbivores, 8 px for omnivores
+and 9 px for carnivores. Reach is at least that diameter. New worlds use the
+resulting **rounded capsule** for prey rectangles, nutrient circles and eggs.
+Endpoint grazing, containment and rotated prey count only on physical overlap;
+tank body contacts still resolve before feeding. Transfer rates and diet
+permissions are unchanged, and no steering or survival subsidy is supplied.
 
-The tank aperture overlay shows that actual capsule at physical size. Bank
-previews show the inherited span and radius. Mouth icons and bite animation are
-cosmetic and do not change contact. Older saved worlds keep their original prey
-shape (span line plus central disk) until **Update mouth contact geometry** is
-chosen in settings. That authoritative upgrade retains the entire ecosystem,
-energy, random state, genes, brain, physics and economy; reset uses current contact.
-The same correction applies to carnivore and omnivore prey contact; diet balance
-and broader biological mouth sizing remain separate design work.
+The tank overlay and Bank previews show that physical capsule. Mouth icons and
+bite animation are cosmetic. Loading an older creature automatically sets
+`intakeLength = max(diet diameter, old intakeWidth)` and replaces `intakeWidth`
+with the fixed diameter. This applies to living creatures, eggs, lineage and
+saved Bank specimens. The input file is untouched; later saves use the converted
+format. IDs, learned state and energy are retained, but future mouth contacts
+use the converted forward geometry, so historical feeding is not guaranteed
+identical. This automatic mouth migration is accepted by the owner.
+
+The independently saved prey-contact model remains explicit: historical worlds
+retain their line-plus-disk contact test until **Update mouth contact geometry**
+is chosen. That authoritative action changes the contact model, retaining the
+ecosystem, energy, random state, brain, physics and economy. Reset uses current
+capsule contact. Diet balance remains separate design work.
 
 ## Chemical energy transfers
 
