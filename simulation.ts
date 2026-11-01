@@ -1,3 +1,4 @@
+import type {EnergyTransferObserver} from './energyActivity';
 import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
 import {partKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
 import {passiveConstraintScale, paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
@@ -3482,6 +3483,7 @@ export function stepSimulation(
   dt: number,
   onEvent?: (type: 'birth' | 'death' | 'eat' | 'clash' | 'egg_loss') => void,
   observeMechanics?: MechanicalObserver,
+  observeEnergy?: EnergyTransferObserver,
 ): void {
   const mu = settings.waterViscosity ?? 0.22;
   const worldWidth = settings.worldWidth;
@@ -4014,6 +4016,8 @@ export function stepSimulation(
         const absorbed = transfer * efficiency;
         feedback.intake = clampVal(feedback.intake + absorbed / Math.max(1e-9, allowance), 0, 1);
         remainingIntake = Math.max(0, remainingIntake - transfer);
+        observeEnergy?.(org.id, state.simTime, absorbed, org.energy + org.structuralBiomass,
+          Math.max(g.maxEnergyCapacity, g.bodyCost), -1);
         org.energy += absorbed;
         ledger.metabolicDissipation += transfer - absorbed;
         returnedEnergy += transfer - absorbed;
@@ -4029,7 +4033,7 @@ export function stepSimulation(
           if (!(canEat() || !feedback.contact)) break;
           const prey = organisms[i];
           if (prey.id === org.id || prey.dissolving || (isKinshipProtected && areSiblings(org, prey))) continue;
-          let contact = false;
+          let contact = false, contactPart = -1;
           for (let part = 0; part < prey.segments.length && !contact; part++) {
             const pos = prey.segments[part], def = prey.genome.parts[part];
             // Conservative rectangle half-diagonal + mouth aperture bounds;
@@ -4039,12 +4043,15 @@ export function stepSimulation(
             contact = settings.mouthContactModel === 'capsule-v1'
               ? capsuleContactsPart(x1, y1, x2, y2, mouthRadius, pos, def)
               : mouthApertureContactsPart(cx, cy, x1, y1, x2, y2, mouthRadius, pos, def);
+            if (contact) contactPart = part;
           }
           if (!contact) continue;
           feedback.contact = 1;
           const reserveBite = prey.energy > 0;
           const transfer = consume(reserveBite ? prey.energy : prey.structuralBiomass, 'Prey', reserveBite ? 1 : .85);
           if (transfer <= 0) continue;
+          observeEnergy?.(prey.id, state.simTime, transfer, prey.energy + prey.structuralBiomass,
+            Math.max(prey.genome.maxEnergyCapacity, prey.genome.bodyCost), contactPart);
           if (reserveBite) prey.energy = Math.max(0, prey.energy - transfer);
           else prey.structuralBiomass = Math.max(0, prey.structuralBiomass - transfer);
           // Deliver a next-tick proprioceptive injury cue to the victim only.

@@ -1,3 +1,21 @@
+## Maintainer integration — feeding/predation halos (v0.38.2)
+
+Integrates #115/#114 after forward mouths, stable toolbar and egg reserve display.
+Real authoritative feeding gains illuminate the body green; real predation losses
+illuminate contacted segments red. Optical RGB, neural state, feeding arithmetic,
+physics, energy stocks and save schemas remain unchanged. Existing pause state
+freezes presentation; the later x0 integration must use the same paused clock.
+
+All fast cases passed except an inherited multi-mouth fixture that assigned a
+carnivore width8. Its stored diameter is corrected to9, leaving its already
+explicit forward reach and diet-derived contact radius unchanged. The complete
+10-case focused activity suite then passes. Build/typecheck and the actual
+production Worker pass, including both egg-reserve and energy-activity checks.
+CI retains every prior fast/toolbar/browser case and adds activity coverage in
+both browser engines. No simulation coefficient or golden reference is changed.
+
+---
+
 ## Maintainer integration — forward mouths and egg reserve display (v0.38.1)
 
 The owner accepts automatic conversion of historical saved mouths to fixed diet
@@ -73,6 +91,35 @@ and the preserved [initial diagnosis/evidence](experiments/paused-tests-107/READ
 Integration is authorized only through a verified fork PR to testing, then owner
 practical review. This checkpoint claims neither a main merge nor upstream
 acceptance/Wiki publication; review actual PR/deployment evidence in #107.
+
+## Observer-only energy activity submission — 2026-10-28
+
+Approved submission for #114 from `submission/energy-activity`, directly based on
+upstream main `6f8f80c`. The final wider translucent glow was accepted visually by
+Hernan after fork PRs25–27, merged into fork main `017ea675`. Actual absorption and
+predation extraction drive independent transient signals, with a 250ms relative
+window, 0.5%/0.35% hysteresis and a safe stock floor. Green covers the body; red
+uses existing authoritative contacted segments. No contact/feeding arithmetic,
+optical sensing, neural decisions, genetics, physics or persistent schemas change.
+
+A 400ms presentation cycle staggers peaks by 200ms, with at most 100ms fade after
+activity ends. Five translucent contours reach 10.5 CSS pixels outward, independent
+of zoom, underneath the original body fill/outline. No blur/filter/body scaling.
+Five strokes per active color add drawing cost; no FPS or zero-overhead claim.
+Nearby halos can overlap. Death/removal/reset clears transient signals.
+
+The upstream submission preserves this target's pause overlay, numeric speed
+controls and Worker protocol. Its existing paused/running state freezes phase and
+decay; late metadata waits for resume. #113's interactive x0/MAX/toolbar change is
+separate and unmerged. On that integration, the same pause-aware clock must follow
+its canonical zero-speed state; no new independent pause mechanism is introduced.
+Test fixtures use upstream's unchanged mouth geometry, not fork oral dimensions.
+
+Fast/build, exact observer-free full snapshots and actual Worker/browser results
+are tracked in #114 and the submission PR. Current Wiki source is included with
+pending-upstream labeling; acceptance and actual Wiki publication remain pending.
+No unrelated fork changes, version bump, hosting changes or VIDA 3D work.
+
 
 ## Coherent fluid drag and anatomical muscle trial — rejected without runtime changes
 

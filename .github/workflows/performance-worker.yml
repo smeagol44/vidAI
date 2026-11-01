@@ -8,6 +8,10 @@ on:
       - 'tests/egg-reserve.test.ts'
       - 'tests/support/egg-reserve.ts'
       - 'e2e/egg-reserve.spec.ts'
+      - 'energyActivity.ts'
+      - 'tests/energy-activity.test.ts'
+      - 'tests/support/energy-activity.ts'
+      - 'e2e/energy-activity.spec.ts'
       - 'tests/closed-energy.test.ts'
       - 'mouthGeometry.ts'
       - 'mouthContactAudit.ts'
@@ -51,5 +55,5 @@ jobs:
       - run: npm run test:worker
       - name: Verify stable toolbar geometry and interactions
         run: npx playwright test e2e/presentation.spec.ts --grep 'toolbar stays' --workers=1
-      - run: npx playwright test e2e/performance-worker.spec.ts e2e/egg-reserve.spec.ts --workers=1
+      - run: npx playwright test e2e/performance-worker.spec.ts e2e/egg-reserve.spec.ts e2e/energy-activity.spec.ts --workers=1
       - run: npx playwright test --config=playwright.worker-firefox.config.ts --workers=1

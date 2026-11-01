@@ -1,3 +1,4 @@
+import {EnergyActivityCollector, EnergyActivityPresentation, drawEnergyGlow} from './energyActivity';
 import {mouthDimensions} from './mouthGeometry';
 import {NEW_PHYSICS_REGIME, type PhysicsRegime} from './foundationPhysics';
 import {enableClosedEconomy, occupiedPopulation, setWorldEnergy, EGG_LIFETIME_MULTIPLIER,
@@ -275,6 +276,8 @@ export default function App() {
   const workerClientRef = useRef<SimulationClient | null>(null);
   const workerSettingsRef = useRef<SimulationSettings | null>(null);
   const workerStepsRef = useRef(0);
+  const energyCollectorRef = useRef(new EnergyActivityCollector());
+  const energyPresentationRef = useRef(new EnergyActivityPresentation());
   const viewportRef = useRef<HTMLDivElement>(null);
   const [{width: canvasWidth, height: canvasHeight}, setViewportSize] = useState({width: 1280, height: 720});
   useEffect(() => {
@@ -529,6 +532,8 @@ export default function App() {
   }, [energyPool?.budget, energyBudgetDraft]);
   const replaceWorld = useCallback((state: SimulationState, settings?: SimulationSettings) => {
     worldEpochRef.current++;
+    energyCollectorRef.current.clear();
+    energyPresentationRef.current.clear();
     simStateRef.current = state;
     workerStepsRef.current = 0;
     const config = settings ?? workerSettingsRef.current;
@@ -1000,12 +1005,14 @@ export default function App() {
         if (evt === 'clash') gameAudio.playSwordClash();
         else if (evt === 'eat') gameAudio.playCoinPickup();
         else if (evt === 'birth') gameAudio.playPowerupChime();
-      });
+      }, undefined, energyCollectorRef.current.record);
+      energyCollectorRef.current.advance(s);
       realTimeTrackerRef.current.physicsStepsThisSec += 1;
       stepsRun++;
       if (performance.now() - frameStartTime > 16.0 && multiplier > 20) break;
     }
 
+    if (!workerClientRef.current) energyPresentationRef.current.accept(energyCollectorRef.current.frame());
     const tracker = realTimeTrackerRef.current;
     const now = performance.now();
     const realSecs = (now - tracker.lastRealTime) / 1000;
@@ -1121,6 +1128,7 @@ export default function App() {
     prepareCanvas(ctx, canvasWidth, canvasHeight);
 
     const s = simStateRef.current;
+    energyPresentationRef.current.advance(performance.now(), workerPausedRef.current || worldEpoch !== worldEpochRef.current, s.organisms);
     const cam = cameraRef.current;
     const zoom = cam.zoom;
 
@@ -1342,6 +1350,7 @@ export default function App() {
         const cornerRad = Math.min(w * 0.35, h * 0.35, 6);
         ctx.beginPath();
         ctx.roundRect(-w * 0.5, -h * 0.5, w, h, [cornerRad, cornerRad, cornerRad, cornerRad]);
+        drawEnergyGlow(ctx, energyPresentationRef.current, org.id, sIdx, zoom);
         ctx.fill();
         ctx.stroke();
 
@@ -1509,6 +1518,7 @@ export default function App() {
     let client: SimulationClient;
     try { client = new SimulationClient(() => simStateRef.current, (state, frame) => {
       simStateRef.current = state;
+      energyPresentationRef.current.accept(frame.energyActivity);
       workerStepsRef.current += frame.steps;
       if (workerPausedRef.current) {
         setEcoStats(previous => ({...previous, ...collectWorldStats(state, workerSettingsRef.current!.targetNutrients)}));
@@ -1532,6 +1542,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    energyPresentationRef.current.setPaused(workerPausedRef.current || worldEpoch !== worldEpochRef.current, performance.now());
     workerClientRef.current?.control(currentSettings(),
       worldEpoch === worldEpochRef.current && gameState.status === 'PLAYING' && !isGameMenuOpen,
       timeMultiplier, isBrainInspectorOpen ? selectedOrgId : null);
