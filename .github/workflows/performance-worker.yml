@@ -2,6 +2,9 @@ name: Worker integration smoke
 on:
   pull_request:
     paths:
+      - 'environmentScenarios.ts'
+      - 'tests/environment-scenarios.test.ts'
+      - 'e2e/environment-scenarios.spec.ts'
       - 'simulation.worker.ts'
       - 'energyEconomy.ts'
       - 'eggReserve.ts'
@@ -55,5 +58,5 @@ jobs:
       - run: npm run test:worker
       - name: Verify stable toolbar geometry and interactions
         run: npx playwright test e2e/presentation.spec.ts --grep 'toolbar stays' --workers=1
-      - run: npx playwright test e2e/performance-worker.spec.ts e2e/egg-reserve.spec.ts e2e/energy-activity.spec.ts --workers=1
+      - run: npx playwright test e2e/performance-worker.spec.ts e2e/egg-reserve.spec.ts e2e/energy-activity.spec.ts e2e/environment-scenarios.spec.ts --workers=1
       - run: npx playwright test --config=playwright.worker-firefox.config.ts --workers=1
