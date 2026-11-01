@@ -8,6 +8,11 @@ Bank previews draw mouths at their inherited aperture span and contact radius,
 including overhang, rather than shrinking every mouth to a small dot. This is a
 visualization change; catalogue anatomy and genes are unchanged.
 
+The submitted start-menu Default / Harsh World environment selection
+is independent of these founder designs, brain modes and population presets.
+Harsh's 50-slot capacity does not request 50 founders; existing preset counts
+and genomes remain unchanged. This selector is pending upstream acceptance.
+
 ## Featured designs
 
 | Identity | Source anatomy | Diet | Body plan |

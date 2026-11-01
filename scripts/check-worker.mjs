@@ -12,6 +12,8 @@ import {stepSimulation} from '../simulation.ts';
 import {eggReserveFixture} from '../tests/support/egg-reserve.ts';
 import {eggReserveLossFraction} from '../eggReserve.ts';
 
+import {createScenarioWorld} from '../environmentScenarios.ts';
+
 // Exercise the actual production-built Worker with real cross-thread cloning.
 // Only the browser's message port is adapted to node:worker_threads.
 const asset = (await readdir(new URL('../dist/assets/', import.meta.url)))
@@ -203,5 +205,33 @@ try {
   await receive(value => value.type === 'frame' && value.frame.epoch === 106);
   assert.deepEqual((await request('snapshot', {}, 106)).state, eggAfter.state);
   console.log('Egg reserve Worker: original reference/frame/export/reset, legacy-current migration, exact 5x funded recovery, structure-only pink and paused freeze passed.');
+
+  const scenarioDefaults = {...DEFAULT_SETTINGS, physicsRegime: 'passive-work-v3',
+    ecologyRegime: 'closed-v1', nutrientLimit: null, mouthContactModel: 'capsule-v1'};
+  const harsh = createScenarioWorld(scenarioDefaults, 'harsh-world', 73, 'balanced', 'standard', 2);
+  const harshSource = createSnapshot(harsh.state, harsh.settings);
+  send({type: 'reset', snapshot: harshSource, epoch: 107});
+  const harshFrame = await receive(value => value.type === 'frame' && value.frame.epoch === 107);
+  assert.equal(harshFrame.frame.state.simTime, 0);
+  assert.equal(harshFrame.frame.state.nutrients.length, 0);
+  assert.deepEqual(await request('snapshot', {}, 107), harshSource);
+  const sameFoundersDefault = createInitialWorld(scenarioDefaults, 73, 'balanced', 'standard', 2);
+  assert.equal(harshSource.state.energyPool.budget, sameFoundersDefault.energyPool.budget);
+  assert.equal(harshSource.state.energyPool.reserve, 825000);
+  const editedScenario = {...harsh.settings, gravity: -10, waterViscosity: .12, nutrientLimit: 7, inflowRate: 2};
+  send({type: 'ack', epoch: 107});
+  send({type: 'control', epoch: 107, settings: editedScenario, speed: 5, selected: null, running: true});
+  await new Promise(resolve => setTimeout(resolve, 120));
+  send({type: 'control', epoch: 107, settings: editedScenario, speed: 5, selected: null, running: false});
+  const harshPaused = await request('snapshot', {}, 107);
+  const harshDirect = restoreSnapshot(harshSource).state;
+  const harshTicks = Math.round(harshPaused.state.simTime * 60); assert.ok(harshTicks > 0);
+  for (let i = 0; i < harshTicks; i++) stepSimulation(harshDirect, editedScenario, 1 / 60);
+  assert.deepEqual(harshPaused, createSnapshot(harshDirect, editedScenario));
+  assert.ok(Math.abs(totalAccountedEnergy(restoreSnapshot(harshPaused).state) - harshSource.state.energyPool.budget) < 1e-6);
+  send({type: 'reset', snapshot: harshPaused, epoch: 108});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 108);
+  assert.deepEqual(await request('snapshot', {}, 108), harshPaused);
+  console.log('Environment Worker: Harsh time-zero empty food/full Default grant, editable controls, exact direct continuation and snapshot reset passed.');
   console.log('Production Worker: open/closed exact exports, funded commands, independent stepping, debt, direct equivalence, all physics regimes, mouth contact in all eight physics/ecology combinations, regime-switch and stale-world rejection passed.');
 } finally { await worker.terminate(); }

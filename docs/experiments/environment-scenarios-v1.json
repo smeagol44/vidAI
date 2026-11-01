@@ -1,0 +1,150 @@
+{
+  "baseline": "6f8f80c4cf771fa394fc12d2954380ea11365ade",
+  "comparisons": [
+    {
+      "seed": 17,
+      "mode": "balanced",
+      "preset": "standard",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 1120540,
+      "defaultEnergyErrorJ": 6.984919309616089e-10,
+      "harshEnergyErrorJ": 6.984919309616089e-10
+    },
+    {
+      "seed": 17,
+      "mode": "balanced",
+      "preset": "showcase",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 972000,
+      "defaultEnergyErrorJ": 3.4924596548080444e-10,
+      "harshEnergyErrorJ": 0
+    },
+    {
+      "seed": 17,
+      "mode": "balanced",
+      "preset": "predator_cove",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 1127940,
+      "defaultEnergyErrorJ": 4.656612873077393e-10,
+      "harshEnergyErrorJ": 0
+    },
+    {
+      "seed": 17,
+      "mode": "balanced",
+      "preset": "megafauna",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 1022860,
+      "defaultEnergyErrorJ": 4.656612873077393e-10,
+      "harshEnergyErrorJ": 9.313225746154785e-10
+    },
+    {
+      "seed": 17,
+      "mode": "unbiased",
+      "preset": "standard",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 1120540,
+      "defaultEnergyErrorJ": 4.656612873077393e-10,
+      "harshEnergyErrorJ": 9.313225746154785e-10
+    },
+    {
+      "seed": 17,
+      "mode": "unbiased",
+      "preset": "showcase",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 972000,
+      "defaultEnergyErrorJ": 3.4924596548080444e-10,
+      "harshEnergyErrorJ": 3.4924596548080444e-10
+    },
+    {
+      "seed": 17,
+      "mode": "unbiased",
+      "preset": "predator_cove",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 1127940,
+      "defaultEnergyErrorJ": 4.656612873077393e-10,
+      "harshEnergyErrorJ": 0
+    },
+    {
+      "seed": 17,
+      "mode": "unbiased",
+      "preset": "megafauna",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 1022860,
+      "defaultEnergyErrorJ": 3.4924596548080444e-10,
+      "harshEnergyErrorJ": 3.4924596548080444e-10
+    },
+    {
+      "seed": 73,
+      "mode": "balanced",
+      "preset": "standard",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 1124990,
+      "defaultEnergyErrorJ": 4.656612873077393e-10,
+      "harshEnergyErrorJ": 6.984919309616089e-10
+    },
+    {
+      "seed": 73,
+      "mode": "balanced",
+      "preset": "showcase",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 972000,
+      "defaultEnergyErrorJ": 2.3283064365386963e-10,
+      "harshEnergyErrorJ": 4.656612873077393e-10
+    },
+    {
+      "seed": 73,
+      "mode": "balanced",
+      "preset": "predator_cove",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 1127940,
+      "defaultEnergyErrorJ": 4.656612873077393e-10,
+      "harshEnergyErrorJ": 6.984919309616089e-10
+    },
+    {
+      "seed": 73,
+      "mode": "balanced",
+      "preset": "megafauna",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 1024390,
+      "defaultEnergyErrorJ": 2.3283064365386963e-10,
+      "harshEnergyErrorJ": 3.4924596548080444e-10
+    },
+    {
+      "seed": 73,
+      "mode": "unbiased",
+      "preset": "standard",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 1124990,
+      "defaultEnergyErrorJ": 6.984919309616089e-10,
+      "harshEnergyErrorJ": 4.656612873077393e-10
+    },
+    {
+      "seed": 73,
+      "mode": "unbiased",
+      "preset": "showcase",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 972000,
+      "defaultEnergyErrorJ": 2.3283064365386963e-10,
+      "harshEnergyErrorJ": 4.656612873077393e-10
+    },
+    {
+      "seed": 73,
+      "mode": "unbiased",
+      "preset": "predator_cove",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 1127940,
+      "defaultEnergyErrorJ": 4.656612873077393e-10,
+      "harshEnergyErrorJ": 6.984919309616089e-10
+    },
+    {
+      "seed": 73,
+      "mode": "unbiased",
+      "preset": "megafauna",
+      "exactTicksPerWorld": 30,
+      "budgetJ": 1024390,
+      "defaultEnergyErrorJ": 3.4924596548080444e-10,
+      "harshEnergyErrorJ": 3.4924596548080444e-10
+    }
+  ],
+  "result": "Exact complete initialization and every continuation tick: Default vs prior; Harsh vs prior manual configuration plus Clear Free Nutrients. No fields excluded or baselines refreshed."
+}
