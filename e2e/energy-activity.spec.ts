@@ -53,11 +53,10 @@ for (const fallback of [false, true]) test(`energy contour glows follow real bod
   await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
   await page.evaluate(() => {const c = (window as any).energyTintCapture; c.green.length = c.red.length = c.totals.green = c.totals.red = 0; c.armPause = true;});
   await page.getByRole('button', {name: '1x', exact: true}).dispatchEvent('click');
-  await page.getByRole('button', {name: 'Resume', exact: true}).click();
   await expect.poll(() => page.evaluate(() => {
     const c = (window as any).energyTintCapture; return c.green.some((s: any) => s.alpha > .20) && c.red.some((s: any) => s.alpha > .25);
   })).toBe(true);
-  // Freeze activity using the existing upstream pause control and overlay.
+  // The capture pauses through the real control after the nonzero speed resumes.
   await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
   const sample = () => page.evaluate(() => {
     const c = (window as any).energyTintCapture;
@@ -87,8 +86,7 @@ for (const fallback of [false, true]) test(`energy contour glows follow real bod
     expect(Math.max(...widths)).toBeLessThanOrEqual(21.001);
   }
   const beforeZoom = await sample();
-  // Upstream's pause overlay is unchanged. Exercise its existing canvas zoom
-  // handler without importing #113's interactive x0 UI.
+  // Zoom remains interactive at x0 without advancing the paused world.
   await page.getByLabel('Aquatic simulation').dispatchEvent('wheel', {deltaY: -500, clientX: 800, clientY: 450});
   await expect.poll(async () => {
     const latest = await sample();
@@ -102,7 +100,6 @@ for (const fallback of [false, true]) test(`energy contour glows follow real bod
   }
   await page.screenshot({path: info.outputPath('energy-pulses-paused.png')});
   await page.getByRole('button', {name: '5x', exact: true}).dispatchEvent('click');
-  await page.getByRole('button', {name: 'Resume', exact: true}).click();
   await page.waitForTimeout(350);
   await page.getByRole('button', {name: 'Pause', exact: true}).click();
   // Replacing the paused world must clear all old activity without advancing time.
