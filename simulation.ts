@@ -353,6 +353,8 @@ export interface Egg {
   genome: Genome;
   fundedStructural: number; // E_structural needed for offspring body
   fundedReserve: number;    // Usable energy given to offspring
+  readonly initialFundedReserve?: number; // Observer reference, fixed at laying; never an energy stock.
+  readonly initialReserveIsLegacy?: boolean; // True when only the reserve at migration was known.
   incubationProgress: number; // 0..1
   totalIncubationTime: number;
   pulseTimer: number;
@@ -4170,6 +4172,7 @@ export function stepSimulation(
               genome: babyGenome,
               fundedStructural: offspringBodyCost,
               fundedReserve: allocatedReserve,
+              initialFundedReserve: allocatedReserve,
               incubationProgress: 0,
               totalIncubationTime: babyGenome.incubationTime || prng.range(8.5, 14.0),
               pulseTimer: k * 0.4,

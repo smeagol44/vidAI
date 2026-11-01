@@ -90,8 +90,8 @@ effective inherited-plus-acquired weights, learning rates and costs.
 Focused tests establish within-life changes, forgetting, retained associations,
 energy charges, individual isolation, inheritance rules and exact continuation.
 Matched retained-versus-erased-experience swimmers isolate changes in acquired
-synaptic state from inherited genes and initial physical conditions. Contributor
-fork coverage also checks exact retained-memory replays, real contact, absorbed
+synaptic state from inherited genes and initial physical conditions. Coverage
+also checks exact retained-memory replays, real contact, absorbed
 receipts and energy accounting for subsequent physical feeding. Encounter
 geometry and finite meals can change or saturate the intake difference; a fixed
 mixture of helpful, harmful and tied outcomes is not guaranteed. These checks
