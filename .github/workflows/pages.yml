@@ -26,6 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          filter: blob:none # keep all commits; avoid unrelated historical evidence blobs
           fetch-depth: 0 # testing provenance counts commits since its pinned main ancestor
       - uses: actions/setup-node@v4
         with:
@@ -81,11 +82,13 @@ jobs:
         with:
           ref: main
           path: production
+          filter: blob:none
       - name: Checkout independent testing branch
         uses: actions/checkout@v4
         with:
           ref: testing
           path: experimental
+          filter: blob:none # retain complete ancestry for deterministic versioning
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
