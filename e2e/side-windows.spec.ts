@@ -406,7 +406,10 @@ for (const fallback of [false, true]) test(`local phone consent and grouped glas
   await expect(menu('L')).toHaveCount(0);
   // This final framing check concerns session reset, not aquarium draw cost.
   // Reuse the same authoritative empty world as the preceding geometry checks.
+  // The import control is mounted only while Settings is open after a reload.
+  await page.getByTitle('Ecology & Physical Settings').click();
   await upload(1500); await check(1500);
+  await page.getByTitle('Close settings (✕)').click();
   const reloadedCanvas = (await canvas.boundingBox())!;
   await page.mouse.move(reloadedCanvas.x + reloadedCanvas.width / 2, reloadedCanvas.y + reloadedCanvas.height / 2);
   for (let i = 0; i < 12; i++) await page.mouse.wheel(0, 200);
