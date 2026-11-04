@@ -5,9 +5,9 @@ features and the original phase status. [Project status](PROJECT_STATUS.md)
 records experiments and release history. This file tracks remaining work;
 listed extensions are not implementation promises.
 
-## Active RGB-only correction — #139
+## RGB-only correction — #139 / v0.41.0
 
-Branch `fix/rgb-only-vision-139` proposes brain v8 and schema20. New starters/spawns use RGB-only rays; old worlds and Bank copies keep v7 until their explicit upgrade. All64 designs retain RGB/recurrent/motor alleles. The bounded validation in `docs/validation/rgb-only-vision-139.json` is separate from the historical experiments. Other follow-ups below remain pending scope.
+Owner accepted the tested RGB-only correction for production through PR140: brain v8 and schema20. New starters/spawns use RGB-only rays; old worlds and Bank copies keep v7 until their explicit upgrade. All64 designs retain RGB/recurrent/motor alleles. The bounded validation in `docs/validation/rgb-only-vision-139.json` is separate from the historical experiments. Other follow-ups below remain pending scope.
 
 ## Integrated contributor advances — v0.40.0
 
@@ -17,10 +17,10 @@ pinned browser provisioning. Old saves retain their cycle unless explicitly
 upgraded. Source issues #125/#126/#135/#136/#137 and #57 hold acceptance receipts.
 Historical no-decay statements below apply to worlds omitting the cycle.
 
-## Owner-requested follow-up order (2026-11-04; scope pending)
+## Owner-requested follow-up order (2026-11-04)
 
 1. RGB-only vision: distance stays internal to raycasting/attenuation; remove the
-   direct neural distance channel through a defined versioned compatibility policy.
+   direct neural distance channel through the accepted preserve/explicit-upgrade policy (#139; accepted for v0.41.0).
 2. Mouth size or effectiveness relative to the attached body part.
 3. Available creature life energy; define which stock/capacity is intended.
 4. Egg-laying cooldown; define the desired timing and governing conditions.
@@ -29,9 +29,12 @@ Historical no-decay statements below apply to worlds omitting the cycle.
 7. Reserve energy, considered together with creature life energy.
 8. Repeat selected experiments only after the preceding corrections and an
    explicit bounded protocol, preserving every original result and lineage.
+9. Testing baseline/version-label cleanup: deliberately align a future testing
+   cycle with the then-current production baseline and make the label clearer.
+   Preserve experimental work and provenance first; do not reset the cycle now.
 
-These are requested discussion topics, not implemented changes or permission to
-rerun historical trials now. Search existing issues before creating bounded tasks;
+Item1 is accepted for the v0.41.0 release. Items2–9 remain deferred; the list
+does not authorize their implementation or any historical trial rerun now. Search existing issues before creating bounded tasks;
 #57 is the durable planning entry point. The owner will clarify ambiguous items.
 
 ## Active work tracking

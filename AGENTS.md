@@ -1,10 +1,10 @@
-# RGB-only vision — #139 / v0.41.0 candidate
+# Accepted RGB-only vision — #139 / v0.41.0
 
 - New application worlds, catalogue/Bank starters and manual archetype spawns use brain v8: five RGB-only rays per eye. Range stays internal to raycasting, attenuation and observer diagnostics. Do not add hit/type/target channels as substitutes.
 - Existing saved v7 brains (including eggs, ancestry, Bank specimens and offspring) retain their original layout and dynamics until explicit upgrade. Historical migrations still terminate at v7. Schema20 admits v7/v8 mixtures; original schema16–19 exports are retained for all-legacy worlds.
 - Upgrade removes inherited distance edges by identity and folds their range=1 empty-water contribution into hidden biases. It preserves RGB learning, other synapses, activations by identity, bodies, energy and PRNG. Disabled range edges do not contribute. This is an explicit behavioral change, not exact equivalence near visible objects.
 - Generate starter calibration in its original channel/PRNG order, then convert by stable identity. Never shift columns or retune gaits/steering to hide failures. Frozen migration/golden tests explicitly construct legacy vision, with unchanged reference hashes. The bounded #139 validation does not repeat or replace historical experiments.
-- v0.41.0 is a proposed branch release until merge/publication is verified. Main remains v0.40.0 and testing remains T1.1. No production promotion or experimental reruns are implied by local checks.
+- Owner tested T1.55 and explicitly authorizes PR140 promotion to production v0.41.0. Verify final checks, main Pages and actual Wiki publishing. Testing remains T1.55/ae9d92b; preserve its original cycle/baseline. Testing-baseline/version-label cleanup is deferred as follow-up point9, with no reset now. No scientific experiment rerun or other queued mechanics are authorized.
 
 # Accepted food lifecycle, observer controls and release v0.40.0
 
@@ -23,13 +23,12 @@
   with the mandatory aggregate. Keep canonical main-only dual-Pages and testing
   identity unchanged. Original ecological evidence is historical and must not
   be rerun, retuned or relabeled as proof of sustainable ecology.
-- Brain v7 still receives RGB plus normalized distance per ray. The owner now
-  requires RGB-only visual inputs as a separate follow-up. Do not silently remove
-  columns from saved neural weights or reinterpret existing experimental results;
-  define a versioned compatibility policy before that change. Mouth/energy/egg
-  concerns and experiment repeats are separate pending-scope tasks in #57.
+- Legacy brain v7 retains RGB plus normalized range; new v8 brains use RGB only
+  under the accepted compatibility policy above. Do not silently convert saved
+  brains or reinterpret existing experimental results. Mouth/energy/egg concerns,
+  experiment repeats and testing-label cleanup remain separate tasks in #57.
 
-# Current integrated interfaces and formats (v0.40.0)
+# Integrated interfaces (v0.40.0, with v0.41.0 vision format above)
 
 - The owner explicitly accepts automatic saved-mouth conversion (#108, decision
   6554984336). New/current mouths have fixed diet diameters7/8/9 and independent
@@ -37,9 +36,10 @@
   and Bank entries converts their old aperture field once. Input files are not
   mutated; future feeding uses the converted geometry. Preserve all other saved
   neural/physics/energy semantics. Do not add an unrequested legacy-mode gate.
-- Current worlds without topology export schema16; self-linked tube topology
+- Legacy-brain-only worlds without topology export schema16; self-linked tube topology
   exports schema17. Explicit decay-v1/v2 worlds use schema18/19,
-  with optional validated topology. All support forward mouths and immutable egg reserve
+  with optional validated topology. Worlds containing v8 brains use schema20.
+  These formats support forward mouths and immutable egg reserve
   references. Historical schemas12–15 load through the accepted mouth migration;
   they still reject smuggled topology. Do not reuse experimental controller
   semantics or silently promote an experimental branch.
@@ -59,8 +59,9 @@
   side-window, Chromium and Firefox jobs feed a mandatory browser-smoke aggregate.
   A changed test fixture/format must retain its actual causal/state guarantees;
   never weaken a timeout/threshold or refresh a frozen reference to hide failure.
-- Production is v0.40.0 after integration. The independent testing branch and
-  T1.1 baseline remain untouched; retain all main/testing publication safeguards.
+- Production release0.41.0 promotes the accepted RGB-only correction. Testing
+  stays T1.55 with its original pinned baseline; retain all main/testing
+  publication safeguards and leave baseline cleanup for point9.
 
 # VIDA 2D issue-backed development and handoffs
 
