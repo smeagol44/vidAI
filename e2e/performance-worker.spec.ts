@@ -102,7 +102,7 @@ for (const physicsRegime of ['paid-work-v2', 'surface-work-v1', 'legacy-v0'] as 
   await page.goto('./?autoplay');
   await page.getByTitle('Ecology & Physical Settings').click();
   const settings = {...DEFAULT_SETTINGS, physicsRegime, targetNutrients: 80, inflowRate: 0};
-  const world = createInitialWorld({...settings, targetNutrients: 0}, 91, 'balanced', 'standard', 2);
+  const world = createInitialWorld({...settings, targetNutrients: 0}, 91, 'balanced', 'standard', 2, physicsRegime === 'legacy-v0' ? 'legacy' : 'rgb');
   const source = createSnapshot(world, settings);
   if (physicsRegime === 'legacy-v0') {
     source.schemaVersion = '11.0.0'; delete (source.settings as Partial<typeof settings>).physicsRegime;

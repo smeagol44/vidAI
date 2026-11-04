@@ -1,3 +1,4 @@
+import {eggReserveFixture} from './support/egg-reserve';
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import * as sim from '../simulation';
@@ -44,8 +45,14 @@ test('explicit world upgrade preserves stable live state and valid learned edges
   const kept = allowed.find(e => old.inputKeys![e.input] === rgbKey)!;
   assert.ok(kept);
   o.learnedSensoryWeights = [kept].map(e => ({edge: e.edge, delta: .2, eligibility: .1}));
+  s.eggs = eggReserveFixture().state.eggs;
+  s.ledger.externalInflow += s.eggs.reduce((v, e) => v + e.fundedReserve + e.fundedStructural, 0);
+  const eggBefore = structuredClone(s.eggs);
   const before = structuredClone(o), rng = s.prng.getState(), energy = totalAccountedEnergy(s);
   sim.upgradeWorldVision(s);
+  assert.ok(s.eggs.every(e => e.genome.brainVersion === 8));
+  assert.ok([...s.lineage.values()].every(r => r.genome.brainVersion === 8));
+  assert.deepEqual(s.eggs.map(({genome, ...egg}) => egg), eggBefore.map(({genome, ...egg}) => egg));
   assert.equal(o.genome.brainVersion, 8); assert.deepEqual(s.prng.getState(), rng); assert.equal(totalAccountedEnergy(s), energy);
   assert.deepEqual(o.segments, before.segments); assert.deepEqual(o.joints, before.joints);
   assert.deepEqual(o.neuralHidden, before.neuralHidden); assert.deepEqual(o.neuralOutputs, before.neuralOutputs);

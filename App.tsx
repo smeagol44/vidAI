@@ -2258,7 +2258,7 @@ export default function App() {
               </div>
 
               <div className="text-[10px] text-slate-400 space-y-1" data-testid="vision-mode">
-                <p>New creatures use RGB-only vision. Saved legacy brains retain range inputs until upgraded.</p>
+                <p>New catalogue starters use RGB-only vision. Saved legacy brains retain range inputs until upgraded.</p>
                 <p>Upgrade changes living creatures, eggs and ancestry in this world. It removes range connections, keeping RGB learning and other connections by identity. Behavior may change. Bank copies remain unchanged.</p>
                 <button type="button" onClick={() => {void updateVision();}}
                   className="w-full py-1.5 rounded-lg border border-cyan-700 text-cyan-300 bg-cyan-950/40">Upgrade world to RGB-only vision</button>
