@@ -308,18 +308,28 @@ for (const fallback of [false, true]) test(`x0 allows inspection, navigation and
   addExternalOrganism(world, createFounderGenome('FND-001'), settings, settings.worldWidth / 2, settings.worldHeight / 2, 0);
   expect(world.organisms).toHaveLength(1);
   const source = createSnapshot(world, settings);
-  const upload = (snapshot: unknown) => page.locator('input[type=file]').setInputFiles({name: 'paused.json',
-    mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(snapshot))});
+  const phase = (name: string) => console.log(`VIDA_X0_${fallback ? 'fallback' : 'Worker'} ${name}`);
+  const upload = async (snapshot: unknown) => {
+    const canvas = page.getByLabel('Aquatic simulation');
+    const epoch = Number(await canvas.getAttribute('data-world-epoch'));
+    await page.locator('input[type=file]').setInputFiles({name: 'paused.json',
+      mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(snapshot))});
+    await expect(canvas).toHaveAttribute('data-world-epoch', String(epoch + 1));
+  };
+  let exportCount = 0;
   const read = async () => {
+    const number = ++exportCount; phase(`export ${number} requested`);
     const download = page.waitForEvent('download');
     await page.getByRole('button', {name: 'Export Snapshot', exact: true}).click();
-    return JSON.parse(await readFile((await (await download).path())!, 'utf8'));
+    const snapshot = JSON.parse(await readFile((await (await download).path())!, 'utf8'));
+    phase(`export ${number} received`); return snapshot;
   };
   await page.getByTitle('Ecology & Physical Settings').click();
   await upload(source);
   await expect(page.getByRole('button', {name: '0x', exact: true})).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByTestId('simulation-activity')).toHaveAttribute('data-state', 'paused');
   expect((await read()).state).toEqual(source.state);
+  phase('import exact; inspect and navigate');
   await page.getByTitle('Close settings (✕)').click();
   const canvas = page.getByLabel('Aquatic simulation'), bounds = (await canvas.boundingBox())!;
   await canvas.click({position: {x: bounds.width / 2, y: bounds.height / 2}});
@@ -337,9 +347,11 @@ for (const fallback of [false, true]) test(`x0 allows inspection, navigation and
   await expect.poll(async () => (await matrix())[2]).not.toBe(before[2]);
   await canvas.hover(); await page.mouse.wheel(0, -100);
   await expect.poll(async () => (await matrix())[0]).toBeGreaterThan(before[0]);
+  phase('open/close Bank');
   await page.getByTitle('Specimen Bank (Save & Spawn Custom Genomes)').click();
   await expect(page.getByTestId('specimen-row').first()).toBeVisible();
   await page.getByTitle('Specimen Bank (Save & Spawn Custom Genomes)').click();
+  phase('manual food and creature additions');
   await page.getByRole('button', {name: 'Feed (F)', exact: true}).click();
   await expect(page.getByRole('group', {name: /^Food: 15 /})).toBeVisible();
   await page.getByRole('button', {name: 'Add Life', exact: true}).click();
@@ -365,11 +377,14 @@ for (const fallback of [false, true]) test(`x0 allows inspection, navigation and
   expect(cleared.state.simTime).toBe(source.state.simTime);
   await page.getByLabel('Maximum creatures + eggs', {exact: true}).focus();
   await page.getByLabel('Maximum creatures + eggs', {exact: true}).press('ArrowRight');
-  await expect.poll(async () => (await read()).settings.maxOrganisms).toBe(3);
-  const exact = await read(); await upload(exact);
+  await expect(page.getByLabel('Maximum creatures + eggs', {exact: true})).toHaveValue('3');
+  // The control and snapshot share the ordered Worker port. Export once after
+  // the real input commits, then assert the authoritative value strictly.
+  const exact = await read(); expect(exact.settings.maxOrganisms).toBe(3);
+  phase('restore exact edited world'); await upload(exact);
   expect((await read()).state).toEqual(exact.state);
   await expect(page.getByRole('button', {name: '0x', exact: true})).toHaveAttribute('aria-pressed', 'true');
-  expect(errors).toEqual([]);
+  phase('complete'); expect(errors).toEqual([]);
 });
 
 for (const fallback of [false, true]) test(`performance pulse preserves exact phase/color across pause and manual edits (${fallback ? 'fallback' : 'Worker'})`, async ({page}) => {
