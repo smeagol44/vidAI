@@ -4,7 +4,7 @@ VIDA is an aquatic artificial-life simulator. Articulated bodies, inherited
 neural controllers, individual experience and physical interactions determine
 behavior. Survival and reproduction depend on finite energy.
 
-**Implementation baseline: v0.39.0.** The core mechanisms exist; reliable
+**Implementation baseline: v0.40.0.** The core mechanisms exist; reliable
 foraging, predator pursuit and self-sustaining multigeneration ecosystems remain
 unproven. This reference covers VIDA 2D; the separate 3D project is independent.
 
@@ -15,7 +15,7 @@ replacing production. Its distinct release label identifies the pinned main
 version and commit, cycle and iteration (currently `T1.1` from
 `main v0.37.0 @ b2a05e5`). Each testing commit advances its iteration;
 resetting to an explicitly chosen newer main baseline begins the next cycle.
-Production uses its independent `v0.39.0` release and forward-mouth save format.
+Production uses its independent `v0.40.0` release and forward-mouth save format.
 The testing-only version code must never be merged to main.
 
 ## Simulation overview
@@ -97,9 +97,9 @@ The maintained source is `docs/wiki/`, automatically published to this Wiki.
 Observer-only energy activity is documented in [Energy Activity](Energy-Activity).
 - [Self-Linked Windows and Physical Tubes](Side-Windows)
 
-## Advanced observation settings — contributor fork
+## Advanced observation settings
 
-**Fork-only; pending upstream acceptance.** The button at the bottom of Settings
+The button at the bottom of Settings
 opens a separate draggable Advanced Settings window with independent options:
 **Automatically select added creatures** (Add Life and every Bank spawn) and
 **Automatically track selected creatures** (manual picking and automatic selection).
@@ -117,9 +117,9 @@ Escape and the close button dismiss the advanced window; its size/position stay
 within the tank viewport, including on phones.
 
 
-### Pipe World and water caustics — pending upstream acceptance
+### Pipe World and water caustics
 
-The submitted third startup environment, **Pipe World**, uses an independent
+The third startup environment, **Pipe World**, uses an independent
 4600 × 2100 preset with no automatic calls, openings or tubes. Its founder
 recipe remains selectable; full settings are in [Ecology](Ecology-Baseline).
 
@@ -127,5 +127,4 @@ Advanced Settings also offers **Show water caustics**. New Default worlds
 start with it on; Harsh and Pipe start with it off. Manual overrides persist
 in observer snapshot metadata, including exports and world forks. Old files
 without the field keep caustics visible. Hiding the canvas blur/fill leaves
-world state, PRNG, optics and Worker behavior unchanged. These features are
-implemented in the contributor fork; upstream release acceptance is pending.
+world state, PRNG, optics and Worker behavior unchanged. The controls affect observation only.

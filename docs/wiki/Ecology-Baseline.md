@@ -7,7 +7,7 @@ generations remain open outcomes. Startup survival alone does not show viability
 ## Initial environmental scenarios
 
 The start-menu Environment dropdown offers world-icon **Default** (preselected)
-and mountain-icon **Harsh World**, independently of founder population/brain mode.
+mountain-icon **Harsh World**, and green-pipe **Pipe World**, independently of founder population/brain mode.
 Default retains configured initialization. Harsh starts a 4800 × 3000 px tank,
 20 px/s² gravity, viscosity 0.40, a combined creature/egg cap of 50 and 1 nutrient/s
 recycling with a finite 200-nutrient cap. Initial population stays preset-dependent
@@ -23,9 +23,9 @@ a scenario. Returning to the start menu can select a fresh Default; existing
 in-world reseed controls keep their current-settings semantics. No custom profiles
 or fractional-rate control is included.
 
-### Pipe World — contributor fork
+### Pipe World
 
-**Fork-only in hernansgarro/vidAI; not accepted upstream.** The third Environment
+The third Environment
 option is **Pipe World**, with an original pixel-style green angled-pipe icon
 beside the selected option. Default and Harsh keep their existing labels/icons.
 Pipe has its own frozen, explicit startup settings; it does not inherit Harsh
@@ -42,7 +42,7 @@ or configured application defaults at runtime.
 | Combined living-creature + egg cap | 50; existing separate 75-egg safeguard unchanged |
 | Kinship protection / mutation severity | true / 0.25 |
 | Physics / ecology / mouth contact | passive-work-v3 / closed-v1 / capsule-v1 |
-| Nutrient cycle | decay-v2 (existing 1 J/s fork cycle) |
+| Nutrient cycle | decay-v2 (1 J/s per food particle) |
 | Automatic selection / tracking | Both off; editable observer preferences |
 | Initial calls / openings / tubes | None |
 
@@ -55,10 +55,9 @@ automatic connection is created. Saving uses the existing schema 19 and exact
 Worker export; imports restore persisted settings/state without consulting any
 starting preset. Selecting Pipe in the menu only takes effect when seeding.
 
-## Continuous food recycling — contributor fork
+## Continuous food recycling
 
-**Fork-only in hernansgarro/vidAI main; pending upstream acceptance.** New
-closed application worlds explicitly select `nutrientCycle: decay-v2` and export
+New closed application worlds explicitly select `nutrientCycle: decay-v2` and export
 schema 19. Both plant nutrients and carrion lose **1 J per simulated second**,
 also while partly eaten, outside the camera or inside a connected tube. Loss is
 capped at remaining energy and returned once to the signed universe reserve.
@@ -97,9 +96,9 @@ a closed pool and the known cycle, supports existing independent physics/contact
 modes and optional tube topology; older schemas reject the new flag. Worker
 control packets reject cycle changes; an upgrade uses an authoritative reset. Snapshots remain authoritative.
 
-The closed transfer diagram below includes the new fork paths. Its historical
-closed-world counterpart sends all expired carrion directly to the reserve and
-never decays plants. Current canonical upstream behavior remains historical.
+The closed transfer diagram below includes the versioned food cycle. Historical
+closed worlds without a cycle send expired carrion directly to the reserve and
+never decay plants until explicitly upgraded.
 
 ## Closed world budget
 

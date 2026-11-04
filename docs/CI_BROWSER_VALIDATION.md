@@ -30,9 +30,9 @@ Production main and independent testing remain separate checkouts; parallel CI
 does not authorize promoting testing features or resetting its baseline.
 
 
-## Submitted pinned browser environment (#136)
+## Pinned browser environment (#136)
 
-Pending upstream acceptance, browser shards use the official
+Browser shards use the official
 `mcr.microsoft.com/playwright:v1.58.2-noble` image, matching the unchanged
 `@playwright/test` lockfile. Browsers and OS dependencies are preinstalled;
 `npm ci`, the production build, every existing shard and the mandatory aggregate

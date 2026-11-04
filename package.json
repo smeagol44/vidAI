@@ -1,6 +1,6 @@
 {
   "name": "vidai",
-  "version": "0.39.0",
+  "version": "0.40.0",
   "private": true,
   "type": "module",
   "description": "VIDA: a 2D aquatic artificial life and evolution simulator",

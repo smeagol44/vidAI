@@ -2,11 +2,10 @@
 
 This document covers the implemented **Default / Harsh World** starting
 selector ([#119](https://github.com/smeagol44/vidAI/issues/119)) and the
-**Pipe World** submission
+**Pipe World** preset
 ([#135](https://github.com/smeagol44/vidAI/issues/135),
 [fork PR #53](https://github.com/hernansgarro/vidAI/pull/53)).
-Pipe World was merged into fork main on 2026-11-02 and is **not yet an
-accepted upstream release**.
+The three presets are integrated in production v0.40.0 through #134.
 
 The start menu's **Environment** dropdown offers Default, Harsh World, and
 Pipe World. Default/Harsh use the established native glyphs; Pipe uses an
@@ -14,7 +13,7 @@ original retro green pipe icon. Choosing a scenario never selects the founder
 organism family or brain mode: the existing Seed Simulation / Predator Cove /
 Megafauna choices remain independent.
 
-| Setting | Default | Harsh World | Pipe World (pending acceptance) |
+| Setting | Default | Harsh World | Pipe World |
 | --- | --- | --- | --- |
 | Recycling rate | Configured default (15/s) | 1/s | 1/s |
 | Nutrient count cap | Unlimited | 200 | 200 |
@@ -26,8 +25,8 @@ Megafauna choices remain independent.
 | Viscosity | Resolved configured default (currently 0.18) | 0.40 | 0.40 |
 | Initial population | Existing founder preset | Same preset; normally 18, not 50 | Same preset; normally 18, not 50 |
 | Starting tube connections | None | None | **None** |
-| Observer auto-selection / auto-tracking (pending acceptance) | On / On | Off / Off | Off / Off |
-| Water caustics display (pending acceptance) | On | Off | Off |
+| Observer auto-selection / auto-tracking | On / On | Off / Off | Off / Off |
+| Water caustics display | On | Off | Off |
 | Other settings | Existing defaults | Explicit Harsh preset values | **Independent explicit copy of the initial Harsh values**, except for tank size |
 
 `constants.ts` loads `playground_config.json` and any existing Playground
@@ -106,9 +105,5 @@ See [#135](https://github.com/smeagol44/vidAI/issues/135) for the original deliv
   actual initial/reset packets, controls, founder buttons and exact imported
   state in Worker and fallback; existing Chromium/Firefox smoke CI.
 
-Nutrient appearance frequencies below one particle per simulated second
-(IDEA-008; High personal priority) remain **unimplemented**. The current
-preset selector and per-particle food decay behavior are unchanged.
-Named custom environment profiles (IDEA-009) are also exploratory, while
-the two proposed compact fixed-size presets (IDEA-019/IDEA-020) still need
-their world-unit dimensions defined.
+Fractional recycling controls and named custom environment profiles remain
+unimplemented; they are independent of the current presets and per-particle decay.

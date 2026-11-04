@@ -1,3 +1,28 @@
+## Maintainer acceptance — PR #134 / v0.40.0 (2026-11-04)
+
+The owner authorizes the complete consolidated contribution and a release bump
+from0.39.0 to0.40.0 before publication. Canonical branch
+`integration/pr134-v0.40.0` starts at reviewed contributor head
+`c37ac8dba6a80eb92414f419150ec50aad570909`; its original ancestry and evidence are
+preserved. Food/observer/Pipe/caustics/renderer runtime behavior is unchanged from
+that reviewed candidate. Package, lockfile and displayed/export BUILD_VERSION
+advance together. Current implementation references replace pending-acceptance
+labels; historical reports below are preserved as dated evidence.
+
+Exact reviewed head passed385 fast tests/build, actual Worker and92 browser
+cases (33Chromium/38Firefox/16toolbar/5side-window), plus standing locomotion.
+Four optional anatomy fixture failures reproduce on current main and are not
+hidden. Required final integration checks, merge SHA and actual production/Wiki
+publication receipts are maintained in #134/#57. Testing retains its independent
+T1.1 identity; no testing promotion or experimental rerun is included.
+
+Follow-up scope is separate: RGB-only vision, mouth size/effectiveness relative
+to its host part, creature life energy, egg-laying cooldown, egg energy production,
+overlapping mouths, reserve energy and selected experiment repeats. Their meanings,
+compatibility decisions and protocols must be settled before implementation.
+
+---
+
 ## Consolidated completed-fork submission — 2026-11-03 (review pending)
 
 Hernan explicitly authorized all eligible completed advances in fork main

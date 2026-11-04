@@ -1,38 +1,27 @@
-# Consolidated contributor submission — pending upstream acceptance
+# Accepted food lifecycle, observer controls and release v0.40.0
 
-- This candidate includes #125 decay-v2/schema19 (1 J/s, radius floor 6, bounded
-  60-second carrion mineralization), saved decay-v1/schema18, and #126 UI-only
-  observer preferences. Omitted cycles retain the canonical historical rules.
-  Do not silently enable a cycle on import or through Worker control packets.
-- #135 Pipe World is an independent 4600 × 2100 startup recipe, without initial
-  calls/openings/tubes. #137 caustics visibility changes only observer paint;
-  preserve caustic state, PRNG, optical sensing and exact snapshots.
-- Earlier no-decay statements below describe historical worlds without a cycle.
-  Genetics, brains, articulated physics, fixed ticks and energy funding remain
-  unchanged. No unmerged research, testing overlay or fork Pages setup belongs
-  in this submission. Preserve the canonical main-only publication architecture.
-- This is a review candidate, not a release. Original evidence and decisions
-  remain in #57/#134 and the linked issues; no automatic experiment reruns.
+- Owner accepts the complete #134 contribution and authorizes its integration,
+  version bump and publication. New closed application worlds use decay-v2 /
+  schema19: 1 J per food particle per simulated second, radius floor6 and bounded
+  remaining-energy carrion mineralization after60s. Losses return once to signed
+  reserve. Saved decay-v1/schema18 retains30 J/s; omitted cycles retain historical
+  food arithmetic/radii/PRNG. Never silently enable a cycle on import or through
+  Worker control packets; explicit upgrades use an authoritative snapshot.
+- Pipe World is an independent4600x2100 recipe with no initial calls/openings/tubes.
+  Selection/tracking/caustics preferences are observer-only snapshot metadata:
+  Default on, Harsh/Pipe off, independent editable overrides and old-file defaults.
+  Hiding caustics skips painting only, preserving state, PRNG and optics.
+- Preserve the official Playwright1.58.2 container and all Worker/browser groups
+  with the mandatory aggregate. Keep canonical main-only dual-Pages and testing
+  identity unchanged. Original ecological evidence is historical and must not
+  be rerun, retuned or relabeled as proof of sustainable ecology.
+- Brain v7 still receives RGB plus normalized distance per ray. The owner now
+  requires RGB-only visual inputs as a separate follow-up. Do not silently remove
+  columns from saved neural weights or reinterpret existing experimental results;
+  define a versioned compatibility policy before that change. Mouth/energy/egg
+  concerns and experiment repeats are separate pending-scope tasks in #57.
 
-# Nutrient-cycle and observer-preference submission (#125/#126)
-
-- Fork main implements `nutrientCycle: decay-v2` for new closed application
-  worlds, schema 19. Saved decay-v1/schema18 retains exact 30 J/s behavior. Historical omitted settings preserve exact lifetimes/radii.
-  This authorized contributor change supersedes the earlier no-abiotic-decay
-  decision below only for new fork worlds; canonical upstream is unchanged.
-- Current food loses 1 J/s to reserve and retains radius >=6; 60-second carrion mineralizes its remaining
-  energy into <=3000 J nearby plant fragments, bounded by target/count/safety
-  limits. Overflow banks once. No organism/feeding/physics coefficient tuning.
-- Preserve historical schemas and Worker control-switch rejection. Acceptance:
-  tests/nutrient-cycle.test.ts, scripts/check-worker.mjs and focused browser
-  checks. Fixed ecological observations are in docs/experiments/nutrient-cycle-v1.json;
-  never silently repeat the registered conditions or claim improved ecology.
-- Advanced observation settings (#126) are UI-only snapshot metadata, never
-  simulation settings. Default seeds both automatic selection/tracking on;
-  Harsh seeds both off. Overrides are independent and survive import/fork;
-  in-world reseeding retains overrides. Manual Track remains available.
-
-# Current integrated interfaces and formats (v0.39.0)
+# Current integrated interfaces and formats (v0.40.0)
 
 - The owner explicitly accepts automatic saved-mouth conversion (#108, decision
   6554984336). New/current mouths have fixed diet diameters7/8/9 and independent
@@ -41,7 +30,7 @@
   mutated; future feeding uses the converted geometry. Preserve all other saved
   neural/physics/energy semantics. Do not add an unrequested legacy-mode gate.
 - Current worlds without topology export schema16; self-linked tube topology
-  exports schema17. In this submission, explicit decay-v1/v2 worlds use schema18/19,
+  exports schema17. Explicit decay-v1/v2 worlds use schema18/19,
   with optional validated topology. All support forward mouths and immutable egg reserve
   references. Historical schemas12–15 load through the accepted mouth migration;
   they still reject smuggled topology. Do not reuse experimental controller
@@ -62,7 +51,7 @@
   side-window, Chromium and Firefox jobs feed a mandatory browser-smoke aggregate.
   A changed test fixture/format must retain its actual causal/state guarantees;
   never weaken a timeout/threshold or refresh a frozen reference to hide failure.
-- Production is v0.39.0 after integration. The independent testing branch and
+- Production is v0.40.0 after integration. The independent testing branch and
   T1.1 baseline remain untouched; retain all main/testing publication safeguards.
 
 # VIDA 2D issue-backed development and handoffs
