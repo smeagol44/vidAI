@@ -1,9 +1,10 @@
+import {createFounderGenome, createInitialWorld} from './support/legacy-vision';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {test} from 'node:test';
-import {createFounderGenome, FEATURED_BLUEPRINTS, FOUNDER_BLUEPRINTS} from '../founders';
+import {FEATURED_BLUEPRINTS, FOUNDER_BLUEPRINTS} from '../founders';
 import {runTwinOarApproach, TWIN_OAR_APPROACH_CONDITIONS} from '../foragingAudit';
-import {createInitialWorld, addExternalOrganism} from '../world';
+import {addExternalOrganism} from '../world';
 import {createSnapshot, restoreSnapshot, LEGACY_SETTINGS, validateGenome} from '../persistence';
 import {stepSimulation, mutateGenome, XoshiroPRNG, CONTINUOUS_EAT_RATE, MOUTH_ASSIMILATION} from '../simulation';
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');

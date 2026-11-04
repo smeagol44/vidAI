@@ -47,7 +47,7 @@ for (const mainthread of [false, true]) test(`closed-budget conversion, controls
   await page.getByTitle('Ecology & Physical Settings').click();
   await expect(page.getByLabel('Unlimited nutrients', {exact: true})).toBeChecked();
   const config = {...DEFAULT_SETTINGS, targetNutrients: 3, inflowRate: 0};
-  const state = createInitialWorld(config, 91, 'balanced', 'standard', 1);
+  const state = createInitialWorld(config, 91, 'balanced', 'standard', 1, 'legacy');
   state.ledger.recordedLosses += 100000000;
   const source = createSnapshot(state, config);
   const upload = (snapshot: unknown) => page.locator('input[type=file]').setInputFiles({name: 'economy.json',
@@ -102,7 +102,7 @@ for (const physicsRegime of ['paid-work-v2', 'surface-work-v1', 'legacy-v0'] as 
   await page.goto('./?autoplay');
   await page.getByTitle('Ecology & Physical Settings').click();
   const settings = {...DEFAULT_SETTINGS, physicsRegime, targetNutrients: 80, inflowRate: 0};
-  const world = createInitialWorld({...settings, targetNutrients: 0}, 91, 'balanced', 'standard', 2);
+  const world = createInitialWorld({...settings, targetNutrients: 0}, 91, 'balanced', 'standard', 2, physicsRegime === 'legacy-v0' ? 'legacy' : 'rgb');
   const source = createSnapshot(world, settings);
   if (physicsRegime === 'legacy-v0') {
     source.schemaVersion = '11.0.0'; delete (source.settings as Partial<typeof settings>).physicsRegime;
@@ -172,6 +172,8 @@ test('new worlds use requested defaults and creature clicks keep diagnostics clo
   await expect(badge).toBeVisible(); await expect(inspector).toHaveCount(0);
   await badge.getByRole('button', {name: 'Inspect', exact: true}).click();
   await expect(inspector).toBeVisible();
+  await expect(inspector.getByTestId('brain-vision')).toHaveText('RGB-only vision');
+  await expect(inspector.locator('svg text').filter({hasText: /distance/})).toHaveCount(0);
   const pruning = inspector.getByLabel('Pruning threshold', {exact: true});
   await expect(pruning).toHaveValue('0.5');
   await expect.poll(() => inspector.locator('svg circle').count()).toBeGreaterThan(0);
@@ -191,7 +193,7 @@ for (const fallback of [false, true]) test(`legacy import and current reset agre
   await page.goto(`./?autoplay${fallback ? '&mainthread' : ''}`);
   await page.getByTitle('Ecology & Physical Settings').click();
   const settings={...DEFAULT_SETTINGS,physicsRegime:'legacy-v0' as const,targetNutrients:0,inflowRate:0};
-  const source=createSnapshot(createInitialWorld(settings,91,'balanced','standard',2),settings);
+  const source=createSnapshot(createInitialWorld(settings,91,'balanced','standard',2,'legacy'),settings);
   source.schemaVersion='11.0.0';delete (source.settings as Partial<typeof settings>).physicsRegime;
   await page.locator('input[type=file]').setInputFiles({name:'old-world.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(source))});
   await expect(page.getByRole('button',{name:'Resume',exact:true})).toBeVisible();
@@ -221,7 +223,7 @@ for (const fallback of [false, true]) test(`legacy import and current reset agre
   await expect(page.getByTestId('physics-regime')).toContainText('Restored swimming');
   await page.keyboard.press('Space');
   const reset=await exportState();expect(reset.settings.physicsRegime).toBe('passive-work-v3');
-  expect(reset.schemaVersion).toBe('19.0.0'); expect(reset.settings.nutrientCycle).toBe('decay-v2');
+  expect(reset.schemaVersion).toBe('20.0.0'); expect(reset.settings.nutrientCycle).toBe('decay-v2');
   expect(reset.settings.mouthContactModel).toBe('capsule-v1');
   expect(reset.state.organisms.some((o: any)=>o.motorDiagnostics?.positiveWorkJ>0)).toBe(true);
   expect(errors).toEqual([]);
@@ -231,7 +233,7 @@ test('repairing a surface-model world preserves its exact paused ecosystem',asyn
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('./?autoplay');await page.getByTitle('Ecology & Physical Settings').click();
   const settings={...DEFAULT_SETTINGS,physicsRegime:'surface-work-v1' as const,targetNutrients:0,inflowRate:0};
-  const state=createInitialWorld(settings,91,'balanced','standard',2);
+  const state=createInitialWorld(settings,91,'balanced','standard',2,'legacy');
   const source=createSnapshot(state,settings);
   await page.locator('input[type=file]').setInputFiles({name:'surface-world.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(source))});
   await expect(page.getByRole('button',{name:'Resume',exact:true})).toBeVisible();
@@ -306,18 +308,28 @@ for (const fallback of [false, true]) test(`x0 allows inspection, navigation and
   addExternalOrganism(world, createFounderGenome('FND-001'), settings, settings.worldWidth / 2, settings.worldHeight / 2, 0);
   expect(world.organisms).toHaveLength(1);
   const source = createSnapshot(world, settings);
-  const upload = (snapshot: unknown) => page.locator('input[type=file]').setInputFiles({name: 'paused.json',
-    mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(snapshot))});
+  const phase = (name: string) => console.log(`VIDA_X0_${fallback ? 'fallback' : 'Worker'} ${name}`);
+  const upload = async (snapshot: unknown) => {
+    const canvas = page.getByLabel('Aquatic simulation');
+    const epoch = Number(await canvas.getAttribute('data-world-epoch'));
+    await page.locator('input[type=file]').setInputFiles({name: 'paused.json',
+      mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(snapshot))});
+    await expect(canvas).toHaveAttribute('data-world-epoch', String(epoch + 1));
+  };
+  let exportCount = 0;
   const read = async () => {
+    const number = ++exportCount; phase(`export ${number} requested`);
     const download = page.waitForEvent('download');
     await page.getByRole('button', {name: 'Export Snapshot', exact: true}).click();
-    return JSON.parse(await readFile((await (await download).path())!, 'utf8'));
+    const snapshot = JSON.parse(await readFile((await (await download).path())!, 'utf8'));
+    phase(`export ${number} received`); return snapshot;
   };
   await page.getByTitle('Ecology & Physical Settings').click();
   await upload(source);
   await expect(page.getByRole('button', {name: '0x', exact: true})).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByTestId('simulation-activity')).toHaveAttribute('data-state', 'paused');
   expect((await read()).state).toEqual(source.state);
+  phase('import exact; inspect and navigate');
   await page.getByTitle('Close settings (✕)').click();
   const canvas = page.getByLabel('Aquatic simulation'), bounds = (await canvas.boundingBox())!;
   await canvas.click({position: {x: bounds.width / 2, y: bounds.height / 2}});
@@ -335,9 +347,11 @@ for (const fallback of [false, true]) test(`x0 allows inspection, navigation and
   await expect.poll(async () => (await matrix())[2]).not.toBe(before[2]);
   await canvas.hover(); await page.mouse.wheel(0, -100);
   await expect.poll(async () => (await matrix())[0]).toBeGreaterThan(before[0]);
+  phase('open/close Bank');
   await page.getByTitle('Specimen Bank (Save & Spawn Custom Genomes)').click();
   await expect(page.getByTestId('specimen-row').first()).toBeVisible();
   await page.getByTitle('Specimen Bank (Save & Spawn Custom Genomes)').click();
+  phase('manual food and creature additions');
   await page.getByRole('button', {name: 'Feed (F)', exact: true}).click();
   await expect(page.getByRole('group', {name: /^Food: 15 /})).toBeVisible();
   await page.getByRole('button', {name: 'Add Life', exact: true}).click();
@@ -363,11 +377,14 @@ for (const fallback of [false, true]) test(`x0 allows inspection, navigation and
   expect(cleared.state.simTime).toBe(source.state.simTime);
   await page.getByLabel('Maximum creatures + eggs', {exact: true}).focus();
   await page.getByLabel('Maximum creatures + eggs', {exact: true}).press('ArrowRight');
-  await expect.poll(async () => (await read()).settings.maxOrganisms).toBe(3);
-  const exact = await read(); await upload(exact);
+  await expect(page.getByLabel('Maximum creatures + eggs', {exact: true})).toHaveValue('3');
+  // The control and snapshot share the ordered Worker port. Export once after
+  // the real input commits, then assert the authoritative value strictly.
+  const exact = await read(); expect(exact.settings.maxOrganisms).toBe(3);
+  phase('restore exact edited world'); await upload(exact);
   expect((await read()).state).toEqual(exact.state);
   await expect(page.getByRole('button', {name: '0x', exact: true})).toHaveAttribute('aria-pressed', 'true');
-  expect(errors).toEqual([]);
+  phase('complete'); expect(errors).toEqual([]);
 });
 
 for (const fallback of [false, true]) test(`performance pulse preserves exact phase/color across pause and manual edits (${fallback ? 'fallback' : 'Worker'})`, async ({page}) => {

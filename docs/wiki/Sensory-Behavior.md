@@ -25,14 +25,18 @@ effects supply no visual target. Body pigment is inherited independently of diet
 
 Each eye may inherit three 0–1 `spectralSensitivity` gains. Missing gains mean
 [1,1,1]. Mutation can suppress or restore any channel, including exact zero.
-After filtering, a ray's neural distance becomes 1 when no channel detects
-light; physical occlusion still applies. Diagnostic hit labels never enter
-the brain. Reduced green sensitivity can suppress purely green stimuli;
+In v0.41, new brain-v8 creatures receive only red, green and blue per ray. Distance is used internally for intersections, Beer–Lambert attenuation and observer diagnostics; no distance, hit or object-type channel reaches these brains. Physical occlusion still applies. Saved brain-v7 creatures retain their original normalized range input (1 when no channel detects light) until explicitly upgraded in Settings. Loading a save does not opt in. Reduced green sensitivity can suppress purely green stimuli;
 other colors, geometry and contact prevent guaranteed camouflage.
 
 Eye upkeep is proportional to `5 * (0.25 + 0.75 * mean(R,G,B))` sensing units.
 Reduced sensitivity saves some energy while discarding information; a blind
 eye retains one-quarter of the original eye contribution.
+
+## Explicit saved-brain upgrade (v0.41)
+
+Settings → **Upgrade world to RGB-only vision** converts living creatures, eggs and ancestry from an authoritative snapshot, then leaves the world paused. It removes inherited range edges by stable identity, preserving the other connections and RGB lifetime learning. The inherited range=1 empty-water contribution is retained in hidden biases; disabled edges contribute nothing. Inputs, memory and outputs retain their identities, and energy/PRNG are unchanged. Responses near visible objects can change. Export a separate snapshot to retain both versions. Bank specimens have their own **Upgrade vision** button; world conversion does not edit Bank copies.
+
+Schema20 supports RGB-only and mixed v7/v8 worlds. An all-legacy world retains its previous schema choice. Descendants inherit their parent's vision version; they cannot silently regain removed range inputs. The 64 new catalogue designs preserve their original RGB/recurrent/motor alleles and PRNG initialization sequence, with only the explicit range/bias conversion. Older experiments used RGB+range and remain historical evidence for those controllers.
 
 ## Other neural inputs
 
@@ -87,27 +91,3 @@ visible/disconnected movement in `tests/`.
 The pink reserve-loss sector is observer-only. Eggs retain the same radius, occlusion, distance attenuation
 and white `EGG_RGB` in vision. Reserve percentage, incubation ring, selection and
 glow do not enter retinal channels or neural inputs.
-
-## Testing-only RGB-only vision
-
-The [testing application](https://smeagol44.github.io/vidAI/testing/) includes
-the0.41.0 candidate from issue139 / PR140. Newly generated catalogue starters and
-manual archetypes use brain v8, receiving only RGB per ray. Geometric distance
-still controls intersections, occlusion and attenuation and appears in observer
-diagnostics; no distance, hit or object-type channel reaches these new brains.
-Production0.40.0 retains the v7 behavior described above.
-
-Existing saved creatures, eggs, ancestry, Bank specimens and descendants retain
-v7 until an explicit upgrade. Settings → **Upgrade world to RGB-only vision**
-converts living creatures, eggs and ancestry from an authoritative snapshot and
-leaves the world paused. Bank specimens have a separate **Upgrade vision** button.
-Connections and activations retain their stable identities; RGB lifetime learning,
-recurrent memory, bodies, energy and PRNG are preserved. Removed enabled range
-connections have their inherited empty-water contribution folded into hidden
-biases. Responses near visible objects can change; keep a separate old snapshot.
-Schema20 supports mixed v7/v8 worlds; all-legacy exports keep their prior schema.
-
-All64 new starter designs retain their RGB, recurrent and motor alleles. Short
-regression checks do not establish long-term feeding or ecological performance.
-Historical experiments used RGB+range and retain their original interpretation;
-this deployment does not rerun them.

@@ -1,6 +1,6 @@
 import {DEFAULT_SETTINGS} from '../../persistence';
 import {createInitialWorld} from '../../world';
-import {createFounderGenome} from '../../founders';
+import {createFounderGenome} from './legacy-vision';
 import {enableClosedEconomy} from '../../energyEconomy';
 import type {Egg, SimulationSettings} from '../../simulation';
 

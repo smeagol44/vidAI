@@ -1,9 +1,11 @@
+import {createFounderGenome} from './support/legacy-vision';
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {readFileSync} from 'node:fs';
-import {mouthContactFixture} from '../mouthContactAudit';
+import {mouthContactFixture as currentContactFixture} from '../mouthContactAudit';
+const mouthContactFixture = (model?: 'capsule-v1', encounter = 'endpoint') => currentContactFixture(model, encounter, 'legacy');
 import {capsuleContactsPart, mouthDimensions} from '../mouthGeometry';
-import {createFounderGenome} from '../founders';
+
 import {DEFAULT_SETTINGS, BUILD_VERSION, createSnapshot, restoreSnapshot, totalAccountedEnergy, validateGenome} from '../persistence';
 import {enableClosedEconomy} from '../energyEconomy';
 import {stepSimulation, mouthApertureContactsPart} from '../simulation';

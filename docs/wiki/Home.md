@@ -4,7 +4,7 @@ VIDA is an aquatic artificial-life simulator. Articulated bodies, inherited
 neural controllers, individual experience and physical interactions determine
 behavior. Survival and reproduction depend on finite energy.
 
-**Implementation baseline: v0.40.0.** The core mechanisms exist; reliable
+**Implementation baseline: v0.41.0.** The core mechanisms exist; reliable
 foraging, predator pursuit and self-sustaining multigeneration ecosystems remain
 unproven. This reference covers VIDA 2D; the separate 3D project is independent.
 
@@ -16,14 +16,15 @@ version and commit, cycle and iteration (cycle1 remains pinned to
 `main v0.37.0 @ b2a05e5`). The displayed iteration counts commits since that
 ancestor, including integrated production history;
 resetting to an explicitly chosen newer main baseline begins the next cycle.
-Production uses its independent `v0.40.0` release and forward-mouth save format.
+Production uses its independent `v0.41.0` release, RGB-only new brains and
+explicit schema20 support for RGB-only or mixed saved brains.
 The testing-only version code must never be merged to main.
 
-**Testing-only correction:** the testing application includes the proposed0.41.0
-[RGB-only vision](Sensory-Behavior#testing-only-rgb-only-vision) and updated
-starter brains. Production remains0.40.0 with its original range inputs. Saved
-legacy brains are preserved until explicitly upgraded in testing. The original
-T1 baseline and historical experiment results are retained.
+Production and testing both include [RGB-only vision](Sensory-Behavior#explicit-saved-brain-upgrade-v041)
+and updated starter brains. Saved legacy brains retain their original range
+inputs until explicitly upgraded. The testing banner's v0.37.0 reference is its
+original pinned cycle baseline, not the current feature level. The T1 baseline
+and historical experiment results remain preserved.
 
 ## Simulation overview
 

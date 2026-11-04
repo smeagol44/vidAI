@@ -1,10 +1,11 @@
+import {createFounderGenome, createInitialWorld} from './support/legacy-vision';
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import React from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
 import * as sim from '../simulation';
-import {createFounderGenome, FOUNDER_BLUEPRINTS} from '../founders';
-import {createInitialWorld, addExternalOrganism} from '../world';
+import {FOUNDER_BLUEPRINTS} from '../founders';
+import {addExternalOrganism} from '../world';
 import {createSnapshot, LEGACY_SETTINGS, restoreSnapshot, totalAccountedEnergy, validateGenome} from '../persistence';
 import BrainGraph from '../BrainGraph';
 

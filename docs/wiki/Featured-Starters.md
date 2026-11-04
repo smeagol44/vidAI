@@ -15,6 +15,10 @@ is independent of these founder designs, brain modes and population presets.
 Harsh's 50-slot capacity does not request 50 founders; existing preset counts
 and genomes remain unchanged.
 
+## Vision versions (v0.41)
+
+All newly generated featured and legacy-catalogue starters use RGB-only brain v8. “Legacy” is a catalogue collection, not an instruction to restore range sensing. Their RGB, recurrent and motor genes retain their reviewed values; removed range connections have their quiet-water contribution folded into biases. Existing saved specimens keep v7 RGB+range, visibly labelled in the Bank, until **Upgrade vision** is chosen. Spawning a saved legacy specimen preserves its original brain. World upgrades do not alter stored Bank copies.
+
 ## Featured designs
 
 | Identity | Source anatomy | Diet | Body plan |
@@ -91,13 +95,3 @@ The roster provides diverse mutable starting points. Swimming, valid mouths
 and bounded learning do not establish reliable foraging, hunting, predator
 avoidance or self-sustaining reproduction for every design. Names such as
 “Pursuer” describe a starting design, not a scripted or guaranteed behavior.
-
-## Testing-only vision correction
-
-In the [testing application](https://smeagol44.github.io/vidAI/testing/), all64
-newly generated catalogue designs use RGB-only brain v8 while retaining their
-reviewed RGB/recurrent/motor alleles. “Legacy” remains a collection name. Saved
-Bank specimens keep their original v7 RGB+range brains until **Upgrade vision**
-is chosen; spawning them preserves that version. World conversion does not edit
-stored Bank copies. Production0.40.0 keeps its existing starter brains. See the
-[testing vision details](Sensory-Behavior#testing-only-rgb-only-vision).

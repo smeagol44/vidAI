@@ -1,3 +1,4 @@
+import {upgradeWorldVision, upgradeGenomeVision} from './simulation';
 import {scenarioObserverPreferences, restoreObserverPreferences, type ObserverPreferences} from './observerPreferences';
 import {tubeGeometry, setSelfTubes, type SelfTubes} from './selfTubes';
 import {EnergyActivityCollector, EnergyActivityPresentation, drawEnergyGlow} from './energyActivity';
@@ -671,6 +672,17 @@ export default function App() {
         setEnergyBudgetDraft(current => current === joules ? null : current);
     });
     else {setWorldEnergy(simStateRef.current, joules); refreshWorldView();}
+  };
+
+  const updateVision = async () => {
+    const epoch = worldEpochRef.current;
+    try {
+      const exact = restoreSnapshot(await authoritativeSnapshot());
+      if (epoch !== worldEpochRef.current) return;
+      upgradeWorldVision(exact.state);
+      replaceWorld(exact.state, exact.settings);
+      setSaveNotification('RGB-only vision enabled. Range connections removed; RGB learning retained; save a new copy to keep this conversion.');
+    } catch (error) {setSaveNotification(`Vision upgrade failed: ${String(error)}`);}
   };
 
   const updateNutrientCycle = async () => {
@@ -2245,6 +2257,13 @@ export default function App() {
                 </div>
               </div>
 
+              <div className="text-[10px] text-slate-400 space-y-1" data-testid="vision-mode">
+                <p>New catalogue starters use RGB-only vision. Saved legacy brains retain range inputs until upgraded.</p>
+                <p>Upgrade changes living creatures, eggs and ancestry in this world. It removes range connections, keeping RGB learning and other connections by identity. Behavior may change. Bank copies remain unchanged.</p>
+                <button type="button" onClick={() => {void updateVision();}}
+                  className="w-full py-1.5 rounded-lg border border-cyan-700 text-cyan-300 bg-cyan-950/40">Upgrade world to RGB-only vision</button>
+              </div>
+
               {energyPool && <div className="text-[10px] text-slate-400 space-y-1">
                 <p data-testid="nutrient-cycle">Food decay: {nutrientCycle === 'decay-v2' ? '1 J/s · minimum radius 6'
                   : nutrientCycle === 'decay-v1' ? '30 J/s · original shrinking cycle' : 'Historical food lifecycle'}.</p>
@@ -2567,7 +2586,7 @@ export default function App() {
                         <span>{item.name}</span>
                       </div>
                       <div className="text-[10px] text-slate-400">
-                        {item.tags.join(' · ')} · {item.savedAt}
+                        {item.tags.join(' · ')} · {item.savedAt} · {item.genome.brainVersion === 8 ? 'RGB-only vision' : 'Legacy RGB + range'}
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
@@ -2576,6 +2595,14 @@ export default function App() {
                         className="px-2 py-1 bg-emerald-600/30 hover:bg-emerald-500/40 border border-emerald-400/50 text-emerald-300 font-bold rounded text-[10px]">
                         Spawn
                       </button>
+                      {!item.id.startsWith('FOUNDER-') && item.genome.brainVersion !== 8 && <button
+                        onClick={() => {
+                          const genome = structuredClone(item.genome); upgradeGenomeVision(genome);
+                          const updated = specimenBank.map(b => b.id === item.id ? {...b, genome} : b);
+                          setSpecimenBank(updated); localStorage.setItem('vida_specimen_bank_v3', JSON.stringify(updated));
+                          setSaveNotification('Saved specimen upgraded to RGB-only vision. Existing world creatures are unchanged.');
+                        }}
+                        className="px-2 py-1 text-cyan-300 text-[10px]">Upgrade vision</button>}
                       {!item.id.startsWith('FOUNDER-') && (
                       <button
                         onClick={() => {
