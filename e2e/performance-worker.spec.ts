@@ -172,6 +172,8 @@ test('new worlds use requested defaults and creature clicks keep diagnostics clo
   await expect(badge).toBeVisible(); await expect(inspector).toHaveCount(0);
   await badge.getByRole('button', {name: 'Inspect', exact: true}).click();
   await expect(inspector).toBeVisible();
+  await expect(inspector.getByTestId('brain-vision')).toHaveText('RGB-only vision');
+  await expect(inspector.locator('svg text').filter({hasText: /distance/})).toHaveCount(0);
   const pruning = inspector.getByLabel('Pruning threshold', {exact: true});
   await expect(pruning).toHaveValue('0.5');
   await expect.poll(() => inspector.locator('svg circle').count()).toBeGreaterThan(0);

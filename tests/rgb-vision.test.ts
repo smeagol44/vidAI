@@ -1,3 +1,6 @@
+import React from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import BrainGraph from '../BrainGraph';
 import {eggReserveFixture} from './support/egg-reserve';
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
@@ -104,4 +107,9 @@ test('RGB-only runtime retains optical geometry in diagnostics without exposing 
   assert.equal(near.neuralInputs.length, 3 * 5 + 7);
   assert.ok(!near.genome.inputKeys!.some(k => /distance|hit|type|target/.test(k)));
   for (const o of [near, far]) assert.ok(o.neuralInputs.every(Number.isFinite));
+  const diagram = renderToStaticMarkup(React.createElement(BrainGraph, {organism: near, threshold: 0}));
+  assert.ok(diagram.includes('RGB-only vision')); assert.ok(!diagram.includes('distance'));
+  const old = sim.spawnOrganism(legacy(), 1200, 750);
+  const legacyDiagram = renderToStaticMarkup(React.createElement(BrainGraph, {organism: old, threshold: 0}));
+  assert.ok(legacyDiagram.includes('Legacy vision')); assert.ok(legacyDiagram.includes('distance'));
 });
