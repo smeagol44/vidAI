@@ -1,0 +1,137 @@
+{
+  "canonicalBase": "6479db4c0979880a9adbf4556bda1611e66fa8ec",
+  "seed": 73,
+  "scope": "No topology; all simulation snapshot fields exact at initialization and each tick; only the release build label is normalized.",
+  "cases": [
+    {
+      "physicsRegime": "legacy-v0",
+      "closed": false,
+      "capsule": false,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "legacy-v0",
+      "closed": false,
+      "capsule": true,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "legacy-v0",
+      "closed": true,
+      "capsule": false,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "legacy-v0",
+      "closed": true,
+      "capsule": true,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "surface-work-v1",
+      "closed": false,
+      "capsule": false,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "surface-work-v1",
+      "closed": false,
+      "capsule": true,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "surface-work-v1",
+      "closed": true,
+      "capsule": false,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "surface-work-v1",
+      "closed": true,
+      "capsule": true,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "paid-work-v2",
+      "closed": false,
+      "capsule": false,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "paid-work-v2",
+      "closed": false,
+      "capsule": true,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "paid-work-v2",
+      "closed": true,
+      "capsule": false,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "paid-work-v2",
+      "closed": true,
+      "capsule": true,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "passive-work-v3",
+      "closed": false,
+      "capsule": false,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "passive-work-v3",
+      "closed": false,
+      "capsule": true,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "passive-work-v3",
+      "closed": true,
+      "capsule": false,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    },
+    {
+      "physicsRegime": "passive-work-v3",
+      "closed": true,
+      "capsule": true,
+      "ticks": 60,
+      "exactCompleteSnapshots": true,
+      "maxStockDifference": 0
+    }
+  ],
+  "totalComparedTicks": 960,
+  "allExact": true
+}

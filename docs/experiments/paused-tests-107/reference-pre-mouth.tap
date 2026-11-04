@@ -1,0 +1,55 @@
+VIDA_PHASE5_PHYSICAL_LEARNING {"improved":1,"worsened":1,"tied":2,"results":[{"seed":711,"side":0,"d":120,"trainingFoodJ":2460,"trainedDelta":4.191314780655964,"trainingTravelX":55.24349226477557,"eatenA":3000,"eatenB":3000,"netIntakeDifferenceJ":0,"travelA":168.48863118911905,"travelB":188.6527674900013,"targetProgressA":71.02412242524385,"targetProgressB":51.158164747329366,"reserveA":14119.19021137175,"reserveB":14120.392648031346},{"seed":711,"side":-34,"d":130,"trainingFoodJ":2460,"trainedDelta":4.191314780655964,"trainingTravelX":55.24349226477557,"eatenA":3000,"eatenB":2820,"netIntakeDifferenceJ":180,"travelA":180.5033763584915,"travelB":212.39330969700833,"targetProgressA":87.80214315445127,"targetProgressB":56.24717723149355,"reserveA":14118.208446339455,"reserveB":13975.633798423944},{"seed":711,"side":34,"d":130,"trainingFoodJ":2460,"trainedDelta":4.191314780655964,"trainingTravelX":55.24349226477557,"eatenA":2580,"eatenB":3000,"netIntakeDifferenceJ":-420,"travelA":196.6090420671965,"travelB":185.02934322478973,"targetProgressA":71.31167538511946,"targetProgressB":83.70873353277909,"reserveA":13783.687228807115,"reserveB":14119.706315959358},{"seed":733,"side":0,"d":130,"trainingFoodJ":2460,"trainedDelta":4.191314780655964,"trainingTravelX":55.24349226477557,"eatenA":3000,"eatenB":3000,"netIntakeDifferenceJ":0,"travelA":165.61081341302474,"travelB":191.52491134612248,"targetProgressA":93.84715173182016,"targetProgressB":68.25655368791317,"reserveA":14119.089884231644,"reserveB":14120.43141370608}]}
+VIDA_PHASE5_POPULATION_SMOKE {"alive":100,"physicalParts":300,"maxIndividualSensoryEdges":96,"maxIndividualMotorEdges":96}
+✔ real learned experience is compared against its own erased-experience physical twin (1917.154205ms)
+✔ a populated tank can step 100 learning-capable articulated animals without unbounded synapse state (744.577236ms)
+✔ physics audit measures dissipative rotated drag, passive spin, free momentum and actual size scaling (123.293214ms)
+✔ offline fitness rejects idle, startup-only, invalid and circular movement (4.210881ms)
+✔ search uses a deterministic bounded budget, keeps the parent, and edits only existing motor alleles (796.935539ms)
+✔ candidate adoption rejects reversed and less sustained motion despite higher distance (131.365048ms)
+✔ CUR-003: selected gait retains a longer held-out physical improvement without cap use (521.704604ms)
+✔ CUR-008: selected gait retains a longer held-out physical improvement without cap use (845.989619ms)
+✔ CUR-009: selected gait retains a longer held-out physical improvement without cap use (542.658228ms)
+✔ the other six featured and all 55 legacy genomes remain exactly unchanged (570.896489ms)
+✔ stored pre-calibration CUR-003 genome resumes the exact v0.32.1 cold continuation (176.113213ms)
+PHASE5C_MOBILE_VALIDATION {"wins":6,"losses":1,"ties":2,"untouched":6,"results":[{"speed":1,"startSeparation":82,"withInjury":180,"withoutInjury":180,"hunterTravel":59.6,"withSeparation":95.9,"withoutSeparation":95},{"speed":1,"startSeparation":94,"withInjury":210,"withoutInjury":210,"hunterTravel":66.8,"withSeparation":102.7,"withoutSeparation":99.8},{"speed":1,"startSeparation":106,"withInjury":360,"withoutInjury":2490,"hunterTravel":28.8,"withSeparation":177.6,"withoutSeparation":112.3},{"speed":1,"startSeparation":118,"withInjury":0,"withoutInjury":0,"hunterTravel":76.8,"withSeparation":118.1,"withoutSeparation":118.1},{"speed":1,"startSeparation":130,"withInjury":0,"withoutInjury":0,"hunterTravel":76.8,"withSeparation":130.1,"withoutSeparation":130.1},{"speed":1.5,"startSeparation":82,"withInjury":180,"withoutInjury":330,"hunterTravel":61.5,"withSeparation":99,"withoutSeparation":95.1},{"speed":1.5,"startSeparation":94,"withInjury":210,"withoutInjury":300,"hunterTravel":63.2,"withSeparation":106.3,"withoutSeparation":103.6},{"speed":1.5,"startSeparation":106,"withInjury":270,"withoutInjury":210,"hunterTravel":70,"withSeparation":129.2,"withoutSeparation":140.1},{"speed":1.5,"startSeparation":118,"withInjury":0,"withoutInjury":0,"hunterTravel":78,"withSeparation":117,"withoutSeparation":117},{"speed":1.5,"startSeparation":130,"withInjury":0,"withoutInjury":0,"hunterTravel":78.1,"withSeparation":128.9,"withoutSeparation":128.9},{"speed":2.2,"startSeparation":82,"withInjury":300,"withoutInjury":360,"hunterTravel":46.1,"withSeparation":78.8,"withoutSeparation":105.1},{"speed":2.2,"startSeparation":94,"withInjury":330,"withoutInjury":360,"hunterTravel":46.9,"withSeparation":85.3,"withoutSeparation":111.8},{"speed":2.2,"startSeparation":106,"withInjury":390,"withoutInjury":540,"hunterTravel":46.6,"withSeparation":151.5,"withoutSeparation":140.2},{"speed":2.2,"startSeparation":118,"withInjury":0,"withoutInjury":0,"hunterTravel":49.3,"withSeparation":145.6,"withoutSeparation":145.6},{"speed":2.2,"startSeparation":130,"withInjury":0,"withoutInjury":0,"hunterTravel":49.1,"withSeparation":157.8,"withoutSeparation":157.8}]}
+PHASE5C_MULTIMORPH_VALIDATION {"wins":5,"losses":6,"ties":4,"observations":[{"preyId":"FND-001","rearOverlap":3,"withInjury":270,"withoutInjury":210,"hunterTravel":30.8,"withSeparation":124.7,"withoutSeparation":132.8},{"preyId":"FND-001","rearOverlap":6,"withInjury":270,"withoutInjury":210,"hunterTravel":29.2,"withSeparation":124.9,"withoutSeparation":133.3},{"preyId":"FND-001","rearOverlap":9,"withInjury":270,"withoutInjury":210,"hunterTravel":27.5,"withSeparation":125.4,"withoutSeparation":134.2},{"preyId":"FND-006","rearOverlap":3,"withInjury":180,"withoutInjury":150,"hunterTravel":-5.9,"withSeparation":116,"withoutSeparation":113.9},{"preyId":"FND-006","rearOverlap":6,"withInjury":180,"withoutInjury":150,"hunterTravel":-11.1,"withSeparation":122.7,"withoutSeparation":120.6},{"preyId":"FND-006","rearOverlap":9,"withInjury":180,"withoutInjury":150,"hunterTravel":-15.8,"withSeparation":128.4,"withoutSeparation":126.3},{"preyId":"FND-021","rearOverlap":3,"withInjury":300,"withoutInjury":360,"hunterTravel":8.8,"withSeparation":85.4,"withoutSeparation":89.5},{"preyId":"FND-021","rearOverlap":6,"withInjury":240,"withoutInjury":270,"hunterTravel":6.4,"withSeparation":86.2,"withoutSeparation":85.8},{"preyId":"FND-021","rearOverlap":9,"withInjury":210,"withoutInjury":240,"hunterTravel":1.8,"withSeparation":90.2,"withoutSeparation":87.5},{"preyId":"FND-031","rearOverlap":3,"withInjury":180,"withoutInjury":180,"hunterTravel":-2.8,"withSeparation":99.2,"withoutSeparation":100.3},{"preyId":"FND-031","rearOverlap":6,"withInjury":180,"withoutInjury":180,"hunterTravel":-4.2,"withSeparation":98.6,"withoutSeparation":99.7},{"preyId":"FND-031","rearOverlap":9,"withInjury":180,"withoutInjury":180,"hunterTravel":-3.7,"withSeparation":94.9,"withoutSeparation":96.1},{"preyId":"FND-051","rearOverlap":3,"withInjury":120,"withoutInjury":120,"hunterTravel":13.9,"withSeparation":112.3,"withoutSeparation":112.2},{"preyId":"FND-051","rearOverlap":6,"withInjury":210,"withoutInjury":240,"hunterTravel":22,"withSeparation":94,"withoutSeparation":88.4},{"preyId":"FND-051","rearOverlap":9,"withInjury":360,"withoutInjury":420,"hunterTravel":20.2,"withSeparation":93.1,"withoutSeparation":87.4}]}
+✔ a mobile, swimming hunter exposes protective and harmful inherited bite responses (2914.393259ms)
+✔ five morphologies show both beneficial and harmful physical injury responses, not universal escape (1481.866695ms)
+✔ cached runtime preserves v0.30 complete continuation: plain (142.84582ms)
+✔ cached runtime preserves v0.30 complete continuation: masked (71.397181ms)
+✔ cached runtime preserves v0.30 complete continuation: learned (157.394442ms)
+✔ cached runtime preserves v0.30 complete continuation: masked-learned (67.398581ms)
+✔ topology edits invalidate masks; changing weights does not cache stale values (23.595209ms)
+✔ learning reuses ID-keyed records and exact saves do not depend on warm caches (88.424222ms)
+✔ one death leaves exactly one larger edible circle containing all remaining chemical energy (34.445692ms)
+✔ worker host and render transport preserve exact state while omitting repeated genomes (121.898464ms)
+✔ worker commands honor nutrient caps, accounting, resize and exact authoritative export (17.127882ms)
+✔ pooled collision clipping exactly matches v0.32 geometry across rotations and boundaries (88.540939ms)
+✔ sparse learning clears removed records and invalidates all old slots after topology edits (8.875613ms)
+✔ lineage transport tracks real spawning, laying, hatching, death and epoch reset (63.652116ms)
+✔ lineage subscriptions coalesce changes, detach and avoid scanning unchanged history (28.632877ms)
+✔ CUR-001: recovery preserves frozen starter swimming and bounded total energy cost (609.883565ms)
+✔ CUR-002: recovery preserves frozen starter swimming and bounded total energy cost (372.360093ms)
+✔ CUR-003: recovery preserves frozen starter swimming and bounded total energy cost (220.020868ms)
+✔ CUR-004: recovery preserves frozen starter swimming and bounded total energy cost (431.756742ms)
+✔ CUR-005: recovery preserves frozen starter swimming and bounded total energy cost (376.996767ms)
+✔ CUR-006: recovery preserves frozen starter swimming and bounded total energy cost (458.323853ms)
+✔ CUR-007: recovery preserves frozen starter swimming and bounded total energy cost (167.505629ms)
+✔ CUR-008: recovery preserves frozen starter swimming and bounded total energy cost (211.105768ms)
+✔ CUR-009: recovery preserves frozen starter swimming and bounded total energy cost (97.435665ms)
+✔ shared-part simultaneous work includes acceleration and charges positive work independently of braking (0.864668ms)
+✔ recovery reserves limit actuation before it acts, with zero unpaid motion or future-food borrowing (29.163099ms)
+✔ CUR-001: v0.34.0 saves retain exact surface-model continuation (58.440323ms)
+✔ CUR-006: v0.34.0 saves retain exact surface-model continuation (58.090781ms)
+✔ recovery snapshots fork and continue exactly in Worker host and direct kernel (347.030038ms)
+✔ recovery retains Darter and Twin Oar physical off-axis food acquisition (736.095264ms)
+✔ Twin Oar reaches off-axis finite food through inherited visual steering and physical muscles (5990.417687ms)
+✔ calibration changes only new Twin Oar genes; old saves and the other 63 designs remain intact (479.433064ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7801.218142

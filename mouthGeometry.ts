@@ -1,9 +1,14 @@
 import type {PartDef, PartPhys, SensoryMouth} from './simulation';
 
-/** Shared display/kernel dimensions. No changes to inherited intake width. */
-export function mouthDimensions(mouth: Pick<SensoryMouth, 'mouthType' | 'intakeWidth'>) {
+/** Shared physical/display dimensions for the forward-facing mouth capsule.
+ * intakeLength is measured from the anatomical anchor toward the outward tip.
+ * Missing intakeLength denotes a legacy genome whose intakeWidth stored reach.
+ */
+export function mouthDimensions(mouth: Pick<SensoryMouth, 'mouthType' | 'intakeWidth' | 'intakeLength'>) {
   const radius = mouth.mouthType === 'carnivore' ? 4.5 : mouth.mouthType === 'omnivore' ? 4 : 3.5;
-  return {radius, halfSpan: Math.max(radius, mouth.intakeWidth * .5)};
+  const diameter = radius * 2;
+  const length = Math.max(diameter, mouth.intakeLength ?? mouth.intakeWidth);
+  return {radius, diameter, length};
 }
 
 function pointSegmentDistanceSquared(px: number, py: number, ax: number, ay: number, bx: number, by: number) {

@@ -55,6 +55,7 @@ export default function BrainGraph({organism: org, threshold}: {organism: Organi
     link(label, edge, x[1], hidden[h], x[2], outputs[o], inheritedWeight + somaticOffset, org.neuralHidden[h] ?? 0);
   }
   return <div className="w-full max-h-72 overflow-y-auto">
+    <p data-testid="brain-vision" className="text-xs text-slate-400">{g.brainVersion === 8 ? 'RGB-only vision' : 'Legacy vision: RGB + range (saved brain)'}</p>
     {((g.plasticityRate ?? 0) > 0 || (g.sensoryPlasticityRate ?? 0) > 0) && <div className="text-xs text-slate-400 px-2 py-1">
       Lifetime learning: genetically enabled (motor rate {(g.plasticityRate ?? 0).toFixed(3)}/s,
       retinal rate {(g.sensoryPlasticityRate ?? 0).toFixed(3)}/s,

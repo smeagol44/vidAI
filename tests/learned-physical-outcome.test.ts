@@ -4,6 +4,7 @@ import * as sim from '../simulation';
 import {createFounderGenome} from '../founders';
 import {createInitialWorld, addExternalOrganism} from '../world';
 import {LEGACY_SETTINGS, createSnapshot, restoreSnapshot, totalAccountedEnergy} from '../persistence';
+import {EcologyIntakeObserver} from '../ecologyAudit';
 
 const settings={...LEGACY_SETTINGS, targetNutrients:0, inflowRate:0, mutationSeverity:0};
 const dt=1/60;
@@ -24,12 +25,14 @@ function train(seed:number) {
  const g=createFounderGenome('FND-001','balanced');
  g.plasticityRate=.8;g.sensoryPlasticityRate=.8;g.plasticMotorScope='all';
  g.memoryConsolidationRate=2;g.forgettingRate=.04;g.maturityAge=1000;
+ const inherited=structuredClone(g);
  const org=addExternalOrganism(world,g,settings,1200,750,0)!;
  // Finite starting nutrient patch in a normal physical forward swimming lane:
  // no scripted reward, food following, teleporting, steering, or energy bonus.
  for(let i=0;i<6;i++)addFood(world,'training-'+i,1280+i*40,750,3000);
  const start=sim.calculateOrganismCOM(org);
  step(world,240);
+ assert.deepEqual(org.genome,inherited,'individual experience must not rewrite inherited genes');
  const end=sim.calculateOrganismCOM(org);
  const grossIntake=18000-world.nutrients.reduce((sum,n)=>sum+n.energyValue,0);
  return {world,org,trainDx:end.x-start.x,foodReceived:grossIntake,stored:magnitude(org)};
@@ -39,31 +42,58 @@ function followup(seed:number, side:number, d:number) {
  const snapshot=createSnapshot(trained.world,settings);
  const original=restoreSnapshot(snapshot).state;
  const control=restoreSnapshot(snapshot).state;
- for(const w of [original,control])clearFood(w);
+ const retained=restoreSnapshot(snapshot).state;
+ for(const w of [original,control,retained])clearFood(w);
  const a=original.organisms[0], b=control.organisms[0];
  const erase=(o:sim.Organism)=>{
   o.learnedMotorWeights?.forEach(s=>{s.delta=0;s.eligibility=0;s.consolidation=0});
   o.learnedSensoryWeights?.forEach(s=>{s.delta=0;s.eligibility=0;s.consolidation=0});
  };
+ const expectedControl=createSnapshot(original,settings);
+ erase(expectedControl.state.organisms[0]);
  erase(b);
+ assert.deepEqual(createSnapshot(control,settings),expectedControl,
+   'the experimental intervention must erase only acquired synaptic state');
  const center=sim.calculateOrganismCOM(a);
  // Identical physical bodies and world RNG. New stimulus starts as a
  // static finite food particle near the swimmer's forward trajectory.
  const x=center.x+d,y=center.y+side;
  addFood(original,'new-food',x,y);
  addFood(control,'new-food',x,y);
+ addFood(retained,'new-food',x,y);
  const initialA=totalAccountedEnergy(original),initialB=totalAccountedEnergy(control);
  const start=sim.calculateOrganismCOM(a);
- step(original,300);step(control,300);
+ const observe=(w:sim.SimulationState)=>{
+   const intake=new EcologyIntakeObserver();
+   // Prime receipt identities before stepping, excluding prior training intake.
+   intake.sample(w);const before=intake.totals().Nutrient;
+   let contactTicks=0;
+   for(let tick=0;tick<300;tick++){
+     sim.stepSimulation(w,settings,dt);intake.sample(w);
+     if(Object.values(w.organisms[0].mouthFeedback??{}).some(m=>m.contact>0))contactTicks++;
+   }
+   return {absorbedJ:intake.totals().Nutrient-before,contactTicks};
+ };
+ const observedA=observe(original),observedB=observe(control);
+ step(retained,300);
+ assert.deepEqual(createSnapshot(retained,settings),createSnapshot(original,settings),
+   'an unchanged retained-experience replay must continue exactly, including PRNG and memory');
  const endA=sim.calculateOrganismCOM(a), endB=sim.calculateOrganismCOM(b);
  const consumed=(w:sim.SimulationState)=>3000-w.nutrients.reduce((sum,n)=>sum+n.energyValue,0);
  const eatenA=consumed(original),eatenB=consumed(control);
+ for(const [gross,observed] of [[eatenA,observedA],[eatenB,observedB]] as const){
+   assert.equal(observed.absorbedJ,gross*sim.MOUTH_ASSIMILATION,
+     'measured food removal must agree with actual absorbed-mouth receipts');
+   assert.equal(observed.absorbedJ>0,observed.contactTicks>0);
+ }
  assert.ok(Math.abs(totalAccountedEnergy(original)-initialA)<.0001);
  assert.ok(Math.abs(totalAccountedEnergy(control)-initialB)<.0001);
  const moveA=Math.hypot(endA.x-start.x,endA.y-start.y);
  const moveB=Math.hypot(endB.x-start.x,endB.y-start.y);
  return {seed,side,d,trainingFoodJ:trained.foodReceived,trainedDelta:trained.stored,
   trainingTravelX:trained.trainDx, eatenA,eatenB,netIntakeDifferenceJ:eatenA-eatenB,
+  absorbedA:observedA.absorbedJ,absorbedB:observedB.absorbedJ,
+  contactTicksA:observedA.contactTicks,contactTicksB:observedB.contactTicks,
   travelA:moveA,travelB:moveB,
   targetProgressA:Math.hypot(start.x-x,start.y-y)-Math.hypot(endA.x-x,endA.y-y),
   targetProgressB:Math.hypot(start.x-x,start.y-y)-Math.hypot(endB.x-x,endB.y-y),
@@ -78,8 +108,12 @@ test('real learned experience is compared against its own erased-experience phys
  const improved=results.filter(r=>r.netIntakeDifferenceJ>0.1).length;
  const worsened=results.filter(r=>r.netIntakeDifferenceJ<-.1).length;
  const tied=results.length-improved-worsened;
- assert.ok(improved>=1 && worsened>=1 && tied>=1,
-   'experience must measurably change physical intake, and its benefit is not guaranteed');
+ // Original intent: experience has a real physical effect, not a promise
+ // of a fixed mixture of favorable/adverse encounters under every aperture.
+ assert.ok(improved+worsened>=1,'acquired state must causally change physical intake in at least one encounter');
+ assert.ok(results.every(r=>Math.abs(r.travelA-r.travelB)>1e-6),
+   'the retained/erased intervention must also change the physical trajectory');
+ assert.ok(tied>=1,'a trajectory change need not change intake from a finite meal');
  console.log('VIDA_PHASE5_PHYSICAL_LEARNING '+JSON.stringify({improved,worsened,tied,results}));
 });
 

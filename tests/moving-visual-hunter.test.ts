@@ -14,7 +14,7 @@ function createHunter(seed: number) {
   g.maturityAge = 1000;
   g.motorFrequency *= 1.4; // fixed inherited fast-swimming hunter gait, never runtime prey sensing
   g.mouths[0].mouthType = 'carnivore';
-  g.mouths[0].intakeWidth = 30;
+  g.mouths[0].intakeWidth = 9; g.mouths[0].intakeLength = 30;
   g.bodyCost = sim.calculateBodyCost(g.parts, g.eyes, g.mouths);
   const parent = structuredClone(g);
   assert.ok(sim.mutateBrainTopology(g, 'wire-retinal-turn', new sim.XoshiroPRNG(seed)));

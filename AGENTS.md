@@ -1,3 +1,123 @@
+# RGB-only vision — #139 / v0.41.0 candidate
+
+- New application worlds, catalogue/Bank starters and manual archetype spawns use brain v8: five RGB-only rays per eye. Range stays internal to raycasting, attenuation and observer diagnostics. Do not add hit/type/target channels as substitutes.
+- Existing saved v7 brains (including eggs, ancestry, Bank specimens and offspring) retain their original layout and dynamics until explicit upgrade. Historical migrations still terminate at v7. Schema20 admits v7/v8 mixtures; original schema16–19 exports are retained for all-legacy worlds.
+- Upgrade removes inherited distance edges by identity and folds their range=1 empty-water contribution into hidden biases. It preserves RGB learning, other synapses, activations by identity, bodies, energy and PRNG. Disabled range edges do not contribute. This is an explicit behavioral change, not exact equivalence near visible objects.
+- Generate starter calibration in its original channel/PRNG order, then convert by stable identity. Never shift columns or retune gaits/steering to hide failures. Frozen migration/golden tests explicitly construct legacy vision, with unchanged reference hashes. The bounded #139 validation does not repeat or replace historical experiments.
+- v0.41.0 is a proposed branch release until merge/publication is verified. Main remains v0.40.0 and testing remains T1.1. No production promotion or experimental reruns are implied by local checks.
+
+# Accepted food lifecycle, observer controls and release v0.40.0
+
+- Owner accepts the complete #134 contribution and authorizes its integration,
+  version bump and publication. New closed application worlds use decay-v2 /
+  schema19: 1 J per food particle per simulated second, radius floor6 and bounded
+  remaining-energy carrion mineralization after60s. Losses return once to signed
+  reserve. Saved decay-v1/schema18 retains30 J/s; omitted cycles retain historical
+  food arithmetic/radii/PRNG. Never silently enable a cycle on import or through
+  Worker control packets; explicit upgrades use an authoritative snapshot.
+- Pipe World is an independent4600x2100 recipe with no initial calls/openings/tubes.
+  Selection/tracking/caustics preferences are observer-only snapshot metadata:
+  Default on, Harsh/Pipe off, independent editable overrides and old-file defaults.
+  Hiding caustics skips painting only, preserving state, PRNG and optics.
+- Preserve the official Playwright1.58.2 container and all Worker/browser groups
+  with the mandatory aggregate. Keep canonical main-only dual-Pages and testing
+  identity unchanged. Original ecological evidence is historical and must not
+  be rerun, retuned or relabeled as proof of sustainable ecology.
+- Brain v7 still receives RGB plus normalized distance per ray. The owner now
+  requires RGB-only visual inputs as a separate follow-up. Do not silently remove
+  columns from saved neural weights or reinterpret existing experimental results;
+  define a versioned compatibility policy before that change. Mouth/energy/egg
+  concerns and experiment repeats are separate pending-scope tasks in #57.
+
+# Current integrated interfaces and formats (v0.40.0)
+
+- The owner explicitly accepts automatic saved-mouth conversion (#108, decision
+  6554984336). New/current mouths have fixed diet diameters7/8/9 and independent
+  inherited forward intakeLength. Loading historical organisms, eggs, lineage
+  and Bank entries converts their old aperture field once. Input files are not
+  mutated; future feeding uses the converted geometry. Preserve all other saved
+  neural/physics/energy semantics. Do not add an unrequested legacy-mode gate.
+- Current worlds without topology export schema16; self-linked tube topology
+  exports schema17. Explicit decay-v1/v2 worlds use schema18/19,
+  with optional validated topology. All support forward mouths and immutable egg reserve
+  references. Historical schemas12–15 load through the accepted mouth migration;
+  they still reject smuggled topology. Do not reuse experimental controller
+  semantics or silently promote an experimental branch.
+- Playback uses canonical speed0 and finite1/2/5/10/20 or 'max'. Worker control
+  packets carry speed, settings and selected; the old running flag is retired.
+  At0x, authoritative commands/inspection can refresh frames without ticks.
+  Discard stopped pacing debt on resume. MAX yields complete fixed-tick batches.
+- Feed/predation halos are transient observer data from actual energy receipts;
+  they never affect saved state, optical RGB or learning. Pause them with the
+  same effective speed. Egg reserve reference fields are persisted observer
+  metadata, not energy stocks; organisms still see white eggs.
+- Side-window stages1–3 are local same-world self-links with explicit call and
+  per-window consent. Full living state crosses funded physical tubes with IDs,
+  lineage, learned state, PRNG and stock intact. Stage4 remote transport is absent.
+  Observer fade/mask layers do not change physics, senses or hit selection.
+- Keep every accumulated fast/Worker/browser case. The parallel Worker, toolbar,
+  side-window, Chromium and Firefox jobs feed a mandatory browser-smoke aggregate.
+  A changed test fixture/format must retain its actual causal/state guarantees;
+  never weaken a timeout/threshold or refresh a frozen reference to hide failure.
+- Production is v0.40.0 after integration. The independent testing branch and
+  T1.1 baseline remain untouched; retain all main/testing publication safeguards.
+
+# VIDA 2D issue-backed development and handoffs
+
+- Read [issue #57](https://github.com/smeagol44/vidAI/issues/57) for the
+  verified roadmap, blocker references, decisions and handoff entry point.
+  The [VIDA 2D Development board](https://github.com/users/smeagol44/projects/1/views/1) is the
+  intended visual dashboard. [Issue #68](https://github.com/smeagol44/vidAI/issues/68)
+  documents the completed board setup, import and built-in workflows.
+  Repo issues and PRs remain the source of scope, decisions and evidence.
+  The current GitHub connector cannot mutate personal Projects v2 item fields;
+  record any required intermediate stage/field synchronization in #57.
+- Select one unblocked, bounded task, read its linked discussion and record
+  whether each proposal is decided, rejected or unapproved. Link work branches,
+  PRs, validation, significant performance/ecology changes and deployment in
+  its issue. A checked task means verified work, not expected progress.
+- **In progress starts with active discussion**, investigation, experimental
+  design or implementation, not merely with coding. Track design decision state
+  separately: an In progress task may still have unresolved decisions. Needs
+  decision means awaiting a decision but not actively under discussion; Ready
+  means accepted/queued but not yet underway; Done means fully verified and
+  completed, not simply ready for work. Keep In review/Testing stages when
+  useful. Project Status custom-field transitions need Projects UI/API,
+  whereas closure, PR merge, reopening and automatic intake are handled by
+  built-in workflows.
+- Native intermediate Project Status updates are delegated through the allowlisted
+  comment-command bridge documented in [Project Status Automation](docs/PROJECT_STATUS_AUTOMATION.md)
+  (issues #75/#105). The workflow and script accept GitHub comment authors
+  `smeagol44` and `hernansgarro`; both checks must agree. ChatGPT uses the
+  authenticated account behind its GitHub connection, not a separate GPT role.
+  After confirming the allowlist is on upstream main, emit `/vida status in-progress`
+  as an exact issue/PR comment when discussion starts, then verify Actions and
+  native field readback. A PR alone does not activate contributor access; the
+  first real contributor-authored command must be verified after merge.
+  Keep the existing owner-managed `VIDA_PROJECT_TOKEN` secret; never copy it to
+  the fork or grant upstream code-write/merge rights merely for status commands.
+  If access/tools cannot update a field, record the exact pending transition in
+  #57; never claim a card moved just because an issue/comment was edited.
+- Fork contributors follow [Contributor Project Instructions](docs/CONTRIBUTOR_WORKFLOW.md).
+  For `hernansgarro`, work on fork topic branches and finish features through
+  fork-internal PRs merged into `hernansgarro/vidAI` main under his applicable
+  merge authorization. Verify that fork merge, then ask him in Latin American
+  Spanish whether he wants an upstream PR; wait for explicit approval before
+  creating any upstream PR, including drafts. Shared issues remain upstream;
+  record the branch before coding, not an early upstream PR. Prepare approved
+  submissions from the intended upstream base with only the selected feature
+  and dependencies, never all unrelated fork-main work. Preserve others' checkpoints.
+  All conversation with Hernan is Latin American Spanish; all authored GitHub
+  artifacts in either repo (including commits/docs/comments) are English.
+  Check language by audience/destination before each message or repository write.
+  This contributor-chat language rule does not change the maintainer's chat language.
+  Project Write access is optional for the command bridge; it does not bypass
+  the author allowlist or grant repo access.
+- The Wiki documents only implemented behavior, not plans or historic
+  changelogs. This issue index and the PRs hold decisions and experimental
+  results. Preserve WORKER authority, physical correctness, saves and the
+  main/testing isolation. Never modify VIDA 3D.
+
 # Dual Pages environments — production/main and experimental/testing
 
 - Publish both independent checkouts as one GitHub Pages artifact from main.

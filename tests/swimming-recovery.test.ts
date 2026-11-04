@@ -1,9 +1,11 @@
+import {createFounderGenome, createInitialWorld} from './support/legacy-vision';
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
+import {legacyMouthState} from './support/legacy-mouth-state';
 import {createHash} from 'node:crypto';
-import {createFounderGenome,FEATURED_BLUEPRINTS} from '../founders';
+import {FEATURED_BLUEPRINTS} from '../founders';
 import {DEFAULT_SETTINGS,createSnapshot,restoreSnapshot,totalAccountedEnergy} from '../persistence';
-import {createInitialWorld,addExternalOrganism} from '../world';
+import {addExternalOrganism} from '../world';
 import {stepSimulation,calculateOrganismCOM} from '../simulation';
 import {paidMotorBatch,MECHANICAL_JOULES,MUSCLE_EFFICIENCY,type PhysicsRegime} from '../foundationPhysics';
 import {SimulationHost} from '../simulationHost';
@@ -70,7 +72,7 @@ const surfaceGolden={
 for(const [id,expected]of Object.entries(surfaceGolden))test(`${id}: v0.34.0 saves retain exact surface-model continuation`,()=>{
   const {state,config}=world(id,'surface-work-v1');
   for(let i=0;i<120;i++)stepSimulation(state,config,dt);
-  assert.equal(createHash('sha256').update(JSON.stringify(createSnapshot(state,config).state)).digest('hex'),expected);
+  assert.equal(createHash('sha256').update(JSON.stringify(legacyMouthState(createSnapshot(state,config).state))).digest('hex'),expected);
 });
 test('recovery snapshots fork and continue exactly in Worker host and direct kernel',()=>{
   const {state,config}=world('CUR-001','paid-work-v2');

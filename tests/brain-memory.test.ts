@@ -1,10 +1,11 @@
+import {createFounderGenome, createInitialWorld} from './support/legacy-vision';
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import React from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
 import * as sim from '../simulation';
-import {createFounderGenome, FOUNDER_BLUEPRINTS} from '../founders';
-import {createInitialWorld, addExternalOrganism} from '../world';
+import {FOUNDER_BLUEPRINTS} from '../founders';
+import {addExternalOrganism} from '../world';
 import {createSnapshot, LEGACY_SETTINGS, restoreSnapshot, totalAccountedEnergy, validateGenome} from '../persistence';
 import BrainGraph from '../BrainGraph';
 
@@ -159,7 +160,7 @@ test('v10 snapshot resumes inherited slow-memory dynamics with exact continuatio
   o.neuralHidden[0] = .2;
   sim.stepSimulation(s, settings, 1 / 60);
   const saved = createSnapshot(s, settings), restored = restoreSnapshot(saved);
-  assert.equal(saved.schemaVersion, '12.0.0');
+  assert.equal(saved.schemaVersion, '16.0.0');
   assert.deepEqual(createSnapshot(restored.state, restored.settings), saved);
   for (let t = 0; t < 15; t++) {
     sim.stepSimulation(s, settings, 1 / 60);

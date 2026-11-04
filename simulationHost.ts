@@ -1,3 +1,6 @@
+import {EnergyActivityCollector, type EnergyActivityFrame} from './energyActivity';
+import type {SimulationSpeed} from './simulationSpeed';
+import {setSelfTubes, type SelfTubes} from './selfTubes';
 import {watchLineage} from './lineageChanges';
 import {occupiedPopulation, setWorldEnergy} from './energyEconomy';
 import {stepSimulation, addNutrients, nutrientSpawnSlots, createArchetypeGenome,
@@ -8,6 +11,7 @@ import {addExternalOrganism} from './world';
 
 export type WorldSnapshot = ReturnType<typeof createSnapshot>;
 export type WorldAction =
+  | {kind: 'self-tubes'; topology: SelfTubes}
   | {kind: 'energy-budget'; joules: number}
   | {kind: 'feed'; x: number; y: number; count: number}
   | {kind: 'feed-all'} | {kind: 'clear-food'}
@@ -17,6 +21,7 @@ type LiveOrganism = Omit<Organism, 'genome'> & {genomeKey: string};
 type LiveEgg = Omit<Egg, 'genome'> & {genomeKey: string};
 export interface RenderFrame {
   epoch: number; steps: number; events: string[];
+  energyActivity: EnergyActivityFrame;
   genomes: Array<[string, Genome]>;
   lineage: Array<[string, Omit<LineageRecord, 'genome'> & {genomeKey: string}]>;
   state: Omit<SimulationState, 'prng' | 'lineage' | 'organisms' | 'eggs'>
@@ -28,10 +33,11 @@ export interface RenderFrame {
 export class SimulationHost {
   state!: SimulationState;
   settings!: SimulationSettings;
-  epoch = 0; running = false; speed = 1; selected: string | null = null;
+  epoch = 0; speed: SimulationSpeed = 0; selected: string | null = null;
   private genomeIds = new WeakMap<Genome, string>();
   private nextGenome = 0;
   private lineageChanges?: ReturnType<typeof watchLineage>;
+  readonly energyActivity = new EnergyActivityCollector();
   private steps = 0;
   private events = new Set<string>();
 
@@ -39,12 +45,14 @@ export class SimulationHost {
     const restored = restoreSnapshot(snapshot);
     this.lineageChanges?.dispose();
     this.state = restored.state; this.settings = restored.settings; this.epoch = epoch;
-    this.running = false; this.steps = 0; this.events.clear();
+    this.energyActivity.clear();
+    this.speed = 0; this.steps = 0; this.events.clear();
     this.genomeIds = new WeakMap(); this.nextGenome = 0;
     this.lineageChanges = watchLineage(this.state.lineage);
   }
   tick(): void {
-    stepSimulation(this.state, this.settings, 1 / 60, event => this.events.add(event));
+    stepSimulation(this.state, this.settings, 1 / 60, event => this.events.add(event), undefined, this.energyActivity.record);
+    this.energyActivity.advance(this.state);
     this.steps++;
   }
   snapshot(metadata: Record<string, unknown> = {}): WorldSnapshot {
@@ -52,6 +60,7 @@ export class SimulationHost {
   }
   action(action: WorldAction): string | number | null {
     const s = this.state, config = this.settings;
+    if (action.kind === 'self-tubes') {setSelfTubes(s, config, action.topology); return null;}
     if (action.kind === 'energy-budget') {setWorldEnergy(s, action.joules); return s.energyPool!.reserve;}
     if (action.kind === 'feed') return addNutrients(s, config, action.count,
       {x: action.x, y: action.y, spread: 80});
@@ -109,6 +118,7 @@ export class SimulationHost {
     }
     this.lineageChanges!.pending.clear();
     const result = {epoch: this.epoch, steps: this.steps, events: [...this.events], genomes, lineage,
+      energyActivity: this.energyActivity.frame(),
       state: {...rest, organisms: live, eggs: liveEggs}};
     this.steps = 0; this.events.clear();
     return result;

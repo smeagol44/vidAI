@@ -25,7 +25,7 @@ test('catalogue, saved specimens, live brain graph and draggable inspector', asy
   // Native select keyboard actions must not trigger simulation hotkeys.
   await page.getByLabel('Body family').focus();
   await page.keyboard.press('Space'); await page.keyboard.press('Escape');
-  await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeHidden();
+  await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeHidden();
   await page.getByLabel('Body family').selectOption('Four paddles'); await expect(rows).toHaveCount(5);
   await page.getByLabel('Diet filter').selectOption('carnivore'); await expect(rows).toHaveCount(1);
   await rows.first().getByRole('button', {name: 'Spawn', exact: true}).click();
@@ -60,7 +60,7 @@ test('v5 snapshots import through the UI and export all six motor channels witho
   await page.goto('./?autoplay');
   await page.getByTitle('Ecology & Physical Settings').click();
   await page.locator('input[type=file]').setInputFiles({name: 'v5-motor-world.json', mimeType: 'application/json', buffer: Buffer.from(source)});
-  await page.getByRole('button', {name: 'RESUME SIMULATION', exact: true}).click();
+  await page.getByRole('button', {name: 'Resume', exact: true}).click();
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', {name: 'Export Snapshot', exact: true}).click();
   const download = await downloadPromise, saved = info.outputPath('migrated-motors.json'); await download.saveAs(saved);
@@ -99,8 +99,8 @@ test('sandbox controls, zero food, diagnostic report and snapshot restore', asyn
   expect(snapshot.settings.worldWidth).toBe(1800); expect(snapshot.state.nutrientAccumulator).toBe(0);
   await range(page.getByLabel('Gravity', {exact: true}), -100);
   await page.locator('input[type=file]').setInputFiles(saved);
-  await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
-  await page.getByRole('button', {name: 'RESUME SIMULATION', exact: true}).click();
+  await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
+  await page.getByRole('button', {name: 'Resume', exact: true}).click();
   await expect(page.getByLabel('Gravity', {exact: true})).toHaveValue('10');
   await expect(page.getByLabel('Nutrient target', {exact: true})).toHaveValue('0');
   await expect(page.getByLabel('Tank width', {exact: true})).toHaveValue('1800');
@@ -133,7 +133,7 @@ test('imported green omnivore and edible remains retain three diet labels and di
   await page.getByTitle('Ecology & Physical Settings').click();
   await page.locator('input[type=file]').setInputFiles({name: 'pigment-and-remains.json', mimeType: 'application/json',
     buffer: Buffer.from(JSON.stringify(createSnapshot(s, settings)))});
-  await page.getByRole('button', {name: 'RESUME SIMULATION', exact: true}).click();
+  await page.getByRole('button', {name: 'Resume', exact: true}).click();
   await expect(page.getByText(/Remains:/)).toHaveText(/Remains: 1/);
   await expect(page.getByText(/Mixed:/)).toHaveCount(0);
   await page.getByRole('button', {name: 'Copy Diagnostic Report', exact: true}).click();

@@ -1,0 +1,78 @@
+{
+  "baseline": "/tmp/vida-main108-baseline",
+  "comparisons": [
+    {
+      "physicsRegime": "legacy-v0",
+      "closed": false,
+      "exactTicks": 120,
+      "sawHatch": true,
+      "sawLay": true,
+      "sawExpiry": false,
+      "energyErrorJ": -1.178705133497715e-9
+    },
+    {
+      "physicsRegime": "legacy-v0",
+      "closed": true,
+      "exactTicks": 120,
+      "sawHatch": true,
+      "sawLay": true,
+      "sawExpiry": true,
+      "energyErrorJ": -1.2660166248679161e-9
+    },
+    {
+      "physicsRegime": "surface-work-v1",
+      "closed": false,
+      "exactTicks": 120,
+      "sawHatch": true,
+      "sawLay": true,
+      "sawExpiry": false,
+      "energyErrorJ": -7.712515071034431e-10
+    },
+    {
+      "physicsRegime": "surface-work-v1",
+      "closed": true,
+      "exactTicks": 120,
+      "sawHatch": true,
+      "sawLay": true,
+      "sawExpiry": true,
+      "energyErrorJ": -8.294591680169106e-10
+    },
+    {
+      "physicsRegime": "paid-work-v2",
+      "closed": false,
+      "exactTicks": 120,
+      "sawHatch": true,
+      "sawLay": true,
+      "sawExpiry": false,
+      "energyErrorJ": -8.585629984736443e-10
+    },
+    {
+      "physicsRegime": "paid-work-v2",
+      "closed": true,
+      "exactTicks": 120,
+      "sawHatch": true,
+      "sawLay": true,
+      "sawExpiry": true,
+      "energyErrorJ": -8.440110832452774e-10
+    },
+    {
+      "physicsRegime": "passive-work-v3",
+      "closed": false,
+      "exactTicks": 120,
+      "sawHatch": true,
+      "sawLay": true,
+      "sawExpiry": false,
+      "energyErrorJ": -6.257323548197746e-10
+    },
+    {
+      "physicsRegime": "passive-work-v3",
+      "closed": true,
+      "exactTicks": 120,
+      "sawHatch": true,
+      "sawLay": true,
+      "sawExpiry": true,
+      "energyErrorJ": -1.0040821507573128e-9
+    }
+  ],
+  "result": "Exact complete simulation snapshots at every tick after removing the two display metadata fields and normalizing the release build label; no baseline refresh."
+}

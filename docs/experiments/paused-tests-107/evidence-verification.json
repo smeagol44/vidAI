@@ -1,0 +1,21 @@
+{
+  "historicalStateHashes": {
+    "plain": "2beee8151de15d2ea1210b79a19357963607a93e817fa54685fa9a05f4dec929",
+    "masked": "6372ca22403f848c5f0a0cf29acd9279327a46accf5c8d091a94b11c13465349",
+    "learned": "4976dca352dd53a031b3e6ba8dfe4716cfa6cd264e1a8f06252afee1e929c7f2",
+    "masked-learned": "2aef53858afe0bb292dd70fe081707fdbbb85fe9dd7492652ebf03c6c28e3337",
+    "CUR-001": "0c047eb7d77179a8416653908504ca302daaebf319f0ea4a173461f90be53a5f",
+    "CUR-006": "08a677b9922d03a0a06a494b50bd1ebe481492fa6b19a3d49a2e9c6c0bd50370",
+    "CUR-003": "1bf8f42ab1dd15f60fce7cd8209785dffb9acc927b4317ab28893a9beb400b33"
+  },
+  "nonMouthDifferences": 0,
+  "geometryControlExactlyRecovers": [
+    "hunter",
+    "learning"
+  ],
+  "expandedLearning": {
+    "beneficial": 4,
+    "harmful": 0,
+    "tied": 4
+  }
+}

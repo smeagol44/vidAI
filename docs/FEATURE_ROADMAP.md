@@ -5,6 +5,51 @@ features and the original phase status. [Project status](PROJECT_STATUS.md)
 records experiments and release history. This file tracks remaining work;
 listed extensions are not implementation promises.
 
+## Active RGB-only correction — #139
+
+Branch `fix/rgb-only-vision-139` proposes brain v8 and schema20. New starters/spawns use RGB-only rays; old worlds and Bank copies keep v7 until their explicit upgrade. All64 designs retain RGB/recurrent/motor alleles. The bounded validation in `docs/validation/rgb-only-vision-139.json` is separate from the historical experiments. Other follow-ups below remain pending scope.
+
+## Integrated contributor advances — v0.40.0
+
+PR #134 adds versioned1 J/s food decay and60s remaining-energy mineralization,
+observer selection/tracking and caustics controls, independent Pipe World and
+pinned browser provisioning. Old saves retain their cycle unless explicitly
+upgraded. Source issues #125/#126/#135/#136/#137 and #57 hold acceptance receipts.
+Historical no-decay statements below apply to worlds omitting the cycle.
+
+## Owner-requested follow-up order (2026-11-04; scope pending)
+
+1. RGB-only vision: distance stays internal to raycasting/attenuation; remove the
+   direct neural distance channel through a defined versioned compatibility policy.
+2. Mouth size or effectiveness relative to the attached body part.
+3. Available creature life energy; define which stock/capacity is intended.
+4. Egg-laying cooldown; define the desired timing and governing conditions.
+5. Egg energy production; clarify funding, uptake and hatching expectations.
+6. Overlapping mouths; clarify geometry, stacking and affected intake rules.
+7. Reserve energy, considered together with creature life energy.
+8. Repeat selected experiments only after the preceding corrections and an
+   explicit bounded protocol, preserving every original result and lineage.
+
+These are requested discussion topics, not implemented changes or permission to
+rerun historical trials now. Search existing issues before creating bounded tasks;
+#57 is the durable planning entry point. The owner will clarify ambiguous items.
+
+## Active work tracking
+
+The [issue-backed roadmap and handoff index](https://github.com/smeagol44/vidAI/issues/57)
+is authoritative for proposed tasks, decisions, blockers, branches and PRs.
+The [VIDA 2D — Development project](https://github.com/users/smeagol44/projects/1/views/1)
+was created by the owner (personal GitHub Project #1). The
+[board setup issue](https://github.com/smeagol44/vidAI/issues/68)
+documents the **verified** issue/PR import, intake, closure and reopening
+workflows (including verification #71). Substantive discussion starts
+**In progress** even before coding. The Project has separate Backlog, Needs
+decision, Ready (queued), In progress, In review, Testing and Done (verified)
+statuses. The scoped GitHub Actions Status bridge ([#75](https://github.com/smeagol44/vidAI/issues/75)) uses the owner-managed Projects secret; [#105](https://github.com/smeagol44/vidAI/issues/105) extends its author checks to `smeagol44` and `hernansgarro`. Contributor activation requires accepted changes on upstream main and an authentic contributor-command field readback; PR tests alone are insufficient. See [Project Status Automation](PROJECT_STATUS_AUTOMATION.md) and [Contributor workflow](CONTRIBUTOR_WORKFLOW.md). Other custom fields still require Projects UI/API.
+repository issue text and comments do not automatically transition a card
+to In progress. #57 tracks any needed synchronization. The GitHub Wiki remains limited to current
+implemented features. No speculative refactor is marked as shipped.
+
 ## Parallel testing environment (publication infrastructure)
 
 One GitHub Pages artifact is assembled from independently checked-out `main`

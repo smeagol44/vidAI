@@ -1,11 +1,13 @@
+import {validateSelfTubes} from './selfTubes';
 import {embodiedEnergy, FOOD_SAFETY_LIMIT} from './energyEconomy';
+import {eggReserveReference} from './eggReserve';
 import {
   XoshiroPRNG, migrateOrganismBrain, ensureBrainLayout, calculateBodyCost,
   calculateMaxEnergyCapacity, clampVal, getPartCornerVertices,
   getBrainLayout, getDietClassification, brainEdgeKey, CARRION_DECAY_SECONDS, MAX_OUTPUTS, MAX_SURFACE_ORGANS, MAX_NEURAL_INPUTS, MAX_HIDDEN, MAX_ENABLED_BRAIN_EDGES, MAX_BRAIN_MEMORY_SECONDS, MAX_PLASTIC_MOTOR_SYNAPSES, MAX_PLASTIC_SENSORY_SYNAPSES, MAX_LEARNED_MOTOR_DELTA, plasticMotorEdges, plasticSensoryEdges, surfacePlacementProblems, morphologyProblems, type Genome, type SimulationSettings, type SimulationState, type Organism,
 } from './simulation';
 
-export const BUILD_VERSION = '0.37.0';
+export const BUILD_VERSION = '0.41.0';
 export const DEFAULT_SETTINGS: SimulationSettings = {
   // Historical kernel callers retain paid v2; the application selects NEW_PHYSICS_REGIME explicitly.
   physicsRegime: 'paid-work-v2',
@@ -59,10 +61,22 @@ export function resizeWorld(s: SimulationState, old: SimulationSettings, width: 
 
 export function createSnapshot(s: SimulationState, settings: SimulationSettings, metadata: Record<string, unknown> = {}) {
   const {prng, lineage, ...data} = s;
-  const snapshot = {schemaVersion: settings.physicsRegime === 'passive-work-v3' ? '15.0.0' : settings.mouthContactModel === 'capsule-v1' ? '14.0.0' : s.energyPool ? '13.0.0' : '12.0.0', build: BUILD_VERSION, metadata, settings: {...settings,
+  const snapshotData = structuredClone(data);
+  const snapshotLineage = structuredClone([...lineage]);
+  const migrateMouths = (genome: Genome | undefined) => { if (!genome || !Array.isArray(genome.mouths)) return; for (const mouth of genome.mouths) {
+    const radius = mouth.mouthType === 'carnivore' ? 4.5 : mouth.mouthType === 'omnivore' ? 4 : 3.5;
+    const diameter = radius * 2;
+    if (mouth.intakeLength === undefined) { mouth.intakeLength = Math.max(diameter, mouth.intakeWidth); mouth.intakeWidth = diameter; }
+  }};
+  for (const organism of snapshotData.organisms) migrateMouths(organism.genome);
+  for (const egg of snapshotData.eggs) migrateMouths(egg.genome);
+  for (const [, record] of snapshotLineage) migrateMouths(record.genome);
+  const rgb = [...snapshotData.organisms, ...snapshotData.eggs, ...snapshotLineage.map(([, r]) => r)].some(r => r.genome?.brainVersion === 8);
+  const snapshot = {schemaVersion: rgb ? '20.0.0' : settings.nutrientCycle === 'decay-v2' ? '19.0.0' : settings.nutrientCycle === 'decay-v1' ? '18.0.0' : s.selfTubes ? '17.0.0' : '16.0.0', build: BUILD_VERSION, metadata, settings: {...settings,
     ...(s.energyPool ? {ecologyRegime: 'closed-v1' as const, nutrientLimit: settings.nutrientLimit ?? null} : {}),
     physicsRegime: settings.physicsRegime ?? 'legacy-v0'},
-    state: {...data, prngState: prng.getState(), lineage: [...lineage]}};
+    state: {...snapshotData, eggs: snapshotData.eggs.map(egg => ({...egg, ...eggReserveReference(egg)})),
+      prngState: prng.getState(), lineage: snapshotLineage}};
   // Canonical JSON representation also drops optional undefined fields in memory.
   return JSON.parse(JSON.stringify(snapshot)) as typeof snapshot;
 }
@@ -76,9 +90,15 @@ function finiteTree(value: unknown, depth = 0): void {
   if (value && typeof value === 'object') for (const v of Object.values(value)) finiteTree(v, depth + 1);
 }
 
-export function validateGenome(raw: unknown): Genome {
+export function validateGenome(raw: unknown, migrateLegacyMouths = false): Genome {
   assert(raw && typeof raw === 'object', 'genome');
   const g = structuredClone(raw) as Genome;
+  // Idempotent migration shared by standalone exports and embedded genomes.
+  if (migrateLegacyMouths) for (const m of (Array.isArray(g.mouths) ? g.mouths : [])) {
+    const radius = m.mouthType === 'carnivore' ? 4.5 : m.mouthType === 'omnivore' ? 4 : 3.5;
+    const diameter = radius * 2;
+    if (m.intakeLength === undefined) { m.intakeLength = Math.max(diameter, m.intakeWidth); m.intakeWidth = diameter; }
+  }
   finiteTree(g);
   assert(typeof g.id === 'string', 'genome ID');
   assert(Array.isArray(g.parts) && g.parts.length >= 1 && g.parts.length <= 7, 'body part count');
@@ -87,7 +107,7 @@ export function validateGenome(raw: unknown): Genome {
   assert(g.anatomyVersion === undefined || g.anatomyVersion === 1, 'anatomy version');
   assert(new Set(g.eyes.map(e => e.id)).size === g.eyes.length
     && new Set(g.mouths.map(m => m.id)).size === g.mouths.length, 'duplicate organ IDs');
-  assert(g.brainVersion === undefined || g.brainVersion === 2 || g.brainVersion === 3 || g.brainVersion === 4 || g.brainVersion === 5 || g.brainVersion === 6 || g.brainVersion === 7, 'brain version');
+  assert(g.brainVersion === undefined || g.brainVersion === 2 || g.brainVersion === 3 || g.brainVersion === 4 || g.brainVersion === 5 || g.brainVersion === 6 || g.brainVersion === 7 || g.brainVersion === 8, 'brain version');
   const dirs = ['NORTH', 'SOUTH', 'EAST', 'WEST'];
   const ids = new Set<string>();
   for (const [i, p] of g.parts.entries()) {
@@ -119,7 +139,12 @@ export function validateGenome(raw: unknown): Genome {
     || (Array.isArray(e.spectralSensitivity) && e.spectralSensitivity.length === 3
       && e.spectralSensitivity.every((v: unknown) => typeof v === 'number'
         && Number.isFinite(v) && v >= 0 && v <= 1))), 'eye spectral sensitivity');
-  assert(g.mouths.every(m => ['herbivore', 'omnivore', 'carnivore'].includes(m.mouthType) && m.intakeWidth > 0), 'mouth parameters');
+  assert(g.mouths.every(m => {
+    if (!['herbivore', 'omnivore', 'carnivore'].includes(m.mouthType)) return false;
+    const diameter = m.mouthType === 'carnivore' ? 9 : m.mouthType === 'omnivore' ? 8 : 7;
+    return Number.isFinite(m.intakeWidth) && m.intakeWidth === diameter
+      && Number.isFinite(m.intakeLength) && m.intakeLength! >= diameter;
+  }), 'mouth parameters');
   for (const matrix of [g.weightsIH, g.weightsHH, g.weightsHO]) {
     assert(Array.isArray(matrix) && matrix.length <= MAX_HIDDEN && matrix.every(row =>
       Array.isArray(row) && row.length <= MAX_NEURAL_INPUTS && row.every(Number.isFinite)), 'neural weights');
@@ -129,7 +154,7 @@ export function validateGenome(raw: unknown): Genome {
   const hiddenCount = g.biasesH.length;
   assert(hiddenCount >= 1 && hiddenCount <= MAX_HIDDEN && g.weightsIH.length === hiddenCount
     && g.weightsHH.length === hiddenCount && g.weightsHH.every(row => row.length === hiddenCount), 'hidden layer');
-  if (g.brainVersion === 5 || g.brainVersion === 6 || g.brainVersion === 7) {
+  if (g.brainVersion === 5 || g.brainVersion === 6 || g.brainVersion === 7 || g.brainVersion === 8) {
     assert(Array.isArray(g.hiddenIds) && g.hiddenIds.length === hiddenCount
       && g.hiddenIds.every(id => typeof id === 'string' && id.length > 0 && id.length <= 128)
       && new Set(g.hiddenIds).size === hiddenCount, 'hidden neuron IDs');
@@ -147,7 +172,7 @@ export function validateGenome(raw: unknown): Genome {
         && key === brainEdgeKey(kind as 'ih' | 'hh' | 'ho', target, source), 'neural edge reference');
     }
   }
-  if (g.brainVersion === 6 || g.brainVersion === 7) {
+  if (g.brainVersion === 6 || g.brainVersion === 7 || g.brainVersion === 8) {
     assert(Array.isArray(g.hiddenTimeConstants) && g.hiddenTimeConstants.length === hiddenCount
       && g.hiddenTimeConstants.every(tau => typeof tau === 'number' && Number.isFinite(tau)
         && tau >= 0 && tau <= MAX_BRAIN_MEMORY_SECONDS), 'hidden memory time constants');
@@ -180,8 +205,8 @@ export function validateGenome(raw: unknown): Genome {
   assert(Array.isArray(g.parentIds) && g.parentIds.every(id => typeof id === 'string'), 'parent IDs');
   g.bodyCost = calculateBodyCost(g.parts, g.eyes, g.mouths);
   g.maxEnergyCapacity = calculateMaxEnergyCapacity(g.parts, g.storageTraitMultiplier ?? 1);
-  if (g.brainVersion === 3 || g.brainVersion === 4 || g.brainVersion === 5 || g.brainVersion === 6 || g.brainVersion === 7) {
-    const expected = getBrainLayout(g, g.brainVersion !== 3, g.brainVersion === 7);
+  if (g.brainVersion === 3 || g.brainVersion === 4 || g.brainVersion === 5 || g.brainVersion === 6 || g.brainVersion === 7 || g.brainVersion === 8) {
+    const expected = getBrainLayout(g, g.brainVersion !== 3, g.brainVersion === 7 || g.brainVersion === 8);
     assert(JSON.stringify(g.inputKeys) === JSON.stringify(expected.inputs)
       && JSON.stringify(g.outputKeys) === JSON.stringify(expected.outputs), 'current neural channel identities');
   }
@@ -200,24 +225,31 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     assert(input.length <= 25_000_000, 'file exceeds 25 MB'); return JSON.parse(input);
   })() : structuredClone(input);
   assert(raw && typeof raw === 'object', 'document');
-  assert(['15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
+  assert(['20.0.0', '19.0.0', '18.0.0', '17.0.0', '16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0', '10.0.0', '9.0.0', '8.0.0', '7.0.0', '6.0.0', '5.0.0', '4.0.0', '3.0.0'].includes(raw.schemaVersion), 'unsupported schema');
   const legacy = raw.schemaVersion === '3.0.0';
   const data = legacy ? raw : raw.state;
   assert(data && typeof data === 'object', 'state');
   finiteTree(data);
+  if (raw.schemaVersion === '17.0.0' || (['18.0.0', '19.0.0', '20.0.0'].includes(raw.schemaVersion) && data.selfTubes !== undefined)) data.selfTubes = validateSelfTubes(data.selfTubes);
+  else assert(data.selfTubes === undefined, 'self-tube topology requires schema 17');
   // Historical omitted fields retain their original values; new-world defaults
   // must not silently change old snapshot ecology.
   const settings: SimulationSettings = {...DEFAULT_SETTINGS, targetNutrients: 400, maxOrganisms: 100, physicsRegime: 'legacy-v0', ...raw.settings};
-  if (!['15.0.0', '14.0.0', '13.0.0', '12.0.0'].includes(raw.schemaVersion)) settings.physicsRegime = 'legacy-v0';
+  if (!['20.0.0', '19.0.0', '18.0.0', '17.0.0', '16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0'].includes(raw.schemaVersion)) settings.physicsRegime = 'legacy-v0';
   else assert(raw.schemaVersion === '15.0.0' ? raw.settings?.physicsRegime === 'passive-work-v3'
+    : ['16.0.0', '17.0.0', '18.0.0', '19.0.0', '20.0.0'].includes(raw.schemaVersion) ? ['legacy-v0', 'surface-work-v1', 'paid-work-v2', 'passive-work-v3'].includes(raw.settings?.physicsRegime)
     : ['legacy-v0', 'surface-work-v1', 'paid-work-v2'].includes(raw.settings?.physicsRegime), 'physics regime');
-  assert(raw.schemaVersion === '15.0.0' ? settings.mouthContactModel === undefined || settings.mouthContactModel === 'capsule-v1'
+  assert(['15.0.0', '16.0.0', '17.0.0', '18.0.0', '19.0.0', '20.0.0'].includes(raw.schemaVersion) ? settings.mouthContactModel === undefined || settings.mouthContactModel === 'capsule-v1'
     : raw.schemaVersion === '14.0.0' ? settings.mouthContactModel === 'capsule-v1'
     : settings.mouthContactModel === undefined, 'mouth contact model');
   const closed = raw.schemaVersion === '13.0.0'
-    || (['15.0.0', '14.0.0'].includes(raw.schemaVersion) && settings.ecologyRegime === 'closed-v1');
+    || (['20.0.0', '19.0.0', '18.0.0', '17.0.0', '16.0.0', '15.0.0', '14.0.0'].includes(raw.schemaVersion) && settings.ecologyRegime === 'closed-v1');
   assert(closed ? settings.ecologyRegime === 'closed-v1' && data.energyPool?.regime === 'closed-v1'
     : settings.ecologyRegime === undefined && data.energyPool === undefined, 'ecology regime');
+  assert(raw.schemaVersion === '20.0.0' ? (settings.nutrientCycle === undefined || (closed && ['decay-v1', 'decay-v2'].includes(settings.nutrientCycle)))
+    : raw.schemaVersion === '19.0.0' ? closed && settings.nutrientCycle === 'decay-v2'
+    : raw.schemaVersion === '18.0.0' ? closed && settings.nutrientCycle === 'decay-v1'
+    : settings.nutrientCycle === undefined, 'nutrient cycle');
   if (closed) {
     const pool = data.energyPool;
     assert(Number.isFinite(pool.budget) && pool.budget >= 0 && pool.budget <= 1e9
@@ -238,16 +270,20 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   assert(Array.isArray(data.prngState) && data.prngState.length === 4 && data.prngState.every((n: unknown) => Number.isInteger(n) && Number(n) >= 0 && Number(n) <= 0xffffffff)
     && data.prngState.some((n: number) => n !== 0), 'PRNG state');
   const prng = new XoshiroPRNG(); prng.setState(data.prngState);
+  if (raw.schemaVersion !== '20.0.0') {
+    assert([...data.organisms, ...data.eggs, ...data.lineage.map(([, rec]: [string, {genome?: Genome}]) => rec)]
+      .every(rec => rec.genome?.brainVersion !== 8), 'RGB-only brains require schema 20');
+  }
   const organisms: Organism[] = data.organisms.map((o: Organism) => {
-    if (['15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0'].includes(raw.schemaVersion)) {
-      assert(o.genome.brainVersion === 7, 'current brain version');
+    if (['20.0.0', '19.0.0', '18.0.0', '17.0.0', '16.0.0', '15.0.0', '14.0.0', '13.0.0', '12.0.0', '11.0.0'].includes(raw.schemaVersion)) {
+      assert(o.genome.brainVersion === 7 || (raw.schemaVersion === '20.0.0' && o.genome.brainVersion === 8), 'current brain version');
     } else {
       if (raw.schemaVersion === '10.0.0') assert(o.genome.brainVersion === 6, 'previous brain version');
       if (raw.schemaVersion === '9.0.0') assert(o.genome.brainVersion === 5, 'previous brain version');
       if (raw.schemaVersion === '8.0.0') assert(o.genome.brainVersion === 4, 'previous brain version');
       migrateOrganismBrain(o); // Keep original activations and PRNG; tau=0 preserves earlier dynamics.
     }
-    o.genome = validateGenome(o.genome);
+    o.genome = validateGenome(o.genome, true);
     if (o.motorDiagnostics !== undefined) {
       const d = o.motorDiagnostics;
       assert(d && [d.positiveWorkJ, d.negativeWorkJ, d.energyLimitedImpulses, d.numericalGuardEvents]
@@ -338,10 +374,15 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
   });
   assert(new Set(organisms.map(o => o.id)).size === organisms.length, 'duplicate organism IDs');
   for (const egg of data.eggs) {
-    egg.genome = validateGenome(egg.genome);
+    egg.genome = validateGenome(egg.genome, true);
     assert([egg.x, egg.y, egg.vx, egg.vy, egg.fundedReserve, egg.fundedStructural, egg.incubationProgress, egg.totalIncubationTime].every(Number.isFinite)
       && (egg.hatchHeading === undefined || Number.isFinite(egg.hatchHeading))
       && egg.fundedReserve >= 0 && egg.fundedStructural >= 0 && egg.totalIncubationTime > 0, 'egg state');
+    assert(egg.initialFundedReserve === undefined || (Number.isFinite(egg.initialFundedReserve)
+      && egg.initialFundedReserve >= 0), 'initial egg reserve');
+    assert(egg.initialReserveIsLegacy === undefined || typeof egg.initialReserveIsLegacy === 'boolean',
+      'egg reserve reference provenance');
+    Object.assign(egg, eggReserveReference(egg));
     if (closed) assert(Number.isFinite(egg.ageSeconds) && egg.ageSeconds >= 0
       && Number.isFinite(egg.hatchReserveTarget) && egg.hatchReserveTarget >= 0
       && egg.hatchReserveTarget <= egg.genome.maxEnergyCapacity
@@ -372,7 +413,7 @@ export function restoreSnapshot(input: unknown): {state: SimulationState; settin
     recentDeaths: data.recentDeaths ?? [],
   };
   delete (state as unknown as Record<string, unknown>).prngState;
-  for (const rec of state.lineage.values()) rec.genome = validateGenome(rec.genome);
+  for (const rec of state.lineage.values()) rec.genome = validateGenome(rec.genome, true);
   if (closed) assert(Math.abs(totalAccountedEnergy(state) - state.energyPool!.budget)
     <= Math.max(1e-5, state.energyPool!.budget * 1e-10), 'world energy conservation');
   return {state, settings, metadata: raw.metadata ?? {legacyImport: true}};
