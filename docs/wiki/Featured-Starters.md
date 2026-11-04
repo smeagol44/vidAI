@@ -15,6 +15,10 @@ is independent of these founder designs, brain modes and population presets.
 Harsh's 50-slot capacity does not request 50 founders; existing preset counts
 and genomes remain unchanged.
 
+## Vision versions (v0.41)
+
+All newly generated featured and legacy-catalogue starters use RGB-only brain v8. “Legacy” is a catalogue collection, not an instruction to restore range sensing. Their RGB, recurrent and motor genes retain their reviewed values; removed range connections have their quiet-water contribution folded into biases. Existing saved specimens keep v7 RGB+range, visibly labelled in the Bank, until **Upgrade vision** is chosen. Spawning a saved legacy specimen preserves its original brain. World upgrades do not alter stored Bank copies.
+
 ## Featured designs
 
 | Identity | Source anatomy | Diet | Body plan |

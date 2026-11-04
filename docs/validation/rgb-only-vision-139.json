@@ -1,0 +1,1250 @@
+{
+  "issue": 139,
+  "base": "67016f5536ebe44f67836ea2e4575c49c26fb3e9",
+  "purpose": "Bounded correctness/impact validation only; not a historical experiment rerun or ecological superiority claim",
+  "protocol": {
+    "seed": 139,
+    "seconds": 3,
+    "ticks": 180,
+    "heading": 0,
+    "settings": {
+      "physicsRegime": "passive-work-v3",
+      "worldWidth": 2400,
+      "worldHeight": 1500,
+      "waterViscosity": 0.18,
+      "targetNutrients": 0,
+      "inflowRate": 0,
+      "nutrientPattern": "uniform",
+      "kinshipProtection": true,
+      "mutationSeverity": 0,
+      "gravity": 0,
+      "maxOrganisms": 30,
+      "mouthContactModel": "capsule-v1"
+    },
+    "food": {
+      "x": 1320,
+      "y": 790,
+      "joules": 3000
+    }
+  },
+  "staticAudit": [
+    {
+      "id": "CUR-001",
+      "name": "Darter Scout",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014926152031403035,
+      "maxBiasCorrection": 0.04383918431354686,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "CUR-002",
+      "name": "Twin Oar Grazer",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014882821447681636,
+      "maxBiasCorrection": 0.08435650843195618,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "CUR-003",
+      "name": "Tidewheel Browser",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014957100448664277,
+      "maxBiasCorrection": 0.04299646431114524,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "CUR-004",
+      "name": "Lantern Filterer",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014935139310546219,
+      "maxBiasCorrection": 0.07742100377334282,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "CUR-005",
+      "name": "Forktail Opportunist",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.0149585860571824,
+      "maxBiasCorrection": 0.06860198720823973,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "CUR-006",
+      "name": "Broadwake Forager",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014937937378417698,
+      "maxBiasCorrection": 0.11465911217266693,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "CUR-007",
+      "name": "Hooktail Scavenger",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.014980401364155113,
+      "maxBiasCorrection": 0.08220609885407612,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "CUR-008",
+      "name": "Hammerhead Pursuer",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.014995568522717804,
+      "maxBiasCorrection": 0.08784774907166137,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "CUR-009",
+      "name": "Branchstalker",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.014950297262985258,
+      "maxBiasCorrection": 0.05631242018658668,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-001",
+      "name": "Three-link Darter",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014926152031403035,
+      "maxBiasCorrection": 0.04383918431354686,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-002",
+      "name": "Ribbon Eel",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014958252024371177,
+      "maxBiasCorrection": 0.06721396431326866,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-003",
+      "name": "Longtail Threadfin",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014999129937496036,
+      "maxBiasCorrection": 0.07670102067058907,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-004",
+      "name": "Six-link Whip",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014998592371121049,
+      "maxBiasCorrection": 0.10491151342866942,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-005",
+      "name": "Seven-link Streamer",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014991754435468465,
+      "maxBiasCorrection": 0.05722764731850474,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-006",
+      "name": "Twin Oar",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014882821447681636,
+      "maxBiasCorrection": 0.08435650843195618,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-007",
+      "name": "Broadwing Skater",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014976152137387542,
+      "maxBiasCorrection": 0.09855371893616394,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-008",
+      "name": "Forktail Paddler",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014994936757721008,
+      "maxBiasCorrection": 0.06669698150362818,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-009",
+      "name": "Doubletail Rowfish",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014995370025280862,
+      "maxBiasCorrection": 0.09537381858564911,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-010",
+      "name": "Nosecone Ray",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014960643136873841,
+      "maxBiasCorrection": 0.101493186741136,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-011",
+      "name": "Four-oar Cruiser",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014999531451612709,
+      "maxBiasCorrection": 0.059816070219967515,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-012",
+      "name": "Longfin Quadrant",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014966886928305029,
+      "maxBiasCorrection": 0.06318397426279262,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-013",
+      "name": "Widewake Paddler",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.01496984949801117,
+      "maxBiasCorrection": 0.07301633271155877,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-014",
+      "name": "Fourfin Comet",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014876325228251516,
+      "maxBiasCorrection": 0.09525215053232386,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-015",
+      "name": "Seven-part Rowfish",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.01499850877560675,
+      "maxBiasCorrection": 0.10890398448100314,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-016",
+      "name": "Forktail Grazer",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014950743487570434,
+      "maxBiasCorrection": 0.08988555243937299,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-017",
+      "name": "Highfork Drifter",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.01482282425975427,
+      "maxBiasCorrection": 0.05837513342499732,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-018",
+      "name": "Trident Swimmer",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014986724853515626,
+      "maxBiasCorrection": 0.06113228369504214,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-019",
+      "name": "Extended Fork",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.0149585860571824,
+      "maxBiasCorrection": 0.06860198720823973,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-020",
+      "name": "Broadstem Trident",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014949657751712947,
+      "maxBiasCorrection": 0.11618188780266794,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-021",
+      "name": "Fourway Fan",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014957100448664277,
+      "maxBiasCorrection": 0.04299646431114524,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-022",
+      "name": "Crossfin Rover",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014985012346878648,
+      "maxBiasCorrection": 0.09520520206075163,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-023",
+      "name": "Uneven Star",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014997103025671095,
+      "maxBiasCorrection": 0.03896490891929716,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-024",
+      "name": "Tallstar Browser",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.014650127473287283,
+      "maxBiasCorrection": 0.06720596507890149,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-025",
+      "name": "Six-arm Fan",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.01498855757759884,
+      "maxBiasCorrection": 0.0710755672585219,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-026",
+      "name": "T-head Drifter",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014932659866753965,
+      "maxBiasCorrection": 0.06263284004526211,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-027",
+      "name": "Widecap Darter",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014989998831879348,
+      "maxBiasCorrection": 0.13783005472971127,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-028",
+      "name": "Longcap Browser",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014982634261250495,
+      "maxBiasCorrection": 0.09658772693714124,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-029",
+      "name": "Crested Hammer",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.014934438003692777,
+      "maxBiasCorrection": 0.0824503859714605,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-030",
+      "name": "Longtail Hammer",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.014995568522717804,
+      "maxBiasCorrection": 0.08784774907166137,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-031",
+      "name": "Barrelfin",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014980064418632536,
+      "maxBiasCorrection": 0.050023287108633664,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-032",
+      "name": "Tallbody Skimmer",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014964718180708587,
+      "maxBiasCorrection": 0.07336217672098429,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-033",
+      "name": "Deepbody Browser",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014971072368789463,
+      "maxBiasCorrection": 0.07615507476730268,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-034",
+      "name": "Broadtail Cruiser",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014937937378417698,
+      "maxBiasCorrection": 0.11465911217266693,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-035",
+      "name": "Longbody Hunter",
+      "removedInputs": 20,
+      "removedNonzeroEdges": 480,
+      "maxRemovedWeight": 0.014957009484060108,
+      "maxBiasCorrection": 0.08802432302618399,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-036",
+      "name": "Left-hook Rover",
+      "removedInputs": 5,
+      "removedNonzeroEdges": 120,
+      "maxRemovedWeight": 0.014948802343569696,
+      "maxBiasCorrection": 0.039185452354140574,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-037",
+      "name": "Offset Paddler",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014949134162161499,
+      "maxBiasCorrection": 0.06758752383990213,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-038",
+      "name": "Crooked Grazer",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014707287135533986,
+      "maxBiasCorrection": 0.06315700868144632,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-039",
+      "name": "Hooktail Generalist",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.014980401364155113,
+      "maxBiasCorrection": 0.08220609885407612,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-040",
+      "name": "Seven-part Crook",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.01490246128756553,
+      "maxBiasCorrection": 0.05757666702847927,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-041",
+      "name": "Three-step Swimmer",
+      "removedInputs": 5,
+      "removedNonzeroEdges": 120,
+      "maxRemovedWeight": 0.01494977277936414,
+      "maxBiasCorrection": 0.040814237426966424,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-042",
+      "name": "Four-step Climber",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014835658392403275,
+      "maxBiasCorrection": 0.0772355254786089,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-043",
+      "name": "Five-step Ribbon",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014918831004761157,
+      "maxBiasCorrection": 0.09057657504687086,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-044",
+      "name": "Six-step Stairfish",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.014965255041606723,
+      "maxBiasCorrection": 0.08939834407763556,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-045",
+      "name": "Seven-step Crawler",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.014990915651433168,
+      "maxBiasCorrection": 0.06155860500410199,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-046",
+      "name": "Branchlet",
+      "removedInputs": 5,
+      "removedNonzeroEdges": 120,
+      "maxRemovedWeight": 0.01495081365806982,
+      "maxBiasCorrection": 0.029821188782807442,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-047",
+      "name": "Splitbrush",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.01482283053221181,
+      "maxBiasCorrection": 0.056276639120187606,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-048",
+      "name": "Crooked Fan",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.01488676366629079,
+      "maxBiasCorrection": 0.04413656154647468,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-049",
+      "name": "Manyfork Browser",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.01496150527149439,
+      "maxBiasCorrection": 0.11049172134138643,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-050",
+      "name": "Wildbranch Hunter",
+      "removedInputs": 15,
+      "removedNonzeroEdges": 360,
+      "maxRemovedWeight": 0.014950297262985258,
+      "maxBiasCorrection": 0.05631242018658668,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-051",
+      "name": "Moonbell Jellyfish",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014999149383511394,
+      "maxBiasCorrection": 0.06402858592104166,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-052",
+      "name": "Lantern Jellyfish",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014935139310546219,
+      "maxBiasCorrection": 0.07742100377334282,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-053",
+      "name": "Sailbell Jellyfish",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014922198525164274,
+      "maxBiasCorrection": 0.07330896524945274,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-054",
+      "name": "Ribbon Jellyfish",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.01487186159240082,
+      "maxBiasCorrection": 0.07291337933856992,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    },
+    {
+      "id": "FND-055",
+      "name": "Crown Jellyfish",
+      "removedInputs": 10,
+      "removedNonzeroEdges": 240,
+      "maxRemovedWeight": 0.014936813903041184,
+      "maxBiasCorrection": 0.05561151861213147,
+      "preservedRGBWeights": true,
+      "preservedMotorWeights": true
+    }
+  ],
+  "paired": [
+    {
+      "id": "CUR-001",
+      "stimulus": "empty",
+      "legacy": {
+        "id": "CUR-001",
+        "vision": "legacy",
+        "stimulus": "empty",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": 77.98677622827245,
+        "dy": -0.41345847706156746,
+        "displacementPx": 77.98787222633332,
+        "reserveDeltaJ": -78.55149236221405,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.3460521586239338e-10
+      },
+      "rgb": {
+        "id": "CUR-001",
+        "vision": "rgb",
+        "stimulus": "empty",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": 77.98677622827245,
+        "dy": -0.41345847706156746,
+        "displacementPx": 77.98787222633332,
+        "reserveDeltaJ": -78.55149236221405,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.3460521586239338e-10
+      }
+    },
+    {
+      "id": "CUR-001",
+      "stimulus": "food",
+      "legacy": {
+        "id": "CUR-001",
+        "vision": "legacy",
+        "stimulus": "food",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": 58.89179861197999,
+        "dy": 2.5422225407065753,
+        "displacementPx": 58.94664400286488,
+        "reserveDeltaJ": -78.2508164434621,
+        "absorbedJ": 0,
+        "visibleTicks": 177,
+        "energyResidualJ": 1.382431946694851e-10
+      },
+      "rgb": {
+        "id": "CUR-001",
+        "vision": "rgb",
+        "stimulus": "food",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": 58.87450761703167,
+        "dy": 2.6030160523835093,
+        "displacementPx": 58.93202304110124,
+        "reserveDeltaJ": -78.23897101366492,
+        "absorbedJ": 0,
+        "visibleTicks": 176,
+        "energyResidualJ": 1.4551915228366852e-10
+      }
+    },
+    {
+      "id": "CUR-002",
+      "stimulus": "empty",
+      "legacy": {
+        "id": "CUR-002",
+        "vision": "legacy",
+        "stimulus": "empty",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": 15.266081036473224,
+        "dy": -0.3222306377311952,
+        "displacementPx": 15.26948141870116,
+        "reserveDeltaJ": -81.20690551537882,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.2187229003757238e-10
+      },
+      "rgb": {
+        "id": "CUR-002",
+        "vision": "rgb",
+        "stimulus": "empty",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": 15.266081036473224,
+        "dy": -0.3222306377311952,
+        "displacementPx": 15.26948141870116,
+        "reserveDeltaJ": -81.20690551537882,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.2187229003757238e-10
+      }
+    },
+    {
+      "id": "CUR-002",
+      "stimulus": "food",
+      "legacy": {
+        "id": "CUR-002",
+        "vision": "legacy",
+        "stimulus": "food",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": 13.300743287758678,
+        "dy": -0.01282710557950395,
+        "displacementPx": 13.300749472924265,
+        "reserveDeltaJ": -81.19366554050612,
+        "absorbedJ": 0,
+        "visibleTicks": 178,
+        "energyResidualJ": 1.2732925824820995e-10
+      },
+      "rgb": {
+        "id": "CUR-002",
+        "vision": "rgb",
+        "stimulus": "food",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": 13.24029778927843,
+        "dy": -0.018525456020825004,
+        "displacementPx": 13.240310749423218,
+        "reserveDeltaJ": -81.19019778080838,
+        "absorbedJ": 0,
+        "visibleTicks": 178,
+        "energyResidualJ": 1.127773430198431e-10
+      }
+    },
+    {
+      "id": "CUR-003",
+      "stimulus": "empty",
+      "legacy": {
+        "id": "CUR-003",
+        "vision": "legacy",
+        "stimulus": "empty",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": -15.432228604404827,
+        "dy": 2.209930153994378,
+        "displacementPx": 15.589659104167229,
+        "reserveDeltaJ": -96.10484003519014,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.4006218407303095e-10
+      },
+      "rgb": {
+        "id": "CUR-003",
+        "vision": "rgb",
+        "stimulus": "empty",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": -15.432228604404827,
+        "dy": 2.209930153994378,
+        "displacementPx": 15.589659104167229,
+        "reserveDeltaJ": -96.10484003519014,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.4006218407303095e-10
+      }
+    },
+    {
+      "id": "CUR-003",
+      "stimulus": "food",
+      "legacy": {
+        "id": "CUR-003",
+        "vision": "legacy",
+        "stimulus": "food",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": -15.706627844782815,
+        "dy": 2.0297311770640363,
+        "displacementPx": 15.837233562262464,
+        "reserveDeltaJ": -96.19253344017125,
+        "absorbedJ": 0,
+        "visibleTicks": 175,
+        "energyResidualJ": 1.5643308870494366e-10
+      },
+      "rgb": {
+        "id": "CUR-003",
+        "vision": "rgb",
+        "stimulus": "food",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": -15.776787581067538,
+        "dy": 2.043789328478397,
+        "displacementPx": 15.908617199408912,
+        "reserveDeltaJ": -96.18318435136462,
+        "absorbedJ": 0,
+        "visibleTicks": 175,
+        "energyResidualJ": 1.382431946694851e-10
+      }
+    },
+    {
+      "id": "CUR-004",
+      "stimulus": "empty",
+      "legacy": {
+        "id": "CUR-004",
+        "vision": "legacy",
+        "stimulus": "empty",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": 20.91216414501173,
+        "dy": 1.3029844767760324,
+        "displacementPx": 20.952717670379506,
+        "reserveDeltaJ": -63.596150072206,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.9281287677586079e-10
+      },
+      "rgb": {
+        "id": "CUR-004",
+        "vision": "rgb",
+        "stimulus": "empty",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": 20.91216414501173,
+        "dy": 1.3029844767760324,
+        "displacementPx": 20.952717670379506,
+        "reserveDeltaJ": -63.596150072206,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.9281287677586079e-10
+      }
+    },
+    {
+      "id": "CUR-004",
+      "stimulus": "food",
+      "legacy": {
+        "id": "CUR-004",
+        "vision": "legacy",
+        "stimulus": "food",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": 20.553532454927335,
+        "dy": 1.0764629091416964,
+        "displacementPx": 20.581702280679046,
+        "reserveDeltaJ": -63.593592564358914,
+        "absorbedJ": 0,
+        "visibleTicks": 180,
+        "energyResidualJ": 1.8917489796876907e-10
+      },
+      "rgb": {
+        "id": "CUR-004",
+        "vision": "rgb",
+        "stimulus": "food",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": 20.549361269667088,
+        "dy": 1.0720338940850525,
+        "displacementPx": 20.577305587986025,
+        "reserveDeltaJ": -63.59303958451892,
+        "absorbedJ": 0,
+        "visibleTicks": 180,
+        "energyResidualJ": 1.7826096154749393e-10
+      }
+    },
+    {
+      "id": "CUR-005",
+      "stimulus": "empty",
+      "legacy": {
+        "id": "CUR-005",
+        "vision": "legacy",
+        "stimulus": "empty",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": 30.013152277651898,
+        "dy": -14.944826329293733,
+        "displacementPx": 33.528154492221496,
+        "reserveDeltaJ": -117.39038444914695,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.7462298274040222e-10
+      },
+      "rgb": {
+        "id": "CUR-005",
+        "vision": "rgb",
+        "stimulus": "empty",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": 30.013152277651898,
+        "dy": -14.944826329293733,
+        "displacementPx": 33.528154492221496,
+        "reserveDeltaJ": -117.39038444914695,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.7462298274040222e-10
+      }
+    },
+    {
+      "id": "CUR-005",
+      "stimulus": "food",
+      "legacy": {
+        "id": "CUR-005",
+        "vision": "legacy",
+        "stimulus": "food",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": 30.084205296184336,
+        "dy": -15.388771203231272,
+        "displacementPx": 33.79162155695352,
+        "reserveDeltaJ": -117.33010273338368,
+        "absorbedJ": 0,
+        "visibleTicks": 145,
+        "energyResidualJ": 1.6370904631912708e-10
+      },
+      "rgb": {
+        "id": "CUR-005",
+        "vision": "rgb",
+        "stimulus": "food",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": 30.466366779001646,
+        "dy": -15.383481823211469,
+        "displacementPx": 34.12991382523156,
+        "reserveDeltaJ": -117.26481726919701,
+        "absorbedJ": 0,
+        "visibleTicks": 144,
+        "energyResidualJ": 1.6370904631912708e-10
+      }
+    },
+    {
+      "id": "CUR-006",
+      "stimulus": "empty",
+      "legacy": {
+        "id": "CUR-006",
+        "vision": "legacy",
+        "stimulus": "empty",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": -22.204473606172996,
+        "dy": 3.304658701049675,
+        "displacementPx": 22.449040452938217,
+        "reserveDeltaJ": -136.1819268694435,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.964508555829525e-10
+      },
+      "rgb": {
+        "id": "CUR-006",
+        "vision": "rgb",
+        "stimulus": "empty",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": -22.204473606172996,
+        "dy": 3.304658701049675,
+        "displacementPx": 22.449040452938217,
+        "reserveDeltaJ": -136.1819268694435,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.964508555829525e-10
+      }
+    },
+    {
+      "id": "CUR-006",
+      "stimulus": "food",
+      "legacy": {
+        "id": "CUR-006",
+        "vision": "legacy",
+        "stimulus": "food",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": -20.27850336326196,
+        "dy": 10.267142316909371,
+        "displacementPx": 22.729538270926177,
+        "reserveDeltaJ": -135.21207643821435,
+        "absorbedJ": 0,
+        "visibleTicks": 133,
+        "energyResidualJ": 2.0736479200422764e-10
+      },
+      "rgb": {
+        "id": "CUR-006",
+        "vision": "rgb",
+        "stimulus": "food",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": -20.502610750405893,
+        "dy": 10.562232501492531,
+        "displacementPx": 23.063343274517777,
+        "reserveDeltaJ": -134.69073428572665,
+        "absorbedJ": 0,
+        "visibleTicks": 133,
+        "energyResidualJ": 2.3646862246096134e-10
+      }
+    },
+    {
+      "id": "CUR-007",
+      "stimulus": "empty",
+      "legacy": {
+        "id": "CUR-007",
+        "vision": "legacy",
+        "stimulus": "empty",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": -11.768451045086977,
+        "dy": -5.5920896196572585,
+        "displacementPx": 13.029501383970425,
+        "reserveDeltaJ": -101.75673345333962,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 3.128661774098873e-10
+      },
+      "rgb": {
+        "id": "CUR-007",
+        "vision": "rgb",
+        "stimulus": "empty",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": -11.768451045086977,
+        "dy": -5.5920896196572585,
+        "displacementPx": 13.029501383970425,
+        "reserveDeltaJ": -101.75673345333962,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 3.128661774098873e-10
+      }
+    },
+    {
+      "id": "CUR-007",
+      "stimulus": "food",
+      "legacy": {
+        "id": "CUR-007",
+        "vision": "legacy",
+        "stimulus": "food",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": -11.501377487988975,
+        "dy": -5.454942703373831,
+        "displacementPx": 12.729418054974508,
+        "reserveDeltaJ": -101.7435176093386,
+        "absorbedJ": 0,
+        "visibleTicks": 114,
+        "energyResidualJ": 3.346940502524376e-10
+      },
+      "rgb": {
+        "id": "CUR-007",
+        "vision": "rgb",
+        "stimulus": "food",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": -11.620482571350067,
+        "dy": -5.506462131532089,
+        "displacementPx": 12.859111182233693,
+        "reserveDeltaJ": -101.73684830615639,
+        "absorbedJ": 0,
+        "visibleTicks": 115,
+        "energyResidualJ": 2.9103830456733704e-10
+      }
+    },
+    {
+      "id": "CUR-008",
+      "stimulus": "empty",
+      "legacy": {
+        "id": "CUR-008",
+        "vision": "legacy",
+        "stimulus": "empty",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": -36.5448313091631,
+        "dy": 0.18406757075740643,
+        "displacementPx": 36.54529485837803,
+        "reserveDeltaJ": -98.23286404761348,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 2.510205376893282e-10
+      },
+      "rgb": {
+        "id": "CUR-008",
+        "vision": "rgb",
+        "stimulus": "empty",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": -36.5448313091631,
+        "dy": 0.18406757075740643,
+        "displacementPx": 36.54529485837803,
+        "reserveDeltaJ": -98.23286404761348,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 2.510205376893282e-10
+      }
+    },
+    {
+      "id": "CUR-008",
+      "stimulus": "food",
+      "legacy": {
+        "id": "CUR-008",
+        "vision": "legacy",
+        "stimulus": "food",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": -36.93654258908555,
+        "dy": 0.2949315929903378,
+        "displacementPx": 36.93772005795532,
+        "reserveDeltaJ": -98.25128159806263,
+        "absorbedJ": 0,
+        "visibleTicks": 88,
+        "energyResidualJ": 2.3283064365386963e-10
+      },
+      "rgb": {
+        "id": "CUR-008",
+        "vision": "rgb",
+        "stimulus": "food",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": -36.88792415574426,
+        "dy": 0.2487984804191683,
+        "displacementPx": 36.888763183438385,
+        "reserveDeltaJ": -98.2478734397846,
+        "absorbedJ": 0,
+        "visibleTicks": 89,
+        "energyResidualJ": 2.2919266484677792e-10
+      }
+    },
+    {
+      "id": "CUR-009",
+      "stimulus": "empty",
+      "legacy": {
+        "id": "CUR-009",
+        "vision": "legacy",
+        "stimulus": "empty",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": -0.7645510443253443,
+        "dy": -35.10443975888711,
+        "displacementPx": 35.11276447511237,
+        "reserveDeltaJ": -94.11272668745914,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.382431946694851e-10
+      },
+      "rgb": {
+        "id": "CUR-009",
+        "vision": "rgb",
+        "stimulus": "empty",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": -0.7645510443253443,
+        "dy": -35.10443975888711,
+        "displacementPx": 35.11276447511237,
+        "reserveDeltaJ": -94.11272668745914,
+        "absorbedJ": 0,
+        "visibleTicks": 0,
+        "energyResidualJ": 1.382431946694851e-10
+      }
+    },
+    {
+      "id": "CUR-009",
+      "stimulus": "food",
+      "legacy": {
+        "id": "CUR-009",
+        "vision": "legacy",
+        "stimulus": "food",
+        "brainVersion": 7,
+        "alive": true,
+        "dx": -0.8450732542773949,
+        "dy": -34.91186907974759,
+        "displacementPx": 34.922095461849516,
+        "reserveDeltaJ": -94.10466049185925,
+        "absorbedJ": 0,
+        "visibleTicks": 113,
+        "energyResidualJ": 1.5643308870494366e-10
+      },
+      "rgb": {
+        "id": "CUR-009",
+        "vision": "rgb",
+        "stimulus": "food",
+        "brainVersion": 8,
+        "alive": true,
+        "dx": -0.8410117924620408,
+        "dy": -34.939046188777525,
+        "displacementPx": 34.94916664838504,
+        "reserveDeltaJ": -94.09904121095678,
+        "absorbedJ": 0,
+        "visibleTicks": 113,
+        "energyResidualJ": 1.6007106751203537e-10
+      }
+    }
+  ]
+}

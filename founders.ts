@@ -1,7 +1,7 @@
 import {applyStarterLocomotion} from './starterLocomotion';
 import rawFounders from './data/founders.json' with {type: 'json'};
 import {
-  XoshiroPRNG, createXavierRecurrentNetwork, calculateBodyCost,
+  upgradeGenomeVision, XoshiroPRNG, createXavierRecurrentNetwork, calculateBodyCost,
   calculateMaxEnergyCapacity, getBrainLayout, getCardinalBaseAngle,
   RAYS_PER_EYE, OUTPUTS_PER_JOINT, remapBrain, WATER_AMBIENT_RGB,
   type Genome, type PartDef, type SensoryEye, type SensoryMouth,
@@ -66,7 +66,7 @@ export const isFeaturedFounderId = (id: string): boolean =>
   FEATURED_STARTER_SPECS.some(spec => spec.id === id);
 
 export function createFounderGenome(id: string, mode: FounderMode = 'balanced',
-  options: {locomotion?: 'current' | 'catalogue'; foraging?: 'current' | 'catalogue'} = {}): Genome {
+  options: {vision?: 'rgb' | 'legacy'; locomotion?: 'current' | 'catalogue'; foraging?: 'current' | 'catalogue'} = {}): Genome {
   const blueprint = FEATURED_BLUEPRINTS.find(f => f.id === id) ?? FOUNDER_BLUEPRINTS.find(f => f.id === id);
   if (!blueprint) throw new Error(`Unknown founder ${id}`);
   const d = structuredClone(blueprint);
@@ -141,6 +141,7 @@ export function createFounderGenome(id: string, mode: FounderMode = 'balanced',
     }
   }
   if (options.locomotion !== 'catalogue') applyStarterLocomotion(g);
+  if (options.vision !== 'legacy') upgradeGenomeVision(g);
   return g;
 }
 
@@ -185,7 +186,7 @@ export function createFounderBankItems(mode: FounderMode = 'balanced'): Specimen
 
 /** Up to five distinct designs, sampled without replacement; clones get independent brains.
  */
-export function sampleFounderGenomes(prng: XoshiroPRNG, count = 18, mode: FounderMode = 'balanced'): Genome[] {
+export function sampleFounderGenomes(prng: XoshiroPRNG, count = 18, mode: FounderMode = 'balanced', vision: 'rgb' | 'legacy' = 'rgb'): Genome[] {
   if (count <= 0) return [];
   const available = [...FEATURED_BLUEPRINTS];
   const designs: FounderBlueprint[] = [];
@@ -195,5 +196,5 @@ export function sampleFounderGenomes(prng: XoshiroPRNG, count = 18, mode: Founde
     designs.push(d); available.splice(available.indexOf(d), 1);
   }
   // Selection order randomizes which designs receive the extra individuals.
-  return Array.from({length: count}, (_, i) => createFounderGenome(designs[i % number].id, mode));
+  return Array.from({length: count}, (_, i) => createFounderGenome(designs[i % number].id, mode, {vision}));
 }

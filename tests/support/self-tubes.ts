@@ -1,5 +1,5 @@
 import {DEFAULT_SETTINGS, createSnapshot} from '../../persistence';
-import {createInitialWorld} from '../../world';
+import {createInitialWorld} from './legacy-vision';
 import {enableClosedEconomy, setWorldEnergy} from '../../energyEconomy';
 import {translateLiveOrganism} from '../../selfTubes';
 export const tubeSettings = {...DEFAULT_SETTINGS, worldWidth: 1800, worldHeight: 600,

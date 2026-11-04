@@ -1,3 +1,11 @@
+# RGB-only vision — #139 / v0.41.0 candidate
+
+- New application worlds, catalogue/Bank starters and manual archetype spawns use brain v8: five RGB-only rays per eye. Range stays internal to raycasting, attenuation and observer diagnostics. Do not add hit/type/target channels as substitutes.
+- Existing saved v7 brains (including eggs, ancestry, Bank specimens and offspring) retain their original layout and dynamics until explicit upgrade. Historical migrations still terminate at v7. Schema20 admits v7/v8 mixtures; original schema16–19 exports are retained for all-legacy worlds.
+- Upgrade removes inherited distance edges by identity and folds their range=1 empty-water contribution into hidden biases. It preserves RGB learning, other synapses, activations by identity, bodies, energy and PRNG. Disabled range edges do not contribute. This is an explicit behavioral change, not exact equivalence near visible objects.
+- Generate starter calibration in its original channel/PRNG order, then convert by stable identity. Never shift columns or retune gaits/steering to hide failures. Frozen migration/golden tests explicitly construct legacy vision, with unchanged reference hashes. The bounded #139 validation does not repeat or replace historical experiments.
+- v0.41.0 is a proposed branch release until merge/publication is verified. Main remains v0.40.0 and testing remains T1.1. No production promotion or experimental reruns are implied by local checks.
+
 # Accepted food lifecycle, observer controls and release v0.40.0
 
 - Owner accepts the complete #134 contribution and authorizes its integration,

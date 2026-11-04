@@ -239,7 +239,7 @@ export interface Genome {
   biasesH: number[];     // [hidden neuron]
   weightsHO: number[][]; // [motor key x hidden neuron]
   biasesO: number[];     // [motor key]
-  brainVersion?: 2 | 3 | 4 | 5 | 6 | 7;
+  brainVersion?: 2 | 3 | 4 | 5 | 6 | 7 | 8;
   hiddenIds?: string[]; // Stable neuron identities; index order defines the matrix axes.
   hiddenTimeConstants?: number[]; // Seconds of leaky activation memory per hidden ID; 0 is the exact legacy update.
   plasticityRate?: number; // Heritable motor-learning rate 0..0.8 / s. Absent or 0 = exact legacy brain.
@@ -1185,12 +1185,12 @@ export function createXavierRecurrentNetwork(customPrng: XoshiroPRNG = rng, inpu
   return {weightsIH, weightsHH, biasesH, weightsHO, biasesO};
 }
 
-export function getBrainLayout(g: Pick<Genome, 'eyes' | 'parts'> & Partial<Pick<Genome, 'mouths'>>, internalSenses = true, injurySense = true) {
+export function getBrainLayout(g: Pick<Genome, 'eyes' | 'parts'> & Partial<Pick<Genome, 'mouths' | 'brainVersion'>>, internalSenses = true, injurySense = true) {
   const inputs: string[] = [];
   const labels: string[] = [];
   g.eyes.forEach((eye, e) => {
     for (let ray = 0; ray < RAYS_PER_EYE; ray++) {
-      for (const channel of ['red', 'green', 'blue', 'distance']) {
+      for (const channel of (g.brainVersion === 8 ? ['red', 'green', 'blue'] : ['red', 'green', 'blue', 'distance'])) {
         inputs.push(`eye:${eye.id}:ray:${ray}:${channel}`);
         labels.push(`E${e + 1} R${ray + 1} ${channel}`);
       }
@@ -1507,12 +1507,12 @@ export function remapBrain(g: Genome, previous: Genome = g): void {
   g.hiddenIds = [...nextHidden];
   g.inputKeys = layout.inputs;
   g.outputKeys = layout.outputs;
-  g.brainVersion = 7;
+  g.brainVersion = g.brainVersion === 8 ? 8 : 7;
   checkBrainBudget(g);
 }
 
 export function ensureBrainLayout(g: Genome): void {
-  if (g.brainVersion !== 7 || !g.inputKeys || !g.outputKeys || !g.hiddenIds || !g.disabledConnections || !g.hiddenTimeConstants) remapBrain(g);
+  if ((g.brainVersion !== 7 && g.brainVersion !== 8) || !g.inputKeys || !g.outputKeys || !g.hiddenIds || !g.disabledConnections || !g.hiddenTimeConstants) remapBrain(g);
   checkBrainBudget(g);
 }
 
@@ -1535,6 +1535,42 @@ export function remapOrganismBrain(org: Organism, previous: Genome): void {
   if (org.learnedSensoryWeights) {
     const allowed = new Set(plasticSensoryEdges(org.genome).map(e => e.edge));
     org.learnedSensoryWeights = org.learnedSensoryWeights.filter(s => allowed.has(s.edge));
+  }
+}
+
+/** Explicit, lossy upgrade: remove range edges by identity, retaining the inherited
+ * empty-water operating point (legacy range=1). No new target information is added.
+ * Lifetime RGB learning keeps its original edge identities. */
+export function upgradeGenomeVision(g: Genome): void {
+  ensureBrainLayout(g);
+  if (g.brainVersion === 8) return;
+  const previous = structuredClone(g);
+  const inactive = new Set(g.disabledConnections);
+  for (let h = 0; h < g.biasesH.length; h++) for (let i = 0; i < g.inputKeys!.length; i++) {
+    if (g.inputKeys![i].endsWith(':distance')
+      && !inactive.has(brainEdgeKey('ih', g.hiddenIds![h], g.inputKeys![i])))
+      g.biasesH[h] += g.weightsIH[h][i];
+  }
+  previous.biasesH = [...g.biasesH];
+  g.brainVersion = 8;
+  remapBrain(g, previous);
+}
+
+export function upgradeWorldVision(state: SimulationState): void {
+  // Clone genomes: immutable render-cache identities must change after the edit.
+  for (const org of state.organisms) {
+    if (org.genome.brainVersion === 8) continue;
+    const previous = structuredClone(org.genome);
+    org.genome = structuredClone(org.genome);
+    upgradeGenomeVision(org.genome);
+    const converted = structuredClone(org.genome);
+    // Live activations and personal learning are remapped by stable identities.
+    remapOrganismBrain(org, {...previous, biasesH: converted.biasesH});
+  }
+  for (const egg of state.eggs) {egg.genome = structuredClone(egg.genome); upgradeGenomeVision(egg.genome);}
+  for (const record of state.lineage.values()) {
+    if (!record.genome) continue;
+    record.genome = structuredClone(record.genome); upgradeGenomeVision(record.genome);
   }
 }
 
@@ -2044,6 +2080,7 @@ export function createArchetypeGenome(
   generation = 1,
   parentIds: string[] = [],
   customPrng = rng,
+  vision: 'rgb' | 'legacy' = 'rgb',
 ): Genome {
   let genome: Genome;
   switch (archetype) {
@@ -2061,6 +2098,7 @@ export function createArchetypeGenome(
   // the body. Store the same long fin axis in its dimensions and keep mating faces flush.
   if (archetype === 'flapper' || archetype === 'glider') alignLegacyFinDimensions(genome.parts);
   normalizeSurfaceOrgans(genome); genome.anatomyVersion = 1;
+  if (vision === 'rgb') upgradeGenomeVision(genome);
   return genome;
 }
 
@@ -2560,6 +2598,7 @@ export function mutateGenome(parent: Genome, severity = 0.25, customPrng: Xoshir
     storageTraitMultiplier,
     maxEnergyCapacity,
   };
+  if (parent.brainVersion === 8) child.brainVersion = 8;
   const parentWithMutatedWeights = {...parent, weightsIH, weightsHH, biasesH, weightsHO, biasesO};
   try {
     remapBrain(child, parentWithMutatedWeights);
@@ -3967,7 +4006,7 @@ export function stepSimulation(
         org.neuralInputs[rayInputIdx++] = sensedR;
         org.neuralInputs[rayInputIdx++] = sensedG;
         org.neuralInputs[rayInputIdx++] = sensedB;
-        org.neuralInputs[rayInputIdx++] = opticallyDetected
+        if (g.brainVersion !== 8) org.neuralInputs[rayInputIdx++] = opticallyDetected
           ? clampVal(closestDist / maxRange, 0, 1) : 1;
 
         org.rayHits.push({

@@ -166,7 +166,7 @@ for (const fallback of [false, true]) test(`Pipe World startup, green icon and e
   expect(start.state.eggs).toHaveLength(0); expect(start.state.nutrients).toHaveLength(0);
   expect(start.state.selfTubes).toBeUndefined();
   expect(start.state.energyPool.reserve).toBe(825000);
-  expect(pipe.schemaVersion).toBe('19.0.0');
+  expect(pipe.schemaVersion).toBe('20.0.0');
   expect(pipe.metadata.observerPreferences).toEqual({selectAddedCreature: false, trackSelectedCreature: false, showCaustics: false});
   await expect(page.getByLabel('Tank width', {exact: true})).toHaveValue('4600');
   await expect(page.getByLabel('Tank height', {exact: true})).toHaveValue('2100');

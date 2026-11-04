@@ -1,3 +1,9 @@
+## #139 RGB-only correction — v0.41.0 candidate (2026-11-04)
+
+Owner prioritized #139 and selected **preserve existing saves, offer an explicit upgrade**. New application genomes use v8 RGB-only rays; v7 saves/eggs/ancestry/Bank entries and their descendants retain range inputs until opted in. Schema20 supports mixed brains; legacy-only exports keep their original schema selection. World conversion uses an authoritative snapshot and remains paused; Bank conversion is separate.
+
+All64 starters in both modes are checked for stable RGB weights, recurrent/motor alleles, memory and neutral-water bias correction. Frozen continuation hashes remain unchanged using explicit legacy fixtures. Bounded impact validation (seed139, nine featured designs, empty/finite-food, three seconds) records zero feeding for both versions in all short food fixtures (so it does not establish feeding effectiveness); largest displacement difference is0.339px (rounded up), maximum ledger residual3.35e-10J. This limited check cannot establish ecological performance. There is no optimization, retuning, baseline replacement or historical experiment rerun. Full checks and PR receipts will be recorded in #139/#57 before review. Main is still v0.40.0; testing T1.1 remains untouched.
+
 ## Maintainer acceptance — PR #134 / v0.40.0 (2026-11-04)
 
 The owner authorizes the complete consolidated contribution and a release bump

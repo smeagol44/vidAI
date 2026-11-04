@@ -1,12 +1,13 @@
+import {createFounderGenome, createInitialWorld} from './support/legacy-vision';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {test} from 'node:test';
 import {legacyMouthState} from './support/legacy-mouth-state';
 import {auditLocomotionPhysics} from '../locomotionPhysicsAudit';
 import {evaluateSwimmer, searchSwimmer, scoreSwimTrial, mutateSwimmer, acceptSwimmer} from '../locomotionSearch';
-import {FEATURED_BLUEPRINTS, FOUNDER_BLUEPRINTS, createFounderGenome} from '../founders';
+import {FEATURED_BLUEPRINTS, FOUNDER_BLUEPRINTS} from '../founders';
 import {XoshiroPRNG, stepSimulation, mutateGenome} from '../simulation';
-import {createInitialWorld, addExternalOrganism} from '../world';
+import {addExternalOrganism} from '../world';
 import {LEGACY_SETTINGS, validateGenome, createSnapshot, restoreSnapshot} from '../persistence';
 
 const selected = ['CUR-003', 'CUR-008', 'CUR-009'];

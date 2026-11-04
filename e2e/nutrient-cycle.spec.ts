@@ -46,7 +46,7 @@ for (const fallback of [false, true]) test(`versioned nutrient radii, paused imp
       .toEqual({state: (snapshot as any).state, settings: (snapshot as any).settings});
   };
   // New startup must explicitly opt in, while old imports retain their semantics.
-  const startup = await read(); expect(startup.schemaVersion).toBe('19.0.0');
+  const startup = await read(); expect(startup.schemaVersion).toBe('20.0.0');
   expect(startup.settings.nutrientCycle).toBe('decay-v2');
   const f = cycleFixture([food(75, false, 1120, 750), food(3000, false, 1280, 750), food(9300, true, 1200, 850)]);
   f.state.caustics = []; f.state.nutrients[2].decayTimeRemaining = .1;

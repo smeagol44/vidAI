@@ -1,9 +1,10 @@
+import {createFounderGenome, createInitialWorld} from './support/legacy-vision';
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {createHash} from 'node:crypto';
 import * as sim from '../simulation';
-import {createFounderGenome} from '../founders';
-import {createInitialWorld, addExternalOrganism} from '../world';
+
+import {addExternalOrganism} from '../world';
 import {LEGACY_SETTINGS, createSnapshot, restoreSnapshot, totalAccountedEnergy} from '../persistence';
 import {compiledBrain, compiledDeltas, invalidateCompiledBrain, alignPlasticRecords} from '../neuralRuntime';
 import {rectangleContact} from '../contacts';

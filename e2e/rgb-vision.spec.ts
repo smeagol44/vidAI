@@ -1,0 +1,42 @@
+import {test, expect} from '@playwright/test';
+import {readFile} from 'node:fs/promises';
+import {createSnapshot, DEFAULT_SETTINGS} from '../persistence';
+import {createInitialWorld, addExternalOrganism} from '../world';
+import {createFounderGenome} from '../founders';
+import {upgradeWorldVision} from '../simulation';
+
+test.use({viewport: {width: 1280, height: 850}});
+for (const fallback of [false, true]) test(`legacy vision is preserved until explicit RGB-only upgrade (${fallback ? 'fallback' : 'Worker'})`, async ({page}) => {
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0};
+  const state = createInitialWorld(settings, 139, 'balanced', 'standard', 0);
+  addExternalOrganism(state, createFounderGenome('CUR-001', 'balanced', {vision: 'legacy'}), settings, 1200, 750, 0);
+  const source = createSnapshot(state, settings);
+  const upgraded = structuredClone(state); upgraded.prng = state.prng; upgraded.lineage = new Map(structuredClone([...state.lineage]));
+  upgradeWorldVision(upgraded);
+  const expected = createSnapshot(upgraded, settings);
+  await page.goto(`./?autoplay${fallback ? '&mainthread' : ''}`);
+  await page.getByTitle('Ecology & Physical Settings').click();
+  const read = async () => {
+    const download = page.waitForEvent('download');
+    await page.getByRole('button', {name: 'Export Snapshot', exact: true}).click({force: true});
+    return JSON.parse(await readFile((await (await download).path())!, 'utf8'));
+  };
+  const startup = await read();
+  expect(startup.state.organisms.length).toBeGreaterThan(0);
+  expect(startup.state.organisms.every((o: any) => o.genome.brainVersion === 8 && !o.genome.inputKeys.some((k: string) => k.endsWith(':distance')))).toBe(true);
+  const canvas = page.getByLabel('Aquatic simulation');
+  const epoch = Number(await canvas.getAttribute('data-world-epoch'));
+  await page.locator('input[type=file]').setInputFiles({name: 'legacy-vision.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(source))});
+  await expect(canvas).toHaveAttribute('data-world-epoch', String(epoch + 1));
+  await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
+  const before = await read(); expect(before.state).toEqual(source.state); expect(before.schemaVersion).toBe('16.0.0');
+  await expect(page.getByTestId('vision-mode')).toContainText('Behavior may change');
+  await page.getByRole('button', {name: 'Upgrade world to RGB-only vision', exact: true}).click({force: true});
+  await expect(canvas).toHaveAttribute('data-world-epoch', String(epoch + 2));
+  const after = await read(); expect(after.schemaVersion).toBe('20.0.0'); expect(after.state).toEqual(expected.state); expect(after.settings).toEqual(expected.settings);
+  await page.getByRole('button', {name: 'Upgrade world to RGB-only vision', exact: true}).click({force: true});
+  await expect(canvas).toHaveAttribute('data-world-epoch', String(epoch + 3));
+  expect((await read()).state).toEqual(after.state);
+  expect(errors).toEqual([]);
+});

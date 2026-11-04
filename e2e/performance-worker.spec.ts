@@ -47,7 +47,7 @@ for (const mainthread of [false, true]) test(`closed-budget conversion, controls
   await page.getByTitle('Ecology & Physical Settings').click();
   await expect(page.getByLabel('Unlimited nutrients', {exact: true})).toBeChecked();
   const config = {...DEFAULT_SETTINGS, targetNutrients: 3, inflowRate: 0};
-  const state = createInitialWorld(config, 91, 'balanced', 'standard', 1);
+  const state = createInitialWorld(config, 91, 'balanced', 'standard', 1, 'legacy');
   state.ledger.recordedLosses += 100000000;
   const source = createSnapshot(state, config);
   const upload = (snapshot: unknown) => page.locator('input[type=file]').setInputFiles({name: 'economy.json',
@@ -191,7 +191,7 @@ for (const fallback of [false, true]) test(`legacy import and current reset agre
   await page.goto(`./?autoplay${fallback ? '&mainthread' : ''}`);
   await page.getByTitle('Ecology & Physical Settings').click();
   const settings={...DEFAULT_SETTINGS,physicsRegime:'legacy-v0' as const,targetNutrients:0,inflowRate:0};
-  const source=createSnapshot(createInitialWorld(settings,91,'balanced','standard',2),settings);
+  const source=createSnapshot(createInitialWorld(settings,91,'balanced','standard',2,'legacy'),settings);
   source.schemaVersion='11.0.0';delete (source.settings as Partial<typeof settings>).physicsRegime;
   await page.locator('input[type=file]').setInputFiles({name:'old-world.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(source))});
   await expect(page.getByRole('button',{name:'Resume',exact:true})).toBeVisible();
@@ -221,7 +221,7 @@ for (const fallback of [false, true]) test(`legacy import and current reset agre
   await expect(page.getByTestId('physics-regime')).toContainText('Restored swimming');
   await page.keyboard.press('Space');
   const reset=await exportState();expect(reset.settings.physicsRegime).toBe('passive-work-v3');
-  expect(reset.schemaVersion).toBe('19.0.0'); expect(reset.settings.nutrientCycle).toBe('decay-v2');
+  expect(reset.schemaVersion).toBe('20.0.0'); expect(reset.settings.nutrientCycle).toBe('decay-v2');
   expect(reset.settings.mouthContactModel).toBe('capsule-v1');
   expect(reset.state.organisms.some((o: any)=>o.motorDiagnostics?.positiveWorkJ>0)).toBe(true);
   expect(errors).toEqual([]);
@@ -231,7 +231,7 @@ test('repairing a surface-model world preserves its exact paused ecosystem',asyn
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('./?autoplay');await page.getByTitle('Ecology & Physical Settings').click();
   const settings={...DEFAULT_SETTINGS,physicsRegime:'surface-work-v1' as const,targetNutrients:0,inflowRate:0};
-  const state=createInitialWorld(settings,91,'balanced','standard',2);
+  const state=createInitialWorld(settings,91,'balanced','standard',2,'legacy');
   const source=createSnapshot(state,settings);
   await page.locator('input[type=file]').setInputFiles({name:'surface-world.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(source))});
   await expect(page.getByRole('button',{name:'Resume',exact:true})).toBeVisible();

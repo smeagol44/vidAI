@@ -29,6 +29,7 @@ const worker = new Worker(new URL(`data:text/javascript,${encodeURIComponent(boo
 let requests = 0;
 const queued = [], waiting = [];
 worker.on('message', value => {
+  if (value.type === 'error' && value.id === undefined) throw new Error('Worker: ' + value.message);
   const index = waiting.findIndex(entry => entry.predicate(value));
   if (index >= 0) {const [entry] = waiting.splice(index, 1); clearTimeout(entry.timer); entry.resolve(value);}
   else queued.push(value);
@@ -37,7 +38,7 @@ const receive = predicate => {
   const index = queued.findIndex(predicate);
   if (index >= 0) return Promise.resolve(queued.splice(index, 1)[0]);
   return new Promise((resolve, reject) => {
-    const entry = {predicate, resolve, timer: setTimeout(() => reject(new Error('Worker response timed out')), 10000)};
+    const entry = {predicate, resolve, timer: setTimeout(() => reject(new Error('Worker response timed out: ' + predicate.toString())), 10000)};
     waiting.push(entry);
   });
 };
@@ -51,7 +52,7 @@ const request = async (type, extra = {}, epoch = 1) => {
 try {
   await receive(value => value.type === 'ready');
   const settings = {...DEFAULT_SETTINGS, targetNutrients: 5, inflowRate: 0};
-  const state = createInitialWorld({...settings, targetNutrients: 0}, 91, 'balanced', 'standard', 2);
+  const state = createInitialWorld({...settings, targetNutrients: 0}, 91, 'balanced', 'standard', 2, 'legacy');
   const source = createSnapshot(state, settings);
   send({type: 'reset', snapshot: source, epoch: 1});
   const frame = await receive(value => value.type === 'frame');
@@ -128,7 +129,7 @@ try {
     send({type: 'reset', epoch, snapshot: source});
     await receive(value => value.type === 'frame' && value.frame.epoch === epoch);
     const initial = await request('snapshot', {}, epoch);
-    assert.equal(initial.schemaVersion, '16.0.0'); assert.deepEqual(initial, source);
+    assert.equal(initial.schemaVersion, '20.0.0'); assert.deepEqual(initial, source);
     const direct = restoreSnapshot(initial).state;
     send({type: 'ack', epoch});
     send({type: 'control', epoch, settings: probe.config, speed: 1, selected: null});
@@ -410,6 +411,23 @@ try {
     assert.match((await receive(value => value.id === -300 - epoch)).message, /Nutrient cycle/);
     assert.deepEqual(await request('snapshot', {}, epoch + 10), after);
   }
+  const rgbSettings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0};
+  const rgbSource = createSnapshot(createInitialWorld(rgbSettings, 139, 'balanced', 'showcase'), rgbSettings);
+  assert.equal(rgbSource.schemaVersion, '20.0.0');
+  assert.ok(rgbSource.state.organisms.every(o => o.genome.brainVersion === 8 && !o.genome.inputKeys.some(k => k.endsWith(':distance'))));
+  send({type: 'reset', snapshot: rgbSource, epoch: 1390});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 1390);
+  assert.deepEqual(await request('snapshot', {}, 1390), rgbSource);
+  send({type: 'ack', epoch: 1390});
+  send({type: 'control', epoch: 1390, settings: rgbSettings, speed: 1, selected: null});
+  await new Promise(resolve => setTimeout(resolve, 100));
+  send({type: 'control', epoch: 1390, settings: rgbSettings, speed: 0, selected: null});
+  const rgbAfter = await request('snapshot', {}, 1390), rgbDirect = restoreSnapshot(rgbSource);
+  const rgbTicks = Math.round(rgbAfter.state.simTime * 60); assert.ok(rgbTicks > 0);
+  for (let i = 0; i < rgbTicks; i++) stepSimulation(rgbDirect.state, rgbSettings, 1 / 60);
+  assert.deepEqual(rgbAfter, createSnapshot(rgbDirect.state, rgbSettings));
+  assert.ok(rgbAfter.state.organisms.every(o => o.neuralInputs.length === o.genome.inputKeys.length));
+  console.log('RGB-only Worker: all nine featured starters, schema20 reset, real optical inputs and exact direct continuation passed.');
   console.log('Nutrient-cycle Worker: schema-18/19 tank/tube reset, 5x exact direct decay/mineralization/PRNG continuation, paused restoration and control-switch rejection passed.');
   console.log('Self-tube Worker: schema-17 reset, full-state L/R transfer, exact direct continuation, unchanged IDs/births/stock, paused closure and stale-command rejection passed.');
   console.log('Environment Worker: Harsh and independent Pipe time-zero empty food/full grant, Pipe 4600x2100 with zero topology, editable controls, exact direct continuation and snapshot reset passed.');

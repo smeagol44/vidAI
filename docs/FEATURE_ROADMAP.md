@@ -5,6 +5,10 @@ features and the original phase status. [Project status](PROJECT_STATUS.md)
 records experiments and release history. This file tracks remaining work;
 listed extensions are not implementation promises.
 
+## Active RGB-only correction — #139
+
+Branch `fix/rgb-only-vision-139` proposes brain v8 and schema20. New starters/spawns use RGB-only rays; old worlds and Bank copies keep v7 until their explicit upgrade. All64 designs retain RGB/recurrent/motor alleles. The bounded validation in `docs/validation/rgb-only-vision-139.json` is separate from the historical experiments. Other follow-ups below remain pending scope.
+
 ## Integrated contributor advances — v0.40.0
 
 PR #134 adds versioned1 J/s food decay and60s remaining-energy mineralization,

@@ -25,14 +25,18 @@ effects supply no visual target. Body pigment is inherited independently of diet
 
 Each eye may inherit three 0–1 `spectralSensitivity` gains. Missing gains mean
 [1,1,1]. Mutation can suppress or restore any channel, including exact zero.
-After filtering, a ray's neural distance becomes 1 when no channel detects
-light; physical occlusion still applies. Diagnostic hit labels never enter
-the brain. Reduced green sensitivity can suppress purely green stimuli;
+In v0.41, new brain-v8 creatures receive only red, green and blue per ray. Distance is used internally for intersections, Beer–Lambert attenuation and observer diagnostics; no distance, hit or object-type channel reaches these brains. Physical occlusion still applies. Saved brain-v7 creatures retain their original normalized range input (1 when no channel detects light) until explicitly upgraded in Settings. Loading a save does not opt in. Reduced green sensitivity can suppress purely green stimuli;
 other colors, geometry and contact prevent guaranteed camouflage.
 
 Eye upkeep is proportional to `5 * (0.25 + 0.75 * mean(R,G,B))` sensing units.
 Reduced sensitivity saves some energy while discarding information; a blind
 eye retains one-quarter of the original eye contribution.
+
+## Explicit saved-brain upgrade (v0.41)
+
+Settings → **Upgrade world to RGB-only vision** converts living creatures, eggs and ancestry from an authoritative snapshot, then leaves the world paused. It removes inherited range edges by stable identity, preserving the other connections and RGB lifetime learning. The inherited range=1 empty-water contribution is retained in hidden biases; disabled edges contribute nothing. Inputs, memory and outputs retain their identities, and energy/PRNG are unchanged. Responses near visible objects can change. Export a separate snapshot to retain both versions. Bank specimens have their own **Upgrade vision** button; world conversion does not edit Bank copies.
+
+Schema20 supports RGB-only and mixed v7/v8 worlds. An all-legacy world retains its previous schema choice. Descendants inherit their parent's vision version; they cannot silently regain removed range inputs. The 64 new catalogue designs preserve their original RGB/recurrent/motor alleles and PRNG initialization sequence, with only the explicit range/bias conversion. Older experiments used RGB+range and remain historical evidence for those controllers.
 
 ## Other neural inputs
 

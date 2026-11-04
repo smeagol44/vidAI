@@ -1,10 +1,11 @@
+import {createFounderGenome, createInitialWorld} from './support/legacy-vision';
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {legacyMouthState} from './support/legacy-mouth-state';
 import {createHash} from 'node:crypto';
-import {createFounderGenome,FEATURED_BLUEPRINTS} from '../founders';
+import {FEATURED_BLUEPRINTS} from '../founders';
 import {DEFAULT_SETTINGS,createSnapshot,restoreSnapshot,totalAccountedEnergy} from '../persistence';
-import {createInitialWorld,addExternalOrganism} from '../world';
+import {addExternalOrganism} from '../world';
 import {stepSimulation,calculateOrganismCOM} from '../simulation';
 import {paidMotorBatch,MECHANICAL_JOULES,MUSCLE_EFFICIENCY,type PhysicsRegime} from '../foundationPhysics';
 import {SimulationHost} from '../simulationHost';

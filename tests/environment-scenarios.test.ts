@@ -148,7 +148,7 @@ test('Pipe exports within unchanged dimension limits and restores edited conditi
   host.settings = {...host.settings, gravity: -10, inflowRate: 2, nutrientLimit: 7, waterViscosity: .12};
   const saved = JSON.parse(JSON.stringify(host.snapshot()));
   const restored = restoreSnapshot(saved);
-  assert.equal(saved.schemaVersion, '19.0.0');
+  assert.equal(saved.schemaVersion, '20.0.0');
   assert.deepEqual(createSnapshot(restored.state, restored.settings), saved);
   host.reset(saved, 2);
   for (let i = 0; i < 60; i++) {host.tick(); stepSimulation(restored.state, restored.settings, 1 / 60);}

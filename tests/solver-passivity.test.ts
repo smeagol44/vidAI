@@ -74,7 +74,7 @@ test('v15 solver saves continue exactly across both ecology/contact choices; old
     f.org.genome.motorForce = 20;
     for (let i = 0; i < 4; i++) stepSimulation(f.state, f.config, 1 / 60);
     const saved = createSnapshot(f.state, f.config), restored = restoreSnapshot(saved), host = new SimulationHost();
-    assert.equal(saved.schemaVersion, '16.0.0'); assert.deepEqual(createSnapshot(restored.state, restored.settings), saved);
+    assert.equal(saved.schemaVersion, '20.0.0'); assert.deepEqual(createSnapshot(restored.state, restored.settings), saved);
     host.reset(saved, 1);
     for (let i = 0; i < 12; i++) {host.tick(); stepSimulation(restored.state, restored.settings, 1 / 60);}
     assert.deepEqual(host.snapshot().state, createSnapshot(restored.state, restored.settings).state);
