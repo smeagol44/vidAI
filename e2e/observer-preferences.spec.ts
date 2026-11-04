@@ -30,7 +30,9 @@ for (const fallback of [false, true]) test(`independent observer preferences, bo
   await page.getByTitle('Ecology & Physical Settings').dispatchEvent('click');
   const read = async () => {
     const download = page.waitForEvent('download');
-    await page.getByRole('button', {name: 'Export Snapshot', exact: true}).dispatchEvent('click');
+    // A native click grants Chromium the user activation required for each download.
+    // Force skips frame-stability waiting while the test's presentation clock is paused.
+    await page.getByRole('button', {name: 'Export Snapshot', exact: true}).click({force: true});
     return JSON.parse(await readFile((await (await download).path())!, 'utf8'));
   };
   const cfg = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0};

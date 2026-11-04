@@ -25,7 +25,9 @@ for (const fallback of [false, true]) test(`versioned nutrient radii, paused imp
   await page.getByTitle('Ecology & Physical Settings').click();
   const read = async () => {
     const download = page.waitForEvent('download');
-    await page.getByRole('button', {name: 'Export Snapshot', exact: true}).dispatchEvent('click');
+    // A native click grants Chromium the user activation required for each download.
+    // Force skips element-stability waiting but still sends an actual mouse gesture.
+    await page.getByRole('button', {name: 'Export Snapshot', exact: true}).click({force: true});
     return JSON.parse(await readFile((await (await download).path())!, 'utf8'));
   };
   const upload = async (snapshot: unknown) => {
