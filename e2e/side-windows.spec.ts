@@ -398,9 +398,15 @@ for (const fallback of [false, true]) test(`local phone consent and grouped glas
   expect(moved.x - card.x).toBeCloseTo(movedPhone.x - phoneBefore.x, 3);
   await page.setViewportSize({width: 1280, height: 900});
   await page.reload();
-  // This final check concerns session reset, not live ecology throughput.
-  // Pause the newly autoplayed world before measuring fallback camera easing.
-  await page.getByRole('button', {name: 'Pause', exact: true}).click();
+  // Verify session identity before replacing anything: importing a fixture
+  // must not conceal a failure to clear the name on page reload.
+  await phone('L').dispatchEvent('click');
+  await expect(menu('L').getByLabel('Your display name')).toHaveValue('');
+  await phone('L').dispatchEvent('click');
+  await expect(menu('L')).toHaveCount(0);
+  // This final framing check concerns session reset, not aquarium draw cost.
+  // Reuse the same authoritative empty world as the preceding geometry checks.
+  await upload(1500); await check(1500);
   const reloadedCanvas = (await canvas.boundingBox())!;
   await page.mouse.move(reloadedCanvas.x + reloadedCanvas.width / 2, reloadedCanvas.y + reloadedCanvas.height / 2);
   for (let i = 0; i < 12; i++) await page.mouse.wheel(0, 200);
