@@ -5,7 +5,7 @@ import {eggReserveFixture} from '../tests/support/egg-reserve';
 
 test.use({viewport: {width: 1280, height: 850}});
 test.setTimeout(60000);
-for (const fallback of [false, true]) test(`egg reserve sectors, rings, selection and exact paused/5x exports (${fallback ? 'fallback' : 'Worker'})`, async ({page}, info) => {
+for (const fallback of [false, true]) test(`egg reserve sectors, rings, selection and exact x0/5x exports (${fallback ? 'fallback' : 'Worker'})`, async ({page}, info) => {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   const workers: string[] = []; page.on('worker', w => workers.push(w.url()));
   await page.addInitScript(() => {
@@ -69,8 +69,6 @@ for (const fallback of [false, true]) test(`egg reserve sectors, rings, selectio
   expect((await read()).state).toEqual(source.state);
   await page.waitForTimeout(120);
   expect((await read()).state).toEqual(source.state);
-  // Keep upstream's pause overlay intact; resume through its real control before selection.
-  await page.getByRole('button', {name: 'Resume', exact: true}).click();
   // Close the settings window and select a painted egg using its actual transform.
   await page.getByTitle('Ecology & Physical Settings').click();
   const bounds = await canvas.boundingBox(); expect(bounds).not.toBeNull();
@@ -82,7 +80,6 @@ for (const fallback of [false, true]) test(`egg reserve sectors, rings, selectio
   await page.getByRole('button', {name: '5x', exact: true}).click();
   await expect.poll(async () => (await read()).state.simTime).toBeGreaterThan(0);
   await page.getByRole('button', {name: 'Pause', exact: true}).click();
-  await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
   const advanced = await read();
   expect(advanced.state.eggs.map((e: any) => e.initialFundedReserve)).toEqual([1000, 1000, 1000, 1000, 1000]);
   expect(advanced.state.eggs.map((e: any) => e.fundedReserve)).toEqual([1000, 750, 500, 250, 0]);

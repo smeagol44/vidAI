@@ -2,16 +2,37 @@ name: Worker integration smoke
 on:
   pull_request:
     paths:
+      - 'observerPreferences.ts'
+      - 'tests/observer-preferences.test.ts'
+      - 'e2e/observer-preferences.spec.ts'
+      - 'simulation.ts'
+      - 'tests/nutrient-cycle.test.ts'
+      - 'tests/support/nutrient-cycle.ts'
+      - 'e2e/nutrient-cycle.spec.ts'
       - 'environmentScenarios.ts'
       - 'tests/environment-scenarios.test.ts'
+      - 'tests/support/scenario-browser.ts'
       - 'e2e/environment-scenarios.spec.ts'
+      - 'sideWindows.ts'
+      - 'worldScene.ts'
+      - 'tests/support/tube-presentation.ts'
+      - 'SideWindowDemo.tsx'
+      - 'sideWindowDemo.css'
+      - 'windowDemo.ts'
+      - 'selfTubes.ts'
+      - 'tests/self-tubes.test.ts'
+      - 'tests/support/self-tubes.ts'
+      - 'tests/support/self-tube-browser.ts'
+      - 'tests/window-demo.test.ts'
+      - 'tests/side-windows.test.ts'
+      - 'e2e/side-windows.spec.ts'
       - 'simulation.worker.ts'
       - 'energyEconomy.ts'
+      - 'energyActivity.ts'
       - 'eggReserve.ts'
       - 'tests/egg-reserve.test.ts'
       - 'tests/support/egg-reserve.ts'
       - 'e2e/egg-reserve.spec.ts'
-      - 'energyActivity.ts'
       - 'tests/energy-activity.test.ts'
       - 'tests/support/energy-activity.ts'
       - 'e2e/energy-activity.spec.ts'
@@ -28,7 +49,6 @@ on:
       - 'App.tsx'
       - 'styles.css'
       - 'e2e/presentation.spec.ts'
-
       - 'SimulationPerformanceIndicator.tsx'
       - 'simulationPerformance.ts'
       - 'simulationSpeed.ts'
@@ -44,21 +64,6 @@ on:
       - 'simulationClient.ts'
       - 'e2e/performance-worker.spec.ts'
       - '.github/workflows/performance-worker.yml'
-      - 'simulation.ts'
-      - 'styles.css'
-      - 'selfTubes.ts'
-      - 'worldScene.ts'
-      - 'SideWindowDemo.tsx'
-      - 'sideWindowDemo.css'
-      - 'sideWindows.ts'
-      - 'windowDemo.ts'
-      - 'tests/self-tubes.test.ts'
-      - 'tests/side-windows.test.ts'
-      - 'tests/window-demo.test.ts'
-      - 'tests/support/self-tubes.ts'
-      - 'tests/support/self-tube-browser.ts'
-      - 'tests/support/tube-presentation.ts'
-      - 'e2e/side-windows.spec.ts'
       - 'playwright.config.ts'
       - 'package.json'
       - 'package-lock.json'
@@ -85,19 +90,27 @@ jobs:
     name: browser-shard (${{ matrix.suite }})
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    # Match the project's pinned @playwright/test version: browsers and OS
+    # dependencies are bundled, avoiding per-shard browser archive downloads.
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+    # GitHub's container HOME points to /github/home (owned by pwuser),
+    # while jobs launch browsers as root. Firefox requires matching ownership.
+    env:
+      HOME: /root
     strategy:
       fail-fast: false
       matrix:
         include:
-          - suite: toolbar
-            browser: chromium
-            command: "npx playwright test e2e/presentation.spec.ts --grep 'toolbar stays' --workers=1"
           - suite: side-windows
             browser: chromium
             command: "npx playwright test e2e/side-windows.spec.ts --workers=1"
+          - suite: toolbar
+            browser: chromium
+            command: "npx playwright test e2e/presentation.spec.ts --grep 'toolbar stays' --workers=1"
           - suite: chromium-regressions
             browser: chromium
-            command: "npx playwright test e2e/performance-worker.spec.ts e2e/egg-reserve.spec.ts e2e/energy-activity.spec.ts e2e/environment-scenarios.spec.ts --workers=1"
+            command: "npx playwright test e2e/performance-worker.spec.ts e2e/energy-activity.spec.ts e2e/egg-reserve.spec.ts e2e/environment-scenarios.spec.ts e2e/nutrient-cycle.spec.ts e2e/observer-preferences.spec.ts --workers=1"
           - suite: firefox-regressions
             browser: firefox
             command: "npx playwright test --config=playwright.worker-firefox.config.ts --workers=1"
@@ -108,7 +121,10 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Verify preinstalled browser availability
+        run: |
+          test -d /ms-playwright
+          ls -1 /ms-playwright
       - run: npm run build
       - name: Run ${{ matrix.suite }}
         run: ${{ matrix.command }}

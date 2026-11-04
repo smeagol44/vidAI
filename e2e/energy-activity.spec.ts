@@ -1,15 +1,21 @@
 import {test, expect} from '@playwright/test';
+import {readFile} from 'node:fs/promises';
 import {energyActivityFixture} from '../tests/support/energy-activity';
 import {createSnapshot} from '../persistence';
 
 test.use({viewport: {width: 1280, height: 850}});
 test.setTimeout(60000);
-for (const fallback of [false, true]) test(`energy contour glows follow real body paths and freeze while paused (${fallback ? 'fallback' : 'Worker'})`, async ({page}, info) => {
+for (const fallback of [false, true]) test(`energy contour glows follow real body paths and freeze at x0 (${fallback ? 'fallback' : 'Worker'})`, async ({page}, info) => {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await page.addInitScript(() => {
-    const capture = {armPause: false, skinFills: 0, bodyOverGlow: 0, totals: {green: 0, red: 0}, green: [] as Array<{alpha: number; path: number[]; at: number; scale: number; width: number}>,
+    const capture = {frames: 0, skinFills: 0, bodyOverGlow: 0, totals: {green: 0, red: 0}, green: [] as Array<{alpha: number; path: number[]; at: number; scale: number; width: number}>,
       red: [] as Array<{alpha: number; path: number[]; at: number; scale: number; width: number}>};
     Object.assign(window, {energyTintCapture: capture});
+    const fillRect = CanvasRenderingContext2D.prototype.fillRect;
+    CanvasRenderingContext2D.prototype.fillRect = function(...args) {
+      if (this.canvas.getAttribute('aria-label') === 'Aquatic simulation' && args[0] === 0 && args[1] === 0) capture.frames++;
+      return fillRect.apply(this, args);
+    };
     const paths = new WeakMap<CanvasRenderingContext2D, number[]>();
     const originalRect = CanvasRenderingContext2D.prototype.roundRect;
     CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, ...rest) {
@@ -33,14 +39,6 @@ for (const fallback of [false, true]) test(`energy contour glows follow real bod
         capture.totals[color]++;
         capture[color].push({width: this.lineWidth, alpha, path: paths.get(this) ?? [], at: performance.now(), scale: Math.hypot(this.getTransform().a, this.getTransform().b)});
         if (capture[color].length > 1000) capture[color].shift();
-        // Pause via the real host control as soon as both rendered waves have
-        // been observed. The independent Worker must not exhaust the victim
-        // while the software-rendered browser waits for another test command.
-        if (capture.armPause && capture.green.some(s => s.alpha > .20)
-          && capture.red.some(s => s.alpha > .25)) {
-          capture.armPause = false;
-          queueMicrotask(() => document.querySelector<HTMLButtonElement>('[data-testid="action-toolbar"] button')!.click());
-        }
       }
       return originalStroke.apply(this, args);
     } as typeof originalStroke;
@@ -48,28 +46,45 @@ for (const fallback of [false, true]) test(`energy contour glows follow real bod
   await page.goto(`./?autoplay${fallback ? '&mainthread' : ''}`);
   await page.getByTitle('Ecology & Physical Settings').click();
   const {state, config} = energyActivityFixture();
-  await page.locator('input[type=file]').setInputFiles({name: 'activity.json', mimeType: 'application/json',
-    buffer: Buffer.from(JSON.stringify(createSnapshot(state, config)))});
-  await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
-  await page.evaluate(() => {const c = (window as any).energyTintCapture; c.green.length = c.red.length = c.totals.green = c.totals.red = 0; c.armPause = true;});
-  await page.getByRole('button', {name: '1x', exact: true}).dispatchEvent('click');
+  const read = async () => {
+    const download = page.waitForEvent('download');
+    await page.getByRole('button', {name: 'Export Snapshot', exact: true}).dispatchEvent('click');
+    return JSON.parse(await readFile((await (await download).path())!, 'utf8'));
+  };
+  const upload = async (name: string) => {
+    const snapshot = JSON.parse(JSON.stringify(createSnapshot(state, config)));
+    await page.locator('input[type=file]').setInputFiles({name, mimeType: 'application/json',
+      buffer: Buffer.from(JSON.stringify(snapshot))});
+    await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
+    // An already-visible Resume button or a wall-clock delay cannot acknowledge
+    // file.text(), React's replacement, and the authoritative Worker reset.
+    await expect.poll(async () => (await read()).state).toEqual(snapshot.state);
+  };
+  await upload('activity.json');
+  await page.evaluate(() => {const c = (window as any).energyTintCapture; c.green.length = c.red.length = c.totals.green = c.totals.red = 0;});
+  await page.getByRole('button', {name: '1x', exact: true}).click();
   await expect.poll(() => page.evaluate(() => {
-    const c = (window as any).energyTintCapture; return c.green.some((s: any) => s.alpha > .20) && c.red.some((s: any) => s.alpha > .25);
+    // Real finite feeding must paint both signals. A slow renderer can skip the
+    // short peaks; exact peak amplitudes are checked with a controlled clock in
+    // energy-activity.test.ts, including the actual glow drawing function.
+    const c = (window as any).energyTintCapture; return c.totals.green > 0 && c.totals.red > 0;
   })).toBe(true);
-  // The capture pauses through the real control after the nonzero speed resumes.
+  // Freeze while activity is ongoing; navigation/inspection remain available.
+  await page.getByRole('button', {name: 'Pause', exact: true}).click();
   await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
   const sample = () => page.evaluate(() => {
     const c = (window as any).energyTintCapture;
-    return {green: c.green.at(-1), red: c.red.at(-1), counts: [c.totals.green, c.totals.red]};
+    return {frames: c.frames, green: c.green.at(-1), red: c.red.at(-1), counts: [c.totals.green, c.totals.red]};
   });
-  await page.waitForTimeout(150);
+  const stopping = await sample();
+  await expect.poll(async () => (await sample()).frames).toBeGreaterThan(stopping.frames + 1);
   const paused = await sample();
   await expect.poll(async () => {
     const latest = await sample();
     return latest.counts[0] > paused.counts[0] && latest.counts[1] > paused.counts[1];
   }).toBe(true);
   const held = await sample();
-  // Observe fresh painted frames while paused: both waves keep exact opacity/path.
+  // Observe fresh painted frames at x0: both waves keep exact opacity/path.
   if (held.counts[0] > paused.counts[0]) expect(held.green.alpha).toBe(paused.green.alpha);
   if (held.counts[1] > paused.counts[1]) expect(held.red.alpha).toBe(paused.red.alpha);
   const capture = await page.evaluate(() => (window as any).energyTintCapture);
@@ -99,15 +114,16 @@ for (const fallback of [false, true]) test(`energy contour glows follow real bod
     expect(last.width * last.scale).toBeCloseTo(2, 3);
   }
   await page.screenshot({path: info.outputPath('energy-pulses-paused.png')});
-  await page.getByRole('button', {name: '5x', exact: true}).dispatchEvent('click');
+  await page.getByRole('button', {name: '5x', exact: true}).click();
   await page.waitForTimeout(350);
   await page.getByRole('button', {name: 'Pause', exact: true}).click();
-  // Replacing the paused world must clear all old activity without advancing time.
+  // Replacing the world at x0 must clear all old activity without advancing time.
   state.nutrients = []; state.organisms = [];
-  await page.locator('input[type=file]').setInputFiles({name: 'empty.json', mimeType: 'application/json',
-    buffer: Buffer.from(JSON.stringify(createSnapshot(state, config)))});
-  await page.waitForTimeout(150);
-  const cleared = await sample(); await page.waitForTimeout(150);
+  await upload('empty.json');
+  const imported = await sample();
+  await expect.poll(async () => (await sample()).frames).toBeGreaterThan(imported.frames);
+  const cleared = await sample();
+  await expect.poll(async () => (await sample()).frames).toBeGreaterThan(cleared.frames + 2);
   expect((await sample()).counts).toEqual(cleared.counts);
   expect(errors).toEqual([]);
 });

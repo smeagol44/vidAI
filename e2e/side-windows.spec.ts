@@ -177,12 +177,21 @@ for (const fallback of [false, true]) test(`local phone consent and grouped glas
   const framePhones = async (target = 400) => {
     // Center Cam and wheel zoom ease toward their targets. Measuring before
     // that motion settles bakes its remaining displacement into the next drag.
-    let previousY = (await phone('L').boundingBox())!.y;
-    await expect.poll(async () => {
-      const y = (await phone('L').boundingBox())!.y, delta = Math.abs(y - previousY);
-      previousY = y;
-      return delta;
-    }, {intervals: [50, 100, 250]}).toBeLessThan(.001);
+    const settledCamera = async () => {
+      // Two polls can observe the same painted frame on a busy software renderer.
+      // Require three distinct settled frames before measuring another drag.
+      const sample = () => page.evaluate(() => ({frame: (window as any).sideWindowPaint.frame,
+        y: document.querySelector('[data-testid="side-demo-phone-L"]')!.getBoundingClientRect().y}));
+      let previous = await sample(), stableFrames = 0;
+      await expect.poll(async () => {
+        const current = await sample();
+        if (current.frame === previous.frame) return stableFrames;
+        stableFrames = Math.abs(current.y - previous.y) < .001 ? stableFrames + 1 : 0;
+        previous = current;
+        return stableFrames;
+      }, {intervals: [50, 100, 250]}).toBeGreaterThanOrEqual(3);
+    };
+    await settledCamera();
     // Move through clear water in bounded increments; a large drag can leave
     // the viewport or overshoot while the camera is still easing on CI.
     const current = (await canvas.boundingBox())!;
@@ -193,8 +202,8 @@ for (const fallback of [false, true]) test(`local phone consent and grouped glas
       const distance = Math.max(-120, Math.min(120, target - y));
       await page.mouse.move(startX, startY); await page.mouse.down();
       await page.mouse.move(startX, startY + distance, {steps: 5}); await page.mouse.up();
-      // Observe the result after easing instead of compounding stale offsets.
-      await page.waitForTimeout(200);
+      // A fixed wall delay does not acknowledge camera easing or a painted frame.
+      await settledCamera();
     }
     // The same original strict framing tolerance remains an acceptance gate.
     await expect.poll(async () => Math.abs((await phone('L').boundingBox())!.y - target)).toBeLessThan(8);
@@ -389,12 +398,22 @@ for (const fallback of [false, true]) test(`local phone consent and grouped glas
   expect(moved.x - card.x).toBeCloseTo(movedPhone.x - phoneBefore.x, 3);
   await page.setViewportSize({width: 1280, height: 900});
   await page.reload();
-  // This final check concerns session reset, not live ecology throughput.
-  // Pause the newly autoplayed world before measuring fallback camera easing.
-  await page.getByRole('button', {name: 'Pause', exact: true}).click();
+  // Verify session identity before replacing anything: importing a fixture
+  // must not conceal a failure to clear the name on page reload.
+  await phone('L').dispatchEvent('click');
+  await expect(menu('L').getByLabel('Your display name')).toHaveValue('');
+  await phone('L').dispatchEvent('click');
+  await expect(menu('L')).toHaveCount(0);
+  // This final framing check concerns session reset, not aquarium draw cost.
+  // Reuse the same authoritative empty world as the preceding geometry checks.
+  // The import control is mounted only while Settings is open after a reload.
+  await page.getByTitle('Ecology & Physical Settings').click();
+  await upload(1500); await check(1500);
+  await page.getByTitle('Close settings (✕)').click();
   const reloadedCanvas = (await canvas.boundingBox())!;
   await page.mouse.move(reloadedCanvas.x + reloadedCanvas.width / 2, reloadedCanvas.y + reloadedCanvas.height / 2);
   for (let i = 0; i < 12; i++) await page.mouse.wheel(0, 200);
+  await expect.poll(async () => (await paint()).wall.scale).toBeCloseTo(.35, 6);
   await expect(phone('L')).toHaveAttribute('data-connected', 'false');
   await framePhones();
   await phone('L').click(); await expect(menu('L').getByLabel('Your display name')).toHaveValue('');

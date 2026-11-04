@@ -128,10 +128,10 @@ for (const count of [0, 1, 3, 18, 50]) test(`startup samples at most five design
   }
 });
 
-test('fresh startup has 400 plants, seed-varying designs and honors the population cap', () => {
+test('fresh startup honors the configured nutrient target, seed-varying designs and population cap', () => {
   const designs = new Set<string>();
   for (const seed of [71, 81, 4242]) {
-    const s = createInitialWorld(DEFAULT_SETTINGS, seed); assert.equal(s.organisms.length, 18); assert.equal(s.nutrients.length, 400);
+    const s = createInitialWorld(DEFAULT_SETTINGS, seed); assert.equal(s.organisms.length, 18); assert.equal(s.nutrients.length, DEFAULT_SETTINGS.targetNutrients);
     designs.add(JSON.stringify([...new Set(s.organisms.map(o => o.genome.id))]));
     const small = createInitialWorld({...DEFAULT_SETTINGS, maxOrganisms: 3}, seed); assert.equal(small.organisms.length, 3);
     assert.equal(new Set(small.organisms.map(o => o.genome.id)).size, 3);

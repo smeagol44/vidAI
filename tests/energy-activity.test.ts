@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {performance} from 'node:perf_hooks';
-import {EnergyActivityCollector, EnergyActivityPresentation, ENERGY_CYCLE_MS} from '../energyActivity';
+import {EnergyActivityCollector, EnergyActivityPresentation, ENERGY_CYCLE_MS, drawEnergyGlow} from '../energyActivity';
 import {mouthContactFixture} from '../mouthContactAudit';
 import {createSnapshot, restoreSnapshot} from '../persistence';
 import {SimulationHost} from '../simulationHost';
@@ -15,6 +15,31 @@ const living = [{id: 'a', dissolving: false}];
 const clockState = (simTime: number) => ({simTime, organisms: living});
 const row = (gain: boolean, loss: boolean, parts = [1]) => [{id: 'a', gain, gainSeen: gain,
   loss, lossSeen: loss, parts: loss ? parts : [], seenParts: loss ? parts : []}];
+
+test('actual glow strokes retain exact red/green peaks, falloff and screen-space widths at controlled phases', () => {
+  const p = new EnergyActivityPresentation(); p.setPaused(false, 0); p.accept(row(true, true));
+  const strokes: Array<{style: string; width: number}> = [];
+  let saves = 0, restores = 0;
+  const ctx = {strokeStyle: '', lineWidth: 0, lineJoin: '', save() {saves++;}, restore() {restores++;},
+    stroke(this: {strokeStyle: string; lineWidth: number}) {
+      strokes.push({style: this.strokeStyle, width: this.lineWidth});
+    }} as unknown as CanvasRenderingContext2D;
+  for (const zoom of [.5, 1, 3]) for (const phase of [0, 200]) {
+    p.clear(); p.setPaused(false, 0); p.accept(row(true, true)); p.advance(phase, false, living);
+    strokes.length = 0;
+    drawEnergyGlow(ctx, p, 'a', 1, zoom);
+    assert.equal(strokes.length, 10, 'five real contour passes for each independent signal');
+    const green = phase === 200 ? .24 : .025, red = phase === 0 ? .28 : .025;
+    const widths = [21, 15, 10, 6, 2], strengths = [.25, .35, .5, .7, 1.3];
+    for (let pass = 0; pass < 5; pass++) {
+      assert.deepEqual(strokes[pass * 2], {style: `rgba(34,220,105,${green * strengths[pass]})`, width: widths[pass] / zoom});
+      assert.deepEqual(strokes[pass * 2 + 1], {style: `rgba(245,55,65,${red * strengths[pass]})`, width: widths[pass] / zoom});
+    }
+  }
+  assert.equal(saves, 6); assert.equal(restores, saves);
+  p.clear(); strokes.length = 0; drawEnergyGlow(ctx, p, 'a', 1, 1);
+  assert.deepEqual(strokes, [], 'a cleared world paints neither color');
+});
 
 test('relative window thresholds, hysteresis, independent directions and safe depleted stock', () => {
   const c = new EnergyActivityCollector();
@@ -198,8 +223,7 @@ test('structural extraction is observed from real bites, while unsuccessful cont
     (id, _time, joules, _stock, _capacity, part) => {if (id === fixture.prey.id && part >= 0) receipts.push(joules);});
   assert.ok(receipts.length > 0);
   assert.equal(before - fixture.prey.structuralBiomass, receipts.reduce((a, b) => a + b, 0));
-  const miss = mouthContactFixture('capsule-v1', 'head-on');
-  miss.prey.segments[0].x += 100;
+  const miss = mouthContactFixture('capsule-v1', 'miss');
   const c = new EnergyActivityCollector();
   stepSimulation(miss.state, miss.config, 1 / 60, undefined, undefined, c.record); c.advance(miss.state);
   assert.deepEqual(c.frame(), []);

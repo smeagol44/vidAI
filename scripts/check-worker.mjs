@@ -1,3 +1,4 @@
+import {cycleFixture, food as cycleFood} from '../tests/support/nutrient-cycle.ts';
 import {selfTubeFixture} from '../tests/support/self-tubes.ts';
 import assert from 'node:assert/strict';
 import {Worker} from 'node:worker_threads';
@@ -9,10 +10,9 @@ import {enableClosedEconomy, setWorldEnergy} from '../energyEconomy.ts';
 import {totalAccountedEnergy} from '../persistence.ts';
 import {mouthContactFixture} from '../mouthContactAudit.ts';
 import {energyActivityFixture} from '../tests/support/energy-activity.ts';
-import {stepSimulation} from '../simulation.ts';
 import {eggReserveFixture} from '../tests/support/egg-reserve.ts';
 import {eggReserveLossFraction} from '../eggReserve.ts';
-
+import {stepSimulation, getNutrientRadius} from '../simulation.ts';
 import {createScenarioWorld} from '../environmentScenarios.ts';
 
 // Exercise the actual production-built Worker with real cross-thread cloning.
@@ -233,9 +233,6 @@ try {
   for (let i = 0; i < populatedTicks; i++) stepSimulation(populatedDirect, zeroSettings, 1 / 60);
   assert.deepEqual(populatedMax.state, createSnapshot(populatedDirect, zeroSettings).state,
     'Populated MAX preserves physics, energy, brain state, genetics and PRNG for the same fixed ticks');
-  console.log('Unlimited MAX: measured x'+(maximum.state.simTime / elapsed).toFixed(1)+'; '+maxTicks+' exact ticks, responsive pause, frozen snapshots and finite resume passed.');
-  console.log('x0 Worker: zero ticks during manual food/spawn/clear/inspection, funded budget and caps, immediate frames, no stopped-wall-time catch-up, exact continuation and paused reset passed.');
-
   // Actual cross-thread activity is render-only. Compare every authoritative
   // optical ray/neural value and all other saved state against an observer-free run.
   const activityProbe = energyActivityFixture();
@@ -245,14 +242,14 @@ try {
   const cleanActivity = await receive(v => v.type === 'frame' && v.frame.epoch === 103);
   assert.deepEqual(cleanActivity.frame.energyActivity, []);
   send({type: 'ack', epoch: 103});
-  send({type: 'control', epoch: 103, settings: activityProbe.config,  speed: 1, selected: null});
+  send({type: 'control', epoch: 103, settings: activityProbe.config, speed: 1, selected: null});
   let concurrent = false;
   for (let i = 0; i < 10 && !concurrent; i++) {
     const packet = await receive(v => v.type === 'frame' && v.frame.epoch === 103);
     concurrent = packet.frame.energyActivity.some(row => row.id === activityProbe.prey.id && row.gain && row.loss && row.parts.includes(0));
     send({type: 'ack', epoch: 103});
   }
-  send({type: 'control', epoch: 103, settings: activityProbe.config,  speed: 0, selected: null});
+  send({type: 'control', epoch: 103, settings: activityProbe.config, speed: 0, selected: null});
   const activityPaused = await request('snapshot', {}, 103);
   assert.ok(concurrent, 'Actual Worker publishes independent concurrent activity and contacted segment');
   const activityDirect = restoreSnapshot(activitySource).state;
@@ -261,7 +258,6 @@ try {
   assert.ok(activityPaused.state.organisms.some(org => org.rayHits.length > 0));
   await new Promise(resolve => setTimeout(resolve, 80));
   assert.deepEqual((await request('snapshot', {}, 103)).state, activityPaused.state);
-  console.log('Energy activity Worker: concurrent real feeding/predation, contacted segment, exact observer-free optical/neural/PRNG/save continuation and paused freeze passed.');
   const eggProbe = eggReserveFixture(true);
   eggProbe.state.eggs[4].fundedStructural -= 100;
   // Match actual embodied stocks after constructing the damaged fixture.
@@ -298,8 +294,6 @@ try {
   send({type: 'reset', snapshot: eggAfter, epoch: 106});
   await receive(value => value.type === 'frame' && value.frame.epoch === 106);
   assert.deepEqual((await request('snapshot', {}, 106)).state, eggAfter.state);
-  console.log('Egg reserve Worker: original reference/frame/export/reset, legacy-current migration, exact 5x funded recovery, structure-only pink and paused freeze passed.');
-
   const scenarioDefaults = {...DEFAULT_SETTINGS, physicsRegime: 'passive-work-v3',
     ecologyRegime: 'closed-v1', nutrientLimit: null, mouthContactModel: 'capsule-v1'};
   const harsh = createScenarioWorld(scenarioDefaults, 'harsh-world', 73, 'balanced', 'standard', 2);
@@ -326,8 +320,32 @@ try {
   send({type: 'reset', snapshot: harshPaused, epoch: 108});
   await receive(value => value.type === 'frame' && value.frame.epoch === 108);
   assert.deepEqual(await request('snapshot', {}, 108), harshPaused);
-  console.log('Environment Worker: Harsh time-zero empty food/full Default grant, editable controls, exact direct continuation and snapshot reset passed.');
-
+  // Pipe starts unconnected in the actual Worker; reload keeps edited settings
+  // and exact fixed-tick continuation rather than recreating a starting preset.
+  const pipe = createScenarioWorld(scenarioDefaults, 'pipe-world', 73, 'unbiased', 'standard', 2);
+  const pipeSource = createSnapshot(pipe.state, pipe.settings);
+  send({type: 'reset', snapshot: pipeSource, epoch: 109});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 109);
+  assert.deepEqual(await request('snapshot', {}, 109), pipeSource);
+  assert.equal(pipeSource.settings.worldWidth, 4600);
+  assert.equal(pipeSource.settings.worldHeight, 2100);
+  assert.equal(pipeSource.state.selfTubes, undefined);
+  assert.equal(pipeSource.state.nutrients.length, 0);
+  const pipeEdited = {...pipe.settings, gravity: -10, inflowRate: 2, nutrientLimit: 7};
+  send({type: 'ack', epoch: 109});
+  send({type: 'control', epoch: 109, settings: pipeEdited, speed: 5, selected: null});
+  await new Promise(resolve => setTimeout(resolve, 120));
+  send({type: 'control', epoch: 109, settings: pipeEdited, speed: 0, selected: null});
+  const pipePaused = await request('snapshot', {}, 109);
+  const pipeDirect = restoreSnapshot(pipeSource).state;
+  const pipeTicks = Math.round(pipePaused.state.simTime * 60); assert.ok(pipeTicks > 0);
+  for (let i = 0; i < pipeTicks; i++) stepSimulation(pipeDirect, pipeEdited, 1 / 60);
+  assert.deepEqual(pipePaused, createSnapshot(pipeDirect, pipeEdited));
+  assert.equal(pipePaused.state.selfTubes, undefined);
+  assert.ok(Math.abs(totalAccountedEnergy(restoreSnapshot(pipePaused).state) - pipeSource.state.energyPool.budget) < 1e-6);
+  send({type: 'reset', snapshot: pipePaused, epoch: 110});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 110);
+  assert.deepEqual(await request('snapshot', {}, 110), pipePaused);
   // Physical self-tubes use the actual built Worker and full-state snapshots.
   for (const [index, side] of ['L', 'R'].entries()) {
     const epoch = 200 + index, fixture = selfTubeFixture(side);
@@ -360,6 +378,44 @@ try {
     send({type: 'action', id: -201, epoch, action: {kind: 'self-tubes', topology: {version: 1, connected: false, accepted: []}}});
     assert.deepEqual(await request('snapshot', {}, epoch + 10), crossed, 'stale topology command is ignored');
   }
+  for (const nutrientCycle of ['decay-v1', 'decay-v2']) for (const tubes of [false, true]) {
+    const probe = cycleFixture([cycleFood(9300, true), cycleFood(75, false, 1000, 500)]);
+    probe.settings.nutrientCycle = nutrientCycle;
+    for (const food of probe.state.nutrients) food.radius = getNutrientRadius(food.energyValue, nutrientCycle);
+    probe.state.nutrients[0].decayTimeRemaining = .1;
+    if (tubes) {
+      probe.settings.worldHeight = 600;
+      probe.state.selfTubes = {version: 1, connected: true, accepted: [0]};
+      probe.state.nutrients[0].x = -200; probe.state.nutrients[0].y = 450;
+    }
+    const epoch = (nutrientCycle === 'decay-v2' ? 180 : 150) + (tubes ? 1 : 0), source = createSnapshot(probe.state, probe.settings);
+    send({type: 'reset', snapshot: source, epoch});
+    await receive(value => value.type === 'frame' && value.frame.epoch === epoch);
+    assert.deepEqual(await request('snapshot', {}, epoch), source);
+    send({type: 'ack', epoch});
+    send({type: 'control', epoch, settings: probe.settings, speed: 5, selected: null});
+    await new Promise(resolve => setTimeout(resolve, 100));
+    send({type: 'control', epoch, settings: probe.settings, speed: 0, selected: null});
+    const after = await request('snapshot', {}, epoch), direct = restoreSnapshot(source);
+    const ticks = Math.round(after.state.simTime * 60); assert.ok(ticks >= 6);
+    for (let i = 0; i < ticks; i++) stepSimulation(direct.state, direct.settings, 1 / 60);
+    assert.deepEqual(after, createSnapshot(direct.state, direct.settings));
+    assert.ok(after.state.nutrients.every(n => n.kind !== 'carrion' && n.energyValue <= 3000));
+    assert.ok(Math.abs(totalAccountedEnergy(direct.state) - direct.state.energyPool.budget) < 1e-6);
+    send({type: 'reset', snapshot: after, epoch: epoch + 10});
+    await receive(value => value.type === 'frame' && value.frame.epoch === epoch + 10);
+    assert.deepEqual(await request('snapshot', {}, epoch + 10), after);
+    send({type: 'control', epoch: epoch + 10, id: -300 - epoch,
+      settings: {...probe.settings, nutrientCycle: undefined}, speed: 1});
+    assert.match((await receive(value => value.id === -300 - epoch)).message, /Nutrient cycle/);
+    assert.deepEqual(await request('snapshot', {}, epoch + 10), after);
+  }
+  console.log('Nutrient-cycle Worker: schema-18/19 tank/tube reset, 5x exact direct decay/mineralization/PRNG continuation, paused restoration and control-switch rejection passed.');
   console.log('Self-tube Worker: schema-17 reset, full-state L/R transfer, exact direct continuation, unchanged IDs/births/stock, paused closure and stale-command rejection passed.');
+  console.log('Environment Worker: Harsh and independent Pipe time-zero empty food/full grant, Pipe 4600x2100 with zero topology, editable controls, exact direct continuation and snapshot reset passed.');
+  console.log('Egg reserve Worker: original reference/frame/export/reset, legacy-current migration, exact 5x funded recovery, structure-only pink and x0 freeze passed.');
+  console.log('Energy activity Worker: concurrent real feeding/predation, contacted segment, exact observer-free optical/neural/PRNG/save continuation and x0 freeze passed.');
+  console.log('Unlimited MAX: measured x'+(maximum.state.simTime / elapsed).toFixed(1)+'; '+maxTicks+' exact ticks, responsive pause, frozen snapshots and finite resume passed.');
+  console.log('x0 Worker: zero ticks during manual food/spawn/clear/inspection, funded budget and caps, immediate frames, no stopped-wall-time catch-up, exact continuation and paused reset passed.');
   console.log('Production Worker: open/closed exact exports, funded commands, independent stepping, debt, direct equivalence, all physics regimes, mouth contact in all eight physics/ecology combinations, regime-switch and stale-world rejection passed.');
 } finally { await worker.terminate(); }

@@ -1,0 +1,38 @@
+{
+  "baseline": "772130b64fa665417a791471b75f01622b9cff86",
+  "scope": "Exact complete verified-fork snapshots through decay/mineralization in tank/tubes; only build label normalized.",
+  "cases": [
+    {
+      "cycle": "historical-omitted",
+      "tubes": false,
+      "exactTicks": 120
+    },
+    {
+      "cycle": "historical-omitted",
+      "tubes": true,
+      "exactTicks": 120
+    },
+    {
+      "cycle": "decay-v1",
+      "tubes": false,
+      "exactTicks": 120
+    },
+    {
+      "cycle": "decay-v1",
+      "tubes": true,
+      "exactTicks": 120
+    },
+    {
+      "cycle": "decay-v2",
+      "tubes": false,
+      "exactTicks": 120
+    },
+    {
+      "cycle": "decay-v2",
+      "tubes": true,
+      "exactTicks": 120
+    }
+  ],
+  "totalComparedTicks": 720,
+  "allExact": true
+}

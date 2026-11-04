@@ -131,7 +131,7 @@ test('active worlds round-trip schema 17 and continue exactly; historical files 
   const restored = restoreSnapshot(snapshot); assert.deepEqual(createSnapshot(restored.state, restored.settings), snapshot);
   for (let i = 0; i < 15; i++) {stepSimulation(state, settings, 1 / 60); stepSimulation(restored.state, restored.settings, 1 / 60);}
   assert.deepEqual(createSnapshot(state, settings), createSnapshot(restored.state, restored.settings));
-  const old = structuredClone(snapshot); old.schemaVersion = '15.0.0';
+  const old = structuredClone(snapshot); old.schemaVersion = '16.0.0';
   assert.throws(() => restoreSnapshot(old), /schema 17/);
   for (const bad of [[1, 0], [0, 0], [-1], [1.5]]) assert.throws(() => validateSelfTubes({version: 1, connected: true, accepted: bad}));
 });

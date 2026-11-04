@@ -5,7 +5,7 @@ export function energyActivityFixture() {
   const {state, config, hunter, prey} = mouthContactFixture('capsule-v1', 'head-on');
   config.worldWidth = 2400; config.worldHeight = 1500;
   const g = prey.genome;
-  g.mouths = [{id: 'grazer', partIndex: 0, direction: 'EAST', slot: 0, intakeWidth: 7, mouthType: 'herbivore'}];
+  g.mouths = [{id: 'grazer', partIndex: 0, direction: 'EAST', slot: 0, intakeWidth: 7, intakeLength: 12, mouthType: 'herbivore'}];
   g.bodyCost = calculateBodyCost(g.parts, g.eyes, g.mouths);
   g.maxEnergyCapacity = calculateMaxEnergyCapacity(g.parts, g.storageTraitMultiplier); remapBrain(g);
   Object.assign(prey, spawnOrganism(g, prey.segments[0].x, prey.segments[0].y, 0,

@@ -188,10 +188,11 @@ Historical timing tables are in
 
 ## Economy state and capacity
 
-Current exports use schema v16 without tube topology and v17 with self-linked
-tubes. Both retain the saved physics, economy and prey-contact model, forward
-mouth genomes and immutable egg reserve references. Schema v17 validates its
-physical topology; older formats reject topology fields. Historical formats,
+Current decay-v2 worlds export schema v19; saved decay-v1 worlds export v18.
+Both support optional validated self-linked tube topology. Worlds without a food
+cycle export v16 without topology or v17 with tubes. All retain saved physics,
+economy, prey-contact model, forward mouths and immutable egg reserve references.
+Schema v16 and older formats reject topology fields. Historical formats,
 including v12–v15, remain importable through the accepted automatic mouth
 conversion described in [Ecology](Ecology-Baseline#physical-mouth-aperture).
 That migration changes future mouth geometry; it is not a promise of identical
@@ -216,3 +217,18 @@ Replacing a message or repeating the same message restarts its lifetime; an old
 message cannot dismiss its replacement. Noninteractive banners do not capture
 pointer input. Hinge dots are hidden; physical joints and their Worker data remain.
 This removes drawing commands, with no measured FPS or solver-speed claim.
+
+
+## Observer controls
+
+Advanced Settings can hide only the decorative caustics painting pass, including
+its blur. Default shows it initially; Harsh and Pipe hide it. State, random draws,
+physical vision and simulation ticks are unchanged. A large cost in software
+rendering does not establish a desktop hardware speedup or more Worker ticks.
+The toolbar rounds achieved speed to one decimal while its hover title retains
+two decimals; requested speeds and the throughput sampler are unchanged.
+
+The nutrient cycle exports schema19 (decay-v2) or retains schema18
+for saved decay-v1 worlds, with or without topology. Worlds without a cycle
+retain schema16/17 as described above. Control packets cannot switch cycles;
+explicit saved-world upgrades use authoritative snapshots. See [Ecology](Ecology-Baseline).

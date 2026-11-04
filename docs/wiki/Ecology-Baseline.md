@@ -7,7 +7,7 @@ generations remain open outcomes. Startup survival alone does not show viability
 ## Initial environmental scenarios
 
 The start-menu Environment dropdown offers world-icon **Default** (preselected)
-and mountain-icon **Harsh World**, independently of founder population/brain mode.
+mountain-icon **Harsh World**, and green-pipe **Pipe World**, independently of founder population/brain mode.
 Default retains configured initialization. Harsh starts a 4800 × 3000 px tank,
 20 px/s² gravity, viscosity 0.40, a combined creature/egg cap of 50 and 1 nutrient/s
 recycling with a finite 200-nutrient cap. Initial population stays preset-dependent
@@ -22,6 +22,83 @@ Controls remain editable. Imports keep exact saved conditions and never reapply
 a scenario. Returning to the start menu can select a fresh Default; existing
 in-world reseed controls keep their current-settings semantics. No custom profiles
 or fractional-rate control is included.
+
+### Pipe World
+
+The third Environment
+option is **Pipe World**, with an original pixel-style green angled-pipe icon
+beside the selected option. Default and Harsh keep their existing labels/icons.
+Pipe has its own frozen, explicit startup settings; it does not inherit Harsh
+or configured application defaults at runtime.
+
+| Setting | Pipe World initial value |
+| --- | --- |
+| Tank dimensions | 4600 × 2100 world units |
+| Gravity / water viscosity | 20 / 0.40 |
+| Nutrient recycling / ecological cap | 1 particle/s / 200 particles |
+| Initial nutrient grant / pattern | 275 × 3000 J / uniform, then banked |
+| Initial free nutrients / eggs | 0 / 0 |
+| Initial organisms | Existing selected founder preset (normally 18; Megafauna 12; showcase 9), with independent balanced/unbiased mode |
+| Combined living-creature + egg cap | 50; existing separate 75-egg safeguard unchanged |
+| Kinship protection / mutation severity | true / 0.25 |
+| Physics / ecology / mouth contact | passive-work-v3 / closed-v1 / capsule-v1 |
+| Nutrient cycle | decay-v2 (1 J/s per food particle) |
+| Automatic selection / tracking | Both off; editable observer preferences |
+| Initial calls / openings / tubes | None |
+
+These values were copied once from the current fork Harsh reference, except
+for dimensions. Food banking preserves the same global initial grant for the
+same seed/population; 825,000 J of food energy is in reserve at time zero.
+The dimensions already fit existing width 800–4800 and height 600–3000 limits.
+Manual local window/tube operations remain available. No remote topology or
+automatic connection is created. Saving uses the existing schema 19 and exact
+Worker export; imports restore persisted settings/state without consulting any
+starting preset. Selecting Pipe in the menu only takes effect when seeding.
+
+## Continuous food recycling
+
+New closed application worlds explicitly select `nutrientCycle: decay-v2` and export
+schema 19. Both plant nutrients and carrion lose **1 J per simulated second**,
+also while partly eaten, outside the camera or inside a connected tube. Loss is
+capped at remaining energy and returned once to the signed universe reserve.
+Zero-energy food is removed. Thus an untouched 3,000 J particle lasts 3,000 simulated seconds (50 minutes).
+Feeding rates and efficiencies remain unchanged; natural decay is additional.
+
+Below 3,000 J, physical radius is `18 * sqrt(remainingJ / 3000)` with a 6-unit minimum physical radius (the historical minimum was 8).
+Larger food retains its established logarithmic radius. Vision, food contact and
+rendering use that physical radius; the existing glow and outline shrink with
+it. No new visual effect or organism-only information is added.
+
+Carrion still has a 60-second timer. Decay runs first; at expiry only remaining
+energy becomes nearby ordinary plant particles, each at most 3,000 J. A local,
+deterministically rotated grid keeps fragment centers distinct, even beside
+walls or channel corners; it preserves the source velocity and adds no force.
+Fully depleted carrion produces nothing. No living organism is needed.
+
+Mineralization obeys `targetNutrients`, any finite `nutrientLimit`, and the 2,200
+food-particle safeguard. It removes expired remains even with no available slot
+and banks energy that cannot be materialized. It never creates a giant fallback
+or loops over the unbounded theoretical fragment count. Ordinary closed-world
+recycling still uses its existing reserve/rate/count rules: `targetNutrients`
+sets initial abundance and additionally bounds mineralization, whereas the
+independent closed nutrient cap bounds ordinary subsequent generation. Default
+retains 15/s and Unlimited; Harsh World retains 1/s and its 200-particle cap.
+Smaller particles can therefore raise particle counts without increasing stock.
+
+Historical imports omit the cycle and retain their exact food lifetimes,
+minimum radii, PRNG and mineralization rules. Import, export, fork, physics repair
+and open-to-closed budget conversion do not silently enable the cycle. A fresh
+start/reset selects it. Settings offers an explicit update to 1 J/s for saved
+closed worlds, keeping their present energy/PRNG/organisms and recomputing only
+food radii. Saved decay-v1/schema18 keeps its original 30 J/s and shrinking below
+6 until explicitly updated. Schema 19 requires
+a closed pool and the known cycle, supports existing independent physics/contact
+modes and optional tube topology; older schemas reject the new flag. Worker
+control packets reject cycle changes; an upgrade uses an authoritative reset. Snapshots remain authoritative.
+
+The closed transfer diagram below includes the versioned food cycle. Historical
+closed worlds without a cycle send expired carrion directly to the reserve and
+never decay plants until explicitly upgraded.
 
 ## Closed world budget
 
@@ -44,13 +121,13 @@ This is an ecological stock ledger, not proof of solver mechanical conservation.
   and carrion decomposition repay debt; surplus beyond zero remains available.
   A funded egg can hatch at zero reserve. Debt is a signed budget adjustment,
   not negative physical energy.
-- Debt repayment requires a return flow. Plant nutrients do not decay; an
-  extinct world containing only nutrients can remain in debt indefinitely.
-  Clear Free Nutrients returns their energy to the reserve, or the player can
-  raise the budget. Persistent debt after extinction is accepted; no abiotic
-  nutrient decay is planned. Manual life still requires available reserve.
-- Carrion decays into the reserve regardless of the nutrient cap; funded food
-  conversion then uses that reserve. Extinct worlds keep recycling until paused.
+- Debt repayment requires a return flow. New fork cycle worlds return natural
+  food decay to reserve, including after extinction. Historical worlds without
+  the cycle keep plants indefinitely and can retain debt; Clear Free Nutrients
+  or a budget increase remains available. Manual life still needs reserve.
+- New fork cycle worlds mineralize expired carrion as described above; historical
+  closed worlds return it directly to reserve. Extinct worlds keep recycling
+  until paused; neither mode guarantees survival or automatic repopulation.
 - The computational food limit is 2,200 particles. At that limit, remains merge
   into existing carrion, or use one extra carrion slot if all particles are plants;
   merging restarts that carrion timer. All energy is retained. Unspent energy
@@ -75,7 +152,10 @@ flowchart TD
   E -->|"Funded viable hatch"| L
   L -->|"Death"| C["Carrion"]
   E -->|"Expiry"| C
-  C -->|"Decay"| R
+  F -->|"Fork cycle: 1 J/s decay"| R
+  C -->|"Fork cycle: 1 J/s decay or overflow"| R
+  C -->|"Fork cycle: 60 s mineralization"| F
+  C -->|"Historical closed expiry"| R
   C -->|"Assimilation"| L
   C -->|"Unassimilated energy"| R
 ```
@@ -89,7 +169,7 @@ flowchart TD
 | Assimilation | 80%; carrion also applies the 85% digestion factor, giving 68% combined assimilation |
 | Storage | Removal stops at the creature's available capacity |
 | Remains | One edible circle containing remaining body and reserve energy; closed worlds aggregate at capacity without loss; open saved worlds record overflow |
-| Decomposition | Closed worlds return carrion energy to the reserve; open saved worlds convert to plant food when a slot is available |
+| Decomposition | New fork cycle: 1 J/s food decay plus bounded 60 s carrion mineralization; historical closed worlds return carrion to reserve; historical open worlds convert when a slot is available |
 
 Mouth permissions apply per mouth, including on creatures with different
 specialist mouths. Feeding requires physical contact; no steering or survival

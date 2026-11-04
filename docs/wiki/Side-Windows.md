@@ -139,7 +139,7 @@ scaling the body. Food and eggs crossing an open end continue locally as well.
 Destination contacts are resolved normally on subsequent ticks.
 
 The observer scene is painted back to front: background water/grid/caustics,
-existing food/egg glows, entities, and human annotations (incubation
+food/egg/energy glows, entities, and human annotations (incubation/reserve
 indicators, selection, traces and aperture/ray diagnostics). One reusable canvas
 composites these passes; it does not create extra animation loops. A universal
 mask then darkens everything above and below the tank and fades both sides
@@ -170,8 +170,9 @@ Vision uses the actual local scene; there are no wrapped rays, remote views or
 destination copies before handoff. Consecutive windows share glass geometry,
 while the crossed section still determines its matching opposite section.
 
-Snapshots carrying physical topology use schema17; worlds without topology use
-forward-mouth schema16. Historical schema12–15 files still load through the
+Without a nutrient cycle, snapshots carrying physical topology use schema17;
+ordinary worlds use forward-mouth schema16. The decay-v2 cycle uses
+schema19 and saved decay-v1 uses schema18, both with optional validated topology. Historical schema12–15 files still load through the
 owner-accepted automatic mouth conversion. Old schemas reject embedded topology.
 Living, egg and lineage genomes retain their forward reach and fixed diet width;
 malformed mouth parameters are rejected before replacing the world. Both current

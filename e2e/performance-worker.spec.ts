@@ -1,6 +1,6 @@
 import {test, expect} from '@playwright/test';
 import {readFile} from 'node:fs/promises';
-import {DEFAULT_SETTINGS, createSnapshot} from '../persistence';
+import {BUILD_VERSION, DEFAULT_SETTINGS, createSnapshot} from '../persistence';
 import {embodiedEnergy, setWorldEnergy} from '../energyEconomy';
 import {createInitialWorld, addExternalOrganism} from '../world';
 import {createFounderGenome} from '../founders';
@@ -62,7 +62,7 @@ for (const mainthread of [false, true]) test(`closed-budget conversion, controls
   await page.getByRole('button', {name: 'Convert this world to a closed energy budget', exact: true}).dispatchEvent('click');
   await expect(page.getByTestId('closed-energy-controls')).toBeVisible();
   const converted = await read();
-  expect(converted.schemaVersion).toBe('16.0.0');
+  expect(converted.schemaVersion).toBe('16.0.0'); expect(converted.settings.nutrientCycle).toBeUndefined();
   expect(converted.state.energyPool.budget).toBe(embodiedEnergy(state));
   expect(converted.state.energyPool.reserve).toBe(0);
   expect(converted.state.organisms).toEqual(source.state.organisms);
@@ -156,7 +156,7 @@ test('new worlds use requested defaults and creature clicks keep diagnostics clo
   await expect(page.getByLabel('Maximum creatures + eggs', {exact: true})).toHaveValue('30');
   await expect(page.locator('#simulation-seed')).toHaveValue('123456789');
   await expect(page.getByTestId('mouth-contact-model')).toContainText('Full rounded aperture');
-  await expect(page.getByTestId('build-version')).toHaveText('v0.39.0');
+  await expect(page.getByTestId('build-version')).toHaveText(`v${BUILD_VERSION}`);
 
   const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0};
   const state = createInitialWorld(settings, 91, 'balanced', 'standard', 0);
@@ -212,7 +212,7 @@ for (const fallback of [false, true]) test(`legacy import and current reset agre
   await expect(page.getByTestId('physics-regime')).toContainText('passive joint solver');
   const stabilized = await exportState();
   expect(stabilized.schemaVersion).toBe('16.0.0'); expect(stabilized.settings.physicsRegime).toBe('passive-work-v3');
-  expect(stabilized.state).toEqual(source.state);
+  expect(stabilized.state).toEqual(source.state); expect(stabilized.settings.nutrientCycle).toBeUndefined();
   await page.getByRole('button',{name:'Resume',exact:true}).click();
   await page.getByTitle('Close settings (✕)').click();
   await page.keyboard.press('Escape');
@@ -221,7 +221,8 @@ for (const fallback of [false, true]) test(`legacy import and current reset agre
   await expect(page.getByTestId('physics-regime')).toContainText('Restored swimming');
   await page.keyboard.press('Space');
   const reset=await exportState();expect(reset.settings.physicsRegime).toBe('passive-work-v3');
-  expect(reset.schemaVersion).toBe('16.0.0'); expect(reset.settings.mouthContactModel).toBe('capsule-v1');
+  expect(reset.schemaVersion).toBe('19.0.0'); expect(reset.settings.nutrientCycle).toBe('decay-v2');
+  expect(reset.settings.mouthContactModel).toBe('capsule-v1');
   expect(reset.state.organisms.some((o: any)=>o.motorDiagnostics?.positiveWorkJ>0)).toBe(true);
   expect(errors).toEqual([]);
 });

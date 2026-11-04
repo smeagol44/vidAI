@@ -1,5 +1,5 @@
+import {tubeGeometry, tubeWallContact, tubeContainsBox, sampleTubeWater, projectWaterPoint, waterRects, moveTubeParticle, transferSelfOrganisms, type SelfTubes, type TubeGeometry} from './selfTubes';
 import type {EnergyTransferObserver} from './energyActivity';
-import {tubeGeometry, tubeWallContact, tubeContainsBox, sampleTubeWater, projectWaterPoint, moveTubeParticle, transferSelfOrganisms, type SelfTubes, type TubeGeometry} from './selfTubes';
 import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
 import {partKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
 import {passiveConstraintScale, paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
@@ -453,6 +453,8 @@ export interface SimulationSettings {
   /** Omitted retains exact historical prey-contact geometry. */
   mouthContactModel?: 'capsule-v1';
   ecologyRegime?: 'closed-v1';
+  /** Omitted preserves historical food lifetimes and radii. */
+  nutrientCycle?: 'decay-v1' | 'decay-v2';
   /** null means no ecological count cap; a visible particle safety limit remains. */
   nutrientLimit?: number | null;
   /** Omitted by historical callers: exact legacy continuation. */
@@ -821,7 +823,14 @@ export function recordFeedingEvent(
   }
 }
 
-export function getNutrientRadius(energy: number): number {
+export const NUTRIENT_DECAY_JOULES_PER_SECOND = 1;
+export const MIN_CYCLING_NUTRIENT_RADIUS = 6;
+
+export function getNutrientRadius(energy: number, cycle?: SimulationSettings['nutrientCycle']): number {
+  if (cycle === 'decay-v2' && energy <= NUTRIENT_ENERGY_VALUE)
+    return Math.max(MIN_CYCLING_NUTRIENT_RADIUS, BASE_NUTRIENT_RADIUS * Math.sqrt(Math.max(0, energy) / NUTRIENT_ENERGY_VALUE));
+  if (cycle === 'decay-v1' && energy <= NUTRIENT_ENERGY_VALUE)
+    return BASE_NUTRIENT_RADIUS * Math.sqrt(Math.max(0, energy) / NUTRIENT_ENERGY_VALUE);
   const ratio = Math.max(0.1, energy / NUTRIENT_ENERGY_VALUE);
   const scale = 1 + 0.35 * Math.log2(ratio);
   return Math.max(8.0, BASE_NUTRIENT_RADIUS * Math.max(0.4, scale));
@@ -3486,20 +3495,85 @@ function evaluateOrganismBrain(org: Organism, dt: number): void {
 
 /** At the particle safety limit, aggregate remains rather than losing energy.
  * Allow one carrion slot above the normal food limit if all slots hold plants. */
-function closedCarrion(state: SimulationState, x: number, y: number, energy: number): void {
+function closedCarrion(state: SimulationState, settings: SimulationSettings, x: number, y: number, energy: number): void {
   if (energy <= 0) return;
   const existing = state.nutrients.length >= FOOD_SAFETY_LIMIT
     ? state.nutrients.find(n => n.kind === 'carrion') : undefined;
   if (existing) {
     existing.energyValue += energy;
-    existing.radius = getNutrientRadius(existing.energyValue);
+    existing.radius = getNutrientRadius(existing.energyValue, settings.nutrientCycle);
     existing.decayTimeRemaining = CARRION_DECAY_SECONDS;
     return;
   }
   state.nutrients.push({id: `REM-${state.prng.nextUint32().toString(36)}`,
     kind: 'carrion', decayTimeRemaining: CARRION_DECAY_SECONDS,
-    x, y, vx: 0, vy: 0, energyValue: energy, radius: getNutrientRadius(energy),
+    x, y, vx: 0, vy: 0, energyValue: energy, radius: getNutrientRadius(energy, settings.nutrientCycle),
     bottomTimer: 0, pulseTimer: state.prng.range(0, Math.PI * 2)});
+}
+
+/** Versioned abiotic lifecycle. All loops are bounded by existing food slots.
+ * New fragments are not degraded twice on their creation tick. Historical
+ * worlds never enter this pass and retain their original arithmetic/PRNG. */
+function advanceNutrientCycle(state: SimulationState, settings: SimulationSettings, dt: number): void {
+  const pool = state.energyPool!;
+  const expired: Nutrient[] = [];
+  let kept = 0, plants = 0;
+  for (const food of state.nutrients) {
+    const lost = Math.min(food.energyValue, (settings.nutrientCycle === 'decay-v1' ? 30 : NUTRIENT_DECAY_JOULES_PER_SECOND) * dt);
+    food.energyValue -= lost;
+    pool.reserve += lost;
+    state.ledger.recordedLosses += lost;
+    if (food.energyValue <= 0) continue;
+    food.radius = getNutrientRadius(food.energyValue, settings.nutrientCycle);
+    if (food.kind === 'carrion') {
+      food.decayTimeRemaining = Math.max(0, (food.decayTimeRemaining ?? CARRION_DECAY_SECONDS) - dt);
+      // Timer subtraction can retain a few ulps at exactly 60 seconds.
+      if (food.decayTimeRemaining < 1e-10) {expired.push(food); continue;}
+    } else plants++;
+    state.nutrients[kept++] = food;
+  }
+  state.nutrients.length = kept;
+  let slots = Math.max(0, Math.min(Math.floor(settings.targetNutrients), settings.nutrientLimit ?? Infinity) - plants);
+  slots = Math.min(slots, Math.max(0, FOOD_SAFETY_LIMIT - kept));
+  const channels = tubeGeometry(settings, state.selfTubes);
+  for (const food of expired) {
+    const count = Math.min(slots, Math.ceil(food.energyValue / NUTRIENT_ENERGY_VALUE));
+    let remaining = food.energyValue;
+    // Fit a small rotated grid inside one local water rectangle. Moving its
+    // center inward keeps even corner fragments distinct after wall projection.
+    const angle = count ? state.prng.range(0, Math.PI * 2) : 0;
+    const cos = Math.cos(angle), sin = Math.sin(angle);
+    const side = Math.ceil(Math.sqrt(count));
+    const extent = Math.max(0, side - 1) * Math.SQRT2 + 1e-6;
+    const rects = channels ? waterRects(channels) : [{left: 35, right: settings.worldWidth - 35,
+      top: 35, bottom: settings.worldHeight - 35}];
+    let distance = Infinity, center = {x: food.x, y: food.y};
+    for (const r of rects) {
+      const left = r.left < 0 ? r.left + BASE_NUTRIENT_RADIUS : r.left;
+      const right = r.right > settings.worldWidth ? r.right - BASE_NUTRIENT_RADIUS : r.right;
+      const x = clampVal(food.x, left + extent, right - extent);
+      const y = clampVal(food.y, r.top + extent, r.bottom - extent);
+      const d = (x - food.x) ** 2 + (y - food.y) ** 2;
+      if (d < distance) {distance = d; center = {x, y};}
+    }
+    const share = count ? Math.min(NUTRIENT_ENERGY_VALUE, remaining / count) : 0;
+    for (let i = 0; i < count; i++) {
+      const energy = Math.min(NUTRIENT_ENERGY_VALUE, i === count - 1 ? remaining : share);
+      const dx = ((i % side) - (side - 1) / 2) * 2;
+      const dy = (Math.floor(i / side) - (side - 1) / 2) * 2;
+      const x = center.x + dx * cos - dy * sin, y = center.y + dx * sin + dy * cos;
+      const point = channels ? projectWaterPoint(channels, x, y)
+        : {x: clampVal(x, 35, settings.worldWidth - 35), y: clampVal(y, 35, settings.worldHeight - 35)};
+      state.nutrients.push({id: `NUT-${state.prng.nextUint32().toString(36)}`, ...point,
+        vx: food.vx, vy: food.vy, energyValue: energy,
+        radius: getNutrientRadius(energy, settings.nutrientCycle), bottomTimer: 0,
+        kind: 'nutrient', pulseTimer: state.prng.range(0, Math.PI * 2)});
+      remaining -= energy;
+    }
+    slots -= count;
+    pool.reserve += remaining;
+    state.ledger.recordedLosses += remaining;
+  }
 }
 
 export function stepSimulation(
@@ -3544,13 +3618,16 @@ export function stepSimulation(
     }
   }
 
-  // Mineralization waits for a plant-food slot; stored carrion energy is never deleted.
+  const cycling = !!state.energyPool && (settings.nutrientCycle === 'decay-v1' || settings.nutrientCycle === 'decay-v2');
+  if (cycling) advanceNutrientCycle(state, settings, dt);
+
+  // Historical mineralization waits for a plant-food slot; stored carrion energy is never deleted.
   let decaySlots = Math.max(0, targetNutrientsVal - nutrients.filter(n => n.kind !== 'carrion').length);
   // 2. Nutrients Motion
   const fluidDampingExp = Math.exp(-mu * 12.0 * dt);
   for (let i = 0; i < nutrients.length; i++) {
     const nut = nutrients[i];
-    if (nut.kind === 'carrion') {
+    if (!cycling && nut.kind === 'carrion') {
       nut.decayTimeRemaining = Math.max(0, (nut.decayTimeRemaining ?? CARRION_DECAY_SECONDS) - dt);
       if (state.energyPool && nut.decayTimeRemaining === 0) {
         state.energyPool.reserve += nut.energyValue;
@@ -3598,7 +3675,7 @@ export function stepSimulation(
     if (state.energyPool) {
       egg.ageSeconds = (egg.ageSeconds ?? 0) + dt;
       if (egg.ageSeconds >= EGG_LIFETIME_MULTIPLIER * egg.totalIncubationTime) {
-        closedCarrion(state, egg.x, egg.y, egg.fundedStructural + egg.fundedReserve);
+        closedCarrion(state, settings, egg.x, egg.y, egg.fundedStructural + egg.fundedReserve);
         eggs.splice(i, 1);
         onEvent?.('egg_loss');
         continue;
@@ -3728,7 +3805,7 @@ export function stepSimulation(
         const deathPoint = channels ? projectWaterPoint(channels, deadPos.x, deadPos.y, 40)
           : {x: clampVal(deadPos.x, 40, worldWidth - 40), y: clampVal(deadPos.y, 40, worldHeight - 40)};
         if (state.energyPool) {
-          closedCarrion(state, deathPoint.x, deathPoint.y, totalRemainingEnergy);
+          closedCarrion(state, settings, deathPoint.x, deathPoint.y, totalRemainingEnergy);
         } else if (totalRemainingEnergy > 0 && nutrients.length < 2200) {
           nutrients.push({
             id: `REM-${prng.nextUint32().toString(36)}`,
@@ -4140,7 +4217,7 @@ export function stepSimulation(
         const transfer = consume(food.energyValue, carrion ? 'Carrion' : 'Nutrient', carrion ? .85 : 1);
         if (transfer <= 0) continue;
         food.energyValue = Math.max(0, food.energyValue - transfer);
-        food.radius = getNutrientRadius(food.energyValue);
+        food.radius = getNutrientRadius(food.energyValue, settings.nutrientCycle);
         if (food.energyValue <= 1) {
           ledger.recordedLosses += food.energyValue;
           returnedEnergy += food.energyValue;

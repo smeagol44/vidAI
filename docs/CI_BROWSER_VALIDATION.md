@@ -10,7 +10,7 @@ avoid software-rendering contention. `fail-fast: false` retains all results.
 
 The required `browser-smoke` name remains an aggregate. It succeeds only when
 the Worker and every browser shard succeed. No skipped/failed dependency can
-make the aggregate green. Permissions, dependency installation, branch
+make the aggregate green. Permissions, branch
 protection, Pages publication and scientific baselines are unchanged.
 
 Run fast tests and build while developing. Use focused browser checks for UI
@@ -28,3 +28,19 @@ aggregate in run 41287349596. Fast/build and standing locomotion checks also
 passed. Exact candidate, merge and publication receipts are maintained in #57.
 Production main and independent testing remain separate checkouts; parallel CI
 does not authorize promoting testing features or resetting its baseline.
+
+
+## Pinned browser environment (#136)
+
+Browser shards use the official
+`mcr.microsoft.com/playwright:v1.58.2-noble` image, matching the unchanged
+`@playwright/test` lockfile. Browsers and OS dependencies are preinstalled;
+`npm ci`, the production build, every existing shard and the mandatory aggregate
+remain. Firefox requires the existing container HOME ownership adjustment.
+This changes browser provisioning, not simulation performance or Pages.
+
+For local focused Chromium reuse, set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`
+to an already installed compatible binary. Ephemeral Work environments cannot
+promise persistent browser caches; use recorded exact-candidate CI evidence
+when local browsers are unavailable. Do not retry scientific protocols as part
+of infrastructure verification.

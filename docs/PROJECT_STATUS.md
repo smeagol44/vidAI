@@ -1,3 +1,93 @@
+## Maintainer acceptance — PR #134 / v0.40.0 (2026-11-04)
+
+The owner authorizes the complete consolidated contribution and a release bump
+from0.39.0 to0.40.0 before publication. Canonical branch
+`integration/pr134-v0.40.0` starts at reviewed contributor head
+`c37ac8dba6a80eb92414f419150ec50aad570909`; its original ancestry and evidence are
+preserved. Food/observer/Pipe/caustics/renderer runtime behavior is unchanged from
+that reviewed candidate. Package, lockfile and displayed/export BUILD_VERSION
+advance together. Current implementation references replace pending-acceptance
+labels; historical reports below are preserved as dated evidence.
+
+Exact reviewed head passed385 fast tests/build, actual Worker and92 browser
+cases (33Chromium/38Firefox/16toolbar/5side-window), plus standing locomotion.
+Four optional anatomy fixture failures reproduce on current main and are not
+hidden. Required final integration checks, merge SHA and actual production/Wiki
+publication receipts are maintained in #134/#57. Testing retains its independent
+T1.1 identity; no testing promotion or experimental rerun is included.
+
+Follow-up scope is separate: RGB-only vision, mouth size/effectiveness relative
+to its host part, creature life energy, egg-laying cooldown, egg energy production,
+overlapping mouths, reserve energy and selected experiment repeats. Their meanings,
+compatibility decisions and protocols must be settled before implementation.
+
+---
+
+## Consolidated completed-fork submission — 2026-11-03 (review pending)
+
+Hernan explicitly authorized all eligible completed advances in fork main
+772130b64fa665417a791471b75f01622b9cff86. Canonical main remains
+041362eefa64971d9038f4ad7ec4fd59a747d3ec and is already ancestral. The existing
+clean PR #134 is expanded additively on its original submission branch; its two
+original commits/receipts remain. No fork-main synchronization or history rewrite
+is needed. Neither fork main nor testing is modified.
+
+Included: reviewed nutrient cycle/observer preferences (#125/#126), independent
+Pipe World without automatic tubes (#135), observer caustics toggle (#137),
+pinned browser provisioning (#136), fork-approved egg/halo layer ordering and
+readout precision corrections, and corresponding causal test compatibility.
+Excluded: contributor workspace, unfinished performance research/Stage4 plans,
+stopped experiments, fork Pages differences, old synchronization artifacts and
+obsolete general browser-test edits. The canonical publication workflow and
+release identity are preserved. The inventory and strategy assessment are in
+[the submission report](reports/completed-fork-submission-2026-11-03.md).
+
+Local npm ci, 385 fast tests, typecheck/build and actual production Worker pass.
+Original ecological evidence remains byte-for-byte; no ecological/evolution
+protocol is rerun or rebaselined. Final candidate CI/readbacks and exact heads
+belong in #57/#134. Wiki sources describe the candidate with pending-acceptance
+labels; actual upstream Wiki publication, merge, auto-merge and release are
+not authorized. All related issues remain open for maintainer acceptance.
+
+The following dated #125/#126-only checkpoint is preserved as original scope
+and evidence; the consolidated scope above supersedes its earlier exclusions.
+
+---
+
+## Nutrient-cycle and observer-preference submission (#125/#126, 2026-11-02)
+
+After visually/practically accepting fork main d044188f06f0bf3519a0c974739e3642ddc723ce,
+Hernan explicitly authorized upstream submission. Clean fork branch
+submission/nutrient-cycle-observer-preferences starts directly at canonical
+041362eefa64971d9038f4ad7ec4fd59a747d3ec. Only the selected food lifecycle and
+observer-preference features/dependencies are included; no fork-main ancestry,
+contributor journal, testing overlay, unrelated renderer/toolbar/test changes,
+hosting changes, release bump or stopped experiments are submitted.
+
+New closed application worlds choose decay-v2/schema19 (1 J/s, radius floor 6,
+remaining-energy mineralization at 60 s); saved v1/schema18 keeps30 J/s and historical
+omitted cycles remain exact. UI-only selection/tracking metadata keeps independent
+Default on/on and Harsh off/off defaults, overrides and manual Track. Canonical
+egg/halo layer order, accepted mouth conversion, physics, controllers, energy
+funding and dual-Pages remain unchanged.
+
+Exact-target local npm ci,379fast tests,build/typecheck and actual production
+Worker pass. Sixteen historical canonical combinations preserve every simulation
+snapshot for960 ticks (zero stock difference); omitted/v1/v2 tank/tube cases
+match the verified fork for720 complete ticks through mineralization. Original
+v1/v2 ecological receipts are included byte-for-byte, not rerun or relabeled as
+new upstream measurements. Material feeding/population differences are retained
+in their reports; no ecological or performance superiority is claimed.
+
+Local browser binaries remain unavailable after the earlier truncated archive.
+A temporary fork-only validation PR against the exact canonical base will supply
+remote browser evidence without merging or deploying. Final head/CI/PR/status
+receipts belong in #125/#126/#57 and the submission PR. Upstream submission is
+not upstream acceptance; issues stay open. No merge/auto-merge/release/deployment
+or actual upstream Wiki publication is authorized.
+
+---
+
 ## Maintainer integration — local tubes and complete feature stack (v0.39.0)
 
 Integrates selected #124 stages1–3 after the preceding contributor features.

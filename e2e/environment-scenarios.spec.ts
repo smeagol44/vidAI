@@ -1,30 +1,22 @@
 import {test, expect} from '@playwright/test';
+import {build} from 'vite';
 import {readFile} from 'node:fs/promises';
 import {DEFAULT_SETTINGS, createSnapshot} from '../persistence';
 import {createInitialWorld} from '../world';
-import {createScenarioWorld} from '../environmentScenarios';
-
-type SnapshotState = ReturnType<typeof createSnapshot>['state'];
-function expectInitialState(actual: SnapshotState, expected: SnapshotState) {
-  // Node and browser transcendental math can differ by one ULP when placing
-  // rotated body parts. Allow only subnanopixel initial x/y differences;
-  // every other field and all imported/continued snapshots stay exact.
-  const normalized = structuredClone(actual);
-  expect(actual.organisms).toHaveLength(expected.organisms.length);
-  for (let i = 0; i < expected.organisms.length; i++) {
-    expect(actual.organisms[i].segments).toHaveLength(expected.organisms[i].segments.length);
-    for (let j = 0; j < expected.organisms[i].segments.length; j++) {
-      for (const key of ['x', 'y'] as const) {
-        const value = expected.organisms[i].segments[j][key];
-        expect(Math.abs(actual.organisms[i].segments[j][key] - value)).toBeLessThanOrEqual(1e-9);
-        normalized.organisms[i].segments[j][key] = value;
-      }
-    }
-  }
-  expect(normalized).toEqual(expected);
-}
 
 test.setTimeout(60000);
+let scenarioBrowserCode: string;
+test.beforeAll(async () => {
+  const built = await build({configFile: false, logLevel: 'silent', build: {
+    write: false, minify: false, lib: {entry: 'tests/support/scenario-browser.ts',
+      formats: ['iife'], name: 'scenarioReference'},
+  }});
+  const output = Array.isArray(built) ? built[0] : built;
+  if (!('output' in output)) throw new Error('Missing scenario reference bundle');
+  const chunk = output.output.find(file => file.type === 'chunk');
+  if (!chunk || chunk.type !== 'chunk') throw new Error('Missing scenario reference code');
+  scenarioBrowserCode = chunk.code;
+});
 for (const fallback of [false, true]) test(`environment dropdown, initial conditions, editable controls and exact imports (${fallback ? 'fallback' : 'Worker'})`, async ({page}, info) => {
   await page.setViewportSize(fallback ? {width: 375, height: 812} : {width: 1280, height: 850});
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
@@ -41,9 +33,12 @@ for (const fallback of [false, true]) test(`environment dropdown, initial condit
     };
   });
   await page.goto(`./${fallback ? '?mainthread' : ''}`);
+  // Node and browser transcendental math may differ by one ULP. Generate the
+  // exact reference in this browser instead of weakening state equality.
+  await page.addScriptTag({content: scenarioBrowserCode});
   const selector = page.getByRole('combobox', {name: 'Environment scenario'});
   await expect(selector).toHaveValue('default');
-  expect(await selector.locator('option').allTextContents()).toEqual(['🌎 Default', '⛰ Harsh World']);
+  expect(await selector.locator('option').allTextContents()).toEqual(['🌎 Default', '⛰ Harsh World', 'Pipe World']);
   const box = await selector.boundingBox();
   expect(box).not.toBeNull(); expect(box!.x).toBeGreaterThanOrEqual(0);
   expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
@@ -60,14 +55,18 @@ for (const fallback of [false, true]) test(`environment dropdown, initial condit
   await page.getByRole('button', {name: 'Pause', exact: true}).dispatchEvent('click');
   await page.getByTitle('Ecology & Physical Settings').dispatchEvent('click');
   const normal = await read();
+  expect(normal.metadata.observerPreferences).toEqual({selectAddedCreature: true, trackSelectedCreature: true, showCaustics: true});
   expect(normal.settings).toMatchObject({worldWidth: 2400, worldHeight: 1500,
     waterViscosity: .18, gravity: 0, maxOrganisms: 30, inflowRate: 15, nutrientLimit: null});
   const start = fallback ? normal : await page.evaluate(() => (window as any).scenarioResets.at(-1));
   expect(start.state.simTime).toBe(0); expect(start.state.nutrients).toHaveLength(275);
-  const expected = createSnapshot(createInitialWorld(start.settings, start.state.initialSeed), start.settings);
-  expectInitialState(start.state, expected.state);
+  const expected = await page.evaluate(({settings, seed}) => {
+    const reference = (window as any).scenarioReference;
+    return reference.createSnapshot(reference.createInitialWorld(settings, seed), settings).state;
+  }, {settings: start.settings, seed: start.state.initialSeed});
+  expect(start.state).toEqual(expected);
   await page.getByTitle('Ecology & Physical Settings').dispatchEvent('click');
-  await page.keyboard.press('Escape');
+  await page.getByTitle('Game Menu').dispatchEvent('click');
   await page.getByRole('button', {name: 'MAIN MENU', exact: true}).dispatchEvent('click');
   await selector.selectOption('harsh-world');
   await page.screenshot({path: info.outputPath('environment-menu.png')});
@@ -77,15 +76,21 @@ for (const fallback of [false, true]) test(`environment dropdown, initial condit
   await page.getByRole('button', {name: 'Pause', exact: true}).dispatchEvent('click');
   await page.getByTitle('Ecology & Physical Settings').dispatchEvent('click');
   const harsh = await read();
+  expect(harsh.metadata.observerPreferences).toEqual({selectAddedCreature: false, trackSelectedCreature: false, showCaustics: false});
   expect(harsh.settings).toEqual({...normal.settings, inflowRate: 1, nutrientLimit: 200,
     worldWidth: 4800, worldHeight: 3000, gravity: 20, maxOrganisms: 50, waterViscosity: .4});
   const harshStart = fallback ? harsh : await page.evaluate(() => (window as any).scenarioResets.at(-1));
   expect(harshStart.state.simTime).toBe(0); expect(harshStart.state.nutrients).toHaveLength(0);
   expect(harshStart.state.organisms).toHaveLength(fallback ? 12 : 18);
-  const planned = createScenarioWorld(normal.settings, 'harsh-world', harshStart.state.initialSeed, 'balanced', preset);
-  expectInitialState(harshStart.state, createSnapshot(planned.state, planned.settings).state);
-  const matchingDefault = createInitialWorld(normal.settings, harshStart.state.initialSeed, 'balanced', preset);
-  expect(harshStart.state.energyPool.budget).toBe(matchingDefault.energyPool!.budget);
+  const planned = await page.evaluate(({settings, seed, preset}) => {
+    const reference = (window as any).scenarioReference;
+    const world = reference.createScenarioWorld(settings, 'harsh-world', seed, 'balanced', preset);
+    const matchingDefault = reference.createInitialWorld(settings, seed, 'balanced', preset);
+    return {state: reference.createSnapshot(world.state, world.settings).state,
+      budget: matchingDefault.energyPool.budget};
+  }, {settings: normal.settings, seed: harshStart.state.initialSeed, preset});
+  expect(harshStart.state).toEqual(planned.state);
+  expect(harshStart.state.energyPool.budget).toBe(planned.budget);
   expect(harshStart.state.energyPool.reserve).toBe(825000);
   for (const [label, value] of [['Tank width', '4800'], ['Tank height', '3000'], ['Gravity', '20'],
     ['Maximum creatures + eggs', '50'], ['Maximum nutrients', '200'], ['Nutrient recycling rate', '1'], ['Water viscosity', '0.4']]) {
@@ -110,12 +115,80 @@ for (const fallback of [false, true]) test(`environment dropdown, initial condit
   await page.clock.runFor(50); // paint the paused, imported tank for visual smoke
   await page.screenshot({path: info.outputPath('environment-restored.png')});
   await page.getByTitle('Ecology & Physical Settings').dispatchEvent('click');
-  await page.keyboard.press('Escape');
+  await page.getByTitle('Game Menu').dispatchEvent('click');
   await page.getByRole('button', {name: 'MAIN MENU', exact: true}).dispatchEvent('click');
   await selector.selectOption('default');
   await page.getByRole('button', {name: 'SEED SIMULATION', exact: true}).dispatchEvent('click');
   await page.getByRole('button', {name: 'Pause', exact: true}).dispatchEvent('click');
   await page.getByTitle('Ecology & Physical Settings').dispatchEvent('click');
   expect((await read()).settings).toEqual(normal.settings);
+  expect(errors).toEqual([]);
+});
+
+for (const fallback of [false, true]) test(`Pipe World startup, green icon and exact reload (${fallback ? 'fallback' : 'Worker'})`, async ({page}, info) => {
+  await page.setViewportSize(fallback ? {width: 375, height: 812} : {width: 1280, height: 850});
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  await page.clock.install({time: new Date('2026-01-01T00:00:00Z')});
+  await page.clock.pauseAt(new Date('2026-01-02T00:00:00Z'));
+  await page.addInitScript(() => {
+    (window as any).scenarioResets = [];
+    const post = Worker.prototype.postMessage;
+    Worker.prototype.postMessage = function(message: any, ...rest: any[]) {
+      if (message.type === 'reset') (window as any).scenarioResets.push(structuredClone(message.snapshot));
+      return (post as any).call(this, message, ...rest);
+    };
+  });
+  await page.goto(`./${fallback ? '?mainthread' : ''}`);
+  const selector = page.getByRole('combobox', {name: 'Environment scenario'});
+  const before = await page.evaluate(() => (window as any).scenarioResets.length);
+  await selector.selectOption('pipe-world');
+  await expect(page.getByRole('img', {name: 'Green retro pipe'})).toBeVisible();
+  const box = await selector.boundingBox();
+  expect(box!.x).toBeGreaterThanOrEqual(0);
+  expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+  expect(await page.evaluate(() => (window as any).scenarioResets.length)).toBe(before);
+  await page.screenshot({path: info.outputPath('pipe-world-menu.png')});
+  await page.getByRole('button', {name: 'SEED SIMULATION', exact: true}).dispatchEvent('click');
+  await page.getByRole('button', {name: 'Pause', exact: true}).dispatchEvent('click');
+  await page.getByTitle('Ecology & Physical Settings').dispatchEvent('click');
+  const read = async () => {
+    const download = page.waitForEvent('download');
+    await page.getByRole('button', {name: 'Export Snapshot', exact: true}).dispatchEvent('click');
+    return JSON.parse(await readFile((await (await download).path())!, 'utf8'));
+  };
+  const pipe = await read();
+  const start = fallback ? pipe : await page.evaluate(() => (window as any).scenarioResets.at(-1));
+  expect(start.settings).toEqual({worldWidth: 4600, worldHeight: 2100, gravity: 20,
+    waterViscosity: .4, inflowRate: 1, nutrientLimit: 200, targetNutrients: 275,
+    nutrientPattern: 'uniform', maxOrganisms: 50, kinshipProtection: true, mutationSeverity: .25,
+    physicsRegime: 'passive-work-v3', ecologyRegime: 'closed-v1', mouthContactModel: 'capsule-v1', nutrientCycle: 'decay-v2'});
+  expect(start.state.simTime).toBe(0); expect(start.state.organisms).toHaveLength(18);
+  expect(start.state.eggs).toHaveLength(0); expect(start.state.nutrients).toHaveLength(0);
+  expect(start.state.selfTubes).toBeUndefined();
+  expect(start.state.energyPool.reserve).toBe(825000);
+  expect(pipe.schemaVersion).toBe('19.0.0');
+  expect(pipe.metadata.observerPreferences).toEqual({selectAddedCreature: false, trackSelectedCreature: false, showCaustics: false});
+  await expect(page.getByLabel('Tank width', {exact: true})).toHaveValue('4600');
+  await expect(page.getByLabel('Tank height', {exact: true})).toHaveValue('2100');
+  await page.clock.runFor(50);
+  await page.screenshot({path: info.outputPath('pipe-world-started.png')});
+  // Start another preset, then restore an edited Pipe snapshot. Neither the
+  // selected preset nor its defaults may overwrite authoritative saved values.
+  await page.getByTitle('Ecology & Physical Settings').dispatchEvent('click');
+  await page.getByTitle('Game Menu').dispatchEvent('click');
+  await page.getByRole('button', {name: 'MAIN MENU', exact: true}).dispatchEvent('click');
+  await selector.selectOption('default');
+  await expect(page.getByRole('img', {name: 'Green retro pipe'})).toHaveCount(0);
+  await page.getByRole('button', {name: 'SEED SIMULATION', exact: true}).dispatchEvent('click');
+  await page.getByRole('button', {name: 'Pause', exact: true}).dispatchEvent('click');
+  await page.getByTitle('Ecology & Physical Settings').dispatchEvent('click');
+  pipe.settings.gravity = -15; pipe.settings.inflowRate = 2; pipe.settings.nutrientLimit = 7;
+  await page.locator('input[type=file]').setInputFiles({name: 'pipe-world.json', mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(pipe))});
+  await expect(page.getByLabel('Tank width', {exact: true})).toHaveValue('4600');
+  await expect(page.getByLabel('Gravity', {exact: true})).toHaveValue('-15');
+  const restored = await read();
+  expect(restored.settings).toEqual(pipe.settings); expect(restored.state).toEqual(pipe.state);
+  expect(restored.metadata.observerPreferences).toEqual(pipe.metadata.observerPreferences);
   expect(errors).toEqual([]);
 });

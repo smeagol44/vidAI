@@ -5,6 +5,31 @@ features and the original phase status. [Project status](PROJECT_STATUS.md)
 records experiments and release history. This file tracks remaining work;
 listed extensions are not implementation promises.
 
+## Integrated contributor advances — v0.40.0
+
+PR #134 adds versioned1 J/s food decay and60s remaining-energy mineralization,
+observer selection/tracking and caustics controls, independent Pipe World and
+pinned browser provisioning. Old saves retain their cycle unless explicitly
+upgraded. Source issues #125/#126/#135/#136/#137 and #57 hold acceptance receipts.
+Historical no-decay statements below apply to worlds omitting the cycle.
+
+## Owner-requested follow-up order (2026-11-04; scope pending)
+
+1. RGB-only vision: distance stays internal to raycasting/attenuation; remove the
+   direct neural distance channel through a defined versioned compatibility policy.
+2. Mouth size or effectiveness relative to the attached body part.
+3. Available creature life energy; define which stock/capacity is intended.
+4. Egg-laying cooldown; define the desired timing and governing conditions.
+5. Egg energy production; clarify funding, uptake and hatching expectations.
+6. Overlapping mouths; clarify geometry, stacking and affected intake rules.
+7. Reserve energy, considered together with creature life energy.
+8. Repeat selected experiments only after the preceding corrections and an
+   explicit bounded protocol, preserving every original result and lineage.
+
+These are requested discussion topics, not implemented changes or permission to
+rerun historical trials now. Search existing issues before creating bounded tasks;
+#57 is the durable planning entry point. The owner will clarify ambiguous items.
+
 ## Active work tracking
 
 The [issue-backed roadmap and handoff index](https://github.com/smeagol44/vidAI/issues/57)

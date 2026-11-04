@@ -74,12 +74,17 @@ for (const closed of [false, true]) test(`reserve references survive JSON, resto
   assert.equal(host.state.eggs[1].initialFundedReserve, 1000);
 });
 
-for (const schema of ['12.0.0', '13.0.0', '14.0.0', '15.0.0'])
+for (const schema of ['12.0.0', '13.0.0', '14.0.0', '15.0.0', '16.0.0'])
   test(`old ${schema} eggs initialize only from known current reserve and retain migration provenance`, () => {
     const {state, config} = eggReserveFixture(schema === '13.0.0');
     config.physicsRegime = schema === '15.0.0' ? 'passive-work-v3' : 'paid-work-v2';
     if (schema === '12.0.0' || schema === '13.0.0') delete config.mouthContactModel;
+    // Old mouth schema uses the former span field. Keep the migration explicit.
     const snapshot = createSnapshot(state, config); snapshot.schemaVersion = schema;
+    if (schema !== '16.0.0') for (const egg of snapshot.state.eggs)
+      for (const mouth of egg.genome.mouths) {
+        mouth.intakeWidth = mouth.intakeLength!; delete mouth.intakeLength;
+      }
     for (const egg of snapshot.state.eggs) {delete (egg as any).initialFundedReserve; delete (egg as any).initialReserveIsLegacy;}
     const before = JSON.stringify(snapshot), restored = restoreSnapshot(snapshot);
     assert.equal(JSON.stringify(snapshot), before, 'import must not mutate its input');

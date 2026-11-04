@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {createScenarioWorld} from '../environmentScenarios';
+import {createScenarioWorld, PIPE_WORLD_PRESET} from '../environmentScenarios';
 import {createInitialWorld} from '../world';
 import {DEFAULT_SETTINGS, createSnapshot, restoreSnapshot, clearFreeNutrients, totalAccountedEnergy} from '../persistence';
 import {stepSimulation, NUTRIENT_ENERGY_VALUE} from '../simulation';
@@ -83,5 +83,76 @@ test('Harsh snapshots and Worker-host control edits continue exactly without rea
   host.reset(saved, 2);
   for (let i = 0; i < 60; i++) {host.tick(); stepSimulation(copy.state, copy.settings, 1 / 60);}
   assert.deepEqual(host.snapshot(), createSnapshot(copy.state, copy.settings));
+  close(totalAccountedEnergy(host.state), state.energyPool!.budget);
+});
+
+const pipeReference = {...defaults, nutrientCycle: 'decay-v2' as const,
+  worldWidth: 4600, worldHeight: 2100, gravity: 20, waterViscosity: .4,
+  inflowRate: 1, nutrientLimit: 200, maxOrganisms: 50};
+
+test('Pipe owns explicit frozen settings independent of Harsh, caller defaults and other instances', () => {
+  assert.deepEqual(PIPE_WORLD_PRESET, pipeReference);
+  assert.ok(Object.isFrozen(PIPE_WORLD_PRESET));
+  const first = createScenarioWorld(defaults, 'pipe-world', 17);
+  const hostile = {...defaults, gravity: -20, waterViscosity: .02, targetNutrients: 5,
+    inflowRate: 99, maxOrganisms: 3, mutationSeverity: .9, kinshipProtection: false};
+  const harsh = createScenarioWorld(hostile, 'harsh-world', 17);
+  harsh.settings.targetNutrients = 10;
+  first.settings.gravity = 0;
+  const second = createScenarioWorld(hostile, 'pipe-world', 17);
+  assert.deepEqual(second.settings, pipeReference);
+  assert.notEqual(first.settings, second.settings);
+  second.settings.inflowRate = 4;
+  assert.equal(createScenarioWorld(defaults, 'harsh-world', 17).settings.inflowRate, 1);
+  assert.equal(PIPE_WORLD_PRESET.inflowRate, 1);
+});
+
+test('Pipe matches the frozen Harsh startup recipe except dimensions, with funded food and zero topology', () => {
+  const pipe = createScenarioWorld(defaults, 'pipe-world', 73);
+  const harsh = createScenarioWorld({...defaults, nutrientCycle: 'decay-v2'}, 'harsh-world', 73);
+  assert.deepEqual(pipe.settings, {...harsh.settings, worldWidth: 4600, worldHeight: 2100});
+  const manual = createInitialWorld(pipeReference, 73);
+  clearFreeNutrients(manual);
+  assert.deepEqual(createSnapshot(pipe.state, pipe.settings), createSnapshot(manual, pipeReference));
+  assert.equal(pipe.state.organisms.length, 18);
+  assert.equal(pipe.state.eggs.length, 0);
+  assert.equal(pipe.state.nutrients.length, 0);
+  assert.equal(pipe.state.simTime, 0);
+  assert.equal(pipe.state.nutrientAccumulator, 0);
+  assert.equal(pipe.state.selfTubes, undefined);
+  assert.equal(pipe.state.energyPool!.reserve, 825000);
+  assert.equal(pipe.state.energyPool!.budget, harsh.state.energyPool!.budget);
+  assert.deepEqual(pipe.observerPreferences, {selectAddedCreature: false, trackSelectedCreature: false, showCaustics: false});
+  close(totalAccountedEnergy(pipe.state), pipe.state.energyPool!.budget);
+});
+
+test('Pipe preserves all founder presets and both brain modes independently', () => {
+  for (const mode of ['balanced', 'unbiased'] as const) {
+    for (const [preset, count] of [['standard', 18], ['showcase', 9], ['megafauna', 12], ['predator_cove', 18]] as const) {
+      const pipe = createScenarioWorld(defaults, 'pipe-world', 73, mode, preset);
+      const harsh = createScenarioWorld(defaults, 'harsh-world', 73, mode, preset);
+      assert.equal(pipe.state.organisms.length, count);
+      assert.deepEqual(pipe.state.organisms.map(o => o.genome), harsh.state.organisms.map(o => o.genome));
+      assert.deepEqual(pipe.state.prng.getState(), harsh.state.prng.getState());
+      assert.equal(pipe.state.energyPool!.budget, harsh.state.energyPool!.budget);
+      assert.equal(pipe.state.selfTubes, undefined);
+    }
+  }
+});
+
+test('Pipe exports within unchanged dimension limits and restores edited conditions and exact continuation', () => {
+  const {state, settings} = createScenarioWorld(defaults, 'pipe-world', 73, 'unbiased', 'standard', 2);
+  const host = new SimulationHost(); host.reset(createSnapshot(state, settings), 1);
+  for (let i = 0; i < 60; i++) host.tick();
+  assert.equal(host.state.nutrients.length, 1);
+  host.settings = {...host.settings, gravity: -10, inflowRate: 2, nutrientLimit: 7, waterViscosity: .12};
+  const saved = JSON.parse(JSON.stringify(host.snapshot()));
+  const restored = restoreSnapshot(saved);
+  assert.equal(saved.schemaVersion, '19.0.0');
+  assert.deepEqual(createSnapshot(restored.state, restored.settings), saved);
+  host.reset(saved, 2);
+  for (let i = 0; i < 60; i++) {host.tick(); stepSimulation(restored.state, restored.settings, 1 / 60);}
+  assert.deepEqual(host.snapshot(), createSnapshot(restored.state, restored.settings));
+  assert.equal(host.state.selfTubes, undefined);
   close(totalAccountedEnergy(host.state), state.energyPool!.budget);
 });
