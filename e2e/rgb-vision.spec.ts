@@ -8,7 +8,7 @@ import {upgradeWorldVision} from '../simulation';
 test.use({viewport: {width: 1280, height: 850}});
 for (const fallback of [false, true]) test(`legacy vision is preserved until explicit RGB-only upgrade (${fallback ? 'fallback' : 'Worker'})`, async ({page}) => {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
-  const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0};
+  const settings = {...DEFAULT_SETTINGS, nutrientLimit: null, targetNutrients: 0, inflowRate: 0};
   const state = createInitialWorld(settings, 139, 'balanced', 'standard', 0);
   addExternalOrganism(state, createFounderGenome('CUR-001', 'balanced', {vision: 'legacy'}), settings, 1200, 750, 0);
   const source = createSnapshot(state, settings);
