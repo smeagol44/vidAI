@@ -29,15 +29,19 @@ for (const fallback of [false, true]) test(`versioned nutrient radii, paused imp
     return JSON.parse(await readFile((await (await download).path())!, 'utf8'));
   };
   const upload = async (snapshot: unknown) => {
+    const canvas = page.getByLabel('Aquatic simulation');
+    const epoch = Number(await canvas.getAttribute('data-world-epoch'));
     await page.evaluate(() => {(window as any).nutrientRadii.length = 0;});
     await page.locator('input[type=file]').setInputFiles({name: 'nutrient-cycle.json', mimeType: 'application/json',
       buffer: Buffer.from(JSON.stringify(snapshot))});
+    // A visible Resume button can belong to the previous paused world. Wait
+    // for replacement before exporting; downloads are not a polling transport.
+    await expect(canvas).toHaveAttribute('data-world-epoch', String(epoch + 1), {timeout: 10000});
     await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
-    // An already-paused world also has Resume visible before File.text resolves.
-    // Wait for the exact replacement, not that stale UI acknowledgement.
-    await expect.poll(async () => {
-      const current = await read(); return {state: current.state, settings: current.settings};
-    }, {timeout: 10000}).toEqual({state: (snapshot as any).state, settings: (snapshot as any).settings});
+    // Worker reset precedes the snapshot on the same ordered message port.
+    const current = await read();
+    expect({state: current.state, settings: current.settings})
+      .toEqual({state: (snapshot as any).state, settings: (snapshot as any).settings});
   };
   // New startup must explicitly opt in, while old imports retain their semantics.
   const startup = await read(); expect(startup.schemaVersion).toBe('19.0.0');

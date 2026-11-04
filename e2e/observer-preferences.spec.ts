@@ -50,7 +50,8 @@ for (const fallback of [false, true]) test(`independent observer preferences, bo
     await page.locator('input[type=file]').setInputFiles({name: 'observer-preferences.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(snapshot))});
     await expect(canvas).toHaveAttribute('data-world-epoch', String(epoch + 1));
     await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
-    await expect.poll(async () => (await read()).state).toEqual((snapshot as any).state);
+    // The epoch acknowledges replacement; reset then snapshot are FIFO Worker requests.
+    expect((await read()).state).toEqual((snapshot as any).state);
   };
   const selectCenter = async () => {
     await page.clock.runFor(32);
@@ -77,7 +78,8 @@ for (const fallback of [false, true]) test(`independent observer preferences, bo
       await expect(badge.getByRole('button', {name: 'Track selected creature'})).toHaveAttribute('aria-pressed', String(trackSelectedCreature));
     } else await expect(badge).toHaveCount(0);
     await page.getByTitle('Ecology & Physical Settings').dispatchEvent('click');
-    await expect.poll(async () => (await read()).state.organisms.length).toBe(2);
+    // Spawn and snapshot share the ordered Worker port; assert one authoritative result.
+    expect((await read()).state.organisms).toHaveLength(2);
     await page.getByTitle('Close settings (✕)').dispatchEvent('click');
     // Clear any automatic choice, then explicitly pick the fixed original creature.
     if (!selectAddedCreature) await expect(badge).toHaveCount(0);
@@ -96,7 +98,7 @@ for (const fallback of [false, true]) test(`independent observer preferences, bo
     } else await expect(badge).toHaveAttribute('data-organism-id', source.state.organisms[0].id);
     await page.getByTitle('Close specimen bank (✕)').dispatchEvent('click');
     await page.getByTitle('Ecology & Physical Settings').dispatchEvent('click');
-    await expect.poll(async () => (await read()).state.organisms.length).toBe(3);
+    expect((await read()).state.organisms).toHaveLength(3);
     if (!selectAddedCreature) await expect(badge).toHaveAttribute('data-organism-id', source.state.organisms[0].id);
     const final = await read(); await upload(final);
     const restored = await openAdvanced();
