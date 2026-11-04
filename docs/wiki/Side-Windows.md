@@ -171,9 +171,8 @@ destination copies before handoff. Consecutive windows share glass geometry,
 while the crossed section still determines its matching opposite section.
 
 Without a nutrient cycle, snapshots carrying physical topology use schema17;
-ordinary worlds use forward-mouth schema16. The submitted decay-v2 cycle uses
-schema19 and saved decay-v1 uses schema18, both with optional topology; upstream
-acceptance of that cycle remains pending. Historical schema12–15 files still load through the
+ordinary worlds use forward-mouth schema16. The decay-v2 cycle uses
+schema19 and saved decay-v1 uses schema18, both with optional validated topology. Historical schema12–15 files still load through the
 owner-accepted automatic mouth conversion. Old schemas reject embedded topology.
 Living, egg and lineage genomes retain their forward reach and fixed diet width;
 malformed mouth parameters are rejected before replacing the world. Both current

@@ -34,8 +34,7 @@ it is not forcibly killed or converted into carrion.
 
 The importer accepts two optional egg fields in historical schemas; current
 forward-mouth snapshots use schema v16 (v17 with tubes). The nutrient
-cycles use v18/v19 and retain the same optional observer fields; upstream
-acceptance remains pending:
+cycles use v18/v19 and retain the same optional observer fields:
 
 | Field | Meaning |
 | --- | --- |

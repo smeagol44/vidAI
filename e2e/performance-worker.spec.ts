@@ -1,6 +1,6 @@
 import {test, expect} from '@playwright/test';
 import {readFile} from 'node:fs/promises';
-import {DEFAULT_SETTINGS, createSnapshot} from '../persistence';
+import {BUILD_VERSION, DEFAULT_SETTINGS, createSnapshot} from '../persistence';
 import {embodiedEnergy, setWorldEnergy} from '../energyEconomy';
 import {createInitialWorld, addExternalOrganism} from '../world';
 import {createFounderGenome} from '../founders';
@@ -156,7 +156,7 @@ test('new worlds use requested defaults and creature clicks keep diagnostics clo
   await expect(page.getByLabel('Maximum creatures + eggs', {exact: true})).toHaveValue('30');
   await expect(page.locator('#simulation-seed')).toHaveValue('123456789');
   await expect(page.getByTestId('mouth-contact-model')).toContainText('Full rounded aperture');
-  await expect(page.getByTestId('build-version')).toHaveText('v0.39.0');
+  await expect(page.getByTestId('build-version')).toHaveText(`v${BUILD_VERSION}`);
 
   const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0};
   const state = createInitialWorld(settings, 91, 'balanced', 'standard', 0);
