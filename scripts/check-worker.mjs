@@ -1,12 +1,19 @@
+import {cycleFixture, food as cycleFood} from '../tests/support/nutrient-cycle.ts';
+import {selfTubeFixture} from '../tests/support/self-tubes.ts';
 import assert from 'node:assert/strict';
 import {Worker} from 'node:worker_threads';
 import {readdir} from 'node:fs/promises';
-import {createInitialWorld} from '../world.ts';
+import {createInitialWorld, addExternalOrganism} from '../world.ts';
+import {createFounderGenome} from '../founders.ts';
 import {DEFAULT_SETTINGS, createSnapshot, restoreSnapshot} from '../persistence.ts';
 import {enableClosedEconomy, setWorldEnergy} from '../energyEconomy.ts';
 import {totalAccountedEnergy} from '../persistence.ts';
 import {mouthContactFixture} from '../mouthContactAudit.ts';
-import {stepSimulation} from '../simulation.ts';
+import {energyActivityFixture} from '../tests/support/energy-activity.ts';
+import {eggReserveFixture} from '../tests/support/egg-reserve.ts';
+import {eggReserveLossFraction} from '../eggReserve.ts';
+import {stepSimulation, getNutrientRadius} from '../simulation.ts';
+import {createScenarioWorld} from '../environmentScenarios.ts';
 
 // Exercise the actual production-built Worker with real cross-thread cloning.
 // Only the browser's message port is adapted to node:worker_threads.
@@ -22,6 +29,7 @@ const worker = new Worker(new URL(`data:text/javascript,${encodeURIComponent(boo
 let requests = 0;
 const queued = [], waiting = [];
 worker.on('message', value => {
+  if (value.type === 'error' && value.id === undefined) throw new Error('Worker: ' + value.message);
   const index = waiting.findIndex(entry => entry.predicate(value));
   if (index >= 0) {const [entry] = waiting.splice(index, 1); clearTimeout(entry.timer); entry.resolve(value);}
   else queued.push(value);
@@ -30,7 +38,7 @@ const receive = predicate => {
   const index = queued.findIndex(predicate);
   if (index >= 0) return Promise.resolve(queued.splice(index, 1)[0]);
   return new Promise((resolve, reject) => {
-    const entry = {predicate, resolve, timer: setTimeout(() => reject(new Error('Worker response timed out')), 10000)};
+    const entry = {predicate, resolve, timer: setTimeout(() => reject(new Error('Worker response timed out: ' + predicate.toString())), 10000)};
     waiting.push(entry);
   });
 };
@@ -44,7 +52,7 @@ const request = async (type, extra = {}, epoch = 1) => {
 try {
   await receive(value => value.type === 'ready');
   const settings = {...DEFAULT_SETTINGS, targetNutrients: 5, inflowRate: 0};
-  const state = createInitialWorld({...settings, targetNutrients: 0}, 91, 'balanced', 'standard', 2);
+  const state = createInitialWorld({...settings, targetNutrients: 0}, 91, 'balanced', 'standard', 2, 'legacy');
   const source = createSnapshot(state, settings);
   send({type: 'reset', snapshot: source, epoch: 1});
   const frame = await receive(value => value.type === 'frame');
@@ -55,10 +63,10 @@ try {
   assert.equal(fed.state.nutrients.length, 5);
   assert.equal(fed.state.ledger.externalInflow - source.state.ledger.externalInflow, 15000);
   send({type: 'ack', epoch: 1});
-  send({type: 'control', epoch: 1, settings, speed: 1, selected: null, running: true});
+  send({type: 'control', epoch: 1, settings, speed: 1, selected: null});
   const end = performance.now() + 200;
   while (performance.now() < end) { /* main-thread stall must not stop the worker */ }
-  send({type: 'control', epoch: 1, settings, speed: 1, selected: null, running: false});
+  send({type: 'control', epoch: 1, settings, speed: 0, selected: null});
   const paused = await request('snapshot');
   assert.ok(paused.state.simTime > .05, 'Simulation advanced independently during the main-thread stall');
   assert.deepEqual((await request('snapshot')).state, paused.state);
@@ -73,15 +81,15 @@ try {
   send({type: 'reset', snapshot: legacySource, epoch: 3});
   await receive(value => value.type === 'frame' && value.frame.epoch === 3);
   const oldSettings = {...settings}; delete oldSettings.physicsRegime;
-  send({type: 'control', epoch: 3, settings: oldSettings, speed: 1, selected: null, running: false});
+  send({type: 'control', epoch: 3, settings: oldSettings, speed: 0, selected: null});
   assert.equal((await request('snapshot', {}, 3)).settings.physicsRegime, 'legacy-v0');
-  send({type: 'control', epoch: 3, settings: oldSettings, speed: 1, selected: null, running: true});
+  send({type: 'control', epoch: 3, settings: oldSettings, speed: 1, selected: null});
   await new Promise(resolve => setTimeout(resolve, 100));
-  send({type: 'control', epoch: 3, settings: oldSettings, speed: 1, selected: null, running: false});
+  send({type: 'control', epoch: 3, settings: oldSettings, speed: 0, selected: null});
   const oldPaused = await request('snapshot', {}, 3);
   assert.ok(oldPaused.state.simTime > .025);
   assert.ok(oldPaused.state.organisms.every(o => o.motorDiagnostics === undefined));
-  send({type: 'control', epoch: 3, id: -77, settings, speed: 1, selected: null, running: true});
+  send({type: 'control', epoch: 3, id: -77, settings, speed: 1, selected: null});
   const rejected = await receive(value => value.id === -77);
   assert.equal(rejected.type, 'error'); assert.match(rejected.message, /regime/);
   assert.equal((await request('snapshot', {}, 3)).settings.physicsRegime, 'legacy-v0');
@@ -91,7 +99,7 @@ try {
   const closedSource = createSnapshot(closed, closedSettings);
   send({type: 'reset', snapshot: closedSource, epoch: 4});
   await receive(value => value.type === 'frame' && value.frame.epoch === 4);
-  assert.equal((await request('snapshot', {}, 4)).schemaVersion, '13.0.0');
+  assert.equal((await request('snapshot', {}, 4)).schemaVersion, '16.0.0');
   assert.equal(await request('action', {action: {kind: 'feed', count: 1, x: 800, y: 600}}, 4), 0);
   const raised = closed.energyPool.budget + 6000;
   await request('action', {action: {kind: 'energy-budget', joules: raised}}, 4);
@@ -99,9 +107,9 @@ try {
   const ready = await request('snapshot', {}, 4);
   const direct = restoreSnapshot(ready).state;
   send({type: 'ack', epoch: 4});
-  send({type: 'control', epoch: 4, settings: closedSettings, speed: 1, selected: null, running: true});
+  send({type: 'control', epoch: 4, settings: closedSettings, speed: 1, selected: null});
   await new Promise(resolve => setTimeout(resolve, 100));
-  send({type: 'control', epoch: 4, settings: closedSettings, speed: 1, selected: null, running: false});
+  send({type: 'control', epoch: 4, settings: closedSettings, speed: 0, selected: null});
   const closedPaused = await request('snapshot', {}, 4);
   const ticks = Math.round((closedPaused.state.simTime - ready.state.simTime) * 60);
   assert.ok(ticks > 0);
@@ -111,30 +119,321 @@ try {
   setWorldEnergy(direct, 0);
   assert.deepEqual((await request('snapshot', {}, 4)).state, createSnapshot(direct, closedSettings).state);
   assert.ok(Math.abs(totalAccountedEnergy(direct)) < 1e-5);
-  send({type: 'control', epoch: 4, id: -78, settings, speed: 1, selected: null, running: false});
+  send({type: 'control', epoch: 4, id: -78, settings, speed: 0, selected: null});
   assert.match((await receive(value => value.id === -78)).message, /Ecology regime/);
   let mouthEpoch = 10;
   for (const physicsRegime of ['legacy-v0', 'surface-work-v1', 'paid-work-v2', 'passive-work-v3']) for (const closed of [false, true]) {
-    const probe = mouthContactFixture('capsule-v1'); probe.config.physicsRegime = physicsRegime;
+    const probe = mouthContactFixture('capsule-v1', 'overlap'); probe.config.physicsRegime = physicsRegime;
     if (closed) {enableClosedEconomy(probe.state); probe.config.ecologyRegime = 'closed-v1'; probe.config.nutrientLimit = null;}
     const source = createSnapshot(probe.state, probe.config), epoch = mouthEpoch++;
     send({type: 'reset', epoch, snapshot: source});
     await receive(value => value.type === 'frame' && value.frame.epoch === epoch);
     const initial = await request('snapshot', {}, epoch);
-    assert.equal(initial.schemaVersion, physicsRegime === 'passive-work-v3' ? '15.0.0' : '14.0.0'); assert.deepEqual(initial, source);
+    assert.equal(initial.schemaVersion, '20.0.0'); assert.deepEqual(initial, source);
     const direct = restoreSnapshot(initial).state;
     send({type: 'ack', epoch});
-    send({type: 'control', epoch, settings: probe.config, speed: 1, selected: null, running: true});
+    send({type: 'control', epoch, settings: probe.config, speed: 1, selected: null});
     await new Promise(resolve => setTimeout(resolve, 80));
-    send({type: 'control', epoch, settings: probe.config, speed: 1, selected: null, running: false});
+    send({type: 'control', epoch, settings: probe.config, speed: 0, selected: null});
     const after = await request('snapshot', {}, epoch);
     const ticks = Math.round(after.state.simTime * 60); assert.ok(ticks > 0);
     for (let i = 0; i < ticks; i++) stepSimulation(direct, probe.config, 1 / 60);
     assert.deepEqual(after.state, createSnapshot(direct, probe.config).state);
     assert.ok(after.state.organisms[0].recentFeedings.some(e => e.energyTransferred > 0));
-    send({type: 'control', epoch, id: -100 - epoch, settings: {...probe.config, mouthContactModel: undefined}, speed: 1, running: false});
+    send({type: 'control', epoch, id: -100 - epoch, settings: {...probe.config, mouthContactModel: undefined}, speed: 0});
     assert.match((await receive(value => value.id === -100 - epoch)).message, /Mouth contact model/);
     assert.deepEqual((await request('snapshot', {}, epoch)).state, after.state);
   }
+  // x0 remains authoritative while manual commands and frame acknowledgements
+  // run; neither exports nor edits may advance one autonomous process.
+  const zeroSettings = {...settings, physicsRegime: 'passive-work-v3', ecologyRegime: 'closed-v1',
+    mouthContactModel: 'capsule-v1', nutrientLimit: null, maxOrganisms: 2};
+  const zeroWorld = createInitialWorld({...zeroSettings, targetNutrients: 0}, 91, 'balanced', 'standard', 1);
+  setWorldEnergy(zeroWorld, 1000000);
+  const zeroSource = createSnapshot(zeroWorld, zeroSettings), epoch = 99;
+  send({type: 'reset', epoch, snapshot: zeroSource});
+  await receive(value => value.type === 'frame' && value.frame.epoch === epoch);
+  const control = speed => send({type: 'control', epoch, settings: zeroSettings, speed,
+    selected: zeroSource.state.organisms[0].id});
+  control(0);
+  assert.deepEqual((await request('snapshot', {}, epoch)).state, zeroSource.state);
+  send({type: 'ack', epoch});
+  assert.equal(await request('action', {action: {kind: 'feed', count: 15, x: 1200, y: 750}}, epoch), 15);
+  const fedFrame = await receive(value => value.type === 'frame' && value.frame.epoch === epoch
+    && value.frame.state.nutrients.length === 15);
+  assert.equal(fedFrame.frame.steps, 0);
+  assert.equal(fedFrame.frame.state.simTime, zeroSource.state.simTime);
+  assert.ok(fedFrame.frame.state.organisms[0].neuralInputs.length > 0, 'Inspection gets actual paused neural state');
+  const zeroFed = await request('snapshot', {}, epoch);
+  assert.deepEqual(zeroFed.state.organisms, zeroSource.state.organisms);
+  assert.deepEqual(zeroFed.state.ledger, zeroSource.state.ledger);
+  assert.equal(zeroFed.state.energyPool.reserve, zeroSource.state.energyPool.reserve - 45000);
+  send({type: 'ack', epoch});
+  assert.equal(typeof await request('action', {action: {kind: 'spawn', x: 1200, y: 750, archetype: 'random'}}, epoch), 'string');
+  const spawnFrame = await receive(value => value.type === 'frame' && value.frame.epoch === epoch
+    && value.frame.state.organisms.length === 2);
+  assert.equal(spawnFrame.frame.steps, 0);
+  const zeroEdited = await request('snapshot', {}, epoch);
+  assert.equal(zeroEdited.state.organisms[1].age, 0);
+  assert.equal(await request('action', {action: {kind: 'spawn', x: 1200, y: 750, archetype: 'random'}}, epoch), null);
+  await new Promise(resolve => setTimeout(resolve, 600));
+  control(0);
+  assert.deepEqual((await request('snapshot', {}, epoch)).state, zeroEdited.state,
+    'Food, physics, metabolism, age, eggs, memory and PRNG stay frozen through wall time and a rejected spawn');
+  assert.equal(await request('action', {action: {kind: 'clear-food'}}, epoch), 45000);
+  const zeroCleared = await request('snapshot', {}, epoch);
+  assert.equal(zeroCleared.state.energyPool.reserve, zeroEdited.state.energyPool.reserve + 45000);
+  assert.deepEqual(zeroCleared.state.organisms, zeroEdited.state.organisms);
+  assert.equal(zeroCleared.state.simTime, zeroSource.state.simTime);
+  const continuation = restoreSnapshot(zeroCleared).state;
+  control(1);
+  await new Promise(resolve => setTimeout(resolve, 100));
+  control(0);
+  const resumed = await request('snapshot', {}, epoch);
+  const resumedTicks = Math.round((resumed.state.simTime - zeroCleared.state.simTime) * 60);
+  assert.ok(resumedTicks > 0 && resumedTicks < 25, 'Resume must not catch up 600ms of stopped wall time');
+  for (let i = 0; i < resumedTicks; i++) stepSimulation(continuation, zeroSettings, 1 / 60);
+  assert.deepEqual(resumed.state, createSnapshot(continuation, zeroSettings).state,
+    'Continuation after paused manual edits is bit-exact with fixed-tick saved-state continuation');
+  send({type: 'reset', epoch: 100, snapshot: zeroCleared});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 100);
+  await new Promise(resolve => setTimeout(resolve, 80));
+  assert.deepEqual((await request('snapshot', {}, 100)).state, zeroCleared.state, 'Reset/import starts at x0');
+  // MAX has no multiplier ceiling, but still yields to commands between batches.
+  const maxSettings = {...zeroSettings, targetNutrients: 0};
+  const empty = createInitialWorld(maxSettings, 123, 'balanced', 'standard', 0);
+  send({type: 'reset', epoch: 101, snapshot: createSnapshot(empty, maxSettings)});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 101);
+  const maxStart = performance.now();
+  send({type: 'control', epoch: 101, settings: maxSettings, speed: 'max', selected: null});
+  await new Promise(resolve => setTimeout(resolve, 150));
+  send({type: 'control', epoch: 101, settings: maxSettings, speed: 0, selected: null});
+  const maximum = await request('snapshot', {}, 101);
+  const elapsed = (performance.now() - maxStart) / 1000;
+  assert.ok(maximum.state.simTime / elapsed > 50, 'Lightweight MAX must exceed x50');
+  const directMax = restoreSnapshot(createSnapshot(empty, maxSettings)).state;
+  const maxTicks = Math.round(maximum.state.simTime * 60);
+  for (let i = 0; i < maxTicks; i++) stepSimulation(directMax, maxSettings, 1 / 60);
+  assert.deepEqual(maximum.state, createSnapshot(directMax, maxSettings).state);
+  await new Promise(resolve => setTimeout(resolve, 100));
+  assert.deepEqual((await request('snapshot', {}, 101)).state, maximum.state);
+  send({type: 'control', epoch: 101, settings: maxSettings, speed: 1, selected: null});
+  await new Promise(resolve => setTimeout(resolve, 100));
+  send({type: 'control', epoch: 101, settings: maxSettings, speed: 0, selected: null});
+  const maxResumed = await request('snapshot', {}, 101);
+  assert.ok(maxResumed.state.simTime - maximum.state.simTime < .4, 'MAX cannot leak backlog into finite resume');
+  send({type: 'reset', epoch: 102, snapshot: zeroCleared});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 102);
+  send({type: 'control', epoch: 102, settings: zeroSettings, speed: 'max', selected: null});
+  await new Promise(resolve => setTimeout(resolve, 60));
+  send({type: 'control', epoch: 102, settings: zeroSettings, speed: 0, selected: null});
+  const populatedMax = await request('snapshot', {}, 102);
+  const populatedDirect = restoreSnapshot(zeroCleared).state;
+  const populatedTicks = Math.round((populatedMax.state.simTime - zeroCleared.state.simTime) * 60);
+  assert.ok(populatedTicks > 0);
+  for (let i = 0; i < populatedTicks; i++) stepSimulation(populatedDirect, zeroSettings, 1 / 60);
+  assert.deepEqual(populatedMax.state, createSnapshot(populatedDirect, zeroSettings).state,
+    'Populated MAX preserves physics, energy, brain state, genetics and PRNG for the same fixed ticks');
+  // Actual cross-thread activity is render-only. Compare every authoritative
+  // optical ray/neural value and all other saved state against an observer-free run.
+  const activityProbe = energyActivityFixture();
+  addExternalOrganism(activityProbe.state, createFounderGenome('FND-001'), activityProbe.config, 1160, 750, 0);
+  const activitySource = createSnapshot(activityProbe.state, activityProbe.config);
+  send({type: 'reset', epoch: 103, snapshot: activitySource});
+  const cleanActivity = await receive(v => v.type === 'frame' && v.frame.epoch === 103);
+  assert.deepEqual(cleanActivity.frame.energyActivity, []);
+  send({type: 'ack', epoch: 103});
+  send({type: 'control', epoch: 103, settings: activityProbe.config, speed: 1, selected: null});
+  let concurrent = false;
+  for (let i = 0; i < 10 && !concurrent; i++) {
+    const packet = await receive(v => v.type === 'frame' && v.frame.epoch === 103);
+    concurrent = packet.frame.energyActivity.some(row => row.id === activityProbe.prey.id && row.gain && row.loss && row.parts.includes(0));
+    send({type: 'ack', epoch: 103});
+  }
+  send({type: 'control', epoch: 103, settings: activityProbe.config, speed: 0, selected: null});
+  const activityPaused = await request('snapshot', {}, 103);
+  assert.ok(concurrent, 'Actual Worker publishes independent concurrent activity and contacted segment');
+  const activityDirect = restoreSnapshot(activitySource).state;
+  for (let i = 0; i < Math.round(activityPaused.state.simTime * 60); i++) stepSimulation(activityDirect, activityProbe.config, 1 / 60);
+  assert.deepEqual(activityPaused.state, createSnapshot(activityDirect, activityProbe.config).state);
+  assert.ok(activityPaused.state.organisms.some(org => org.rayHits.length > 0));
+  await new Promise(resolve => setTimeout(resolve, 80));
+  assert.deepEqual((await request('snapshot', {}, 103)).state, activityPaused.state);
+  const eggProbe = eggReserveFixture(true);
+  eggProbe.state.eggs[4].fundedStructural -= 100;
+  // Match actual embodied stocks after constructing the damaged fixture.
+  eggProbe.state.energyPool.budget -= 100;
+  const eggSource = createSnapshot(eggProbe.state, eggProbe.config);
+  send({type: 'reset', snapshot: eggSource, epoch: 104});
+  const eggFrame = await receive(value => value.type === 'frame' && value.frame.epoch === 104);
+  assert.equal(eggFrame.frame.state.eggs[1].initialFundedReserve, 1000);
+  assert.deepEqual((await request('snapshot', {}, 104)).state, eggSource.state);
+  await new Promise(resolve => setTimeout(resolve, 80));
+  assert.deepEqual((await request('snapshot', {}, 104)).state, eggSource.state);
+  await request('action', {action: {kind: 'energy-budget', joules: eggProbe.state.energyPool.budget + 10000}}, 104);
+  const eggFunded = await request('snapshot', {}, 104);
+  const eggDirect = restoreSnapshot(eggFunded).state;
+  send({type: 'ack', epoch: 104});
+  send({type: 'control', epoch: 104, settings: eggProbe.config, speed: 5, selected: null});
+  await new Promise(resolve => setTimeout(resolve, 120));
+  send({type: 'control', epoch: 104, settings: eggProbe.config, speed: 0, selected: null});
+  const eggAfter = await request('snapshot', {}, 104);
+  const eggTicks = Math.round(eggAfter.state.simTime * 60); assert.ok(eggTicks > 0);
+  for (let i = 0; i < eggTicks; i++) stepSimulation(eggDirect, eggProbe.config, 1 / 60);
+  assert.deepEqual(eggAfter.state, createSnapshot(eggDirect, eggProbe.config).state);
+  assert.deepEqual(eggAfter.state.eggs.map(e => e.initialFundedReserve), [1000, 1000, 1000, 1000, 1000]);
+  assert.ok(eggReserveLossFraction(eggAfter.state.eggs[1]) < .25, 'Existing funded recovery shrinks pink');
+  assert.equal(eggReserveLossFraction(eggAfter.state.eggs[0]), 0, 'Above-original reserves stay white');
+  assert.equal(eggReserveLossFraction(eggAfter.state.eggs[4]), 1, 'Structural repair alone stays pink');
+  const legacyEggs = structuredClone(eggAfter);
+  for (const e of legacyEggs.state.eggs) {delete e.initialFundedReserve; delete e.initialReserveIsLegacy;}
+  send({type: 'reset', snapshot: legacyEggs, epoch: 105});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 105);
+  const migratedEggs = await request('snapshot', {}, 105);
+  assert.ok(migratedEggs.state.eggs.every(e => e.initialReserveIsLegacy && e.initialFundedReserve === e.fundedReserve));
+  assert.deepEqual(migratedEggs.state.prngState, legacyEggs.state.prngState);
+  send({type: 'reset', snapshot: eggAfter, epoch: 106});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 106);
+  assert.deepEqual((await request('snapshot', {}, 106)).state, eggAfter.state);
+  const scenarioDefaults = {...DEFAULT_SETTINGS, physicsRegime: 'passive-work-v3',
+    ecologyRegime: 'closed-v1', nutrientLimit: null, mouthContactModel: 'capsule-v1'};
+  const harsh = createScenarioWorld(scenarioDefaults, 'harsh-world', 73, 'balanced', 'standard', 2);
+  const harshSource = createSnapshot(harsh.state, harsh.settings);
+  send({type: 'reset', snapshot: harshSource, epoch: 107});
+  const harshFrame = await receive(value => value.type === 'frame' && value.frame.epoch === 107);
+  assert.equal(harshFrame.frame.state.simTime, 0);
+  assert.equal(harshFrame.frame.state.nutrients.length, 0);
+  assert.deepEqual(await request('snapshot', {}, 107), harshSource);
+  const sameFoundersDefault = createInitialWorld(scenarioDefaults, 73, 'balanced', 'standard', 2);
+  assert.equal(harshSource.state.energyPool.budget, sameFoundersDefault.energyPool.budget);
+  assert.equal(harshSource.state.energyPool.reserve, 825000);
+  const editedScenario = {...harsh.settings, gravity: -10, waterViscosity: .12, nutrientLimit: 7, inflowRate: 2};
+  send({type: 'ack', epoch: 107});
+  send({type: 'control', epoch: 107, settings: editedScenario, speed: 5, selected: null});
+  await new Promise(resolve => setTimeout(resolve, 120));
+  send({type: 'control', epoch: 107, settings: editedScenario, speed: 0, selected: null});
+  const harshPaused = await request('snapshot', {}, 107);
+  const harshDirect = restoreSnapshot(harshSource).state;
+  const harshTicks = Math.round(harshPaused.state.simTime * 60); assert.ok(harshTicks > 0);
+  for (let i = 0; i < harshTicks; i++) stepSimulation(harshDirect, editedScenario, 1 / 60);
+  assert.deepEqual(harshPaused, createSnapshot(harshDirect, editedScenario));
+  assert.ok(Math.abs(totalAccountedEnergy(restoreSnapshot(harshPaused).state) - harshSource.state.energyPool.budget) < 1e-6);
+  send({type: 'reset', snapshot: harshPaused, epoch: 108});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 108);
+  assert.deepEqual(await request('snapshot', {}, 108), harshPaused);
+  // Pipe starts unconnected in the actual Worker; reload keeps edited settings
+  // and exact fixed-tick continuation rather than recreating a starting preset.
+  const pipe = createScenarioWorld(scenarioDefaults, 'pipe-world', 73, 'unbiased', 'standard', 2);
+  const pipeSource = createSnapshot(pipe.state, pipe.settings);
+  send({type: 'reset', snapshot: pipeSource, epoch: 109});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 109);
+  assert.deepEqual(await request('snapshot', {}, 109), pipeSource);
+  assert.equal(pipeSource.settings.worldWidth, 4600);
+  assert.equal(pipeSource.settings.worldHeight, 2100);
+  assert.equal(pipeSource.state.selfTubes, undefined);
+  assert.equal(pipeSource.state.nutrients.length, 0);
+  const pipeEdited = {...pipe.settings, gravity: -10, inflowRate: 2, nutrientLimit: 7};
+  send({type: 'ack', epoch: 109});
+  send({type: 'control', epoch: 109, settings: pipeEdited, speed: 5, selected: null});
+  await new Promise(resolve => setTimeout(resolve, 120));
+  send({type: 'control', epoch: 109, settings: pipeEdited, speed: 0, selected: null});
+  const pipePaused = await request('snapshot', {}, 109);
+  const pipeDirect = restoreSnapshot(pipeSource).state;
+  const pipeTicks = Math.round(pipePaused.state.simTime * 60); assert.ok(pipeTicks > 0);
+  for (let i = 0; i < pipeTicks; i++) stepSimulation(pipeDirect, pipeEdited, 1 / 60);
+  assert.deepEqual(pipePaused, createSnapshot(pipeDirect, pipeEdited));
+  assert.equal(pipePaused.state.selfTubes, undefined);
+  assert.ok(Math.abs(totalAccountedEnergy(restoreSnapshot(pipePaused).state) - pipeSource.state.energyPool.budget) < 1e-6);
+  send({type: 'reset', snapshot: pipePaused, epoch: 110});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 110);
+  assert.deepEqual(await request('snapshot', {}, 110), pipePaused);
+  // Physical self-tubes use the actual built Worker and full-state snapshots.
+  for (const [index, side] of ['L', 'R'].entries()) {
+    const epoch = 200 + index, fixture = selfTubeFixture(side);
+    send({type: 'reset', snapshot: fixture.source, epoch});
+    await receive(value => value.type === 'frame' && value.frame.epoch === epoch);
+    assert.deepEqual(await request('snapshot', {}, epoch), fixture.source);
+    send({type: 'ack', epoch});
+    send({type: 'control', epoch, settings: fixture.settings, speed: 1, selected: null});
+    await new Promise(resolve => setTimeout(resolve, 160));
+    send({type: 'control', epoch, settings: fixture.settings, speed: 0, selected: null});
+    const crossed = await request('snapshot', {}, epoch), direct = restoreSnapshot(fixture.source);
+    const ticks = Math.round(crossed.state.simTime * 60); assert.ok(ticks > 0);
+    for (let tick = 0; tick < ticks; tick++) stepSimulation(direct.state, direct.settings, 1 / 60);
+    assert.deepEqual(crossed, createSnapshot(direct.state, direct.settings));
+    assert.equal(crossed.state.organisms[0].id, fixture.source.state.organisms[0].id);
+    assert.equal(crossed.state.organisms.length, 1);
+    assert.equal(crossed.state.totalBirths, fixture.source.state.totalBirths);
+    assert.ok(side === 'L' ? crossed.state.organisms[0].segments[0].x > fixture.settings.worldWidth
+      : crossed.state.organisms[0].segments[0].x < 0);
+    assert.ok(Math.abs(totalAccountedEnergy(restoreSnapshot(crossed).state) - fixture.source.state.energyPool.budget) < 1e-6);
+    await request('action', {action: {kind: 'self-tubes', topology: {version: 1, connected: false, accepted: [0]}}}, epoch);
+    const closedTube = await request('snapshot', {}, epoch);
+    assert.equal(closedTube.state.simTime, crossed.state.simTime);
+    assert.equal(closedTube.state.selfTubes.connected, false);
+    assert.equal(closedTube.state.organisms[0].energy, crossed.state.organisms[0].energy);
+    assert.ok(closedTube.state.organisms[0].segments[0].x > 0 && closedTube.state.organisms[0].segments[0].x < 1800);
+    assert.deepEqual(await request('snapshot', {}, epoch), closedTube);
+    send({type: 'reset', snapshot: crossed, epoch: epoch + 10});
+    await receive(value => value.type === 'frame' && value.frame.epoch === epoch + 10);
+    send({type: 'action', id: -201, epoch, action: {kind: 'self-tubes', topology: {version: 1, connected: false, accepted: []}}});
+    assert.deepEqual(await request('snapshot', {}, epoch + 10), crossed, 'stale topology command is ignored');
+  }
+  for (const nutrientCycle of ['decay-v1', 'decay-v2']) for (const tubes of [false, true]) {
+    const probe = cycleFixture([cycleFood(9300, true), cycleFood(75, false, 1000, 500)]);
+    probe.settings.nutrientCycle = nutrientCycle;
+    for (const food of probe.state.nutrients) food.radius = getNutrientRadius(food.energyValue, nutrientCycle);
+    probe.state.nutrients[0].decayTimeRemaining = .1;
+    if (tubes) {
+      probe.settings.worldHeight = 600;
+      probe.state.selfTubes = {version: 1, connected: true, accepted: [0]};
+      probe.state.nutrients[0].x = -200; probe.state.nutrients[0].y = 450;
+    }
+    const epoch = (nutrientCycle === 'decay-v2' ? 180 : 150) + (tubes ? 1 : 0), source = createSnapshot(probe.state, probe.settings);
+    send({type: 'reset', snapshot: source, epoch});
+    await receive(value => value.type === 'frame' && value.frame.epoch === epoch);
+    assert.deepEqual(await request('snapshot', {}, epoch), source);
+    send({type: 'ack', epoch});
+    send({type: 'control', epoch, settings: probe.settings, speed: 5, selected: null});
+    await new Promise(resolve => setTimeout(resolve, 100));
+    send({type: 'control', epoch, settings: probe.settings, speed: 0, selected: null});
+    const after = await request('snapshot', {}, epoch), direct = restoreSnapshot(source);
+    const ticks = Math.round(after.state.simTime * 60); assert.ok(ticks >= 6);
+    for (let i = 0; i < ticks; i++) stepSimulation(direct.state, direct.settings, 1 / 60);
+    assert.deepEqual(after, createSnapshot(direct.state, direct.settings));
+    assert.ok(after.state.nutrients.every(n => n.kind !== 'carrion' && n.energyValue <= 3000));
+    assert.ok(Math.abs(totalAccountedEnergy(direct.state) - direct.state.energyPool.budget) < 1e-6);
+    send({type: 'reset', snapshot: after, epoch: epoch + 10});
+    await receive(value => value.type === 'frame' && value.frame.epoch === epoch + 10);
+    assert.deepEqual(await request('snapshot', {}, epoch + 10), after);
+    send({type: 'control', epoch: epoch + 10, id: -300 - epoch,
+      settings: {...probe.settings, nutrientCycle: undefined}, speed: 1});
+    assert.match((await receive(value => value.id === -300 - epoch)).message, /Nutrient cycle/);
+    assert.deepEqual(await request('snapshot', {}, epoch + 10), after);
+  }
+  const rgbSettings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0};
+  const rgbSource = createSnapshot(createInitialWorld(rgbSettings, 139, 'balanced', 'showcase'), rgbSettings);
+  assert.equal(rgbSource.schemaVersion, '20.0.0');
+  assert.ok(rgbSource.state.organisms.every(o => o.genome.brainVersion === 8 && !o.genome.inputKeys.some(k => k.endsWith(':distance'))));
+  send({type: 'reset', snapshot: rgbSource, epoch: 1390});
+  await receive(value => value.type === 'frame' && value.frame.epoch === 1390);
+  assert.deepEqual(await request('snapshot', {}, 1390), rgbSource);
+  send({type: 'ack', epoch: 1390});
+  send({type: 'control', epoch: 1390, settings: rgbSettings, speed: 1, selected: null});
+  await new Promise(resolve => setTimeout(resolve, 100));
+  send({type: 'control', epoch: 1390, settings: rgbSettings, speed: 0, selected: null});
+  const rgbAfter = await request('snapshot', {}, 1390), rgbDirect = restoreSnapshot(rgbSource);
+  const rgbTicks = Math.round(rgbAfter.state.simTime * 60); assert.ok(rgbTicks > 0);
+  for (let i = 0; i < rgbTicks; i++) stepSimulation(rgbDirect.state, rgbSettings, 1 / 60);
+  assert.deepEqual(rgbAfter, createSnapshot(rgbDirect.state, rgbSettings));
+  assert.ok(rgbAfter.state.organisms.every(o => o.neuralInputs.length === o.genome.inputKeys.length));
+  console.log('RGB-only Worker: all nine featured starters, schema20 reset, real optical inputs and exact direct continuation passed.');
+  console.log('Nutrient-cycle Worker: schema-18/19 tank/tube reset, 5x exact direct decay/mineralization/PRNG continuation, paused restoration and control-switch rejection passed.');
+  console.log('Self-tube Worker: schema-17 reset, full-state L/R transfer, exact direct continuation, unchanged IDs/births/stock, paused closure and stale-command rejection passed.');
+  console.log('Environment Worker: Harsh and independent Pipe time-zero empty food/full grant, Pipe 4600x2100 with zero topology, editable controls, exact direct continuation and snapshot reset passed.');
+  console.log('Egg reserve Worker: original reference/frame/export/reset, legacy-current migration, exact 5x funded recovery, structure-only pink and x0 freeze passed.');
+  console.log('Energy activity Worker: concurrent real feeding/predation, contacted segment, exact observer-free optical/neural/PRNG/save continuation and x0 freeze passed.');
+  console.log('Unlimited MAX: measured x'+(maximum.state.simTime / elapsed).toFixed(1)+'; '+maxTicks+' exact ticks, responsive pause, frozen snapshots and finite resume passed.');
+  console.log('x0 Worker: zero ticks during manual food/spawn/clear/inspection, funded budget and caps, immediate frames, no stopped-wall-time catch-up, exact continuation and paused reset passed.');
   console.log('Production Worker: open/closed exact exports, funded commands, independent stepping, debt, direct equivalence, all physics regimes, mouth contact in all eight physics/ecology combinations, regime-switch and stale-world rejection passed.');
 } finally { await worker.terminate(); }

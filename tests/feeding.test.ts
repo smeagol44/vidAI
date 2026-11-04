@@ -8,7 +8,7 @@ const settings = {...DEFAULT_SETTINGS, targetNutrients: 0, inflowRate: 0, mutati
 function genome(type?: sim.MouthType) {
   const g = sim.createReferenceNematodeGenome(new sim.XoshiroPRNG(7));
   g.parts = [g.parts[0]]; g.motorForce = 0; g.eyes = [];
-  g.mouths = type ? [{id: 'mouth', partIndex: 0, direction: 'EAST', intakeWidth: 12, mouthType: type}] : [];
+  g.mouths = type ? [{id: 'mouth', partIndex: 0, direction: 'EAST', intakeWidth: type === 'carnivore' ? 9 : type === 'omnivore' ? 8 : 7, intakeLength: 12, mouthType: type}] : [];
   g.bodyCost = sim.calculateBodyCost(g.parts, g.eyes, g.mouths);
   g.maxEnergyCapacity = sim.calculateMaxEnergyCapacity(g.parts, g.storageTraitMultiplier);
   sim.remapBrain(g);
@@ -164,7 +164,7 @@ test('new saves continue exactly through carrion decay, and old v4 food remains 
   const {s, org, x} = setup(); org.genome.colorMutationRate = .4;
   s.nutrients = [food(x + 200, 'carrion')]; s.nutrients[0].decayTimeRemaining = .025;
   const snapshot = createSnapshot(s, settings), restored = restoreSnapshot(snapshot);
-  assert.equal(snapshot.schemaVersion, '12.0.0');
+  assert.equal(snapshot.schemaVersion, '16.0.0');
   assert.deepEqual(createSnapshot(restored.state, restored.settings), snapshot);
   for (let i = 0; i < 3; i++) { sim.stepSimulation(s, settings, 1 / 60); sim.stepSimulation(restored.state, settings, 1 / 60); }
   assert.deepEqual(createSnapshot(s, settings), createSnapshot(restored.state, settings));

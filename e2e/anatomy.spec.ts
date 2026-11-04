@@ -13,7 +13,7 @@ test('fresh defaults, five-design population, slotted bank preview and jellyfish
   await page.goto('./');
   await page.getByRole('button', {name: 'SEED SIMULATION', exact: true}).click();
   await page.keyboard.press('Space');
-  await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
+  await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
   await page.getByTitle('Ecology & Physical Settings').click();
   await expect(page.getByLabel('Nutrient target', {exact: true})).toHaveValue('275');
   const download = page.waitForEvent('download');
@@ -63,9 +63,9 @@ test('expanded organ layouts import and their retinal strip scrolls on a narrow 
   await page.setViewportSize({width: 520, height: 900}); await page.goto('./?autoplay');
   await page.getByTitle('Ecology & Physical Settings').click();
   await page.locator('input[type=file]').setInputFiles({name: 'slotted.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(createSnapshot(state, settings)))});
-  await expect(page.getByRole('button', {name: 'RESUME SIMULATION', exact: true})).toBeVisible();
+  await expect(page.getByRole('button', {name: 'Resume', exact: true})).toBeVisible();
   await page.getByTitle('Close settings (✕)').click();
-  await page.getByRole('button', {name: 'RESUME SIMULATION', exact: true}).click();
+  await page.getByRole('button', {name: 'Resume', exact: true}).click();
   const rect = (await page.getByLabel('Aquatic simulation').boundingBox())!;
   await page.mouse.click(rect.x + rect.width / 2, rect.y + rect.height / 2);
   await page.getByTitle('Close Diagnostics Window (✕)').click();

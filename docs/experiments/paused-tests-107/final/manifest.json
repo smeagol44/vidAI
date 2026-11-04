@@ -1,0 +1,34 @@
+{
+  "ownerDecisionComment": 6429762405,
+  "initialCheckpoint": "7cc26dd8eaf19e9c8742ca809fa549e01f12898e",
+  "files": {
+    "build.log": {
+      "bytes": 1327,
+      "sha256": "d16f0451e02dfdaca4a3e3d1ea57839a087d1b03e1d23ac6d10a3f1c85e27e88"
+    },
+    "fast.tap": {
+      "bytes": 60167,
+      "sha256": "10328dfd8f85c846f284fc9a7d414551af63ca9f03e62c607b78be1aea38be8c"
+    },
+    "focused.tap": {
+      "bytes": 15546,
+      "sha256": "70a3b0303f6c77bfe0bb5e76b158dcfc8de7c950ddb36e4d5ea1ba938ce6d97e"
+    },
+    "npm-ci.log": {
+      "bytes": 125,
+      "sha256": "8bbb2738201505d14dc9d29e52a2898c4bbdeb1a14da8281a511ac0858a835d8"
+    },
+    "report.md": {
+      "bytes": 11440,
+      "sha256": "c27b1d4e87d64700e575bb65842030a5a08122e7d6a42f156d97e38777dd82f1"
+    },
+    "worker.log": {
+      "bytes": 410,
+      "sha256": "318d7793270ec46c367f2bc88d469970c98c6d4e64430e8efd10825b985e181e"
+    }
+  },
+  "buildConsoleNormalization": {
+    "operation": "trim trailing line whitespace",
+    "rawSha256": "5492b7bbd87d343c7f759d6146499de6bf0d8fdb8848ba1ee1b9a241227d82fb"
+  }
+}

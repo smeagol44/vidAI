@@ -27,3 +27,177 @@ button, input, select {font: inherit;}
   scrollbar-width: thin;
 }
 .vida-window > div { min-width: 0; }
+
+/* Keep reserved numeric slots and stable viewport-driven toolbar rows. */
+.simulation-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  grid-template-areas: "general controls" "counters controls";
+  gap: 8px;
+  align-items: start;
+}
+.toolbar-general, .toolbar-counters, .toolbar-controls { min-width: 0; }
+.toolbar-value {
+  display: inline-block;
+  font-family: ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Reserve the existing numeric widths, but only wrap general telemetry when
+   the controls leave insufficient horizontal space. */
+.toolbar-general {
+  grid-area: general;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: start;
+  justify-content: flex-start;
+  gap: 6px 8px;
+  white-space: nowrap;
+}
+.toolbar-general > * { flex: 0 0 auto; }
+.toolbar-identity {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: var(--toolbar-menu-space, 0px);
+}
+.toolbar-credits { display: inline-block; width: max-content; }
+.toolbar-general[data-credits="false"] .toolbar-credits {
+  /* Keep the measurable hidden text outside the identity's scroll box. */
+  position: fixed;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.toolbar-metrics {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  max-width: 100%;
+}
+.toolbar-metrics > * { flex: 0 0 auto; justify-self: start; }
+/* Reserve the whole readout, without inserting blank space between its values. */
+.toolbar-performance { width: calc(37ch + 14px); }
+.toolbar-performance-text { white-space: nowrap; }
+.toolbar-general[data-compact-metrics="true"] .toolbar-metrics {
+  display: grid;
+  width: 100%;
+  grid-template-columns: max-content max-content;
+  grid-template-areas: "generation time" "performance performance";
+  justify-content: start;
+}
+.toolbar-generation { grid-area: generation; }
+.toolbar-performance { grid-area: performance; }
+.toolbar-time { grid-area: time; }
+.toolbar-counter-icon { flex: 0 0 auto; }
+.toolbar-counter-mobile-icon { display: none; }
+
+
+/* Counters may fill the whole lower band when right-hand controls only need two rows. */
+.toolbar-counters {
+  grid-area: counters;
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 6px 8px;
+  justify-content: start;
+}
+.toolbar-counters > div { white-space: nowrap; }
+.toolbar-counters > div:last-child { grid-column: 1 / -1; }
+
+/* Explicit right-side priorities avoid content-dependent flex wrapping. */
+.toolbar-controls {
+  grid-area: controls;
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  grid-template-areas:
+    "settings ledger menu"
+    "add bank inspector"
+    "speed speed speed";
+  gap: 6px;
+  align-items: center;
+  justify-content: end;
+}
+.toolbar-controls > * { white-space: nowrap; justify-content: center; }
+.toolbar-controls > :nth-child(1) { grid-area: add; }
+.toolbar-controls > :nth-child(2) { grid-area: speed; justify-self: end; }
+.toolbar-controls > :nth-child(3) { grid-area: bank; }
+.toolbar-controls > :nth-child(4) { grid-area: inspector; }
+.toolbar-controls > :nth-child(5) { grid-area: settings; }
+.toolbar-controls > :nth-child(6) { grid-area: ledger; }
+.toolbar-controls > :nth-child(7) { grid-area: menu; }
+
+/* The available left counter area can use more columns on medium screens. */
+@media (min-width: 1024px) {
+  .toolbar-counters { grid-template-columns: repeat(3, max-content); }
+  .toolbar-counters > div:last-child { grid-column: auto; }
+}
+
+/* Counter rows extend below both general telemetry and the controls. */
+@media (min-width: 1152px) {
+  .simulation-toolbar {
+    grid-template-areas: "general controls" "counters counters";
+  }
+  .toolbar-counters {
+    grid-template-columns: repeat(7, max-content);
+  }
+  .toolbar-controls {
+    grid-template-columns: repeat(5, max-content);
+    grid-template-areas:
+      "bank inspector settings ledger menu"
+      "add speed speed speed speed";
+  }
+}
+
+/* The measured controls fit a single row on wide desktop layouts. */
+@media (min-width: 1600px) {
+  .toolbar-controls {
+    grid-template-columns: repeat(7, max-content);
+    grid-template-areas: "add speed bank inspector settings ledger menu";
+  }
+}
+
+/* Phones use aligned icon actions and one full-width speed row. Menu remains
+   at the top-right; only the identity row reserves its measured space. */
+@media (max-width: 639px) {
+  .simulation-toolbar {
+    position: relative;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "general" "controls" "counters";
+  }
+  /* The pinned Menu sets the actual height of the phone identity row. */
+  .toolbar-identity { min-height: 32px; }
+  .toolbar-controls {
+    width: 100%;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-areas: "add bank inspector settings ledger" "speed speed speed speed speed";
+  }
+  .toolbar-controls > button { min-height: 32px; }
+  .toolbar-controls > :nth-child(2) { justify-self: stretch; }
+  .toolbar-controls > :nth-child(2) button { flex: 1; padding-inline: 4px; }
+  .toolbar-controls > :nth-child(7) {
+    grid-area: auto;
+    position: absolute;
+    top: 8px;
+    right: 12px;
+  }
+  .toolbar-counters {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: 100%;
+    gap: 6px;
+  }
+  .toolbar-counters > div {
+    padding-inline: 4px;
+    justify-content: space-between;
+    gap: 4px;
+    min-width: 0;
+  }
+  .toolbar-counters > div:last-child { grid-column: auto; }
+  .toolbar-counter-label, .toolbar-food-limit, .toolbar-counter-emoji { display: none; }
+  .toolbar-counter-mobile-icon { display: block; }
+}

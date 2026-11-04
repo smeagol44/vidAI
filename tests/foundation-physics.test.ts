@@ -1,8 +1,9 @@
+import {createFounderGenome, createInitialWorld} from './support/legacy-vision';
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import * as sim from '../simulation';
-import {createFounderGenome} from '../founders';
-import {createInitialWorld, addExternalOrganism} from '../world';
+
+import {addExternalOrganism} from '../world';
 import {DEFAULT_SETTINGS, LEGACY_SETTINGS, createSnapshot, restoreSnapshot, totalAccountedEnergy} from '../persistence';
 import {surfaceResistance, muscleParameters, paidMotorImpulse, MECHANICAL_JOULES, MUSCLE_EFFICIENCY} from '../foundationPhysics';
 import {SimulationHost} from '../simulationHost';

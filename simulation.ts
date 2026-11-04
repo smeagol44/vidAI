@@ -1,3 +1,5 @@
+import {tubeGeometry, tubeWallContact, tubeContainsBox, sampleTubeWater, projectWaterPoint, waterRects, moveTubeParticle, transferSelfOrganisms, type SelfTubes, type TubeGeometry} from './selfTubes';
+import type {EnergyTransferObserver} from './energyActivity';
 import {mouthDimensions, capsuleContactsPart} from './mouthGeometry';
 import {partKineticEnergy, type MechanicalObserver} from './mechanicalObservation';
 import {passiveConstraintScale, paidMotorBatch, usesPaidActuation, muscleParameters, paidMotorImpulse, surfaceResistance, type PhysicsRegime} from './foundationPhysics';
@@ -191,7 +193,8 @@ export function eyeSensoryUpkeep(eyes: readonly SensoryEye[]): number {
 }
 
 export interface SensoryMouth extends SurfaceOrgan {
-  intakeWidth: number; // aperture contact width
+  intakeWidth: number; // visible mouth diameter
+  intakeLength?: number; // forward reach from the anatomical anchor; optional only for legacy data
   mouthType: MouthType;
 }
 
@@ -236,7 +239,7 @@ export interface Genome {
   biasesH: number[];     // [hidden neuron]
   weightsHO: number[][]; // [motor key x hidden neuron]
   biasesO: number[];     // [motor key]
-  brainVersion?: 2 | 3 | 4 | 5 | 6 | 7;
+  brainVersion?: 2 | 3 | 4 | 5 | 6 | 7 | 8;
   hiddenIds?: string[]; // Stable neuron identities; index order defines the matrix axes.
   hiddenTimeConstants?: number[]; // Seconds of leaky activation memory per hidden ID; 0 is the exact legacy update.
   plasticityRate?: number; // Heritable motor-learning rate 0..0.8 / s. Absent or 0 = exact legacy brain.
@@ -352,6 +355,8 @@ export interface Egg {
   genome: Genome;
   fundedStructural: number; // E_structural needed for offspring body
   fundedReserve: number;    // Usable energy given to offspring
+  readonly initialFundedReserve?: number; // Observer reference, fixed at laying; never an energy stock.
+  readonly initialReserveIsLegacy?: boolean; // True when only the reserve at migration was known.
   incubationProgress: number; // 0..1
   totalIncubationTime: number;
   pulseTimer: number;
@@ -448,6 +453,8 @@ export interface SimulationSettings {
   /** Omitted retains exact historical prey-contact geometry. */
   mouthContactModel?: 'capsule-v1';
   ecologyRegime?: 'closed-v1';
+  /** Omitted preserves historical food lifetimes and radii. */
+  nutrientCycle?: 'decay-v1' | 'decay-v2';
   /** null means no ecological count cap; a visible particle safety limit remains. */
   nutrientLimit?: number | null;
   /** Omitted by historical callers: exact legacy continuation. */
@@ -466,6 +473,7 @@ export interface SimulationSettings {
 }
 
 export interface SimulationState {
+  selfTubes?: SelfTubes;
   energyPool?: EnergyPool;
   initialSeed?: number;
   simTime: number;
@@ -815,7 +823,14 @@ export function recordFeedingEvent(
   }
 }
 
-export function getNutrientRadius(energy: number): number {
+export const NUTRIENT_DECAY_JOULES_PER_SECOND = 1;
+export const MIN_CYCLING_NUTRIENT_RADIUS = 6;
+
+export function getNutrientRadius(energy: number, cycle?: SimulationSettings['nutrientCycle']): number {
+  if (cycle === 'decay-v2' && energy <= NUTRIENT_ENERGY_VALUE)
+    return Math.max(MIN_CYCLING_NUTRIENT_RADIUS, BASE_NUTRIENT_RADIUS * Math.sqrt(Math.max(0, energy) / NUTRIENT_ENERGY_VALUE));
+  if (cycle === 'decay-v1' && energy <= NUTRIENT_ENERGY_VALUE)
+    return BASE_NUTRIENT_RADIUS * Math.sqrt(Math.max(0, energy) / NUTRIENT_ENERGY_VALUE);
   const ratio = Math.max(0.1, energy / NUTRIENT_ENERGY_VALUE);
   const scale = 1 + 0.35 * Math.log2(ratio);
   return Math.max(8.0, BASE_NUTRIENT_RADIUS * Math.max(0.4, scale));
@@ -854,6 +869,7 @@ export function addNutrients(state: SimulationState, settings: SimulationSetting
   patch?: {x: number; y: number; spread: number}): number {
   const count = Math.min(Math.max(0, Math.floor(requested)), nutrientSpawnSlots(state, settings));
   const prng = state.prng;
+  const channels = tubeGeometry(settings, state.selfTubes);
   // In bloom mode, 65% of abiotic input is clustered around twelve stable
   // sites, while 35% remains dispersed. No sources track organism locations,
   // energy, diets, deaths or reproductive needs. The manual Feed patch
@@ -866,6 +882,16 @@ export function addNutrients(state: SimulationState, settings: SimulationSetting
     const bloom = bloomCenters && prng.nextFloat() < .65
       ? bloomCenters[prng.rangeInt(0, bloomCenters.length - 1)] : undefined;
     const center = patch ?? (bloom && {x: bloom.x, y: bloom.y, spread});
+    if (channels) {
+      const point = center ? projectWaterPoint(channels, center.x + prng.range(-center.spread, center.spread),
+        center.y + prng.range(-center.spread, center.spread), 40) : sampleTubeWater(channels, () => prng.nextFloat());
+      state.nutrients.push({id: `NUT-${prng.nextUint32().toString(36)}`, ...point, vx: 0, vy: 0,
+        energyValue: NUTRIENT_ENERGY_VALUE, radius: getNutrientRadius(NUTRIENT_ENERGY_VALUE), bottomTimer: 0,
+        pulseTimer: prng.range(0, Math.PI * 2)});
+      if (state.energyPool) state.energyPool.reserve -= NUTRIENT_ENERGY_VALUE;
+      else state.ledger.externalInflow += NUTRIENT_ENERGY_VALUE;
+      continue;
+    }
     state.nutrients.push({id: `NUT-${prng.nextUint32().toString(36)}`,
       x: center ? clampVal(center.x + prng.range(-center.spread, center.spread), 40, settings.worldWidth - 40) : prng.range(40, settings.worldWidth - 40),
       y: center ? clampVal(center.y + prng.range(-center.spread, center.spread), 40, settings.worldHeight - 40) : prng.range(40, settings.worldHeight - 40),
@@ -1159,12 +1185,12 @@ export function createXavierRecurrentNetwork(customPrng: XoshiroPRNG = rng, inpu
   return {weightsIH, weightsHH, biasesH, weightsHO, biasesO};
 }
 
-export function getBrainLayout(g: Pick<Genome, 'eyes' | 'parts'> & Partial<Pick<Genome, 'mouths'>>, internalSenses = true, injurySense = true) {
+export function getBrainLayout(g: Pick<Genome, 'eyes' | 'parts'> & Partial<Pick<Genome, 'mouths' | 'brainVersion'>>, internalSenses = true, injurySense = true) {
   const inputs: string[] = [];
   const labels: string[] = [];
   g.eyes.forEach((eye, e) => {
     for (let ray = 0; ray < RAYS_PER_EYE; ray++) {
-      for (const channel of ['red', 'green', 'blue', 'distance']) {
+      for (const channel of (g.brainVersion === 8 ? ['red', 'green', 'blue'] : ['red', 'green', 'blue', 'distance'])) {
         inputs.push(`eye:${eye.id}:ray:${ray}:${channel}`);
         labels.push(`E${e + 1} R${ray + 1} ${channel}`);
       }
@@ -1481,12 +1507,12 @@ export function remapBrain(g: Genome, previous: Genome = g): void {
   g.hiddenIds = [...nextHidden];
   g.inputKeys = layout.inputs;
   g.outputKeys = layout.outputs;
-  g.brainVersion = 7;
+  g.brainVersion = g.brainVersion === 8 ? 8 : 7;
   checkBrainBudget(g);
 }
 
 export function ensureBrainLayout(g: Genome): void {
-  if (g.brainVersion !== 7 || !g.inputKeys || !g.outputKeys || !g.hiddenIds || !g.disabledConnections || !g.hiddenTimeConstants) remapBrain(g);
+  if ((g.brainVersion !== 7 && g.brainVersion !== 8) || !g.inputKeys || !g.outputKeys || !g.hiddenIds || !g.disabledConnections || !g.hiddenTimeConstants) remapBrain(g);
   checkBrainBudget(g);
 }
 
@@ -1509,6 +1535,42 @@ export function remapOrganismBrain(org: Organism, previous: Genome): void {
   if (org.learnedSensoryWeights) {
     const allowed = new Set(plasticSensoryEdges(org.genome).map(e => e.edge));
     org.learnedSensoryWeights = org.learnedSensoryWeights.filter(s => allowed.has(s.edge));
+  }
+}
+
+/** Explicit, lossy upgrade: remove range edges by identity, retaining the inherited
+ * empty-water operating point (legacy range=1). No new target information is added.
+ * Lifetime RGB learning keeps its original edge identities. */
+export function upgradeGenomeVision(g: Genome): void {
+  ensureBrainLayout(g);
+  if (g.brainVersion === 8) return;
+  const previous = structuredClone(g);
+  const inactive = new Set(g.disabledConnections);
+  for (let h = 0; h < g.biasesH.length; h++) for (let i = 0; i < g.inputKeys!.length; i++) {
+    if (g.inputKeys![i].endsWith(':distance')
+      && !inactive.has(brainEdgeKey('ih', g.hiddenIds![h], g.inputKeys![i])))
+      g.biasesH[h] += g.weightsIH[h][i];
+  }
+  previous.biasesH = [...g.biasesH];
+  g.brainVersion = 8;
+  remapBrain(g, previous);
+}
+
+export function upgradeWorldVision(state: SimulationState): void {
+  // Clone genomes: immutable render-cache identities must change after the edit.
+  for (const org of state.organisms) {
+    if (org.genome.brainVersion === 8) continue;
+    const previous = structuredClone(org.genome);
+    org.genome = structuredClone(org.genome);
+    upgradeGenomeVision(org.genome);
+    const converted = structuredClone(org.genome);
+    // Live activations and personal learning are remapped by stable identities.
+    remapOrganismBrain(org, {...previous, biasesH: converted.biasesH});
+  }
+  for (const egg of state.eggs) {egg.genome = structuredClone(egg.genome); upgradeGenomeVision(egg.genome);}
+  for (const record of state.lineage.values()) {
+    if (!record.genome) continue;
+    record.genome = structuredClone(record.genome); upgradeGenomeVision(record.genome);
   }
 }
 
@@ -2018,6 +2080,7 @@ export function createArchetypeGenome(
   generation = 1,
   parentIds: string[] = [],
   customPrng = rng,
+  vision: 'rgb' | 'legacy' = 'rgb',
 ): Genome {
   let genome: Genome;
   switch (archetype) {
@@ -2035,6 +2098,7 @@ export function createArchetypeGenome(
   // the body. Store the same long fin axis in its dimensions and keep mating faces flush.
   if (archetype === 'flapper' || archetype === 'glider') alignLegacyFinDimensions(genome.parts);
   normalizeSurfaceOrgans(genome); genome.anatomyVersion = 1;
+  if (vision === 'rgb') upgradeGenomeVision(genome);
   return genome;
 }
 
@@ -2409,7 +2473,8 @@ export function mutateGenome(parent: Genome, severity = 0.25, customPrng: Xoshir
     return {
       ...m,
       mouthType: mutatedType,
-      intakeWidth: mutate(m.intakeWidth, 2, 3, 38),
+      intakeLength: Math.max(mutatedType === 'carnivore' ? 9 : mutatedType === 'omnivore' ? 8 : 7, mutate(m.intakeLength ?? m.intakeWidth, 2, 3, 38)),
+      intakeWidth: mutatedType === 'carnivore' ? 9 : mutatedType === 'omnivore' ? 8 : 7,
     };
   });
 
@@ -2420,7 +2485,8 @@ export function mutateGenome(parent: Genome, severity = 0.25, customPrng: Xoshir
     if (placement) mouths.push({
       id: `mouth-${customPrng.nextUint32().toString(36)}`,
       ...placement,
-      intakeWidth: customPrng.range(14, 28),
+      intakeLength: customPrng.range(14, 28),
+      intakeWidth: chosenType === 'carnivore' ? 9 : chosenType === 'omnivore' ? 8 : 7,
       mouthType: chosenType,
     });
   } else if (customPrng.nextFloat() < mutChance * 0.12 && mouths.length > 1) {
@@ -2532,6 +2598,7 @@ export function mutateGenome(parent: Genome, severity = 0.25, customPrng: Xoshir
     storageTraitMultiplier,
     maxEnergyCapacity,
   };
+  if (parent.brainVersion === 8) child.brainVersion = 8;
   const parentWithMutatedWeights = {...parent, weightsIH, weightsHH, biasesH, weightsHO, biasesO};
   try {
     remapBrain(child, parentWithMutatedWeights);
@@ -2971,7 +3038,7 @@ export function calculateJointMotorTarget(def: PartDef, phase: number, amplitude
   return clampVal((oscillation + angleCommand * directRange) * def.maxAngle, -def.maxAngle, def.maxAngle);
 }
 
-function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number, observe?: MechanicalObserver): number {
+function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_sub: number, observe?: MechanicalObserver, channels?: TubeGeometry): number {
   const g = org.genome, numJoints = org.joints.length;
   const corrected = usesPaidActuation(settings.physicsRegime);
   const surfaceModel = settings.physicsRegime === 'surface-work-v1';
@@ -3107,6 +3174,16 @@ function advanceOrganismPhysics(org: Organism, settings: SimulationSettings, dt_
       const vPtX = seg.vx - seg.angVel * ry;
       const vPtY = seg.vy + seg.angVel * rx;
 
+      if (channels) {
+        const contact = tubeWallContact(channels, pt.x, pt.y);
+        if (contact) {
+          const normalSpeed = vPtX * contact.nx + vPtY * contact.ny;
+          const fx = contact.dx * kWallRepel - normalSpeed * contact.nx * kWallDamping;
+          const fy = contact.dy * kWallRepel - normalSpeed * contact.ny * kWallDamping;
+          scratchFx[i] += fx; scratchFy[i] += fy; scratchTorque[i] += rx * fy - ry * fx;
+        }
+        continue;
+      }
       if (pt.x < 0) {
         const pen = -pt.x;
         const fx = pen * kWallRepel - vPtX * kWallDamping;
@@ -3322,7 +3399,7 @@ function hatchObstacles(organisms: Organism[]): HatchBounds[] {
 /** Authoritative dry-run of the same eight-orientation clearance test used for hatching.
  * Does not consume PRNG or move the egg or adults.
  */
-function hatchPlacement(egg: Egg, settings: SimulationSettings, organisms: Organism[], sharedObstacles?: HatchBounds[]) {
+function hatchPlacement(egg: Egg, settings: SimulationSettings, organisms: Organism[], sharedObstacles?: HatchBounds[], topology?: SelfTubes) {
   const pose = restSegments(egg.genome.parts);
   const obstacles = sharedObstacles ?? hatchObstacles(organisms);
   let containedOrientation = false;
@@ -3330,7 +3407,9 @@ function hatchPlacement(egg: Egg, settings: SimulationSettings, organisms: Organ
     const heading = (egg.hatchHeading ?? 0) + attempt * Math.PI / 4, c = Math.cos(heading), s = Math.sin(heading);
     const segments = pose.map(p => ({...p, x: egg.x + c * p.x - s * p.y, y: egg.y + s * p.x + c * p.y, angle: p.angle + heading}));
     const b = bodyBounds(egg.genome.parts, segments), margin = 2;
-    if (b.left < margin || b.top < margin || b.right > settings.worldWidth - margin || b.bottom > settings.worldHeight - margin) continue;
+    const channels = tubeGeometry(settings, topology);
+    if (channels ? !tubeContainsBox(channels, b, margin)
+      : b.left < margin || b.top < margin || b.right > settings.worldWidth - margin || b.bottom > settings.worldHeight - margin) continue;
     containedOrientation = true;
     if (obstacles.some(a => a.left < b.right + margin && a.right > b.left - margin
       && a.top < b.bottom + margin && a.bottom > b.top - margin)) continue;
@@ -3347,7 +3426,7 @@ export type EggHatchStatus = 'incubating' | 'nonviable' | 'population-cap' |
   'orientation-pending' | 'space-blocked' | 'tank-boundary' | 'clear' | 'world-debt' | 'funding' | 'expired';
 
 /** Kernel-derived inspection, not a second, approximate hatching algorithm. */
-export function evaluateEggHatchStatus(egg: Egg, settings: SimulationSettings, organisms: Organism[], pool?: EnergyPool): {
+export function evaluateEggHatchStatus(egg: Egg, settings: SimulationSettings, organisms: Organism[], pool?: EnergyPool, topology?: SelfTubes): {
   status: EggHatchStatus; message: string; clearHeading: number | null;
 } {
   if (pool && (egg.ageSeconds ?? 0) >= EGG_LIFETIME_MULTIPLIER * egg.totalIncubationTime)
@@ -3365,7 +3444,7 @@ export function evaluateEggHatchStatus(egg: Egg, settings: SimulationSettings, o
     status: 'population-cap', message: 'Ready, blocked by living population cap', clearHeading: null};
   if (egg.hatchHeading === undefined) return {
     status: 'orientation-pending', message: 'Ready; orientation will be chosen on the next tick', clearHeading: null};
-  const placement = hatchPlacement(egg, settings, organisms);
+  const placement = hatchPlacement(egg, settings, organisms, undefined, topology);
   if (placement.heading !== null) return {status: 'clear',
     message: 'Ready; full-body hatch space is clear', clearHeading: placement.heading};
   if (placement.reason === 'tank-boundary') return {
@@ -3455,20 +3534,85 @@ function evaluateOrganismBrain(org: Organism, dt: number): void {
 
 /** At the particle safety limit, aggregate remains rather than losing energy.
  * Allow one carrion slot above the normal food limit if all slots hold plants. */
-function closedCarrion(state: SimulationState, x: number, y: number, energy: number): void {
+function closedCarrion(state: SimulationState, settings: SimulationSettings, x: number, y: number, energy: number): void {
   if (energy <= 0) return;
   const existing = state.nutrients.length >= FOOD_SAFETY_LIMIT
     ? state.nutrients.find(n => n.kind === 'carrion') : undefined;
   if (existing) {
     existing.energyValue += energy;
-    existing.radius = getNutrientRadius(existing.energyValue);
+    existing.radius = getNutrientRadius(existing.energyValue, settings.nutrientCycle);
     existing.decayTimeRemaining = CARRION_DECAY_SECONDS;
     return;
   }
   state.nutrients.push({id: `REM-${state.prng.nextUint32().toString(36)}`,
     kind: 'carrion', decayTimeRemaining: CARRION_DECAY_SECONDS,
-    x, y, vx: 0, vy: 0, energyValue: energy, radius: getNutrientRadius(energy),
+    x, y, vx: 0, vy: 0, energyValue: energy, radius: getNutrientRadius(energy, settings.nutrientCycle),
     bottomTimer: 0, pulseTimer: state.prng.range(0, Math.PI * 2)});
+}
+
+/** Versioned abiotic lifecycle. All loops are bounded by existing food slots.
+ * New fragments are not degraded twice on their creation tick. Historical
+ * worlds never enter this pass and retain their original arithmetic/PRNG. */
+function advanceNutrientCycle(state: SimulationState, settings: SimulationSettings, dt: number): void {
+  const pool = state.energyPool!;
+  const expired: Nutrient[] = [];
+  let kept = 0, plants = 0;
+  for (const food of state.nutrients) {
+    const lost = Math.min(food.energyValue, (settings.nutrientCycle === 'decay-v1' ? 30 : NUTRIENT_DECAY_JOULES_PER_SECOND) * dt);
+    food.energyValue -= lost;
+    pool.reserve += lost;
+    state.ledger.recordedLosses += lost;
+    if (food.energyValue <= 0) continue;
+    food.radius = getNutrientRadius(food.energyValue, settings.nutrientCycle);
+    if (food.kind === 'carrion') {
+      food.decayTimeRemaining = Math.max(0, (food.decayTimeRemaining ?? CARRION_DECAY_SECONDS) - dt);
+      // Timer subtraction can retain a few ulps at exactly 60 seconds.
+      if (food.decayTimeRemaining < 1e-10) {expired.push(food); continue;}
+    } else plants++;
+    state.nutrients[kept++] = food;
+  }
+  state.nutrients.length = kept;
+  let slots = Math.max(0, Math.min(Math.floor(settings.targetNutrients), settings.nutrientLimit ?? Infinity) - plants);
+  slots = Math.min(slots, Math.max(0, FOOD_SAFETY_LIMIT - kept));
+  const channels = tubeGeometry(settings, state.selfTubes);
+  for (const food of expired) {
+    const count = Math.min(slots, Math.ceil(food.energyValue / NUTRIENT_ENERGY_VALUE));
+    let remaining = food.energyValue;
+    // Fit a small rotated grid inside one local water rectangle. Moving its
+    // center inward keeps even corner fragments distinct after wall projection.
+    const angle = count ? state.prng.range(0, Math.PI * 2) : 0;
+    const cos = Math.cos(angle), sin = Math.sin(angle);
+    const side = Math.ceil(Math.sqrt(count));
+    const extent = Math.max(0, side - 1) * Math.SQRT2 + 1e-6;
+    const rects = channels ? waterRects(channels) : [{left: 35, right: settings.worldWidth - 35,
+      top: 35, bottom: settings.worldHeight - 35}];
+    let distance = Infinity, center = {x: food.x, y: food.y};
+    for (const r of rects) {
+      const left = r.left < 0 ? r.left + BASE_NUTRIENT_RADIUS : r.left;
+      const right = r.right > settings.worldWidth ? r.right - BASE_NUTRIENT_RADIUS : r.right;
+      const x = clampVal(food.x, left + extent, right - extent);
+      const y = clampVal(food.y, r.top + extent, r.bottom - extent);
+      const d = (x - food.x) ** 2 + (y - food.y) ** 2;
+      if (d < distance) {distance = d; center = {x, y};}
+    }
+    const share = count ? Math.min(NUTRIENT_ENERGY_VALUE, remaining / count) : 0;
+    for (let i = 0; i < count; i++) {
+      const energy = Math.min(NUTRIENT_ENERGY_VALUE, i === count - 1 ? remaining : share);
+      const dx = ((i % side) - (side - 1) / 2) * 2;
+      const dy = (Math.floor(i / side) - (side - 1) / 2) * 2;
+      const x = center.x + dx * cos - dy * sin, y = center.y + dx * sin + dy * cos;
+      const point = channels ? projectWaterPoint(channels, x, y)
+        : {x: clampVal(x, 35, settings.worldWidth - 35), y: clampVal(y, 35, settings.worldHeight - 35)};
+      state.nutrients.push({id: `NUT-${state.prng.nextUint32().toString(36)}`, ...point,
+        vx: food.vx, vy: food.vy, energyValue: energy,
+        radius: getNutrientRadius(energy, settings.nutrientCycle), bottomTimer: 0,
+        kind: 'nutrient', pulseTimer: state.prng.range(0, Math.PI * 2)});
+      remaining -= energy;
+    }
+    slots -= count;
+    pool.reserve += remaining;
+    state.ledger.recordedLosses += remaining;
+  }
 }
 
 export function stepSimulation(
@@ -3477,7 +3621,10 @@ export function stepSimulation(
   dt: number,
   onEvent?: (type: 'birth' | 'death' | 'eat' | 'clash' | 'egg_loss') => void,
   observeMechanics?: MechanicalObserver,
+  observeEnergy?: EnergyTransferObserver,
 ): void {
+  const channels = tubeGeometry(settings, state.selfTubes);
+  const transitBefore = channels ? new Map(state.organisms.map(o => [o.id, o.segments[0].x])) : undefined;
   const mu = settings.waterViscosity ?? 0.22;
   const worldWidth = settings.worldWidth;
   const worldHeight = settings.worldHeight;
@@ -3510,13 +3657,16 @@ export function stepSimulation(
     }
   }
 
-  // Mineralization waits for a plant-food slot; stored carrion energy is never deleted.
+  const cycling = !!state.energyPool && (settings.nutrientCycle === 'decay-v1' || settings.nutrientCycle === 'decay-v2');
+  if (cycling) advanceNutrientCycle(state, settings, dt);
+
+  // Historical mineralization waits for a plant-food slot; stored carrion energy is never deleted.
   let decaySlots = Math.max(0, targetNutrientsVal - nutrients.filter(n => n.kind !== 'carrion').length);
   // 2. Nutrients Motion
   const fluidDampingExp = Math.exp(-mu * 12.0 * dt);
   for (let i = 0; i < nutrients.length; i++) {
     const nut = nutrients[i];
-    if (nut.kind === 'carrion') {
+    if (!cycling && nut.kind === 'carrion') {
       nut.decayTimeRemaining = Math.max(0, (nut.decayTimeRemaining ?? CARRION_DECAY_SECONDS) - dt);
       if (state.energyPool && nut.decayTimeRemaining === 0) {
         state.energyPool.reserve += nut.energyValue;
@@ -3536,10 +3686,13 @@ export function stepSimulation(
     nut.y += nut.vy * dt;
     nut.pulseTimer = (nut.pulseTimer || 0) + dt * (nut.isSuper ? 4.0 : 2.5);
 
+    if (channels) moveTubeParticle(nut, channels);
+    else {
     if (nut.x < 35) { nut.x = 35; nut.vx = 0; }
     if (nut.x > worldWidth - 35) { nut.x = worldWidth - 35; nut.vx = 0; }
     if (nut.y < 35) { nut.y = 35; nut.vy = 0; }
     if (nut.y > worldHeight - 35) { nut.y = worldHeight - 35; nut.vy = 0; }
+    }
   }
 
   // 3. Caustics
@@ -3561,7 +3714,7 @@ export function stepSimulation(
     if (state.energyPool) {
       egg.ageSeconds = (egg.ageSeconds ?? 0) + dt;
       if (egg.ageSeconds >= EGG_LIFETIME_MULTIPLIER * egg.totalIncubationTime) {
-        closedCarrion(state, egg.x, egg.y, egg.fundedStructural + egg.fundedReserve);
+        closedCarrion(state, settings, egg.x, egg.y, egg.fundedStructural + egg.fundedReserve);
         eggs.splice(i, 1);
         onEvent?.('egg_loss');
         continue;
@@ -3576,10 +3729,13 @@ export function stepSimulation(
     egg.x += egg.vx * dt;
     egg.y += egg.vy * dt;
 
+    if (channels) moveTubeParticle(egg, channels);
+    else {
     if (egg.x < 35) { egg.x = 35; egg.vx = 0; }
     if (egg.x > worldWidth - 35) { egg.x = worldWidth - 35; egg.vx = 0; }
     if (egg.y < 35) { egg.y = 35; egg.vy = 0; }
     if (egg.y > worldHeight - 35) { egg.y = worldHeight - 35; egg.vy = 0; }
+    }
 
     const remainingEggEnergy = egg.fundedStructural + egg.fundedReserve;
 
@@ -3620,7 +3776,7 @@ export function stepSimulation(
       if (state.energyPool || organisms.filter(o => !o.dissolving).length < (settings.maxOrganisms ?? 50)) {
         egg.hatchHeading ??= prng.range(0, Math.PI * 2);
         sharedHatchObstacles ??= hatchObstacles(organisms);
-        const heading = hatchPlacement(egg, settings, organisms, sharedHatchObstacles).heading;
+        const heading = hatchPlacement(egg, settings, organisms, sharedHatchObstacles, state.selfTubes).heading;
         if (heading === null) continue; // Remain funded, edible and ready until a full body fits.
         const startingUsableReserve = remainingEggEnergy - requiredBodyCost;
         const baby = spawnOrganism(
@@ -3685,15 +3841,16 @@ export function stepSimulation(
       if (org.dissolveAlpha <= 0) {
         const deadPos = org.segments[0];
         const totalRemainingEnergy = Math.max(0, org.structuralBiomass) + Math.max(0, org.energy);
+        const deathPoint = channels ? projectWaterPoint(channels, deadPos.x, deadPos.y, 40)
+          : {x: clampVal(deadPos.x, 40, worldWidth - 40), y: clampVal(deadPos.y, 40, worldHeight - 40)};
         if (state.energyPool) {
-          closedCarrion(state, clampVal(deadPos.x, 40, worldWidth - 40),
-            clampVal(deadPos.y, 40, worldHeight - 40), totalRemainingEnergy);
+          closedCarrion(state, settings, deathPoint.x, deathPoint.y, totalRemainingEnergy);
         } else if (totalRemainingEnergy > 0 && nutrients.length < 2200) {
           nutrients.push({
             id: `REM-${prng.nextUint32().toString(36)}`,
             kind: 'carrion', decayTimeRemaining: CARRION_DECAY_SECONDS,
-            x: clampVal(deadPos.x, 40, worldWidth - 40),
-            y: clampVal(deadPos.y, 40, worldHeight - 40), vx: 0, vy: 0,
+            x: deathPoint.x,
+            y: deathPoint.y, vx: 0, vy: 0,
             energyValue: totalRemainingEnergy, radius: getNutrientRadius(totalRemainingEnergy),
             bottomTimer: 0, pulseTimer: prng.range(0, Math.PI * 2),
           });
@@ -3849,7 +4006,7 @@ export function stepSimulation(
         org.neuralInputs[rayInputIdx++] = sensedR;
         org.neuralInputs[rayInputIdx++] = sensedG;
         org.neuralInputs[rayInputIdx++] = sensedB;
-        org.neuralInputs[rayInputIdx++] = opticallyDetected
+        if (g.brainVersion !== 8) org.neuralInputs[rayInputIdx++] = opticallyDetected
           ? clampVal(closestDist / maxRange, 0, 1) : 1;
 
         org.rayHits.push({
@@ -3925,7 +4082,7 @@ export function stepSimulation(
   const work = new Map(active.map(org => [org, 0]));
   const substeps = Math.max(NUM_SUBSTEPS, Math.ceil(dt * 240));
   for (let sub = 0; sub < substeps; sub++) {
-    for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics));
+    for (const org of active) work.set(org, work.get(org)! + advanceOrganismPhysics(org, settings, dt / substeps, observeMechanics, channels));
     resolveBodyContacts(active, BASE_PART_DENSITY, projectBodyJoints, observeMechanics);
   }
   for (let index = active.length - 1; index >= 0; index--) {
@@ -3990,12 +4147,12 @@ export function stepSimulation(
       const cos = Math.cos(phys.angle), sin = Math.sin(phys.angle);
       const cx = phys.x + cos * anchor.x - sin * anchor.y;
       const cy = phys.y + sin * anchor.x + cos * anchor.y;
-      const {radius: mouthRadius, halfSpan: halfAperture} = mouthDimensions(mouth);
+      const {radius: mouthRadius, length: intakeLength} = mouthDimensions(mouth);
       const normal = getCardinalOutwardNormal(mouth.direction);
-      const tx = cos * -normal.y - sin * normal.x;
-      const ty = sin * -normal.y + cos * normal.x;
-      const x1 = cx - tx * halfAperture, y1 = cy - ty * halfAperture;
-      const x2 = cx + tx * halfAperture, y2 = cy + ty * halfAperture;
+      const nx = cos * normal.x - sin * normal.y;
+      const ny = sin * normal.x + cos * normal.y;
+      const x1 = cx, y1 = cy;
+      const x2 = cx + nx * intakeLength, y2 = cy + ny * intakeLength;
       const eatsMeat = mouth.mouthType !== 'herbivore';
       const eatsPlants = mouth.mouthType !== 'carnivore';
       const allowance = (mouth.mouthType === 'omnivore' ? OMNIVORE_EAT_RATE : CONTINUOUS_EAT_RATE) * dt;
@@ -4009,6 +4166,8 @@ export function stepSimulation(
         const absorbed = transfer * efficiency;
         feedback.intake = clampVal(feedback.intake + absorbed / Math.max(1e-9, allowance), 0, 1);
         remainingIntake = Math.max(0, remainingIntake - transfer);
+        observeEnergy?.(org.id, state.simTime, absorbed, org.energy + org.structuralBiomass,
+          Math.max(g.maxEnergyCapacity, g.bodyCost), -1);
         org.energy += absorbed;
         ledger.metabolicDissipation += transfer - absorbed;
         returnedEnergy += transfer - absorbed;
@@ -4024,22 +4183,25 @@ export function stepSimulation(
           if (!(canEat() || !feedback.contact)) break;
           const prey = organisms[i];
           if (prey.id === org.id || prey.dissolving || (isKinshipProtected && areSiblings(org, prey))) continue;
-          let contact = false;
+          let contact = false, contactPart = -1;
           for (let part = 0; part < prey.segments.length && !contact; part++) {
             const pos = prey.segments[part], def = prey.genome.parts[part];
             // Conservative rectangle half-diagonal + mouth aperture bounds;
             // unlike a fixed 70px cutoff, this also handles large mutated parts.
-            const reach = Math.hypot(def.width, def.height) * .5 + halfAperture + mouthRadius;
+            const reach = Math.hypot(def.width, def.height) * .5 + intakeLength + mouthRadius;
             if (Math.abs(pos.x - cx) > reach || Math.abs(pos.y - cy) > reach) continue;
             contact = settings.mouthContactModel === 'capsule-v1'
               ? capsuleContactsPart(x1, y1, x2, y2, mouthRadius, pos, def)
               : mouthApertureContactsPart(cx, cy, x1, y1, x2, y2, mouthRadius, pos, def);
+            if (contact) contactPart = part;
           }
           if (!contact) continue;
           feedback.contact = 1;
           const reserveBite = prey.energy > 0;
           const transfer = consume(reserveBite ? prey.energy : prey.structuralBiomass, 'Prey', reserveBite ? 1 : .85);
           if (transfer <= 0) continue;
+          observeEnergy?.(prey.id, state.simTime, transfer, prey.energy + prey.structuralBiomass,
+            Math.max(prey.genome.maxEnergyCapacity, prey.genome.bodyCost), contactPart);
           if (reserveBite) prey.energy = Math.max(0, prey.energy - transfer);
           else prey.structuralBiomass = Math.max(0, prey.structuralBiomass - transfer);
           // Deliver a next-tick proprioceptive injury cue to the victim only.
@@ -4087,14 +4249,14 @@ export function stepSimulation(
         if (!(canEat() || !feedback.contact)) break;
         const food = nutrients[i], carrion = food.kind === 'carrion';
         if (carrion ? !eatsMeat : !eatsPlants) continue;
-        const reach = food.radius + halfAperture + mouthRadius;
+        const reach = food.radius + intakeLength + mouthRadius;
         if (Math.abs(food.x - cx) > reach || Math.abs(food.y - cy) > reach) continue;
         if (distPointToSegment(food.x, food.y, x1, y1, x2, y2) > food.radius + mouthRadius) continue;
         feedback.contact = 1;
         const transfer = consume(food.energyValue, carrion ? 'Carrion' : 'Nutrient', carrion ? .85 : 1);
         if (transfer <= 0) continue;
         food.energyValue = Math.max(0, food.energyValue - transfer);
-        food.radius = getNutrientRadius(food.energyValue);
+        food.radius = getNutrientRadius(food.energyValue, settings.nutrientCycle);
         if (food.energyValue <= 1) {
           ledger.recordedLosses += food.energyValue;
           returnedEnergy += food.energyValue;
@@ -4167,6 +4329,7 @@ export function stepSimulation(
               genome: babyGenome,
               fundedStructural: offspringBodyCost,
               fundedReserve: allocatedReserve,
+              initialFundedReserve: allocatedReserve,
               incubationProgress: 0,
               totalIncubationTime: babyGenome.incubationTime || prng.range(8.5, 14.0),
               pulseTimer: k * 0.4,
@@ -4219,6 +4382,7 @@ export function stepSimulation(
   if (bubbles.length > 60) {
     bubbles.splice(0, bubbles.length - 60);
   }
+  if (transitBefore) transferSelfOrganisms(state, settings, transitBefore);
   if (state.energyPool) state.energyPool.reserve += returnedEnergy;
 }
 

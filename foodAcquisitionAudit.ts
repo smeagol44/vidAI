@@ -76,11 +76,11 @@ export function nearestEdibleFreeFoodGap(org: Organism, state: SimulationState):
     const cx = phys.x + cos * anchor.x - sin * anchor.y;
     const cy = phys.y + sin * anchor.x + cos * anchor.y;
     const normal = sim.getCardinalOutwardNormal(mouth.direction);
-    const tx = cos * -normal.y - sin * normal.x;
-    const ty = sin * -normal.y + cos * normal.x;
-    const {radius, halfSpan: half} = mouthDimensions(mouth);
-    const x1 = cx - tx * half, y1 = cy - ty * half;
-    const x2 = cx + tx * half, y2 = cy + ty * half;
+    const nx = cos * normal.x - sin * normal.y;
+    const ny = sin * normal.x + cos * normal.y;
+    const {radius, length} = mouthDimensions(mouth);
+    const x1 = cx, y1 = cy;
+    const x2 = cx + nx * length, y2 = cy + ny * length;
     for (const food of state.nutrients) {
       const carrion = food.kind === 'carrion';
       if (carrion ? mouth.mouthType === 'herbivore' : mouth.mouthType === 'carnivore') continue;

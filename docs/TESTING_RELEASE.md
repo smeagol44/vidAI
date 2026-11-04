@@ -28,3 +28,18 @@ Neither belongs on production `main`, including during feature promotion.
 
 Run `npm run test:testing-release` on testing to verify the pinned ancestry,
 release identity and iteration counting.
+
+## RGB-only vision deployment — issue139 (2026-11-04)
+
+Owner requested deployment of reviewed PR140 to testing only. Source candidate
+`23736d50f70b6768cf7624fb1acfa5dd7932def7` includes current production0.40.0 plus
+the proposed0.41.0 RGB-only correction. The deployment retains the original
+T1 baseline manifest and commit history; iteration advances according to the
+existing commit-count rule, including integrated production ancestry. It does
+not start a new cycle or count independent experiment runs.
+
+New catalogue starters and manual archetypes use RGB-only brain v8. Existing
+saved worlds/eggs/ancestry/Bank entries retain v7 until explicit upgrade. World
+and Bank upgrades are separate. The inspection label and schema20 identify the
+new format. PR140 remains a clean unmerged production candidate; production
+continues from main0.40.0. No historical experiment is rerun by this deployment.
