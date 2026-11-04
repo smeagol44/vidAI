@@ -12,11 +12,18 @@ unproven. This reference covers VIDA 2D; the separate 3D project is independent.
 
 The independent `testing` branch publishes to `/vidAI/testing/` without
 replacing production. Its distinct release label identifies the pinned main
-version and commit, cycle and iteration (currently `T1.1` from
-`main v0.37.0 @ b2a05e5`). Each testing commit advances its iteration;
+version and commit, cycle and iteration (cycle1 remains pinned to
+`main v0.37.0 @ b2a05e5`). The displayed iteration counts commits since that
+ancestor, including integrated production history;
 resetting to an explicitly chosen newer main baseline begins the next cycle.
 Production uses its independent `v0.40.0` release and forward-mouth save format.
 The testing-only version code must never be merged to main.
+
+**Testing-only correction:** the testing application includes the proposed0.41.0
+[RGB-only vision](Sensory-Behavior#testing-only-rgb-only-vision) and updated
+starter brains. Production remains0.40.0 with its original range inputs. Saved
+legacy brains are preserved until explicitly upgraded in testing. The original
+T1 baseline and historical experiment results are retained.
 
 ## Simulation overview
 

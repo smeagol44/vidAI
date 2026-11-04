@@ -91,3 +91,13 @@ The roster provides diverse mutable starting points. Swimming, valid mouths
 and bounded learning do not establish reliable foraging, hunting, predator
 avoidance or self-sustaining reproduction for every design. Names such as
 “Pursuer” describe a starting design, not a scripted or guaranteed behavior.
+
+## Testing-only vision correction
+
+In the [testing application](https://smeagol44.github.io/vidAI/testing/), all64
+newly generated catalogue designs use RGB-only brain v8 while retaining their
+reviewed RGB/recurrent/motor alleles. “Legacy” remains a collection name. Saved
+Bank specimens keep their original v7 RGB+range brains until **Upgrade vision**
+is chosen; spawning them preserves that version. World conversion does not edit
+stored Bank copies. Production0.40.0 keeps its existing starter brains. See the
+[testing vision details](Sensory-Behavior#testing-only-rgb-only-vision).

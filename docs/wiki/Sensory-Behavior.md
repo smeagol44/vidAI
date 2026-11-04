@@ -87,3 +87,27 @@ visible/disconnected movement in `tests/`.
 The pink reserve-loss sector is observer-only. Eggs retain the same radius, occlusion, distance attenuation
 and white `EGG_RGB` in vision. Reserve percentage, incubation ring, selection and
 glow do not enter retinal channels or neural inputs.
+
+## Testing-only RGB-only vision
+
+The [testing application](https://smeagol44.github.io/vidAI/testing/) includes
+the0.41.0 candidate from issue139 / PR140. Newly generated catalogue starters and
+manual archetypes use brain v8, receiving only RGB per ray. Geometric distance
+still controls intersections, occlusion and attenuation and appears in observer
+diagnostics; no distance, hit or object-type channel reaches these new brains.
+Production0.40.0 retains the v7 behavior described above.
+
+Existing saved creatures, eggs, ancestry, Bank specimens and descendants retain
+v7 until an explicit upgrade. Settings → **Upgrade world to RGB-only vision**
+converts living creatures, eggs and ancestry from an authoritative snapshot and
+leaves the world paused. Bank specimens have a separate **Upgrade vision** button.
+Connections and activations retain their stable identities; RGB lifetime learning,
+recurrent memory, bodies, energy and PRNG are preserved. Removed enabled range
+connections have their inherited empty-water contribution folded into hidden
+biases. Responses near visible objects can change; keep a separate old snapshot.
+Schema20 supports mixed v7/v8 worlds; all-legacy exports keep their prior schema.
+
+All64 new starter designs retain their RGB, recurrent and motor alleles. Short
+regression checks do not establish long-term feeding or ecological performance.
+Historical experiments used RGB+range and retain their original interpretation;
+this deployment does not rerun them.
